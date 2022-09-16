@@ -1,0 +1,270 @@
+<html>
+
+<head>
+    <title>ALTOS CORE</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" >
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <style type="text/css">
+        body {
+            font-weight: 200;
+            font-size: 14px;
+            
+
+        }
+
+        .header {
+            font-size: 20px;
+            font-weight: 100;
+            text-align: center;
+            color: #007cae;
+        }
+
+        .title {
+            font-size: 25px;
+            font-weight: 100;
+            /* text-align: right;*/
+            padding: 10px 20px 0px 20px;
+        }
+
+        .title span {
+            color: #007cae;
+        }
+
+        .details {
+            padding: 10px 50px 0px 50px;
+            text-align: left !important;
+            /*margin-left: 40%;*/
+        }
+
+        .hrItem {
+            border: none;
+            height: 1px;
+            /* Set the hr color */
+            color: #333;
+            /* old IE */
+            background-color: #fff;
+            /* Modern Browsers */
+        }
+
+        .details .content {
+            text-align: justify;
+            font-size: 14px !important;
+            line-height: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: black;
+
+
+        }
+    </style>
+</head>
+
+<body>
+<br>
+    <div class='details' style="margin-left: 14cm; top:2cm">
+
+        <p style="color: black; width: 200px;">{{date|date:'d-m-Y'}}</p>
+
+    </div>
+
+
+    <div class='wrapper'>
+        <div class='header'>
+            <p class='title' style="color: black"><b>Letter of Appointment</b></p>
+        </div>
+        <div>
+
+            <div class='details '>
+                <div class="content text-justify">
+
+                    {{ mem.fullname }}<br>
+                    {{mem.permanentaddress1}}<br>
+                    {{mem.permanentaddress2}}<br>
+                    {{mem.permanentaddress3}}<br>
+                    {{mem.permanentdistrict}}<br>
+                    {{mem.permanentstate}}-{{mem.permanentpincode}}<br><br>
+
+                    Dear {{mem.fullname}},<br>
+                    <br>
+                    Thank you for exploring career opportunities with ALTOS TECHNOLOGIES. You have
+                    successfully completed our initial selection process and we are pleased to make you an offer
+                    of employment.<br><br>
+                    This offer is based on your profile and performance in the selection process. You have been
+                    selected for the position of <b>{{mem.designation.designation}}</b> by virtue of the interview and further discussions with
+                    us, effective from .<br><br>
+                    You will be under probation for one month with salary from the date of appointment and on
+                    your service during the said probation period being found satisfactory, the company will offer
+                    you a starting salary of <b>{{mem.confirm_salary}}</b> per month based on your performance in the said period.<br><br>
+                    Your normal working hours' will be 37.5hours'per week, to be worked Monday to Saturday.
+                    If company suggests at times, you are requested to work on holidays also.<br><br>
+                    Kindly confirm your acceptance of this offer online through the option 'Accept Offer letter".
+                    If not accepted within 5 Days, it will be construed that you are not interested in this
+                    employment and this offer will be automatically withdrawn.<br><br>
+
+                    <h4>DUTIES AND RESPONSIBILITIES</h4>
+                    <ul>
+                        <li>Research prospective accounts in targeted markets, pursue leads and follow through to a
+                            successful agreement</li>
+                        <li>Understand the target markets, including industry, company, project, company contacts and
+                            which market strategies can be used to attract clients</li> 
+                        <li>Collaborate with design and sales teams to ensure that requirements are met</li> 
+                        <li>Maintain relationships with current clients and identify new prospects within the area you
+                            have been assigned</li> 
+                        <li>Possess a strong understanding of our products, our competition in the industry and
+                            positioning</li> 
+                        <li>Follow the latest industry developments and stay up-to date on corporate competitors</li> 
+                        <li>Contacting potential clients to establish rapport and arrange meetings.</li>
+                        <li>Planning and overseeing new marketing initiatives.</li> 
+                        <li>Researching organizations and individuals to find new opportunities.</li> 
+                        <li>Increasing the value of current customers while attracting new ones.</li> 
+                        <li>Finding and developing new markets and improving sales.</li> 
+                        <li> Attending conferences, meetings, and industry events.</li>
+                        <li>Developing quotes and proposals for clients.</li> 
+                        <li>Developing goals for the development team and business growth and ensuring they are met.</li> 
+                        <li>Training personnel and helping team members develop their skills.</li> 
+                        <li>Develop a growth strategy focused both on financial gain and customer satisfaction</li> 
+                        <li> Conduct research to identify new markets and customer needs</li>
+                        <li>Arrange business meetings with prospective clients</li> 
+                        <li>Promote the company’s products/services addressing or predicting clients’ objectives</li> 
+                        <li>Prepare sales contracts ensuring adherence to law established rules and guidelines</li> 
+                        <li>Keep records of sales, revenue, invoices etc.</li> 
+                        <li>Provide trustworthy feedback and after-sales support</li> 
+                        <li>Build long-term relationships with new and existing customers</li> 
+                        <li>Develop entry level staff into valuable salespeople</li> 
+                        <li>research and identify new business opportunities -including new markets, growth areas,
+                            trends,
+                            customers, partnerships, products and services – or new ways of reaching existing markets</li> 
+                        <li>seek out the appropriate contact in an organisation</li> 
+                        <li> generate leads and cold call prospective customers</li>
+                        <li>meet with customers/clients face to face or over the phone</li> 
+                        <li>foster and develop relationships with customers/clients</li> 
+                        <li>understand the needs of your customers and be able to respond effectively with a plan of
+                            how to meet these</li> 
+                        <li>think strategically - seeing the bigger picture and setting aims and objectives in order to
+                            develop and improve the business</li> 
+                        <li>work strategically - carrying out necessary planning in order to implement operational
+                            changes</li> 
+                        <li>draw up client contracts - depending on the size of company, this task may be completed by
+                            someone else or agreements may not be as formal</li> 
+                        <li>have a good understanding of the businesses' products or services and be able to advise
+                            others about them</li> 
+                        <li>ensure staff are on board throughout the organisation, and understand the need for change
+                            and what is required of them</li> 
+                        <li>train members of your team, arranging external training where appropriate</li>
+                        <li>discuss promotional strategy and activities with the marketing department</li>
+                        <li>liaise with the finance team, warehousing and logistics departments as appropriate</li>
+                        <li>seek ways of improving the way the business operates</li>
+                        <li>attend seminars, conferences and events where appropriate</li>
+                        <li>keep abreast of trends and changes in the business world.</li>
+
+                    </ul>
+
+
+
+                    
+
+                   
+                    <h4>TERMS AND CONDITIONS</h4>
+                    <b>1.Confidentiality Agreement</b>
+                        <p>&nbsp;&nbsp;&nbsp;As part of your acceptance of this appointment as an employee with ALTOS
+                        TECHNOLOHIES you are required to maintain strict confidentiality of the intellectual
+                        property rights protected information and other business information of ALTOS
+                        TECHNOLOGIES and its clients which may be revealed to you by ALTOS
+                        TECHNOLOGIES or which may in the course of your engagement with ALTOS
+                        TECHNOLOGIES come your possession or knowledge unless specifically authorized to do
+                        so in writing by ALTOS TECHNOLOGIES. This Confidentiality Clause shall survive the
+                        termination or earlier determination of this Appointment.</p>
+
+                    <b>2.Notice period</b>  
+                    <p>
+                        &nbsp;&nbsp;&nbsp;The notice period for resigning from the job is 2 months, on your relieve, you have to
+                        complete and submit all the assigned work properly, unless you have to pay the
+                        compensation.
+                    </p> 
+                    <b>3.Compliance to all clauses</b> 
+                    <p>
+                        &nbsp;&nbsp;&nbsp; The Company has the rights to terminate you from the job immediately at any time for
+                        genuine reasons like misbehaviour, malpractices, spy works, lack of performances in work,
+                        illegal activities and so on
+                    </p> 
+                    <b>4.Relocation</b>  
+                    <p>
+                        &nbsp;&nbsp;&nbsp; If company suggests at times, you are requested to relocate to other job locations also
+                    </p>
+                    <b>5.Leave</b> 
+                    <p> &nbsp;&nbsp;&nbsp;You are entitled for 12 days leave for each 12 months continued service</p> 
+                    <b>6.Letter of Appointment</b>  
+                    <p>
+                        &nbsp;&nbsp;&nbsp;You will be issued a letter of appointment at the time of your joining and after completing
+                        joining formalities as per ALTOS TECHNOLOGIES policy.
+
+                    </p>
+
+                    <h4>Withdrawal of Offer</h4>
+                    <p>If you fail to accept the offer from ALTOS TECHNOLOGIES within 5 days, it will be
+                        construed that you are not interested in this employment and this offer will be automatically
+                        withdrawn.</p>
+
+                    We look forward to you having a long and fruitful relationship with ALTOS Technologies.
+                    <!-- following terms and conditions:<br><br>
+                   
+                    1. {{con.condition1}}<br>
+                     2. {{con.condition2}}<br>
+                      3. {{con.condition3}}<br>
+                       4. {{con.condition4}}<br>
+                        5. {{con.condition5}}<br>
+                         6. {{con.condition6}}<br> -->
+                          
+                  
+                    <br>
+                    We look forward to you having a long and fruitful relationship with ALTOS Technologies.<br>
+                    <br>
+                    
+                    <p>For ALTOS Technologies,
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                         <span>Yours Sincerely</span></p>
+                         <br>
+                        
+<div style="padding-top:-15px" >
+    <img style="height:100px; " src="{{ mem.offerqr.url }}" alt="..." >
+    <p style="text-align:center; ">(To verify)</p>
+</div>
+                  
+
+
+    <p style="padding-top:-60px">
+        <img src="{{mem.signature.url}}" style="height:70px;width: 100px; padding-left:30px;">
+
+       <br>
+       
+        <br> {{hr.fullname}}<br> HR Manager</p><p style="text-align:right;padding-top:-30px">{{mem.fullname}}</   
+     
+                </div>
+            
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+        </span>
+    </div>
+    </div>
+    <script>
+        var today = new Date();
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        document.getElementById("currentDate").value = date;
+    </script>
+
+</body>
+
+</html>

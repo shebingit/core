@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_cleanup.apps.CleanupConfig',
     'base_app',
+    'qr_code',
     'cal',
     # 'marketingapp',
 ]

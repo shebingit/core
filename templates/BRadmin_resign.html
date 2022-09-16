@@ -67,7 +67,7 @@
                               
                                 <th> Date of Appointment </th>
                                 <th> Employee Id </th>
-                                <th> Update </th>
+                                <!-- <th> Update </th> -->
                                 <th> Offer Letter </th>
                                 <th> Experience Certificate </th>
                                 <th> Relieve letter</th>
@@ -100,12 +100,12 @@
                                 <td> {{i.joiningdate|date:"d-m-Y"}}</td>
                                 <td> {{i.employee_id}}</td>
                         
-                                <td> <a href="{% url 'man_registration_update' i.id %}"> 
+                                <!-- <td> <a href="{% url 'man_registration_update' i.id %}"> 
                                     <div class="badge badge-outline-warning">Update</div></a>
-                                  </td>
+                                </td> -->
                                 <td> <a href="{% url 'pdfof' i.id %}"> 
                                     <div class="badge badge-outline-success">Download</div></a>
-                                  </td>
+                                </td>
                                  
                                 <td> <a href="{% url 'pdfex' i.id %}">  
                                     <div class="badge badge-outline-success">Download</div></a>

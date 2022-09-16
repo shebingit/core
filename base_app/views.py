@@ -1,3 +1,6 @@
+import qrcode 
+from num2words import num2words
+from xhtml2pdf import pisa
 
 import random
 import os, json, math
@@ -4872,7 +4875,7 @@ def BRadmin_taskdesignation(request):
     # Desig = designation.objects.filter(department_id=dept_id)
     Desig = designation.objects.all()
     
-    return render(request, 'BRadmin_taskdesignation.html', {'Desig': Desig,'Adm':Adm})
+    return render(request, 'BRadmin_taskdesignation.html', {'Desig': Desig})
     
 
 def BRadmin_taskemployee(request): 
@@ -5195,7 +5198,7 @@ def Manager_selectproject(request):
     return render(request,'manager_selectproject.html',{'project':proj})
     
     
-#*************************meenu**********************
+#************************* meenu **********************
 def newdept(request):
     if 'Adm_id' in request.session:
         if request.session.has_key('Adm_id'):
@@ -5297,7 +5300,7 @@ def man_delete(request, id):
 ############## end ##########
 
 
-#######################################################christin########################
+########################### christin ########################
 
 def logout(request):
     if 'usernametsid' in request.session:
@@ -5358,7 +5361,7 @@ def internship_save(request):
                 return render(request,'internship.html',{'a':a})
             else:
                 a.save()
-                qr = qrcode.make("http://altoscore.com/admin_code?id=" + str(a.id))
+                qr = qrcode.make("https://altoscore.in/admin_code?id=" + str(a.id))
                 qr.save(settings.MEDIA_ROOT + "\\" +str(a.id) + ".png")
                 with open(settings.MEDIA_ROOT + "\\" + str(a.id) + ".png", "rb") as reopen:
                         djangofile = File(reopen)
@@ -5443,7 +5446,7 @@ def man_registration_form(request):
             email_id=x.email
             x.save()
             y1 = user_registration.objects.get(id=a.id)
-            qr = qrcode.make("http://altoscore.in/offerletter/" + str(y1.id))
+            qr = qrcode.make("https://altoscore.in/offerletter/" + str(y1.id))
             qr.save(settings.MEDIA_ROOT + "/images"+"//" +"offer"+str(y1.id) + ".png")
             with open(settings.MEDIA_ROOT + "/images"+"//"+"offer"+ str(y1.id) +".png","rb") as reopen:
                     djangofile = File(reopen)
@@ -5451,14 +5454,14 @@ def man_registration_form(request):
                     y1.save()
     
             y2 = user_registration.objects.get(id=a.id)
-            qr1 = qrcode.make("http://altoscore.in/relieveletter/" + str(y2.id))
+            qr1 = qrcode.make("https://altoscore.in/relieveletter/" + str(y2.id))
             qr1.save(settings.MEDIA_ROOT + "/images"+"//"+"re" +str(y2.id) + ".png")
             with open(settings.MEDIA_ROOT + "/images"+"//"+"re" + str(y2.id) + ".png", "rb") as reopen:
                     djangofile = File(reopen)
                     y2.relieveqr = djangofile
                     y2.save()
             y3 = user_registration.objects.get(id=a.id)
-            qr2 = qrcode.make("http://altoscore.in/experienceletter/" + str(y3.id))
+            qr2 = qrcode.make("https://altoscore.in/experienceletter/" + str(y3.id))
             qr2.save(settings.MEDIA_ROOT + "/images"+"//"+"exp" +str(y3.id) + ".png")
             with open(settings.MEDIA_ROOT + "/images"+"//"+"exp" + str(y3.id) + ".png", "rb") as reopen:
                     djangofile = File(reopen)
@@ -5529,31 +5532,227 @@ def render_pdfof_view(request,id):
     con = conditions.objects.get(id=1)
     mem = user_registration.objects.get(id=id)
     br_admin = branch_registration.objects.get(id=mem.branch_id)
-    template_path = 'pdfof.html'
-    context = {'mem': mem,
-    'con':con,
-    'media_url':settings.MEDIA_URL,
-    'date':date,
-    'br_admin':br_admin
-    }
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="certificate.pdf"'
-    # find the template and render it.
-    template = get_template(template_path)
-    html = template.render(context)
 
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-       html, dest=response)
+     #==== HR offer letter ===
+
+    if mem.designation.designation == 'hr':
+        hr=designation.objects.get(designation = 'hr')
+        hrname=user_registration.objects.get(designation_id=hr)
+        template_path = 'pdfhrof.html'
+        context = {'mem': mem,
+        'con':con,
+        'media_url':settings.MEDIA_URL,
+        'date':date,
+        'hr':hrname,
+        'br_admin':br_admin
+        }
+        
+        # Create a Django response object, and specify content_type as pdf
+        response = HttpResponse(content_type='application/pdf')
+        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+        response['Content-Disposition'] = 'filename="certificate.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+
+
+        #====software developer offer letter ===
+
+    elif mem.designation.designation == 'developer':
+        hr=designation.objects.get(designation = 'hr')
+        hrname=user_registration.objects.get(designation_id=hr)
+        template_path = 'pdfsdof.html'
+        context = {'mem': mem,
+        'con':con,
+        'media_url':settings.MEDIA_URL,
+        'date':date,
+        'hr':hrname,
+        'br_admin':br_admin
+        }
+        
+        # Create a Django response object, and specify content_type as pdf
+        response = HttpResponse(content_type='application/pdf')
+        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+        response['Content-Disposition'] = 'filename="certificate.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
     
+     #====Team leader offer letter ===
+    
+    elif mem.designation.designation == 'team leader':
+        hr=designation.objects.get(designation = 'hr')
+        hrname=user_registration.objects.get(designation_id=hr)
+        template_path = 'pdftlof.html'
+        context = {'mem': mem,
+        'con':con,
+        'media_url':settings.MEDIA_URL,
+        'date':date,
+        'hr':hrname,
+        'br_admin':br_admin
+        }
+        
+        # Create a Django response object, and specify content_type as pdf
+        response = HttpResponse(content_type='application/pdf')
+        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+        response['Content-Disposition'] = 'filename="certificate.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+
+     #====Project Manager offer letter ===
+    
+    elif mem.designation.designation == 'project manager':
+        hr=designation.objects.get(designation = 'hr')
+        hrname=user_registration.objects.get(designation_id=hr)
+        template_path = 'pdfpmof.html'
+        context = {'mem': mem,
+        'con':con,
+        'media_url':settings.MEDIA_URL,
+        'date':date,
+        'hr':hrname,
+        'br_admin':br_admin
+        }
+        
+        # Create a Django response object, and specify content_type as pdf
+        response = HttpResponse(content_type='application/pdf')
+        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+        response['Content-Disposition'] = 'filename="certificate.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
 
 
-    # if error then show some funy view
-    if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
+    #====Digital Marketing offer letter === Business Development Executive
+    
+    elif mem.designation.designation == 'Digital Marketing':
+        hr=designation.objects.get(designation = 'hr')
+        hrname=user_registration.objects.get(designation_id=hr)
+        template_path = 'pdfdmof.html'
+        context = {'mem': mem,
+        'con':con,
+        'media_url':settings.MEDIA_URL,
+        'date':date,
+        'hr':hrname,
+        'br_admin':br_admin
+        }
+        
+        # Create a Django response object, and specify content_type as pdf
+        response = HttpResponse(content_type='application/pdf')
+        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+        response['Content-Disposition'] = 'filename="certificate.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+
+    #====Business Development Executive Offer letter
+    
+    elif mem.designation.designation == 'Business Development Executive':
+        hr=designation.objects.get(designation = 'hr')
+        hrname=user_registration.objects.get(designation_id=hr)
+        template_path = 'pdfbdeof.html'
+        context = {'mem': mem,
+        'con':con,
+        'media_url':settings.MEDIA_URL,
+        'date':date,
+        'hr':hrname,
+        'br_admin':br_admin
+        }
+        
+        # Create a Django response object, and specify content_type as pdf
+        response = HttpResponse(content_type='application/pdf')
+        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+        response['Content-Disposition'] = 'filename="certificate.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+
+    #====Telecallers Offer letter
+    
+    elif mem.designation.designation == 'Telecaller':
+        hr=designation.objects.get(designation = 'hr')
+        hrname=user_registration.objects.get(designation_id=hr)
+        template_path = 'pdftelof.html'
+        context = {'mem': mem,
+        'con':con,
+        'media_url':settings.MEDIA_URL,
+        'date':date,
+        'hr':hrname,
+        'br_admin':br_admin
+        }
+        
+        # Create a Django response object, and specify content_type as pdf
+        response = HttpResponse(content_type='application/pdf')
+        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+        response['Content-Disposition'] = 'filename="certificate.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+
+
 
 def render_pdfre_view(request,id):
 
@@ -5590,10 +5789,14 @@ def render_pdfex_view(request,id):
     date = datetime.now()   
     mem = user_registration.objects.get(id=id)
     br_admin = branch_registration.objects.get(id=mem.branch_id)
+    hr=designation.objects.get(designation = 'hr')
+    hrname=user_registration.objects.get(designation_id=hr)
+   
     template_path = 'pdfex.html'
     context = {'mem': mem,
     'media_url':settings.MEDIA_URL,
     'date':date,
+    'hr':hrname,
     'br_admin':br_admin
     }
     # Create a Django response object, and specify content_type as pdf
@@ -5606,15 +5809,16 @@ def render_pdfex_view(request,id):
 
     # create a pdf
     pisa_status = pisa.CreatePDF(
-       html, dest=response)
-    
-
+    html, dest=response)
 
     # if error then show some funy view
     if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
     
+
+
 def render_pdfau_view(request,id):
 
     date = datetime.now()   

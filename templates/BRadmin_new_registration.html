@@ -133,10 +133,10 @@
                                  {% if i.designation_id == 1 %}
                                         <a id="alert2"  href=""> 
                                     <div class="badge badge-outline-success">Admin</div></a>
-                                    {% else%}
+                                {% else%}
                                     <a href="{% url 'pdfof' i.id %}"> 
                                     <div class="badge badge-outline-success">Download</div></a>
-                                        {% endif %}
+                                {% endif %}
                                   </td>
                                  
                                    <td>
