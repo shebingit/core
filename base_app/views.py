@@ -5368,7 +5368,9 @@ def internship_save(request):
                         a.qr = djangofile
 
                         a.save()
-            return redirect('internshipform')
+            branch = branch_registration.objects.all()
+            msg_success="Success"
+            return render(request, 'internship.html',{'branch':branch,'msg_success':msg_success})
         except:
             message = "Enter all details !!!"
             return render(request, 'internship.html',{'message':message})
@@ -5759,10 +5761,13 @@ def render_pdfre_view(request,id):
     date = datetime.now()   
     mem = user_registration.objects.get(id=id)
     br_admin = branch_registration.objects.get(id=mem.branch_id)
+    hr=designation.objects.get(designation = 'hr')
+    hrname=user_registration.objects.get(designation_id=hr)
     template_path = 'pdfre.html'
     context = {'mem': mem,
     'media_url':settings.MEDIA_URL,
     'date':date,
+    'hr':hrname,
     'br_admin':br_admin
     }
     # Create a Django response object, and specify content_type as pdf
@@ -8883,9 +8888,12 @@ def render_pdf_view(request,id):
 
     date = datetime.now()   
     mem = internship.objects.get(id=id)
+    hr=designation.objects.get(designation = 'hr')
+    hrname=user_registration.objects.get(designation_id=hr)
     template_path = 'pdf.html'
     context = {'mem': mem,
     'media_url':settings.MEDIA_URL,
+    'hr':hrname,
     'date':date
     }
     # Create a Django response object, and specify content_type as pdf
@@ -9013,7 +9021,7 @@ def man_registration_update(request, id):
 
         admins = user_registration.objects.get(id=Adm_id)
 
-        br_name = branch_registration.objects.get(id=admins.id)
+        br_name = branch_registration.objects.get(id=admins.branch.id)
 
         return render(request, 'man_registration_update.html', {'con': con, 'mem4': mem4, 'qem': qem, 'xem': xem, 'Adm': Adm, 'des': des, 'br_name': br_name, 'desig':desig})
     else:

@@ -268,18 +268,20 @@ input[type=number] {
   </section>
   {% if msg_success %}
     <script>
+     
         Swal.fire({
             position: 'center',
             icon: 'success',
             text: '{{ msg_success }}',
-            showConfirmButton: false,
-            timer: 1500
+            showConfirmButton: true,
+            button:"OK"
+            
         }).then(function () {
             javascript: history.go(-1);
         })
     </script>
-    {% endif %}
-    {% if msg_error %}
+  {% endif %}
+  {% if msg_error %}
     <script>
         Swal.fire({
             icon: 'error',
@@ -289,7 +291,7 @@ input[type=number] {
             javascript: history.go(-1);
         })
     </script>
-    {%endif%}
+  {%endif%}
   <script>
   function dates() {
     var checkin_date = $("#startDate").datepicker('getDate');
@@ -385,22 +387,18 @@ input[type=number] {
 
     swalWithBootstrapButtons.fire({
       title: 'Are you sure?',
-
       icon: 'warning',
+
       showCancelButton: true,
       confirmButtonText: ' Submit',
       cancelButtonText: '  cancel!',
       reverseButtons: true,
-      
+     
      
     }).then((result) => {
       if (result.isConfirmed) {
         $('#alert1').submit();
-        swalWithBootstrapButtons.fire(
-          'Success',
-          'Your file is Uploaded...',
-
-        )
+        
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
