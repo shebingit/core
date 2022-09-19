@@ -1,3 +1,5 @@
+from genericpath import exists
+from logging import exception
 import qrcode 
 from num2words import num2words
 from xhtml2pdf import pisa
@@ -21,7 +23,7 @@ from io import BytesIO
 from django.core.files import File
 from django.conf import settings
 from django.db.models import Q
-
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.core.mail import send_mail
 
@@ -5369,7 +5371,7 @@ def internship_save(request):
 
                         a.save()
             branch = branch_registration.objects.all()
-            msg_success="Success"
+            msg_success="Your application has been sent successfully"
             return render(request, 'internship.html',{'branch':branch,'msg_success':msg_success})
         except:
             message = "Enter all details !!!"
@@ -9187,11 +9189,22 @@ def registrationupdatesave(request, id):
         
 def registrationdelete(request,id):
     man = user_registration.objects.get(id=id)
-  
-    man1 = extracurricular.objects.get(user_id=man.id)
-    man2 = qualification.objects.get(user_id=man.id)
-    man2.delete()
-    man1.delete()
+   
+    try:
+
+        man2 = qualification.objects.get(user_id=man.id)
+        man2.delete()
+    
+    except ObjectDoesNotExist:
+        print("No data")
+
+
+    try:
+        man1 = extracurricular.objects.get(user_id=man.id)
+        man1.delete()
+    except ObjectDoesNotExist:
+        print("No data")
+   
     man.delete()
     os.remove(man.idproof.path)
     os.remove(man.photo.path)

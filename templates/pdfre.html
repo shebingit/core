@@ -67,7 +67,16 @@
             <div class="content">
                 Dear {{mem.fullname}},<br><br>
 
-	We wish to inform you that you have been relieved from your position of “<strong>{{mem.department}} {{mem.designation}}</strong>”
+	We wish to inform you that you have been relieved from your position of 
+    “
+    {% if  mem.designation.designation == 'developer' %}
+        <strong> {{mem.department}} {{mem.designation}}</strong>”
+        
+    {% else %}
+        <strong>  {{mem.designation}} </strong>”
+        
+    {% endif %}
+    
      at ALTOS Technologies with effect from {{date|date:'d-m-Y'}}.<br>
 	<p style="text-indent: 2cm;"></p>Hereafter, you will be relieved from all the duties and responsibilities from 
     the last working day with us and there will be no commitments or liabilities 
