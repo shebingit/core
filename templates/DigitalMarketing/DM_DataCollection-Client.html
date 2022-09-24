@@ -1,0 +1,41 @@
+{% extends 'DigitalMarketing/DM_base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container">
+    <h4 class="text-center m-4">DATA COLLECTION CLIENT</h4>
+    <form action="#" method="post">
+        {% csrf_token %}
+        <div class="input-group p-3 m-2">
+            <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" placeholder="SL NO" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" placeholder="FULL NAME" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="email" class="form-control" placeholder="EMAIL ID" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3 m-2">
+            <input type="tel" class="form-control" placeholder="PHONE NUMBER" style=" color: #fff;">
+        </div>
+      
+        <div class="input-group p-3 m-2">
+            <textarea class="form-control" style=" color: #fff;">Business Details! </textarea>
+        </div>
+        
+        <center>
+            <div class="p-3 m-3 text-center">
+                <button type="submit" class="btn btn-success">SAVE</button>
+            </div>
+        </center>
+        
+        
+    </form>
+</div>
+
+{% endblock %}

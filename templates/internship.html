@@ -15,6 +15,7 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <title>Internship Registration</title>
+
 <style>
  /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -190,7 +191,7 @@ input[type=number] {
                   style="border-radius:5px; " autocomplete="off" required>
               </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <div class="container">
                 <div class="text-left mt-3 ">Branch</div>
                 <select name="branch" id="course" class="form-control mt-2 text-light" style="border-radius:5px; " required>
@@ -201,7 +202,7 @@ input[type=number] {
                 </select>
                 
               </div>
-            </div>
+            </div> -->
             <div class="row">
               <div class="col-md-6">
                 <div class="text-left mt-3 ">Start Date</div>
@@ -266,7 +267,14 @@ input[type=number] {
     </div>
     <div class="col-md-3"></div>
   </section>
-  {% if msg_success %}
+
+{% if Flag == 'True' %}
+<script>
+  alert("Your application send")
+</script>
+{% endif %}
+
+<!--  {% if msg_success %}
     <script>
      
         Swal.fire({
@@ -280,7 +288,7 @@ input[type=number] {
             javascript: history.go(-1);
         })
     </script>
-  {% endif %}
+  {% endif %}-->
   {% if msg_error %}
     <script>
         Swal.fire({
@@ -411,8 +419,6 @@ input[type=number] {
     })
   });
 </script>
+
 </body>
-
-
-
 </html>

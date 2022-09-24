@@ -1,3 +1,4 @@
+from enum import Flag
 from genericpath import exists
 from logging import exception
 import qrcode 
@@ -134,22 +135,22 @@ def login(request):
                 trcount=user_registration.objects.filter(designation=Trainer).count()
                 return redirect('BRadmin_profiledash')
             
-        design2 = designation.objects.get(designation="tester")   
-        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation_id=design2.id,status="active").exists():
+        # design2 = designation.objects.get(designation="tester")   
+        # if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation_id=design2.id,status="active").exists():
                
-                member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
-                request.session['usernamets'] = member.designation_id
-                request.session['usernamets1'] = member.fullname
-                request.session['usernamehr2'] = member.branch_id
-                request.session['usernametsid'] = member.id
-                if request.session.has_key('usernamets'):
-                    usernamets = request.session['usernamets']
-                if request.session.has_key('usernamets1'):
-                    usernamets1 = request.session['usernamets1']
-                else:
-                   return redirect('/')
-                mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
-                return render(request,'TSdashboard.html',{'mem':mem})
+        #         member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+        #         request.session['usernamets'] = member.designation_id
+        #         request.session['usernamets1'] = member.fullname
+        #         request.session['usernamehr2'] = member.branch_id
+        #         request.session['usernametsid'] = member.id
+        #         if request.session.has_key('usernamets'):
+        #             usernamets = request.session['usernamets']
+        #         if request.session.has_key('usernamets1'):
+        #             usernamets1 = request.session['usernamets1']
+        #         else:
+        #            return redirect('/')
+        #         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
+        #         return render(request,'TSdashboard.html',{'mem':mem})
     
         design = designation.objects.get(designation="team leader")
         
@@ -5350,7 +5351,7 @@ def internship_save(request):
             a.course = request.POST['course']
             a.stream = request.POST['stream']
             a.platform = request.POST['platform']
-            a.branch_id  =  request.POST['branch']
+            #a.branch_id  =  request.POST['branch']
             a.start_date =  request.POST['start_date']
             a.end_date  =  request.POST['end_date']
             a.mobile  =  request.POST['mobile']
@@ -5370,9 +5371,10 @@ def internship_save(request):
                         a.qr = djangofile
 
                         a.save()
-            branch = branch_registration.objects.all()
+           
             msg_success="Your application has been sent successfully"
-            return render(request, 'internship.html',{'branch':branch,'msg_success':msg_success})
+            Flag='True'
+            return render(request, 'internship.html',{'msg_success':msg_success,'Flag':Flag})
         except:
             message = "Enter all details !!!"
             return render(request, 'internship.html',{'message':message})
@@ -16196,3 +16198,38 @@ def MAN_project_table(request,id):
         return render(request, 'MAN_project_table.html', {'mem': mem, 'var': var, 'data': data, 'data1': data1, 'newdata': newdata})
     else:
         return redirect('/')
+
+
+
+    #====================== Digital Markemting ==============
+
+
+def dm_dashboard(request):
+    return render(request,'DigitalMarketing/DM_dashboard.html')
+
+#loadin for data collections
+
+def dm_data_collect(request):
+    return render(request,'DigitalMarketing/DM_Date-Collection.html')
+
+def dm_backlink_details(request):
+    return render(request,'DigitalMarketing/DM_Backlins-Details.html')
+
+def dm_blog_calender(request):
+    return render(request,'DigitalMarketing/DM_Blog-calender.html')
+
+def dm_smm_post_calender(request):
+    return render(request,'DigitalMarketing/DM_Smm-Post-Calender.html')
+
+def dm_web_page_content(request):
+    return render(request,'DigitalMarketing/DM_Web-Page-Content.html')
+
+def dm_on_page_works(request):
+    return render(request,'DigitalMarketing/DM_On-Page-Works.html')
+
+def dm_competitor_analysis(request):
+    return render(request,'DigitalMarketing/DM_CompetitorAnalysis.html')
+
+
+def dm_data_collection_client(request):
+    return render(request,'DigitalMarketing/DM_DataCollection-Client.html')

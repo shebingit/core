@@ -1,0 +1,48 @@
+{% extends 'DigitalMarketing/DM_base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container">
+    <h4 class="text-center m-4">Data Collection</h4>
+    <form action="#" method="post">
+        {% csrf_token %}
+        <div class="input-group p-3 m-2">
+            <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" placeholder="SL NO" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" placeholder="FULL NAME" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="email" class="form-control" placeholder="EMAIL ID" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3 m-2">
+            <input type="tel" class="form-control" placeholder="PHONE NUMBER" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3 m-2">
+            <input type="text" class="form-control" placeholder="LOCATION" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3 m-2">
+            <input type="text" class="form-control" placeholder=" APLIED INTERNSHIP/OJT" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3 m-2">
+            <input type="text" class="form-control p-2" placeholder="FRESHER / EXPERIENCED " style=" color: #fff;">
+        </div>
+        <div class="input-group p-3 m-2">
+            <input type="text" class="form-control" placeholder="REMARKS/STATUS" style=" color: #fff;">
+        </div>
+        <center>
+            <div class="p-3 m-3 text-center">
+                <button type="submit" class="btn btn-success">SAVE</button>
+            </div>
+        </center>
+        
+        
+    </form>
+</div>
+
+{% endblock %}

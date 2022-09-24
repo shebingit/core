@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from django.urls import re_path, include
+from django.urls import re_path, include ,path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
@@ -12,7 +12,7 @@ from cal import views as calviews
 urlpatterns = [
     re_path('admin/', admin.site.urls),
     
-    re_path(r'^$', views.login, name='login'),
+    #re_path(r'^$', views.login, name='login'),
     
     re_path(r'^logout/$', views.logout, name='logout'),
     re_path(r'^logout4/$', views.logout4, name='logout4'),
@@ -1496,7 +1496,18 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     re_path(r'^MAN_project_list/(?P<id>\d+)/$', views.MAN_project_list, name='MAN_project_list'),
     re_path(r'^MAN_project_table/(?P<id>\d+)/$', views.MAN_project_table, name='MAN_project_table'),
 
-   
+
+#======================Digital Markenting===================
+
+   path('', views.dm_dashboard, name='DM-Dashboard'),
+   path('DM-Data-Collect', views.dm_data_collect, name='DM-Data-Collect'),
+   path('DM-Backlink-Details', views.dm_backlink_details, name='DM-Backlink-Details'),
+   path('DM-Blog-Calender', views.dm_blog_calender, name='DM-Blog-Calender'),
+   path('DM-SMM-POST-CALENDER', views.dm_smm_post_calender, name='DM-SMM-POST-CALENDER'),
+   path('DM-WEB-PAGE-CONTENT', views.dm_web_page_content, name='DM-WEB-PAGE-CONTENT'),
+   path('DM-ON-PAGE-WORKS', views.dm_on_page_works, name='DM-ON-PAGE-WORKS'),
+   path('DM-COMPETITOR-ANALYSIS', views.dm_competitor_analysis, name='DM-COMPETITOR-ANALYSIS'),
+   path('DM-DATA-COLLECTION-CLIENT', views.dm_data_collection_client, name='DM-DATA-COLLECTION-CLIENT'),
 
 ]
 

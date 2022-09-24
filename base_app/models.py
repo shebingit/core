@@ -215,7 +215,7 @@ class project(models.Model):
                                related_name='branch', null=True, blank=True, default='')
     project = models.CharField(max_length=100,  null=True, blank=True)
     rejectdate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-    description = models.CharField(max_length=100,  null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     startdate = models.DateField(
         auto_now_add=False, auto_now=False,  null=True, blank=True)
     enddate = models.DateField(
