@@ -1,0 +1,27 @@
+{% extends 'DigitalMarketing/Client-data/CP_base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container" id="Competitor">
+    <h4 class="text-center m-4">COMPETITOR &nbsp; ANALYSIA &nbsp;/ WEBSITE &nbsp;AUDIT</h4>
+    <form action="#" method="post">
+        {% csrf_token %}
+        <div class="input-group p-3 m-2">
+            <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" placeholder="SL NO" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" placeholder="COMPANY NAME" style=" color: #fff;">
+        </div>
+        
+            <div class="p-3 m-3 text-end">
+                <button type="submit" class="btn btn-success">SAVE</button>
+            </div>
+        
+    </form>
+</div>
+{% endblock %}

@@ -1,6 +1,7 @@
 from enum import Flag
 from genericpath import exists
 from logging import exception
+from urllib import request
 import qrcode 
 from num2words import num2words
 from xhtml2pdf import pisa
@@ -16212,24 +16213,61 @@ def dm_dashboard(request):
 def dm_data_collect(request):
     return render(request,'DigitalMarketing/DM_Date-Collection.html')
 
+
+#loadin for backlink_details
+
 def dm_backlink_details(request):
     return render(request,'DigitalMarketing/DM_Backlins-Details.html')
+
+#loadin for backlink_details
 
 def dm_blog_calender(request):
     return render(request,'DigitalMarketing/DM_Blog-calender.html')
 
+#loadin for backlink_details
+
 def dm_smm_post_calender(request):
     return render(request,'DigitalMarketing/DM_Smm-Post-Calender.html')
+
+
+#loadin for backlink_details
 
 def dm_web_page_content(request):
     return render(request,'DigitalMarketing/DM_Web-Page-Content.html')
 
+
+#loadin for backlink_details
+
 def dm_on_page_works(request):
     return render(request,'DigitalMarketing/DM_On-Page-Works.html')
+
+#loadin for backlink_details
 
 def dm_competitor_analysis(request):
     return render(request,'DigitalMarketing/DM_CompetitorAnalysis.html')
 
 
+#loadin for backlink_details
+
 def dm_data_collection_client(request):
     return render(request,'DigitalMarketing/DM_DataCollection-Client.html')
+
+
+#loadin task assign page
+def DM_Task_Assign(request):
+    return render(request,'DigitalMarketing/DM_Task-Assign.html')
+
+
+#==========Client section=====
+
+def cp_competitor_analysis(request):
+    return render(request,'DigitalMarketing/Client-data/CP_CompetitorAnalysis.html')
+
+
+def cp_web_page_content(request):
+    return render(request,'DigitalMarketing/Client-data/CP_Web-Page-Content.html')
+
+
+def cp_on_page_works(request):
+    return render(request,'DigitalMarketing/Client-data/CP_On-Page-Works.html')
+

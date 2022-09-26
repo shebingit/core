@@ -1508,6 +1508,13 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    path('DM-ON-PAGE-WORKS', views.dm_on_page_works, name='DM-ON-PAGE-WORKS'),
    path('DM-COMPETITOR-ANALYSIS', views.dm_competitor_analysis, name='DM-COMPETITOR-ANALYSIS'),
    path('DM-DATA-COLLECTION-CLIENT', views.dm_data_collection_client, name='DM-DATA-COLLECTION-CLIENT'),
+   path('DM_TASK-ASSIGN', views.DM_Task_Assign, name='DM_TASK-ASSIGN'),
+
+
+#===============Client project =================== 
+ path('CP-COMPETITOR-ANALYSIS', views.cp_competitor_analysis, name='CP-COMPETITOR-ANALYSIS'),
+ path('CP-WEB-PAGE-CONTENT', views.cp_web_page_content, name='CP-WEB-PAGE-CONTENT'),
+ path('CP-ON-PAGE-WORKS', views.cp_on_page_works, name='CP-ON-PAGE-WORKS'), 
 
 ]
 

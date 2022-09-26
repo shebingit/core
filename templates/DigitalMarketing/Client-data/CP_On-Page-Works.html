@@ -1,8 +1,7 @@
-{% extends 'DigitalMarketing/DM_base.html' %}
+{% extends 'DigitalMarketing/Client-data/CP_base.html' %}
 {% load static %}
 
 {% block content %}
-
 
 <div class="container" id="onpage">
     <h4 class="text-center m-4">ON PAGE WORKS</h4>
@@ -35,57 +34,6 @@
 
     </form>
 </div>
-
-
-<div class="container">
-    <button type="button" class="text-center p-2 btn btn-secondary mb-3" id="data-btn" onclick="myFunction()">Collect Data</button>
-    <div class="row">
-        <h4 class="text-start mt-3 mb-4">ON PAGE WORKS</h4>
-    </div>
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-              <th scope="col">Sl no</th>
-              <th scope="col">Date</th>
-              <th scope="col">Url</th>
-              <th scope="col">Work Details</th>
-              <th scope="col">Remarks/Status</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>22-09-2022</td>
-              <td>https://altostechnologies.in/ </td>
-              <td>meta tag</td> 
-              <td>Done</td>
-              
-            </tr>
-          </tbody>
-    
-    </table>
-</div>
-<style>
-    #onpage
-    {
-        display: none;
-    }
-
-</style>
-
-<script>
-    function myFunction() {
-        var x = document.getElementById("onpage");
-        if (x.style.display === "none") {
-          x.style.display = "block";
-          
-        } else {
-          x.style.display = "none";
-          
-        }
-      }
-</script>
 
 
 {% endblock %}

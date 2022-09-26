@@ -4,7 +4,7 @@
 {% block content %}
 
 
-<div class="container">
+<div class="container" id="data-collection-client">
     <h4 class="text-center m-4">DATA COLLECTION CLIENT</h4>
     <form action="#" method="post">
         {% csrf_token %}
@@ -37,5 +37,58 @@
         
     </form>
 </div>
+
+
+<div class="container">
+    <button type="button" class="text-center p-2 btn btn-secondary mb-3" id="data-btn" onclick="myFunction()">Collect Data</button>
+    <div class="row">
+        <h4 class="text-start mt-3 mb-4">DATA COLLECTION CLIENT</h4>
+    </div>
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Sl no</th>
+              <th scope="col">Date</th>
+              <th scope="col">Full Name</th>
+              <th scope="col">Email Id</th>
+              <th scope="col">Phone No</th>
+              <th scope="col">Bussines Details</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>22-09-2022</td>
+              <td>Fabin </td>
+              <td>Fabin@gmail.com</td> 
+              <td>98767654</td>
+              <td>Resort</td>
+              
+            </tr>
+          </tbody>
+    
+    </table>
+</div>
+<style>
+    #data-collection-client
+    {
+        display: none;
+    }
+
+</style>
+
+<script>
+    function myFunction() {
+        var x = document.getElementById("data-collection-client");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+          
+        } else {
+          x.style.display = "none";
+          
+        }
+      }
+</script>
 
 {% endblock %}

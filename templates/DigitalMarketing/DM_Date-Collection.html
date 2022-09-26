@@ -3,46 +3,153 @@
 
 {% block content %}
 
-
-<div class="container">
+<div class="container" id="data-collect">
+    
     <h4 class="text-center m-4">Data Collection</h4>
     <form action="#" method="post">
         {% csrf_token %}
-        <div class="input-group p-3 m-2">
-            <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group p-3 m-2">
+                    <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group p-3  m-2">
+                    <input type="text" class="form-control" placeholder="SL NO" style=" color: #fff;">
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group p-3  m-2">
+                    <input type="text" class="form-control" placeholder="FULL NAME" style=" color: #fff;">
+                </div>
+                
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group p-3  m-2">
+                    <input type="email" class="form-control" placeholder="EMAIL ID" style=" color: #fff;">
+                </div>
+                
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group p-3 m-2">
+                    <input type="tel" class="form-control" placeholder="PHONE NUMBER" style=" color: #fff;">
+                </div>
+                
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group p-3 m-2">
+                    <input type="text" class="form-control" placeholder="LOCATION" style=" color: #fff;">
+                </div>
+                
+            </div>
+            <div class="col-lg-12">
+                <div class="input-group p-3 m-2">
+                    <input type="text" class="form-control" placeholder=" APLIED INTERNSHIP/OJT" style=" color: #fff;">
+                </div>
+                
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group p-3 m-2">
+                    <select id="Employee" class="form-control"  style="background-color:#434a54;border:none; color: #fff;">
+                        <option selected class="p-2 m-2">FRESHER / EXPERIENCED</option>
+                        <option class="p-2 m-2">Yes</option>
+                        <option class="p-2 m-2">No</option>
+                        
+                    </select>
+                   
+                </div>
+               
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group p-3 m-2">
+                    <select id="Employee" class="form-control" style="background-color:#434a54;border:none; color: #fff;">
+                        <option selected class="p-2 m-2">REMARKS/STATUS</option>
+                        <option class="p-2 m-2">Intrested</option>
+                        <option class="p-2 m-2">Not Intrested</option>
+                        <option class="p-2 m-2">Waiting</option>
+                        <option class="p-2 m-2">Buy Tone</option>
+                        <option class="p-2 m-2">Not Answering</option>	
+                        <option class="p-2 m-2">Call back</option>
+                    </select>
+                   
+                </div>
+
+            </div>
         </div>
-        <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="SL NO" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="FULL NAME" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3  m-2">
-            <input type="email" class="form-control" placeholder="EMAIL ID" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3 m-2">
-            <input type="tel" class="form-control" placeholder="PHONE NUMBER" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3 m-2">
-            <input type="text" class="form-control" placeholder="LOCATION" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3 m-2">
-            <input type="text" class="form-control" placeholder=" APLIED INTERNSHIP/OJT" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3 m-2">
-            <input type="text" class="form-control p-2" placeholder="FRESHER / EXPERIENCED " style=" color: #fff;">
-        </div>
-        <div class="input-group p-3 m-2">
-            <input type="text" class="form-control" placeholder="REMARKS/STATUS" style=" color: #fff;">
-        </div>
-        <center>
-            <div class="p-3 m-3 text-center">
+    
+        
+        
+        
+        
+            <div class="p-3 m-3 text-end">
                 <button type="submit" class="btn btn-success">SAVE</button>
             </div>
-        </center>
+        
         
         
     </form>
 </div>
+
+
+<div class="container">
+    <button type="button" class="text-center p-2 btn btn-secondary mb-3" id="data-btn" onclick="myFunction()">Collect Data</button>
+    <div class="row">
+        <h4 class="text-start mt-3 mb-3">DATA COLLECTION</h4>
+    </div>
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Sl no</th>
+              <th scope="col">Date</th>
+              <th scope="col">Full Name</th>
+              <th scope="col">Email Id</th>
+              <th scope="col">Phone No</th>
+              <th scope="col">Location</th>
+              <th scope="col">Applied Internship</th>
+              <th scope="col">Experienced/Fresher</th>
+              <th scope="col">Remarks/Status</th>
+             
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>22-09-2022</td>
+              <td>text2 </td>
+              <td>text1@gmail.com</td>
+              <td>8987676598</td>
+              <td>Pala</td>
+              <td>Python</td>
+              <td>Experienced</td>
+              <td>Intrested</td>
+            </tr>
+            
+            
+          </tbody>
+    
+    </table>
+</div>
+<style>
+    #data-collect
+    {
+        display: none;
+    }
+
+</style>
+
+<script>
+    function myFunction() {
+        var x = document.getElementById("data-collect");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+          
+        } else {
+          x.style.display = "none";
+          
+        }
+      }
+</script>
 
 {% endblock %}

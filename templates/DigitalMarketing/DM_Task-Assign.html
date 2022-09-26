@@ -1,0 +1,91 @@
+{% extends 'DigitalMarketing/DM_base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container">
+    <h4 class="text-center m-4">TASK ASSIGN</h4>
+    <form action="#" method="post">
+        {% csrf_token %}
+
+    <div class="empoyee  mt-3 mb-3">
+        <label for="Employee" class="form-label mt-3 mb-3">Choose Employee</label>
+        <select id="Employee" class="form-select">
+        <option selected class="p-2 m-2">Text 1</option>
+        <option class="p-2 m-2">Text 2</option>
+        <option class="p-2 m-2">Text 3</option>
+        <option class="p-2 m-2">Text 4</option>
+        <option class="p-2 m-2">Text 5</option>
+        </select>
+
+    </div>
+    
+    <div class="category mt-3 mb-3">
+        <label for="Category" class="form-label mt-3 mb-3">Task Category</label>
+        <select id="Category" class="form-select p-2">
+        <option class="p-2 m-2" selected>DATA Collection</option>
+        <option class="p-2 m-2">Backlink Details</option>
+        <option class="p-2 m-2">Blog calender</option>
+        <option class="p-2 m-2">SMM Post Calender</option>
+        <option class="p-2 m-2">Webpage Content creation</option>
+        <option class="p-2 m-2">On page works</option>
+        <option class="p-2 m-2">Competitor analysis/Website Audit</option>
+        <option class="p-2 m-2">Data collection - Client</option>
+        </select>
+
+    </div>
+    <div class="Dates mt-2 mb-3">
+        <label for="dates" class="form-label mt-3 mb-3 ">Choose Date</label><br>
+        <input type="date"id="dates" class="w-100 p-2">
+    </div>
+    <div class="text-end mb-5 p-2">
+        <button type="submit" class="btn btn-success">SAVE</button>
+    </div>
+    
+    </form>
+
+    <div class="container" id="task-data">
+        <div class="row">
+            <h4 class="text-start mt-3 mb-3">TASK ASSIGN DATA</h4>
+        </div>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                  <th scope="col">NO</th>
+                  <th scope="col">Task Assign Date</th>
+                  <th scope="col">Full Name</th>
+                  <th scope="col">Project Name</th>
+                  <th scope="col">Assinged Task</th>
+                  <th scope="col">Task Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>22-09-2022</td>
+                  <td>text2 </td>
+                  <td>@mdo</td>
+                  <td>
+                    Competitor analysis/Website Audit
+                  </td>
+                  <td>Assinged</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>23-09-2022</td>
+                  <td>
+                    text1
+                  </td>
+                  <td>@fat</td>
+                  <td>On page works</td>
+                  <td>Accepted</td>
+                </tr>
+                
+              </tbody>
+        
+        </table>
+
+    </div>
+
+{% endblock %}
