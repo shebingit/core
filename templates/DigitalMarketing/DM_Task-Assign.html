@@ -4,43 +4,52 @@
 {% block content %}
 
 
-<div class="container">
+<div class="container p-3" style="background-color:#212529 ;">
     <h4 class="text-center m-4">TASK ASSIGN</h4>
-    <form action="#" method="post">
+    <form action="{% url 'DM-Task-ASSIGNED' %}" method="post">
         {% csrf_token %}
 
     <div class="empoyee  mt-3 mb-3">
         <label for="Employee" class="form-label mt-3 mb-3">Choose Employee</label>
-        <select id="Employee" class="form-select">
-        <option selected class="p-2 m-2">Text 1</option>
-        <option class="p-2 m-2">Text 2</option>
-        <option class="p-2 m-2">Text 3</option>
-        <option class="p-2 m-2">Text 4</option>
-        <option class="p-2 m-2">Text 5</option>
+        <select id="Employee" name="empname" class="form-select" required>
+          <option class="p-2">Select Employee</option>
+          {% for i in worker %}
+            <option class="p-2" value="{{i.fullname}}">{{i.fullname}}</option>
+          {% endfor %}
+       
         </select>
 
+    </div>
+    <div class="work mt-3 mb-3">
+      <label for="Category" class="form-label mt-3 mb-3">Works</label>
+        <select id="Category" class="form-select p-2" name="twork">
+          <option class="p-2" selected>Data Collection</option>
+          {% for i in works %}
+          <option class="p-2" value="{{i.work_name}}">{{i.work_name}}</option>
+          {% endfor %}
+        </select>
     </div>
     
     <div class="category mt-3 mb-3">
         <label for="Category" class="form-label mt-3 mb-3">Task Category</label>
-        <select id="Category" class="form-select p-2">
-        <option class="p-2 m-2" selected>DATA Collection</option>
-        <option class="p-2 m-2">Backlink Details</option>
-        <option class="p-2 m-2">Blog calender</option>
-        <option class="p-2 m-2">SMM Post Calender</option>
-        <option class="p-2 m-2">Webpage Content creation</option>
-        <option class="p-2 m-2">On page works</option>
-        <option class="p-2 m-2">Competitor analysis/Website Audit</option>
-        <option class="p-2 m-2">Data collection - Client</option>
+        <select id="Category" class="form-select p-2"name="tcateg">
+        <option class="p-2" selected>DATA Collection</option>
+        <option class="p-2">Backlink Details</option>
+        <option class="p-2">Blog calender</option>
+        <option class="p-2">SMM Post Calender</option>
+        <option class="p-2">Webpage Content creation</option>
+        <option class="p-2">On page works</option>
+        <option class="p-2">Competitor analysis/Website Audit</option>
+        <option class="p-2">Data collection - Client</option>
         </select>
 
     </div>
     <div class="Dates mt-2 mb-3">
         <label for="dates" class="form-label mt-3 mb-3 ">Choose Date</label><br>
-        <input type="date"id="dates" class="w-100 p-2">
+        <input type="date" id="dates" name="tdate" class="w-100 p-2" required>
     </div>
     <div class="text-end mb-5 p-2">
-        <button type="submit" class="btn btn-success">SAVE</button>
+        <button type="submit" class="btn btn-success p-2">Assign Task</button>
     </div>
     
     </form>
@@ -61,31 +70,36 @@
                 </tr>
               </thead>
               <tbody>
+                {% for i in tasks %}
                 <tr>
-                  <th scope="row">1</th>
-                  <td>22-09-2022</td>
-                  <td>text2 </td>
-                  <td>@mdo</td>
+                  
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td>{{i.task_date}}</td>
+                  <td>{{i.employee_name}} </td>
+                  <td>{{i.task_work}}</td>
                   <td>
-                    Competitor analysis/Website Audit
+                    {{i.task_category}}
                   </td>
-                  <td>Assinged</td>
+                  <td>{{i.task_status}}</td>
                 </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>23-09-2022</td>
-                  <td>
-                    text1
-                  </td>
-                  <td>@fat</td>
-                  <td>On page works</td>
-                  <td>Accepted</td>
-                </tr>
-                
+                {% endfor %}
               </tbody>
         
         </table>
 
     </div>
+
+    <!-- Sweat aleert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if mesg == 1 %}
+  <script>
+    swal("Good job!","Task Successfuly Assigned.", "success");
+  </script>
+{% elif  mesg == 0 %}
+  <script>
+    swal("Good job!","Work Successfuly Removed.", "error");
+  </script>
+
+{% endif %}
 
 {% endblock %}

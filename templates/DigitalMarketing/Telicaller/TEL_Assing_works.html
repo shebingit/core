@@ -1,0 +1,31 @@
+{% extends 'DigitalMarketing/Telicaller/TEL_Base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .container a{
+        text-decoration: none;
+        color: #fff;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+           
+            <div class="card">
+                <div class="card-body">
+                    <h6>Date: 22/09/2022</h6><br>
+                    <h4>Work Name: Altos</h4><br>
+                    <h5>Task Category: Backlink Details</h5><br>
+                   
+                <div class="card-footer text-end">
+                    <a href="{% url 'TEL-Work-Table' %}" class="btn btn-success">Start Work</a>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

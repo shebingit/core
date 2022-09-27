@@ -676,3 +676,19 @@ class income(models.Model):
     department = models.ForeignKey(department, on_delete=models.SET_NULL,related_name='accounts_department_name', null=True, blank=True)
     payment_head = models.ForeignKey(payment_head, on_delete=models.SET_NULL,related_name='accounts_payment_head', null=True, blank=True)
     pay_status = models.IntegerField(default=0)
+
+
+#==== Digital Marketing======
+
+class Work(models.Model):
+     
+    work_date = models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    work_name = models.CharField(max_length=200,null=True, blank=True)
+    work_status=models.CharField(max_length=50,null=True, blank=True)
+
+class TaskAssign(models.Model):
+     task_date = models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+     employee_name=models.CharField(max_length=200,null=True, blank=True)
+     task_work=models.CharField(max_length=200,null=True, blank=True)
+     task_category=models.CharField(max_length=200,null=True, blank=True)
+     task_status=models.CharField(max_length=50,null=True, blank=True)

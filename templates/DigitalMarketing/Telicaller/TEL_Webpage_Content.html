@@ -1,0 +1,36 @@
+{% extends 'DigitalMarketing/Telicaller/TEL_Base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container" >
+    <h4 class="text-center m-4">WEB PAGE CONTENT CREATION ADD</h4>
+    <form action="#" method="post">
+        {% csrf_token %}
+        <div class="input-group p-3 m-2">
+            <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" placeholder="SL NO" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="url" class="form-control" placeholder="PASTE PAGE URL" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" placeholder="DESCRIPTION  ON CONTENT" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" placeholder="KEYWORDS IF ANY" style=" color: #fff;">
+        </div>
+        <center>
+            <div class="p-1 text-center">
+                <button type="submit" class="btn btn-success p-2">SAVE</button>
+            </div>
+
+        </center>
+        
+    </form>
+</div>
+
+{% endblock %}

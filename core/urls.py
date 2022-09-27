@@ -1500,6 +1500,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 #======================Digital Markenting===================
 
    path('', views.dm_dashboard, name='DM-Dashboard'),
+   path('DM-WORKS', views.dm_works, name='DM-WORKS'),
    path('DM-Data-Collect', views.dm_data_collect, name='DM-Data-Collect'),
    path('DM-Backlink-Details', views.dm_backlink_details, name='DM-Backlink-Details'),
    path('DM-Blog-Calender', views.dm_blog_calender, name='DM-Blog-Calender'),
@@ -1509,7 +1510,25 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    path('DM-COMPETITOR-ANALYSIS', views.dm_competitor_analysis, name='DM-COMPETITOR-ANALYSIS'),
    path('DM-DATA-COLLECTION-CLIENT', views.dm_data_collection_client, name='DM-DATA-COLLECTION-CLIENT'),
    path('DM_TASK-ASSIGN', views.DM_Task_Assign, name='DM_TASK-ASSIGN'),
+   path('DM_WORK_CREATE', views.dm_work_create, name='DM_WORK_CREATE'),
+   path('DM-Telecallers', views.dm_telecalers, name='DM-Telecallers'),
 
+
+#======= Digital Marketing Creation Section=====
+
+ path('DM-WORK-ADD', views.dm_Work_add, name='DM-WORK-ADD'),
+ path('DM-Task-ASSIGNED', views.dm_task_assigning, name='DM-Task-ASSIGNED'),
+
+#====== Digital Marketing Deletion=========
+
+ path('DM-WORK-Delete/<int:dm_work_delete_id>', views.dm_Work_Delete, name='DM-WORK-Delete'),
+
+#========Telecaller==============
+
+ path('TEL-Dashboard', views.TEL_dashboard, name='TEL-Dashboard'),
+ path('TEL-Assign-Works', views.tel_assign_works, name='TEL-Assign-Works'),
+ path('TEL-Work-Table', views.tel_works_table, name='TEL-Work-Table'),
+ path('TEL-Start-Work', views.tel_start_work, name='TEL-Start-Work'),
 
 #===============Client project =================== 
  path('CP-COMPETITOR-ANALYSIS', views.cp_competitor_analysis, name='CP-COMPETITOR-ANALYSIS'),

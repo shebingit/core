@@ -16208,6 +16208,31 @@ def MAN_project_table(request,id):
 def dm_dashboard(request):
     return render(request,'DigitalMarketing/DM_dashboard.html')
 
+def dm_works(request):
+    return render(request,'DigitalMarketing/DM_Works.html')
+
+def dm_Work_add(request):
+    if request.method =="POST":
+        wdate=request.POST['wdate']
+        wname=request.POST['wname']
+        wstatus="Pending"
+        works=Work(work_date=wdate,work_name=wname,work_status=wstatus)
+        works.save()
+        mesg=1
+        works=Work.objects.all()
+        return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg})
+    else:
+        works=Work.objects.all()
+        return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works})
+
+def dm_Work_Delete(request,dm_work_delete_id):
+    works=Work.objects.get(id=dm_work_delete_id)
+    works.delete()
+    mesg=0
+    works=Work.objects.all()
+    return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg})
+
+    
 #loadin for data collections
 
 def dm_data_collect(request):
@@ -16236,6 +16261,10 @@ def dm_web_page_content(request):
     return render(request,'DigitalMarketing/DM_Web-Page-Content.html')
 
 
+def dm_work_create(request):
+    works=Work.objects.all()
+    return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works})
+
 #loadin for backlink_details
 
 def dm_on_page_works(request):
@@ -16255,7 +16284,53 @@ def dm_data_collection_client(request):
 
 #loadin task assign page
 def DM_Task_Assign(request):
-    return render(request,'DigitalMarketing/DM_Task-Assign.html')
+    works=Work.objects.all()
+    des=designation.objects.get(designation='Telecaller')
+    worker=user_registration.objects.filter(designation=des.id)
+    return render(request,'DigitalMarketing/DM_Task-Assign.html',{'works':works,'worker':worker})
+
+def dm_task_assigning(request):
+    works=Work.objects.all()
+    des=designation.objects.get(designation='Telecaller')
+    worker=user_registration.objects.filter(designation=des.id)
+    if request.method =="POST":
+        tdate=request.POST['tdate']
+        empname=request.POST['empname']
+        twork=request.POST['twork']
+        tcateg=request.POST['tcateg']
+        tstatus="Assigned"
+        task=TaskAssign(task_date=tdate,employee_name=empname,task_work=twork,task_category=tcateg,task_status=tstatus)
+        task.save()
+        tasks=TaskAssign.objects.all()
+        mesg=1
+        return render(request,'DigitalMarketing/DM_Task-Assign.html',{'tasks':tasks,'mesg':mesg,'works':works,'worker':worker})
+    else:
+        tasks=TaskAssign.objects.all()
+        return render(request,'DigitalMarketing/DM_Task-Assign.html',{'tasks':tasks,'works':works,'worker':worker})
+
+
+def dm_telecalers(request):
+    return render(request,'DigitalMarketing/DM_Telecaller.html')
+
+#==========Teliecaller===============
+
+def TEL_dashboard(request):
+    return render(request,'DigitalMarketing/Telicaller/TEL_Dashboard.html')
+
+def tel_assign_works(request):
+    return render(request,'DigitalMarketing/Telicaller/TEL_Assing_works.html')
+
+def tel_works_table(request):
+    return render(request,'DigitalMarketing/Telicaller/TEL_Work_Table.html')
+
+def tel_start_work(request):
+    value='Webpage Content'
+    if value == 'Data collection':
+        return render(request,'DigitalMarketing/Telicaller/TEL_DataCollect.html')
+
+    elif value == 'Webpage Content':
+        return render(request,'DigitalMarketing/Telicaller/TEL_Webpage_Content.html')
+
 
 
 #==========Client section=====

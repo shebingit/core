@@ -1,0 +1,63 @@
+{% extends 'DigitalMarketing/DM_base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+<div class="container">
+    <h4 class="text-center">WORK CREATE</h4>
+    <form action="{% url 'DM-WORK-ADD' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group p-3 m-2">
+            <input type="date" class="form-control" name="wdate" placeholder="DATE" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3 m-2">
+            <input type="text" class="form-control" name="wname" placeholder="WORK" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3 m-2">
+          <button type="submit" class="btn btn-success"> Save</button>
+        </div>
+    </form>
+</div>
+
+<div class="container mt-4 p-3">
+    <table class="table table-dark table-striped text-center">
+        <thead>
+            <tr>
+              <th scope="col">Action</th>
+              <th scope="col">No</th>
+              <th scope="col">Date</th>
+              <th scope="col">Work</th>
+              <th scope="col">Remarks/Status</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for i in works %}
+            <tr>
+              <th scope="row"><a href="{% url 'DM-WORK-Delete' i.id %}" class="btn btn-danger">Delete</a></th>
+              <th scope="row">{{forloop.counter}}</th>
+              <td>{{i.work_date}}</td>
+              <td>{{i.work_name}}</td>
+              <td>{{i.work_status}}</td>
+ 
+            </tr>
+          {% endfor %}
+          </tbody>
+    
+    </table>
+</div>
+<!-- Sweat aleert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if mesg == 1 %}
+  <script>
+    swal("Good job!","Work Successfuly Added.", "success");
+  </script>
+{% elif  mesg == 0 %}
+  <script>
+    swal("Good job!","Work Successfuly Removed.", "error");
+  </script>
+
+{% endif %}
+
+{% endblock %}
