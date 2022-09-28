@@ -19,6 +19,7 @@
               <th scope="col">Remarks/Status</th>
               <th scope="col">Report</th>
               <th scope="col">Action</th>
+              <th scope="col">HandOver Data</th>
             </tr>
           </thead>
           <tbody>
@@ -36,6 +37,7 @@
               </td>
               <td><a href="{% url 'DM-PROJECT-VIEW' i.id %}" class="btn btn-secondary">View</a></td>
               <td><a href="#" class="btn btn-warning">Forward</a></td>
+              <td><a href="{% url 'DM-PROJECT-VIEW' i.id %}" class="btn btn-secondary">View</a></td>
  
             </tr>
             {% endfor %}

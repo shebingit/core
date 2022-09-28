@@ -535,6 +535,7 @@ def Trainers_Calendar(request):
         return render(request,'Trainers_Calendar.html',{'mem':mem, 'vars':vars})
     else:
         return redirect('/')
+
 def Trainers_Attendancetable(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -554,6 +555,7 @@ def Trainers_Attendancetable(request):
         return render(request, 'Trainers_Attendancetable.html',{'mem':mem,'vars':attend})
     else:
         return redirect('/')
+
 def Trainee(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -581,6 +583,7 @@ def reportedissue(request):
         return render(request, 'reportedissue.html', {'mem': mem})
     else:
         return redirect('/')
+
 def reportissuetrainers(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -594,6 +597,7 @@ def reportissuetrainers(request):
         return render(request, 'reportissuetrainers.html', {'mem': mem})
     else:
         return redirect('/')
+
 def trainerunsolvedissue(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -616,6 +620,7 @@ def trainerunsolvedissue(request):
         return render(request,'trainerunsolvedissue.html',context)
     else:
         return redirect('/')
+
 def savetmreplaytrnr(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -641,6 +646,7 @@ def savetmreplaytrnr(request):
         return redirect('reportissuetrainers')
     else:
         return redirect('/')
+
 def trainersolvedissue(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -16231,7 +16237,7 @@ def dm_works(request,wk):
     #================================
 
 def dm_project_view(request,dm_project_id):
-    tasks=TaskAssign.objects.filter(id=dm_project_id)
+    tasks=TaskAssign.objects.filter(task_work=dm_project_id)
     return render(request,'DigitalMarketing/DM_Project_View.html',{'tasks':tasks})
 
      #================================ 
@@ -16341,7 +16347,7 @@ def dm_Task_Assign(request,taid):
     return render(request,'DigitalMarketing/DM_Task-Assign.html',{'works':works,'worker':worker,'tasks':tasks,'wc':wc})
 
 def dm_task_assigning(request):
-    works=Work.objects.all()
+   
     des=designation.objects.get(designation='Telecaller')
     worker=user_registration.objects.filter(designation=des.id)
     if request.method =="POST":
@@ -16351,10 +16357,13 @@ def dm_task_assigning(request):
         tworks=Work.objects.get(work_name=twork)
         tworks.work_status='Assigned'
         whname=tworks.work_head
-        if whname == 'House Project':
+        if whname =='House Project':
             wc=0
-        else:
+            works=Work.objects.filter(work_head='House Project')
+        elif whname =='Client Project':
             wc=1
+            works=Work.objects.filter(work_head='Client Project')
+
         tworks.save()
         tcateg=request.POST['tcateg']
         tstatus="Assigned"
@@ -16375,7 +16384,8 @@ def TEL_dashboard(request):
     return render(request,'DigitalMarketing/Telicaller/TEL_Dashboard.html')
 
 def tel_assign_works(request):
-    return render(request,'DigitalMarketing/Telicaller/TEL_Assing_works.html')
+    works=TaskAssign.objects.filter(employee_name='trainingmanager1')
+    return render(request,'DigitalMarketing/Telicaller/TEL_Assing_works.html',{'works':works})
 
 def tel_works_table(request):
     return render(request,'DigitalMarketing/Telicaller/TEL_Work_Table.html')

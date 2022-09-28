@@ -10,14 +10,15 @@
 </style>
 
 <div class="container">
-    <div class="row">
+    <div class="row g-3">
+    {% for i in works %}
         <div class="col-3">
            
-            <div class="card">
+            <div class="card" style="height: 25vh;">
                 <div class="card-body">
-                    <h6>Date: 22/09/2022</h6><br>
-                    <h4>Work Name: Altos</h4><br>
-                    <h5>Task Category: Backlink Details</h5><br>
+                    <h6>Date: {{i.task_date}}</h6>
+                    <h5>Work Name: {{i.task_work.work_name}}</h5>
+                    <h6>Task Category: {{i.task_category}}</h6>
                    
                 <div class="card-footer text-end">
                     <a href="{% url 'TEL-Work-Table' %}" class="btn btn-success">Start Work</a>
@@ -25,6 +26,7 @@
                 </div>
             </div>
         </div>
+    {% endfor %}
     </div>
 </div>
 
