@@ -1500,7 +1500,11 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 #======================Digital Markenting===================
 
    path('', views.dm_dashboard, name='DM-Dashboard'),
-   path('DM-WORKS', views.dm_works, name='DM-WORKS'),
+   path('DM-In-House-Project', views.dm_in_house_project, name='DM-In-House-Project'),
+   path('DM-Client-Project', views.dm_client_project, name='DM-Client-Project'),
+
+   path('DM-WORKS/<int:wk>', views.dm_works, name='DM-WORKS'),
+   path('DM-PROJECT-VIEW/<int:dm_project_id>', views.dm_project_view, name='DM-PROJECT-VIEW'),
    path('DM-Data-Collect', views.dm_data_collect, name='DM-Data-Collect'),
    path('DM-Backlink-Details', views.dm_backlink_details, name='DM-Backlink-Details'),
    path('DM-Blog-Calender', views.dm_blog_calender, name='DM-Blog-Calender'),
@@ -1509,14 +1513,14 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    path('DM-ON-PAGE-WORKS', views.dm_on_page_works, name='DM-ON-PAGE-WORKS'),
    path('DM-COMPETITOR-ANALYSIS', views.dm_competitor_analysis, name='DM-COMPETITOR-ANALYSIS'),
    path('DM-DATA-COLLECTION-CLIENT', views.dm_data_collection_client, name='DM-DATA-COLLECTION-CLIENT'),
-   path('DM_TASK-ASSIGN', views.DM_Task_Assign, name='DM_TASK-ASSIGN'),
-   path('DM_WORK_CREATE', views.dm_work_create, name='DM_WORK_CREATE'),
+   path('DM_TASK-ASSIGN/<int:taid>', views.dm_Task_Assign, name='DM_TASK-ASSIGN'),
+   path('DM_WORK_CREATE/<int:wcid>', views.dm_work_create, name='DM_WORK_CREATE'),
    path('DM-Telecallers', views.dm_telecalers, name='DM-Telecallers'),
 
 
 #======= Digital Marketing Creation Section=====
 
- path('DM-WORK-ADD', views.dm_Work_add, name='DM-WORK-ADD'),
+ path('DM-WORK-ADD/<int:waid>', views.dm_Work_add, name='DM-WORK-ADD'),
  path('DM-Task-ASSIGNED', views.dm_task_assigning, name='DM-Task-ASSIGNED'),
 
 #====== Digital Marketing Deletion=========

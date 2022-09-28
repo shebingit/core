@@ -6,8 +6,13 @@
 
 
 <div class="container">
-    <h4 class="text-center">WORK CREATE</h4>
-    <form action="{% url 'DM-WORK-ADD' %}" method="post">
+  {% if wc == 0 %}
+    <h4 class="text-center"> IN HOUSE PROJECT CREATE</h4>
+  {% else %}
+    <h4 class="text-center"> CLIENT PROJECT CREATE</h4>
+  {% endif %}
+
+    <form action="{% url 'DM-WORK-ADD' wc %}" method="post">
         {% csrf_token %}
         <div class="input-group p-3 m-2">
             <input type="date" class="form-control" name="wdate" placeholder="DATE" style=" color: #fff;">
@@ -17,6 +22,7 @@
         </div>
         <div class="input-group p-3 m-2">
           <button type="submit" class="btn btn-success"> Save</button>
+          
         </div>
     </form>
 </div>

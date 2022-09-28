@@ -150,6 +150,36 @@
     </div>
 </div>
 
+<style>
+    .container a{
+         text-decoration: none;
+         color: #fff;
+    }
+   
+</style>
+
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-lg-4">
+            <a href="{% url 'DM-In-House-Project' %}">
+            <div class="card text-center">
+                <div class="card-body">
+                    IN HOUSE PROJECT
+                </div>
+            </div>
+            </a>
+        </div>
+        <div class="col-lg-4">
+            <a href="{% url 'DM-Client-Project' %}">
+            <div class="card text-center">
+                <div class="card-body">
+                   CLIENTS PROJECT
+                </div>
+            </div>
+            </a>
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}

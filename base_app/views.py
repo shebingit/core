@@ -16208,29 +16208,69 @@ def MAN_project_table(request,id):
 def dm_dashboard(request):
     return render(request,'DigitalMarketing/DM_dashboard.html')
 
-def dm_works(request):
-    return render(request,'DigitalMarketing/DM_Works.html')
 
-def dm_Work_add(request):
-    if request.method =="POST":
+def dm_in_house_project(request):
+    prid=0
+    return render(request,'DigitalMarketing/DM_In-House-Project.html',{'prid':prid})
+
+def dm_client_project(request):
+    prid=1
+    return render(request,'DigitalMarketing/DM_Client-Project.html',{'prid':prid})
+
+
+def dm_works(request,wk):
+    if wk == 0:
+        wc=0
+        works=Work.objects.filter(work_head='House Project')
+    else:
+        wc=1
+        works=Work.objects.filter(work_head='Client Project')
+    
+    return render(request,'DigitalMarketing/DM_Works.html',{'works':works,'wc':wc})
+
+    #================================
+
+def dm_project_view(request,dm_project_id):
+    tasks=TaskAssign.objects.filter(id=dm_project_id)
+    return render(request,'DigitalMarketing/DM_Project_View.html',{'tasks':tasks})
+
+     #================================ 
+
+def dm_Work_add(request,waid):
+    if request.method == "POST":
         wdate=request.POST['wdate']
         wname=request.POST['wname']
+
+        print(waid)
         wstatus="Pending"
-        works=Work(work_date=wdate,work_name=wname,work_status=wstatus)
-        works.save()
-        mesg=1
-        works=Work.objects.all()
-        return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg})
-    else:
-        works=Work.objects.all()
-        return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works})
+        if waid == 0: 
+            works=Work(work_date=wdate,work_name=wname,work_status=wstatus,work_head='House Project')
+            works.save()
+            mesg=1
+            wc=0
+            works=Work.objects.filter(work_head=works.work_head)
+            return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc})
+        elif waid == 1: 
+            works=Work(work_date=wdate,work_name=wname,work_status=wstatus,work_head='Client Project')
+            works.save()
+            mesg=1
+            wc=1
+            works=Work.objects.filter(work_head=works.work_head)
+            return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc})
+    
 
 def dm_Work_Delete(request,dm_work_delete_id):
     works=Work.objects.get(id=dm_work_delete_id)
+    whnane=works.work_head
     works.delete()
+    if whnane == 'House Project':
+        works=Work.objects.filter(work_head=whnane)
+        wc=0
+    else:
+         works=Work.objects.filter(work_head=whnane)
+         wc=1
     mesg=0
-    works=Work.objects.all()
-    return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg})
+    return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc})
 
     
 #loadin for data collections
@@ -16261,9 +16301,13 @@ def dm_web_page_content(request):
     return render(request,'DigitalMarketing/DM_Web-Page-Content.html')
 
 
-def dm_work_create(request):
-    works=Work.objects.all()
-    return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works})
+def dm_work_create(request,wcid):
+    wc=wcid
+    if wc == 0: 
+         works=Work.objects.filter(work_head='House Project')
+    elif wc == 1: 
+         works=Work.objects.filter(work_head='Client Project')
+    return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'wc':wc})
 
 #loadin for backlink_details
 
@@ -16283,11 +16327,18 @@ def dm_data_collection_client(request):
 
 
 #loadin task assign page
-def DM_Task_Assign(request):
-    works=Work.objects.all()
+def dm_Task_Assign(request,taid):
+    if taid == 0:
+        works=Work.objects.filter(work_head='House Project')
+        wc=0
+    else:
+        wc=1
+        works=Work.objects.filter(work_head='Client Project')
+    tasks=TaskAssign.objects.all()
+
     des=designation.objects.get(designation='Telecaller')
     worker=user_registration.objects.filter(designation=des.id)
-    return render(request,'DigitalMarketing/DM_Task-Assign.html',{'works':works,'worker':worker})
+    return render(request,'DigitalMarketing/DM_Task-Assign.html',{'works':works,'worker':worker,'tasks':tasks,'wc':wc})
 
 def dm_task_assigning(request):
     works=Work.objects.all()
@@ -16297,16 +16348,22 @@ def dm_task_assigning(request):
         tdate=request.POST['tdate']
         empname=request.POST['empname']
         twork=request.POST['twork']
+        tworks=Work.objects.get(work_name=twork)
+        tworks.work_status='Assigned'
+        whname=tworks.work_head
+        if whname == 'House Project':
+            wc=0
+        else:
+            wc=1
+        tworks.save()
         tcateg=request.POST['tcateg']
         tstatus="Assigned"
-        task=TaskAssign(task_date=tdate,employee_name=empname,task_work=twork,task_category=tcateg,task_status=tstatus)
+        task=TaskAssign(task_date=tdate,employee_name=empname,task_work=tworks,task_category=tcateg,task_status=tstatus)
         task.save()
-        tasks=TaskAssign.objects.all()
+        tasks=TaskAssign.objects.filter(task_work=tworks.id)
         mesg=1
-        return render(request,'DigitalMarketing/DM_Task-Assign.html',{'tasks':tasks,'mesg':mesg,'works':works,'worker':worker})
-    else:
-        tasks=TaskAssign.objects.all()
-        return render(request,'DigitalMarketing/DM_Task-Assign.html',{'tasks':tasks,'works':works,'worker':worker})
+        return render(request,'DigitalMarketing/DM_Task-Assign.html',{'tasks':tasks,'mesg':mesg,'works':works,'worker':worker,'wc':wc})
+
 
 
 def dm_telecalers(request):
