@@ -1,3 +1,4 @@
+from email.policy import default
 from xmlrpc.client import boolean
 from django.contrib.auth.models import User
 from django.db import models
@@ -693,3 +694,30 @@ class TaskAssign(models.Model):
      task_work=models.ForeignKey(Work,on_delete=models.CASCADE,null=True,blank=True)
      task_category=models.CharField(max_length=200,null=True, blank=True)
      task_status=models.CharField(max_length=50,null=True, blank=True)
+
+class DataCollect(models.Model):
+      Project_name=models.ForeignKey(Work,on_delete=models.CASCADE,null=True,blank=True)
+      Employeeid=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+      dc_date = models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+      dc_name=models.CharField(max_length=100,null=True, blank=True)
+      dc_email=models.CharField(max_length=100,null=True, blank=True)
+      dc_phone=models.CharField(max_length=50,null=True, blank=True)
+      dc_loc=models.CharField(max_length=110,null=True, blank=True)
+      dc_internship=models.CharField(max_length=100,null=True, blank=True)
+      dc_Fr_Ex=models.CharField(max_length=50,null=True, blank=True)
+      dc_status=models.CharField(max_length=50,null=True, blank=True)
+      dc_reason=models.CharField(max_length=50,null=True, blank=True)
+
+#-------------------------------------------------------------------------------------
+
+#======================Team leader=======================================
+
+class TLDProject(models.Model):
+    tld_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    tld_project_name=models.CharField(max_length=100,null=True, blank=True)
+
+class TLDPojectDescription(models.Model):
+    tld_project_id=models.ForeignKey(TLDProject,on_delete=models.CASCADE,null=True,blank=True)
+    tld_project_module=models.CharField(max_length=100,null=True, blank=True)
+    tld_project_descrip=models.TextField()
+    tld_project_ui=models.ImageField(upload_to="ProjectUI", null=True)

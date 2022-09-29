@@ -1497,9 +1497,23 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     re_path(r'^MAN_project_table/(?P<id>\d+)/$', views.MAN_project_table, name='MAN_project_table'),
 
 
+
+#========================= Team Leader======================
+
+
+
+ path('',views.tl_dashboard, name='TL-Dashboard'),
+ path('TL-Document',views.tl_document, name='TL-Document'),
+ path('TL-DNew-Projectt',views.tl_dnew_project, name='TL-DNew-Project'),
+ path('TL-DPrjects',views.tl_dproject, name='TL-DPrjects'),
+ path('TL-DProject-Add',views.tl_dproject_add, name='TL-DProject-Add'),
+ path('TLD-Project-Description/<int:tldproject_id>',views.tl_dproject_descrip, name='TLD-Project-Description'),
+ path('TL-DProject-Descrption-Add',views.tl_dproject_descrption_add, name='TL-DProject-Descrption-Add'),
+
+
 #======================Digital Markenting===================
 
-   path('', views.dm_dashboard, name='DM-Dashboard'),
+   path('dm_dashboard', views.dm_dashboard, name='DM-Dashboard'),
    path('DM-In-House-Project', views.dm_in_house_project, name='DM-In-House-Project'),
    path('DM-Client-Project', views.dm_client_project, name='DM-Client-Project'),
 
@@ -1531,8 +1545,12 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
  path('TEL-Dashboard', views.TEL_dashboard, name='TEL-Dashboard'),
  path('TEL-Assign-Works', views.tel_assign_works, name='TEL-Assign-Works'),
- path('TEL-Work-Table', views.tel_works_table, name='TEL-Work-Table'),
- path('TEL-Start-Work', views.tel_start_work, name='TEL-Start-Work'),
+ path('TEL-Work-Table/<int:tel_task_id>', views.tel_works_table, name='TEL-Work-Table'),
+ path('TEL-Work-Table-View', views.tel_work_table_view, name='TEL-Work-Table-View'),
+ path('TEL-Start-Work/<int:start_id>', views.tel_start_work, name='TEL-Start-Work'),
+
+
+path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-COLLECTION-ADD'),
 
 #===============Client project =================== 
  path('CP-COMPETITOR-ANALYSIS', views.cp_competitor_analysis, name='CP-COMPETITOR-ANALYSIS'),

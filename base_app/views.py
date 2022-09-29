@@ -16206,6 +16206,60 @@ def MAN_project_table(request,id):
     else:
         return redirect('/')
 
+#-----------------------------------------------------------------------------------------------------------
+
+
+#=====================Team Leader==================
+
+def tl_dashboard(request):
+    return render(request,'TL-Module/tl_dashboard.html')
+
+def tl_document(request):
+    return render(request,'TL-Module/tl_document.html')
+
+def tl_dnew_project(request):
+    return render(request,'TL-Module/tl_dnew_project.html')
+
+def tl_dproject(request):
+    projects=TLDProject.objects.all()
+    return render(request,'TL-Module/tl_dproject.html',{'projects':projects})
+
+def tl_dproject_add(request):
+    if request.method == "POST":
+        project_date=request.POST['dproject_date']
+        project_name=request.POST['dproject_name']
+        projects=TLDProject(tld_date=project_date,tld_project_name=project_name)
+        projects.save()
+        msg=1
+        return render(request,'TL-Module/tl_document.html',{'msg':msg})
+    else:
+        msg=0
+        return render(request,'TL-Module/tl_document.html',{'msg':msg})
+
+
+def tl_dproject_descrip(request,tldproject_id):
+    projects=TLDProject.objects.get(id=tldproject_id)
+    project_desc=TLDPojectDescription.objects.filter(tld_project_id=projects)
+    return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc})
+
+
+def tl_dproject_descrption_add(request):    
+    if request.method == "POST":
+        projectid=request.POST['project_id']
+        project_module=request.POST['dproject_module']
+        project_desc=request.POST['dproject_desc']
+        project_ui=request.FILES.get('dproject_img')
+
+        projects=TLDProject.objects.get(id=projectid)
+        
+        project_desc=TLDPojectDescription(tld_project_id=projects,
+                                        tld_project_module=project_module,
+                                        tld_project_descrip=project_desc,
+                                        tld_project_ui=project_ui)
+        project_desc.save()
+        msg=1
+        project_desc=TLDPojectDescription.objects.filter(tld_project_id=projects)
+        return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc,'msg':msg})
 
 
     #====================== Digital Markemting ==============
@@ -16384,20 +16438,58 @@ def TEL_dashboard(request):
     return render(request,'DigitalMarketing/Telicaller/TEL_Dashboard.html')
 
 def tel_assign_works(request):
-    works=TaskAssign.objects.filter(employee_name='trainingmanager1')
+    works=TaskAssign.objects.filter(employee_name='trainingmanager1',task_status='Assigned')
     return render(request,'DigitalMarketing/Telicaller/TEL_Assing_works.html',{'works':works})
 
-def tel_works_table(request):
-    return render(request,'DigitalMarketing/Telicaller/TEL_Work_Table.html')
+def tel_works_table(request,tel_task_id):
+    task=TaskAssign.objects.get(id=tel_task_id)
+    task.task_status='Pending'
+    task.save()
+    tasks=TaskAssign.objects.filter(task_status='Pending')
+    return render(request,'DigitalMarketing/Telicaller/TEL_Work_Table.html',{'tasks':tasks})
 
-def tel_start_work(request):
-    value='Webpage Content'
-    if value == 'Data collection':
-        return render(request,'DigitalMarketing/Telicaller/TEL_DataCollect.html')
+def tel_work_table_view(request):
+    tasks=TaskAssign.objects.filter(task_status='Pending')
+    return render(request,'DigitalMarketing/Telicaller/TEL_Work_Table.html',{'tasks':tasks})
 
-    elif value == 'Webpage Content':
+def tel_start_work(request,start_id):
+    t_category=TaskAssign.objects.get(id=start_id)
+    
+    value=t_category.task_category
+    print(value)
+
+    if value == 'DATA Collection':
+        proname=t_category.task_work.work_name
+        return render(request,'DigitalMarketing/Telicaller/TEL_DataCollect.html',{'proname':proname})
+
+    elif value == 'Webpage Content creation':
         return render(request,'DigitalMarketing/Telicaller/TEL_Webpage_Content.html')
+    
+    tasks=TaskAssign.objects.filter(task_status='Pending')
+    return render(request,'DigitalMarketing/Telicaller/TEL_Work_Table.html',{'tasks':tasks})
 
+
+def tel_data_collection_add(request):
+    if request.method =="POST":
+        dcdate=request.POST['dcdate']
+        dcname=request.POST['dcname']
+        dcmail=request.POST['dcmail']
+        dcphno=request.POST['dcphno']
+        dcloc=request.POST['dcloc']
+        dcinternship=request.POST['dcinternship']
+        dcfrex=request.POST['dcfr_ex']
+        dcstatus=request.POST['dcstatus']
+        dcreason=request.POST['dcreason']
+        pname=Work.objects.get(work_name=request.POST['pname'])
+        
+        emp=user_registration.objects.get(fullname='trainingmanager1')
+
+        datacollect=DataCollect(dc_date=dcdate,dc_name=dcname,dc_email=dcmail,dc_phone=dcphno,dc_loc=dcloc,
+                                dc_internship=dcinternship,dc_Fr_Ex=dcfrex,dc_status=dcstatus,dc_reason=dcreason,Employeeid=emp,Project_name=pname)
+        datacollect.save()
+        msg=1
+        record_count=DataCollect.objects.all().count
+        return render(request,'DigitalMarketing/Telicaller/TEL_DataCollect.html',{'msg':msg})
 
 
 #==========Client section=====

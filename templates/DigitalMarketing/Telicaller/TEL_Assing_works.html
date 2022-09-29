@@ -14,14 +14,16 @@
     {% for i in works %}
         <div class="col-3">
            
-            <div class="card" style="height: 25vh;">
+            <div class="card" style="height: 26vh;">
+                <div class="card-head text-center mt-3">
+                    <h4> {{i.task_work.work_name}}</h4>
+                </div>
                 <div class="card-body">
                     <h6>Date: {{i.task_date}}</h6>
-                    <h5>Work Name: {{i.task_work.work_name}}</h5>
                     <h6>Task Category: {{i.task_category}}</h6>
                    
-                <div class="card-footer text-end">
-                    <a href="{% url 'TEL-Work-Table' %}" class="btn btn-success">Start Work</a>
+                <div class="card-footer text-center">
+                    <a href="{% url 'TEL-Work-Table' i.id %}" class="btn btn-success">Start Work</a>
                 </div>
                 </div>
             </div>

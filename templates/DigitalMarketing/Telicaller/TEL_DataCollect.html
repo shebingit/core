@@ -3,54 +3,58 @@
 
 {% block content %}
 
-<div class="container" id="data-collect ">
+
+
+<div class="container">
     
-    <h4 class="text-center m-4">Data Collection</h4>
-    <form action="#" method="post">
+    <h4 class="text-center m-4">{{proname}} Data Collection</h4>
+    <form action="{% url 'TEL-DATA-COLLECTION-ADD' %}" method="post"  id="data-collect">
         {% csrf_token %}
+
+        <input type="text" name="pname" value="{{proname}}" hidden>
         <div class="row">
             <div class="col-lg-6">
                 <div class="input-group p-3 m-2">
-                    <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+                    <input type="date" class="form-control" name="dcdate" placeholder="DATE"  style=" color: #fff;">
                 </div>
             </div>
             
             <div class="col-lg-6">
                 <div class="input-group p-3  m-2">
-                    <input type="text" class="form-control" placeholder="FULL NAME" style=" color: #fff;">
+                    <input type="text" class="form-control" name="dcname" placeholder="FULL NAME" style=" color: #fff;">
                 </div>
                 
             </div>
             <div class="col-lg-6">
                 <div class="input-group p-3  m-2">
-                    <input type="email" class="form-control" placeholder="EMAIL ID" style=" color: #fff;">
+                    <input type="email" class="form-control" name="dcmail" placeholder="EMAIL ID" style=" color: #fff;">
                 </div>
                 
             </div>
             <div class="col-lg-6">
                 <div class="input-group p-3 m-2">
-                    <input type="tel" class="form-control" placeholder="PHONE NUMBER" style=" color: #fff;">
+                    <input type="tel" class="form-control" name="dcphno" placeholder="PHONE NUMBER" style=" color: #fff;">
                 </div>
                 
             </div>
             <div class="col-lg-6">
                 <div class="input-group p-3 m-2">
-                    <input type="text" class="form-control" placeholder="LOCATION" style=" color: #fff;">
+                    <input type="text" class="form-control" name="dcloc" placeholder="LOCATION" style=" color: #fff;">
                 </div>
                 
             </div>
             <div class="col-lg-6">
                 <div class="input-group p-3 m-2">
-                    <input type="text" class="form-control" placeholder=" APLIED INTERNSHIP/OJT" style=" color: #fff;">
+                    <input type="text" class="form-control"  name="dcinternship" placeholder=" APLIED INTERNSHIP/OJT" style=" color: #fff;">
                 </div>
                 
             </div>
             <div class="col-lg-6">
                 <div class="input-group p-3 m-2">
-                    <select id="Employee" class="form-control"  style="background-color:#434a54;border:none; color: #fff;">
+                    <select id="Employee" class="form-control" name="dcfr_ex"  style="background-color:#434a54;border:none; color: #fff;">
                         <option selected class="p-2 m-2">FRESHER / EXPERIENCED</option>
-                        <option class="p-2 m-2">Yes</option>
-                        <option class="p-2 m-2">No</option>
+                        <option class="p-2 m-2" value="FRESHER">Yes</option>
+                        <option class="p-2 m-2" value="EXPERIENCED">No</option>
                         
                     </select>
                    
@@ -59,22 +63,24 @@
             </div>
             <div class="col-lg-6">
                 <div class="input-group p-3 m-2">
-                    <select id="selectbox" class="form-control" style="background-color:#434a54;border:none; color: #fff;">
+                    <select id="selectbox" class="form-control" name="dcstatus" style="background-color:#434a54;border:none; color: #fff;">
                        
                         <option class="p-2 m-2">Intrested</option>
                         <option class="p-2 m-2">Not Intrested</option>
                         <option class="p-2 m-2">Waiting</option>
-                        <option class="p-2 m-2">Buy Tone</option>
+                        <option class="p-2 m-2">Busy Tone</option>
                         <option class="p-2 m-2">Not Answering</option>	
-                        <option class="p-2 m-2">Call back</option>
+                        <option class="p-2 m-2">Call Back</option>
                     </select>
                    
                 </div>
 
             </div>
             <div class="col-lg-12 reason" id="reason" >
+                Reason :
                 <div class="input-group p-3 m-2">
-                    <textarea class="form-control" row="5">Reason !</textarea>
+                   
+                  <textarea class="form-control"  name="dcreason"   row="5" style="color: #fff;"></textarea>
                 </div>
                 
             </div>
@@ -115,4 +121,16 @@
     })
 
    </script>
+    <!-- Sweat aleert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if msg == 1 %}
+  <script>
+    swal("Good job!","Data Successfuly Collected.", "success");
+  </script>
+{% elif  msg == 0 %}
+  <script>
+    swal("Good job!","Data Successfuly Removed.", "error");
+  </script>
+
+{% endif %}
 {% endblock %}

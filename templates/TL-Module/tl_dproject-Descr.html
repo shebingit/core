@@ -1,0 +1,84 @@
+{% extends 'TL-Module/tl_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <form action="{% url 'TL-DProject-Descrption-Add' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <h3 class="text-center mb-4">Add {{projects.tld_project_name}} Project  Description </h3>
+                    <label class="m-2">Project Module  Name</label>
+                    <input type="text" name="project_id" value="{{projects.id}}" hidden>
+                    <div class="col-lg-12">
+                        <div class="input-group p-3 m-2">
+                            <input type="text" class="form-control" name="dproject_module" style=" color: #fff;">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <label class="m-2">Project Module Description</label>
+                        <div class="input-group p-3  m-2">
+                            <textarea type="text" class="form-control" name="dproject_desc" row="10" style=" color: #fff;"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <label class="m-2">Project UI Design</label>
+                        <div class="input-group p-3  m-2">
+                            <input type="file" class="form-control" name="dproject_img"  accept="ProjectUI/*" style=" color: #fff;">
+                        </div>
+                    </div>
+                    <div class="p-3 m-3 text-center">
+                        <button type="submit" class="btn btn-success">SAVE</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+
+    <div class="row g-3">
+       
+        <h3 class="text-center m-1">Project Descriptions</h3>
+       
+       
+    {% for i in project_desc %}
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-lg-4">
+                    {% if i.tld_project_ui %}
+                        <img src="{{i.tld_project_ui.url}}" class="img-fluid p-2" alt="...">
+                    {% endif %}
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{i.tld_project_module}}</h5>
+                            <p class="card-text">{{i.tld_project_descrip}}</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+<!-- Sweat aleert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if msg == 1 %}
+  <script>
+    swal("Good job!","Data Successfuly Collected.", "success");
+  </script>
+{% elif  msg == 0 %}
+  <script>
+    swal("Sorry!","Data Error .", "error");
+  </script>
+{% endif %}
+
+{% endblock %}

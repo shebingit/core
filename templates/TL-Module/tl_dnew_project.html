@@ -1,0 +1,33 @@
+{% extends 'TL-Module/tl_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <form action="{% url 'TL-DProject-Add' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <h3 class="text-center mb-4"> Project  Add  For  Document</h3>
+                    <label class="m-2">Project Name</label>
+                    <div class="col-lg-12">
+                        <div class="input-group p-3 m-2">
+                            <input type="text" class="form-control" name="dproject_name" style=" color: #fff;">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <label class="m-2">Project Assign Date</label>
+                        <div class="input-group p-3  m-2">
+                            <input type="date" class="form-control" name="dproject_date"  style=" color: #fff;">
+                        </div>
+                    </div>
+                    <div class="p-3 m-3 text-center">
+                        <button type="submit" class="btn btn-success">SAVE</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
