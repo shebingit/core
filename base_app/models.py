@@ -721,3 +721,22 @@ class TLDPojectDescription(models.Model):
     tld_project_module=models.CharField(max_length=100,null=True, blank=True)
     tld_project_descrip=models.TextField()
     tld_project_ui=models.ImageField(upload_to="ProjectUI", null=True)
+
+class TLDProjectReview(models.Model):
+    tld_project_reviewid=models.ForeignKey(TLDProject,on_delete=models.CASCADE,null=True,blank=True)
+    tld_project_review_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+
+
+class TLDProjectCorrectionUpdation(models.Model):
+    tld_project_cu_id=models.ForeignKey(TLDProject,on_delete=models.CASCADE,null=True,blank=True)
+    tld_project_cu_review_id=models.ForeignKey(TLDProjectReview,on_delete=models.CASCADE,null=True,blank=True)
+    tld_project_cu_module=models.CharField(max_length=100,null=True, blank=True)
+    tld_project_cu_descrip=models.TextField()
+    tld_project_oldui=models.ImageField(upload_to="ProjectUI", null=True)
+    tld_project_cu_olddescrip=models.TextField()
+    tld_project_cu_newui=models.ImageField(upload_to="ProjectUI", null=True)
+    tld_project_cu_newdescrip=models.TextField()
+    tld_project_cu_start=models.CharField(max_length=100,null=True, blank=True)
+    tld_project_cu_end=models.CharField(max_length=100,null=True, blank=True)
+    tld_project_cu_wdays=models.CharField(max_length=50,null=True, blank=True)
+    tld_project_cu_status=models.CharField(max_length=50,null=True, blank=True)

@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <a href="#" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'TLD-Project-Description-Delete' i.id %}" class="btn btn-danger">Delete</a>
                 </div>
             </div>
         </div>
@@ -78,6 +78,10 @@
 {% elif  msg == 0 %}
   <script>
     swal("Sorry!","Data Error .", "error");
+  </script>
+{% elif  msg == 2 %}
+  <script>
+    swal("Done!","Data Successfuly Removed.", "error");
   </script>
 {% endif %}
 

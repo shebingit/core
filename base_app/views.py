@@ -16243,6 +16243,42 @@ def tl_dproject_descrip(request,tldproject_id):
     return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc})
 
 
+#==== Project Description Download====
+
+def tl_dproject_description_pdf(request,project_pdf_id):
+    date = datetime.now()  
+    project=TLDProject.objects.get(id=project_pdf_id)
+    project_desc=TLDPojectDescription.objects.filter(tld_project_id=project)
+    template_path = 'TL-Module/tl_dproject_description_pdf.html'
+    context = {'project':project,
+    'project_desc':project_desc,
+    'media_url':settings.MEDIA_URL,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="ProjectDescription.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+  
+        
+
+
+
 def tl_dproject_descrption_add(request):    
     if request.method == "POST":
         projectid=request.POST['project_id']
@@ -16260,6 +16296,148 @@ def tl_dproject_descrption_add(request):
         msg=1
         project_desc=TLDPojectDescription.objects.filter(tld_project_id=projects)
         return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc,'msg':msg})
+
+
+
+def tl_dproject_description_delete(request,tldproject_desc_delete_id):
+
+    project_desc=TLDPojectDescription.objects.get(id=tldproject_desc_delete_id)
+    projects=TLDProject.objects.get(id=project_desc.tld_project_id.id)
+    project_desc.delete()
+    msg=2
+    project_desc=TLDPojectDescription.objects.filter(tld_project_id=projects)
+    return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc,'msg':msg})
+
+
+def tl_dproject_review(request,tldproject_review_id):
+    projects=TLDProject.objects.get(id=tldproject_review_id)
+    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects)
+    return render(request,'TL-Module/tl_dproject-review.html',{'projects':projects,'reviews':reviews})
+
+
+def tl_dproject_review_date_add(request,ltp_review_date_id):
+    if request.method == "POST":
+        pjt_review_date=request.POST['dproject_review_date']
+        projects=TLDProject.objects.get(id=ltp_review_date_id)
+        reviews=TLDProjectReview(tld_project_reviewid=projects,tld_project_review_date=pjt_review_date)
+        reviews.save()
+        reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects)
+        return render(request,'TL-Module/tl_dproject-review.html',{'projects':projects,'reviews':reviews})
+
+def tl_dproject_correction_updation(request,tlp_prj_id,tlp_review_id):
+    projects=TLDProject.objects.get(id=tlp_prj_id)
+    reviews=TLDProjectReview.objects.get(id=tlp_review_id)
+    print(reviews.id)
+    return render(request,'TL-Module/tl_dproject-correction-updation.html',{'projects':projects,'reviews':reviews})
+
+def tl_dproject_correction_updation_save(request,tlp_cureview_id):
+    if request.method == "POST":
+        reviews=TLDProjectReview.objects.get(id=tlp_cureview_id)
+        p1=request.POST['dpjt_cu']
+        p2=request.POST['dpjt_cu_module_name']
+        p3=request.POST['dpjt_cu_module_dese']
+        p4=request.POST['dpjt_cu_pre_cont']
+        p5=request.FILES.get('dpjt_cu_pre_img')
+        p6=request.POST['dpjt_cu_new_cont']
+        p7=request.FILES.get('dpjt_cu_new_img')
+        p8=reviews.tld_project_review_date
+        p9=request.POST['dpjt_cu_end']
+        p10=request.POST['ddpjt_cu_wdays']
+        projects=TLDProject.objects.get(id=reviews.tld_project_reviewid.id)
+       
+        Correctionupdate=TLDProjectCorrectionUpdation(tld_project_cu_status=p1,
+                                                    tld_project_cu_module=p2,
+                                                    tld_project_cu_descrip=p3,
+                                                    tld_project_cu_olddescrip=p4,
+                                                    tld_project_oldui=p5,
+                                                    tld_project_cu_newdescrip=p6,
+                                                    tld_project_cu_newui=p7,
+                                                    tld_project_cu_start=p8,
+                                                    tld_project_cu_end=p9,
+                                                    tld_project_cu_wdays=p10,tld_project_cu_id=projects,tld_project_cu_review_id=reviews)
+
+        Correctionupdate.save()
+        msg=1
+        return render(request,'TL-Module/tl_dproject-correction-updation.html',{'projects':projects,'reviews':reviews,'msg':msg})
+
+    
+def tl_dproject_corretion_updation_view(request,tlp_cu_view_id):
+    reviews=TLDProjectReview.objects.get(id=tlp_cu_view_id)
+    Correctionupdate=TLDProjectCorrectionUpdation.objects.filter(tld_project_cu_review_id=reviews)
+    return render(request,'TL-Module/tl_dproject-correction-updation_view.html',{'Correctionupdate':Correctionupdate})
+
+
+def tl_dproject_corretion_updation_edit(request,tlp_cu_edit):
+    Correctionupdate=TLDProjectCorrectionUpdation.objects.get(id=tlp_cu_edit)
+    return render(request,'TL-Module/tl_dproject-correction-updation_edit.html',{'Correctionupdate':Correctionupdate})
+
+
+def tl_dproject_edit_save(request,tlp_edit_save):
+    if request.method=="POST":
+        Correctionupdate=TLDProjectCorrectionUpdation.objects.get(id=tlp_edit_save)
+        Correctionupdate.tld_project_cu_status=request.POST.get('updpjt_cu')
+        Correctionupdate.tld_project_cu_module=request.POST.get('updpjt_cu_module_name')
+        Correctionupdate.tld_project_cu_descrip=request.POST.get('updpjt_cu_module_dese')
+
+        Correctionupdate.tld_project_cu_olddescrip=request.POST.get('updpjt_cu_pre_cont')
+        oldimg=request.FILES.get('updpjt_cu_pre_img')
+        if oldimg:
+            Correctionupdate.tld_project_oldui=oldimg
+        else:
+            Correctionupdate.tld_project_oldui= Correctionupdate.tld_project_oldui
+
+
+        Correctionupdate.tld_project_cu_newdescrip=request.POST.get('updpjt_cu_new_cont')
+        newimg=request.FILES.get('updpjt_cu_new_img')
+        if newimg:
+            Correctionupdate.tld_project_cu_newui=newimg
+        else:
+            Correctionupdate.tld_project_cu_newui=Correctionupdate.tld_project_cu_newui
+
+
+        Correctionupdate.tld_project_cu_start= Correctionupdate.tld_project_cu_start
+        Correctionupdate.tld_project_cu_end=request.POST.get('updpjt_cu_end')
+
+        Correctionupdate.tld_project_cu_wdays=request.POST.get('upddpjt_cu_wdays')
+        Correctionupdate.save()
+        return redirect('TL-DPrjects')
+
+
+def tl_dproject_review_pdf(request,tld_review_pdf_id):
+    date = datetime.now()  
+    project=TLDProject.objects.get(id=tld_review_pdf_id)
+    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=project)
+    Correctionupdate=TLDProjectCorrectionUpdation.objects.filter(tld_project_cu_id=project)
+    project_desc=TLDPojectDescription.objects.filter(tld_project_id=project)
+    template_path = 'TL-Module/tl_dproject_review_pdf.html'
+    context = {'project':project,
+    'project_desc':project_desc,
+    'reviews':reviews,
+    'Correctionupdate':Correctionupdate,
+    'media_url':settings.MEDIA_URL,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Review.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
 
 
     #====================== Digital Markemting ==============

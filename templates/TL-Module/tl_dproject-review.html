@@ -1,0 +1,35 @@
+{% extends 'TL-Module/tl_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h4 class="text-center">{{projects.tld_project_name}} - Review Date </h4>
+    <form action="{% url 'TL-DProject-review-Date-Add' projects.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group p-3 m-2">
+            <input type="Date" class="form-control" name="dproject_review_date" placeholder="Review Date" style=" color: #fff;">
+        </div>
+        <div class="p-3 m-3 text-center">
+            <button type="submit" class="btn btn-success">SAVE</button>
+        </div>
+    </form>
+</div>
+<div class="container">
+    <div class="row">
+    {% for i in reviews %}
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card head mt-3 p-2">
+                    <h5 class="text-center">Review Date : {{i.tld_project_review_date}}</h5>
+                </div>
+                <div class="card-body text-center">
+                    <a href="{% url 'TLD-Corretion-Updation' projects.id i.id %}" class="btn btn-primary">Correction / Updation</a>
+                    <a href="{% url 'TLD-Corretion-Updation-view' i.id %}" class="btn btn-info">View</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

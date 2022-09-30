@@ -1,0 +1,53 @@
+{% extends 'TL-Module/tl_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h4 class="text-center">Project Correction Or Updation Edit </h4>
+    <form action="{% url 'TLD-Edit-Save' Correctionupdate.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group p-3 m-2 mt-4">
+            <select  class="form-control" name="updpjt_cu"  style="background-color:#434a54;border:none; color: #fff;">
+                <option selected class="p-2 m-2">{{Correctionupdate.tld_project_cu_status}}</option>
+                <option class="p-2 m-2" value="Correction">Correction</option>
+                <option class="p-2 m-2" value="Updation">Updation</option>
+                
+            </select>
+           
+        </div>
+        <div class="input-group p-3 m-2">
+            <input type="text" class="form-control" name="updpjt_cu_module_name"  style=" color: #fff;" value="{{Correctionupdate.tld_project_cu_module}}">
+        </div>
+        <div class="input-group p-3 m-2">
+            <textarea class="form-control" name="updpjt_cu_module_dese"  rows="5" style=" color: #fff;">{{Correctionupdate.tld_project_cu_descrip}}</textarea>
+        </div>
+        
+        <div class="input-group p-3 m-2">
+          
+            <textarea class="form-control" name="updpjt_cu_pre_cont"  rows="5" style=" color: #fff;">{{Correctionupdate.tld_project_cu_olddescrip}}</textarea>
+        </div>
+        Previous Content Image
+        <div class="input-group p-3 m-2">
+            <input type="file" class="form-control" name="updpjt_cu_pre_img"  accept="ProjectUI/*"  style=" color: #fff;">
+        </div>
+        <div class="input-group p-3 m-2">
+            <textarea class="form-control" name="updpjt_cu_new_cont"  rows="5" style=" color: #fff;">{{Correctionupdate.tld_project_cu_newdescrip}}</textarea>
+        </div>
+        New Content Image:
+        <div class="input-group p-3 m-2">
+            <input type="file" class="form-control" name="updpjt_cu_new_img"  accept="ProjectUI/*" style=" color: #fff;">
+        </div>
+       
+        End Date:
+        <div class="input-group p-3 m-2">
+            <input type="Date" class="form-control" name="updpjt_cu_end"  value="01-01-1999" style=" color: #fff;">
+        </div>
+        <div class="input-group p-3 m-2">
+            <input type="text" class="form-control" name="upddpjt_cu_wdays" placeholder="No of Days Worked"  style=" color: #fff;" value="{{Correctionupdate.tld_project_cu_wdays}}">
+        </div>
+        <div class="p-3 m-3 text-center">
+            <button type="submit" class="btn btn-success">SAVE</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

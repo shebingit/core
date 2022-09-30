@@ -1509,7 +1509,16 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
  path('TL-DProject-Add',views.tl_dproject_add, name='TL-DProject-Add'),
  path('TLD-Project-Description/<int:tldproject_id>',views.tl_dproject_descrip, name='TLD-Project-Description'),
  path('TL-DProject-Descrption-Add',views.tl_dproject_descrption_add, name='TL-DProject-Descrption-Add'),
-
+ path('TLD-Project-Description-Delete/<int:tldproject_desc_delete_id>',views.tl_dproject_description_delete, name='TLD-Project-Description-Delete'),
+ path('TLD-Project-DesecrptionPDF/<int:project_pdf_id>',views.tl_dproject_description_pdf, name='TLD-Project-DesecrptionPDF'),
+ path('TLD-Project-review/<int:tldproject_review_id>',views.tl_dproject_review, name='TLD-Project-review'),
+ path('TL-DProject-review-Date-Add/<int:ltp_review_date_id>',views. tl_dproject_review_date_add, name='TL-DProject-review-Date-Add'),
+ path('TLD-Corretion-Updation/<int:tlp_prj_id>/<int:tlp_review_id>',views.tl_dproject_correction_updation, name='TLD-Corretion-Updation'),
+ path('TLD-Correction-updation-save/<int:tlp_cureview_id>',views.tl_dproject_correction_updation_save, name='TLD-Correction-updation-save'),
+ path('TLD-Corretion-Updation-view/<int:tlp_cu_view_id>',views.tl_dproject_corretion_updation_view, name='TLD-Corretion-Updation-view'),
+ path('TLD-Correction-Update-Edit/<int:tlp_cu_edit>',views.tl_dproject_corretion_updation_edit, name='TLD-Correction-Update-Edit'),
+ path('TLD-Edit-Save/<int:tlp_edit_save>',views.tl_dproject_edit_save, name='TLD-Edit-Save'),
+ path('TLD-Project-ReviewPDF/<int:tld_review_pdf_id>',views.tl_dproject_review_pdf, name='TLD-Project-ReviewPDF'),
 
 #======================Digital Markenting===================
 

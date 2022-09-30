@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Infox core</title>
+        <style type="text/css">
+            body {
+                font-weight: 200;
+                font-size: 14px;
+      
+            }
+            .header {
+                font-size: 18px;
+                font-weight: 100;
+                text-align: center;
+                color: #007cae;
+            }
+            .title {
+                font-size: 25px;
+                font-weight: 100;
+              
+               padding:5px
+            }
+            .title span {
+                color: #007cae;
+            }
+            .details {
+                padding: 10px;
+                text-align: left !important;
+                
+            }
+            .hrItem {
+                border: none;
+                height: 1px;
+                /* Set the hr color */
+                color: #333; /* old IE */
+                background-color: #fff; /* Modern Browsers */
+            }
+            .details .content{
+                text-align: justify;
+                font-size: 20px !important;
+                line-height: 30px;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                
+
+            }
+        </style>
+    </head>
+    <body>
+        <div class='details' style="margin-left: 14cm; top:2cm">
+            
+            <p style="color: black; width: 200px;"><b>Date:{{date|date:'d-m-Y'}}</b></p>
+
+        </div>
+ 
+    
+        <div class='wrapper'>
+            <div class='header'>
+                <p class='title'style="color: black"><b>Project : {{project.tld_project_name}}</b></p> 
+                <p class=''style="color: black"><b>Project Assigned Date : {{project.tld_date}}</b></p> 
+              
+            </div>
+        <div>
+    
+        <div class="container">
+            <div class="row">
+                <h4  class="title">Project Descriptions</h4>
+               {% for i in project_desc %} 
+                <div class="col-lg-12">
+                    <h2 class="">{{i.tld_project_module}}</h2>
+                    <p>* {{i.tld_project_descrip}}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+        
+ 
+ 
+    <script>
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+         document.getElementById("currentDate").value = date;
+    </script>
+        
+    </body>
+</html>
