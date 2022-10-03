@@ -5,7 +5,7 @@ from urllib import request
 import qrcode 
 from num2words import num2words
 from xhtml2pdf import pisa
-
+from django.db.models import Sum
 import random
 import os, json, math
 # import psycopg2
@@ -16436,7 +16436,106 @@ def tl_dproject_review_pdf(request,tld_review_pdf_id):
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
 
+def tl_dproject_workers(request,ltd_prjid):
+    projects=TLDProject.objects.get(id=ltd_prjid)
+    desg=designation.objects.get(designation='developer')
+    developers=user_registration.objects.filter(designation=desg.id)
+    Workers=TLDProjectWorkers.objects.filter(tld_pw_id=ltd_prjid)
+    return render(request,'TL-Module/tl_dproject_Worker_Assign.html',{'projects':projects,'developers':developers,'Workers':Workers})
 
+def tl_dproject_Assign_save(request,tld_prj_save):
+    if request.method == "POST":
+        projects=TLDProject.objects.get(id=tld_prj_save)
+
+        p1=request.POST['assign_date']
+        name=request.POST['dv_name']
+        p2=user_registration.objects.get(fullname=name)
+        p3=request.POST['work_days']
+        Workers=TLDProjectWorkers(tld_pwn_name=p2,tld_pw_date=p1,tld_pw_id=projects,tld_pw_workdays=p3,tld_pw_wid=p2.fullname)
+        Workers.save()
+        Workers=TLDProjectWorkers.objects.filter(tld_pw_id=tld_prj_save)
+        desg=designation.objects.get(designation='developer')
+        developers=user_registration.objects.filter(designation=desg.id)
+        return render(request,'TL-Module/tl_dproject_Worker_Assign.html',{'projects':projects,'developers':developers,'Workers':Workers})
+
+def tl_dproject_workday(request,tld_work_id):
+    Workers=TLDProjectWorkers.objects.get(tld_pw_id=tld_work_id)
+    return render(request,'TL-Module/tl_dproject_Worker_day.html',{'Workers':Workers})
+
+
+def tl_dproject_workday_save(request,tld_work_save):
+     Workers=TLDProjectWorkers.objects.get(tld_pw_id=tld_work_save)
+     if request.method == "POST":
+        p1=request.POST['editwork_days']
+        Workers.tld_pw_workdays=p1
+        Workers.save()
+        wrk=Workers.tld_pw_id.id
+        return redirect('TLD-Project-Worker-Assign',wrk)
+
+
+def tld_project_fulldocument(request,tld_prjdoc_id):
+    date = datetime.now()  
+    project=TLDProject.objects.get(id=tld_prjdoc_id)
+    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=project)
+    Correctionupdate=TLDProjectCorrectionUpdation.objects.filter(tld_project_cu_id=project)
+    project_desc=TLDPojectDescription.objects.filter(tld_project_id=project)
+   
+    workes=TLDProjectWorkers.objects.filter(tld_pw_id=project).values('tld_pw_wid').distinct()
+
+    workdays=TLDProjectWorkers.objects.aggregate(Sum('tld_pw_workdays'))
+    template_path = 'TL-Module/tl_dproject_document_pdf.html'
+   
+    context = {'project':project,
+    'project_desc':project_desc,
+    'reviews':reviews,
+    'workes':workes,
+    'workdays':workdays,
+    'Correctionupdate':Correctionupdate,
+    'media_url':settings.MEDIA_URL,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+    
+def tl_dprject_desecription_edit(request,tld_dese_edit):
+    project_dese=TLDPojectDescription.objects.get(id=tld_dese_edit)
+    return render(request,'TL-Module/tl_dproject_desecription_update.html',{'project_dese':project_dese})
+
+def tl_dproject_desecriptin_update(request,tld_dese_update_id):
+    project_desc=TLDPojectDescription.objects.get(id=tld_dese_update_id)
+    if request.method == "POST":
+        p1=request.POST.get('updproject_module')
+        p2=request.POST.get('updproject_desc')
+        p3=request.FILES.get('updproject_img')
+        if p3:
+            project_desc.tld_project_ui=p3
+        else:
+             project_desc.tld_project_ui= project_desc.tld_project_ui
+        
+        project_desc.tld_project_module=p1
+        project_desc.tld_project_descrip=p2
+        project_desc.save()
+        projects=TLDProject.objects.get(id=project_desc.tld_project_id.id)
+        project_desc=TLDPojectDescription.objects.filter(tld_project_id=projects)
+        msg=3
+        return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc,'msg':msg})
 
 
 
@@ -16668,6 +16767,10 @@ def tel_data_collection_add(request):
         msg=1
         record_count=DataCollect.objects.all().count
         return render(request,'DigitalMarketing/Telicaller/TEL_DataCollect.html',{'msg':msg})
+
+
+
+
 
 
 #==========Client section=====

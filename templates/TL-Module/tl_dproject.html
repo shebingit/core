@@ -12,12 +12,18 @@
                 </div>
                 <div class="card-body">
                     <h6 class="mb-3">Project Assigned Date: {{i.tld_date}}</h6>
+                    <div class="actions text-end">
+                        <a href="{% url 'TLD-Project-Worker-Assign' i.id %}" class="btn btn-outline-primary  ">Project Assign</a>
+                         <a href="{% url 'TLD-Project-Document' i.id %}" class="btn btn-outline-success ">Project Doc.PDF</a>
+
+                    </div>
+                    
                 </div>
                 <div class="card-footer">
-                    <a href="{% url 'TLD-Project-Description' i.id %}" class="btn btn-primary ">Add Project Description</a>
-                    <a href="{% url 'TLD-Project-DesecrptionPDF' i.id %}" class="btn btn-success m-2">PDF Download</a>
-                    <a href="{% url 'TLD-Project-review' i.id %}" class="btn btn-info m-2">Add Project Review</a>
-                    <a href="{% url 'TLD-Project-ReviewPDF' i.id %}" class="btn btn-success m-2">PDF Download</a>
+                    <a href="{% url 'TLD-Project-Description' i.id %}" class="btn btn-outline-primary ">Add Project Description</a>
+                    <a href="{% url 'TLD-Project-DesecrptionPDF' i.id %}" class="btn btn-outline-success m-2">PDF Download</a>
+                    <a href="{% url 'TLD-Project-review' i.id %}" class="btn btn-outline-info m-2">Add Project Review</a>
+                    <a href="{% url 'TLD-Project-ReviewPDF' i.id %}" class="btn btn-outline-success m-2">PDF Download</a>
                       
                 </div>
             </div>

@@ -1519,7 +1519,13 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
  path('TLD-Correction-Update-Edit/<int:tlp_cu_edit>',views.tl_dproject_corretion_updation_edit, name='TLD-Correction-Update-Edit'),
  path('TLD-Edit-Save/<int:tlp_edit_save>',views.tl_dproject_edit_save, name='TLD-Edit-Save'),
  path('TLD-Project-ReviewPDF/<int:tld_review_pdf_id>',views.tl_dproject_review_pdf, name='TLD-Project-ReviewPDF'),
-
+ path('TLD-Project-Worker-Assign/<int:ltd_prjid>',views.tl_dproject_workers, name='TLD-Project-Worker-Assign'),
+ path('TLD-Work Days-Change/<int:tld_work_id>',views.tl_dproject_workday, name='TLD-Work Days-Change'),
+ path('TLD-Work-Assign/<int:tld_prj_save>',views.tl_dproject_Assign_save, name='TLD-Work-Assign'),
+ path('TLD-Project-Days-Save/<int:tld_work_save>',views.tl_dproject_workday_save, name='TLD-Project-Days-Save'),
+ path('TLD-Project-Document/<int:tld_prjdoc_id>',views.tld_project_fulldocument, name='TLD-Project-Document'),
+ path('TLD-Project-Description-Edit/<int:tld_dese_edit>',views.tl_dprject_desecription_edit, name='TLD-Project-Description-Edit'),
+ path('TL-DProject-Descrption-Update/<int:tld_dese_update_id>',views.tl_dproject_desecriptin_update, name='TL-DProject-Descrption-Update'),
 #======================Digital Markenting===================
 
    path('dm_dashboard', views.dm_dashboard, name='DM-Dashboard'),

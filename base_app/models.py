@@ -740,3 +740,10 @@ class TLDProjectCorrectionUpdation(models.Model):
     tld_project_cu_end=models.CharField(max_length=100,null=True, blank=True)
     tld_project_cu_wdays=models.CharField(max_length=50,null=True, blank=True)
     tld_project_cu_status=models.CharField(max_length=50,null=True, blank=True)
+
+class TLDProjectWorkers(models.Model):
+    tld_pw_id=models.ForeignKey(TLDProject,on_delete=models.CASCADE,null=True,blank=True)
+    tld_pwn_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    tld_pw_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    tld_pw_wid=models.CharField(max_length=50,null=True, blank=True)
+    tld_pw_workdays=models.IntegerField()
