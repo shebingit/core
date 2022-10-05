@@ -1,0 +1,80 @@
+{% extends 'promanagerindex.html' %} 
+{% load static %} 
+{% block content %}
+
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Projects Documents</h4>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <form>
+            <div class="input-group input-group-sm mb-3">
+              <input
+                type="text"
+                class="form-control text-white"
+                id="myInput"
+                onkeyup="myFunction()"
+                placeholder="Search . . ."
+                style="border: green"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="table-responsive">
+          <table class="table" id="myTable">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Project Details</th>
+                <th>Desecription</th>
+                <th>Correction/Updation</th>
+                <th>Correction</th>
+                <th>Updation</th>
+                <th>Full Project</th>
+              </tr>
+            </thead>
+            {% if project_data %}
+            {% for i in project_data %}
+            <tbody>
+                <tr>
+                    <td><span class="ps-2">{{i.project}}</span></td>
+                    <td>{{i.startdate|date:'d-m-Y'}}</td>
+                    <td>{{i.enddate|date:'d-m-Y'}}</td>
+                    <td> <a  class="btn btn-outline-primary" href="{% url 'PM_project_doc_details' i.id %}" style="cursor:pointer">Add Details</a></td>
+                    <td><a class="btn btn-outline-success" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Pdf  Download</a></td>
+                    <td>
+                      <a class="btn btn-outline-danger" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Correction</a>
+                      <a class="btn btn-outline-info" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Updation</a>
+                      
+                    </td>
+                    <td><a class="btn btn-outline-warning" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Pdf Download</a></td>
+                    <td><a  class="btn btn-outline-primary" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Pdf Download</a></td>
+                    <td><a  class="btn btn-outline-info" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Pdf Download</a></td>
+                </tr>
+                {% endfor %}
+                {% else%}
+                    <h5 style="text-align:center">Nothing to display!</h5>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  
+
+</script>
+
+{%endblock%}

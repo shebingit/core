@@ -161,6 +161,9 @@ def login(request):
                  request.session['tlid'] = member.id
                  
                  return redirect('TLdashboard')
+
+
+
         design1 = designation.objects.get(designation="project manager")
             
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design1.id,status="active").exists():
@@ -5936,7 +5939,7 @@ def projectmanager_assignproject(request):
         pro = user_registration.objects.filter(id=prid)
         desi_id = user_registration.objects.get(id=prid)
         d = designation.objects.get(designation="team leader")
-        t = designation.objects.get(designation="tester")
+        t = designation.objects.get(designation="developer")
         
         
         tes = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= t.id)
@@ -5990,6 +5993,9 @@ def projectmanager_assignproject(request):
         return render(request, 'projectmanager_assignproject.html', {'pro':pro,'spa':spa,'pvar':pvar,'tes':tes})
     else:
         return redirect('/')
+
+
+
 
 def projectmanager_projectstatus(request,id):
     if 'prid' in request.session:
@@ -7352,7 +7358,10 @@ def TLprojects(request):
         mem = user_registration.objects.filter(id=tlid)
         display1 = project.objects.all()
         display=project_taskassign.objects.filter(developer_id=tlid).values('project_id').distinct()
-        return render(request, 'TLprojects.html',{'display':display,'mem':mem,'display1':display1})
+        project_user = user_registration.objects.get(id=tlid)
+        tl_projectproject_doc=ProjectDocuments.objects.filter(projectdoc_user=project_user)
+       
+        return render(request, 'TLprojects.html',{'display':display,'mem':mem,'display1':display1,'tl_projectproject_doc':tl_projectproject_doc})
     else:
         return redirect('/')
 
@@ -14878,6 +14887,47 @@ def pm_createmodule(request):
         return redirect('/')
 
 
+############################# shebin shaji ############
+
+def pm_projectdocument(request):
+
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        desi_id = user_registration.objects.get(id=prid)
+        d = designation.objects.get(designation="team leader")
+        spa = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= d.id)
+        pro = user_registration.objects.filter(id=prid)
+        project_data = project.objects.filter(projectmanager_id=prid)
+        return render(request, 'pm_document.html',{'pro':pro,'project_data':project_data,'spa':spa})
+    else:
+        return redirect('/')
+
+def project_document_assign(request,prjdocid):
+    prjdoc_uid=request.POST.get('tlid')
+    project_user = user_registration.objects.get(id=prjdoc_uid)
+    projectdoc=project.objects.get(id=prjdocid)
+    projectdocument=ProjectDocuments(projectdoc_id=projectdoc,projectdoc_user=project_user)
+    projectdocument.save()
+    return redirect('pm_projectdocument')
+
+
+def TLprojectsDocuments(request):
+     if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+
+        project_user = user_registration.objects.get(id=tlid)
+        tl_projectproject_doc=ProjectDocuments.objects.filter(projectdoc_user=project_user)
+        return render(request, 'TLprojectdocuments.html',{'tl_projectproject_doc':tl_projectproject_doc})
+
+
+############################# end ########################
+
 def pm_createtable(request):
     if 'prid' in request.session:
         if request.session.has_key('prid'):
@@ -16279,56 +16329,33 @@ def tl_dproject_description_pdf(request,project_pdf_id):
 
 
 
-def tl_dproject_descrption_add(request):    
-    if request.method == "POST":
-        projectid=request.POST['project_id']
-        project_module=request.POST['dproject_module']
-        project_desc=request.POST['dproject_desc']
-        project_ui=request.FILES.get('dproject_img')
-
-        projects=TLDProject.objects.get(id=projectid)
-        
-        project_desc=TLDPojectDescription(tld_project_id=projects,
-                                        tld_project_module=project_module,
-                                        tld_project_descrip=project_desc,
-                                        tld_project_ui=project_ui)
-        project_desc.save()
-        msg=1
-        project_desc=TLDPojectDescription.objects.filter(tld_project_id=projects)
-        return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc,'msg':msg})
-
-
-
-def tl_dproject_description_delete(request,tldproject_desc_delete_id):
-
-    project_desc=TLDPojectDescription.objects.get(id=tldproject_desc_delete_id)
-    projects=TLDProject.objects.get(id=project_desc.tld_project_id.id)
-    project_desc.delete()
-    msg=2
-    project_desc=TLDPojectDescription.objects.filter(tld_project_id=projects)
-    return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc,'msg':msg})
 
 
 def tl_dproject_review(request,tldproject_review_id):
-    projects=TLDProject.objects.get(id=tldproject_review_id)
-    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects)
+    projects=ProjectDocuments.objects.get(id=tldproject_review_id)
+    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects.projectdoc_id)
     return render(request,'TL-Module/tl_dproject-review.html',{'projects':projects,'reviews':reviews})
 
 
 def tl_dproject_review_date_add(request,ltp_review_date_id):
     if request.method == "POST":
         pjt_review_date=request.POST['dproject_review_date']
-        projects=TLDProject.objects.get(id=ltp_review_date_id)
+        dprojects=ProjectDocuments.objects.get(id=ltp_review_date_id)
+        projects=project.objects.get(id=dprojects.projectdoc_id.id)
         reviews=TLDProjectReview(tld_project_reviewid=projects,tld_project_review_date=pjt_review_date)
         reviews.save()
         reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects)
         return render(request,'TL-Module/tl_dproject-review.html',{'projects':projects,'reviews':reviews})
 
+
+
 def tl_dproject_correction_updation(request,tlp_prj_id,tlp_review_id):
-    projects=TLDProject.objects.get(id=tlp_prj_id)
+    dprojects=ProjectDocuments.objects.get(id=tlp_prj_id)
+    projects=project.objects.get(id=dprojects.projectdoc_id.id)
     reviews=TLDProjectReview.objects.get(id=tlp_review_id)
+    modules=project_module_assign.objects.filter(project_name=projects)
     print(reviews.id)
-    return render(request,'TL-Module/tl_dproject-correction-updation.html',{'projects':projects,'reviews':reviews})
+    return render(request,'TL-Module/tl_dproject-correction-updation.html',{'projects':projects,'reviews':reviews,'modules':modules})
 
 def tl_dproject_correction_updation_save(request,tlp_cureview_id):
     if request.method == "POST":
@@ -16343,8 +16370,8 @@ def tl_dproject_correction_updation_save(request,tlp_cureview_id):
         p8=reviews.tld_project_review_date
         p9=request.POST['dpjt_cu_end']
         p10=request.POST['ddpjt_cu_wdays']
-        projects=TLDProject.objects.get(id=reviews.tld_project_reviewid.id)
-       
+        dprojects=ProjectDocuments.objects.get(id=reviews.tld_project_reviewid.id)
+        projects=project.objects.get(id=dprojects.projectdoc_id.id)
         Correctionupdate=TLDProjectCorrectionUpdation(tld_project_cu_status=p1,
                                                     tld_project_cu_module=p2,
                                                     tld_project_cu_descrip=p3,
@@ -16400,18 +16427,19 @@ def tl_dproject_edit_save(request,tlp_edit_save):
 
         Correctionupdate.tld_project_cu_wdays=request.POST.get('upddpjt_cu_wdays')
         Correctionupdate.save()
-        return redirect('TL-DPrjects')
+        return redirect('TLprojects')
 
 
 def tl_dproject_review_pdf(request,tld_review_pdf_id):
-    date = datetime.now()  
-    project=TLDProject.objects.get(id=tld_review_pdf_id)
-    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=project)
-    Correctionupdate=TLDProjectCorrectionUpdation.objects.filter(tld_project_cu_id=project)
-    project_desc=TLDPojectDescription.objects.filter(tld_project_id=project)
+    date = datetime.now()
+
+    dproject=ProjectDocuments.objects.get(id=tld_review_pdf_id)
+    projects=project.objects.get(id=dproject.projectdoc_id.id)
+    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects)
+    Correctionupdate=TLDProjectCorrectionUpdation.objects.filter(tld_project_cu_id=projects)
+    
     template_path = 'TL-Module/tl_dproject_review_pdf.html'
-    context = {'project':project,
-    'project_desc':project_desc,
+    context = {'projects':projects,
     'reviews':reviews,
     'Correctionupdate':Correctionupdate,
     'media_url':settings.MEDIA_URL,
@@ -16437,7 +16465,7 @@ def tl_dproject_review_pdf(request,tld_review_pdf_id):
     return response
 
 def tl_dproject_workers(request,ltd_prjid):
-    projects=TLDProject.objects.get(id=ltd_prjid)
+    projects=ProjectDocuments.objects.get(id=ltd_prjid)
     desg=designation.objects.get(designation='developer')
     developers=user_registration.objects.filter(designation=desg.id)
     Workers=TLDProjectWorkers.objects.filter(tld_pw_id=ltd_prjid)
@@ -16445,7 +16473,7 @@ def tl_dproject_workers(request,ltd_prjid):
 
 def tl_dproject_Assign_save(request,tld_prj_save):
     if request.method == "POST":
-        projects=TLDProject.objects.get(id=tld_prj_save)
+        projects=ProjectDocuments.objects.get(id=tld_prj_save)
 
         p1=request.POST['assign_date']
         name=request.POST['dv_name']
@@ -16475,17 +16503,18 @@ def tl_dproject_workday_save(request,tld_work_save):
 
 def tld_project_fulldocument(request,tld_prjdoc_id):
     date = datetime.now()  
-    project=TLDProject.objects.get(id=tld_prjdoc_id)
-    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=project)
-    Correctionupdate=TLDProjectCorrectionUpdation.objects.filter(tld_project_cu_id=project)
-    project_desc=TLDPojectDescription.objects.filter(tld_project_id=project)
+    dproject=ProjectDocuments.objects.get(id=tld_prjdoc_id)
+    projects=project.objects.get(id=dproject.projectdoc_id.id)
+    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects)
+    Correctionupdate=TLDProjectCorrectionUpdation.objects.filter(tld_project_cu_id=projects)
+    project_desc=project_module_assign.objects.filter(project_name=projects)
    
-    workes=TLDProjectWorkers.objects.filter(tld_pw_id=project).values('tld_pw_wid').distinct()
+    workes=TLDProjectWorkers.objects.filter(tld_pw_id=projects).values('tld_pw_wid').distinct()
 
     workdays=TLDProjectWorkers.objects.aggregate(Sum('tld_pw_workdays'))
     template_path = 'TL-Module/tl_dproject_document_pdf.html'
    
-    context = {'project':project,
+    context = {'projects':projects,
     'project_desc':project_desc,
     'reviews':reviews,
     'workes':workes,
@@ -16532,7 +16561,7 @@ def tl_dproject_desecriptin_update(request,tld_dese_update_id):
         project_desc.tld_project_module=p1
         project_desc.tld_project_descrip=p2
         project_desc.save()
-        projects=TLDProject.objects.get(id=project_desc.tld_project_id.id)
+        projects=ProjectDocuments.objects.get(id=project_desc.tld_project_id.id)
         project_desc=TLDPojectDescription.objects.filter(tld_project_id=projects)
         msg=3
         return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc,'msg':msg})
@@ -16786,3 +16815,55 @@ def cp_web_page_content(request):
 def cp_on_page_works(request):
     return render(request,'DigitalMarketing/Client-data/CP_On-Page-Works.html')
 
+
+
+############################### --- Documentation------- ######################################
+
+def PM_project_doc_details(request,prodoc_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        projectdoc=project.objects.get(id=prodoc_id)
+        prdetails=PM_ProjectDocumentDetails.objects.get(doc_project_id=projectdoc)
+        if prdetails:
+            status=0
+            print(status)
+        else:
+            status=1
+
+        return render(request, 'pm_project_document_details.html',{'pro':pro,'projectdoc':projectdoc,'status':status})
+    else:
+        return redirect('/')
+
+def Doc_Project_Detail_Save(request,prjid):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        projectdoc=project.objects.get(id=prjid)
+        if request.method =="POST":
+            p1=request.POST['doc_project_name']
+            p2=request.POST['doc_project_stdate']
+            p3=request.POST['doc_project_enddate']
+            p4=request.FILES.get('doc_project_ui')
+            p5=request.POST['doc_project_frend']
+            p6=request.POST['doc_project_baend']
+            p7=request.POST['doc_project_lib']
+
+            prjdoc=PM_ProjectDocumentDetails(doc_project_name=p1,
+                                            doc_project_startdate=p2,
+                                            doc_project_enddate=p3,
+                                            doc_project_ui=p4,
+                                            doc_project_frontend=p5,
+                                            doc_project_backend=p6,
+                                            doc_project_libraries=p7,
+                                            doc_project_id=projectdoc)
+            prjdoc.save()
+            msg=1
+            status=1
+            return render(request, 'pm_project_document_details.html',{'pro':pro,'projectdoc':projectdoc,'status':status,'msg':msg})

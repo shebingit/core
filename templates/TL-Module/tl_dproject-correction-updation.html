@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container">
-    <h4 class="text-center">{{projects.tld_project_name}} - Project Correction Or Updation </h4>
+    <h4 class="text-center">{{projects.project}} - Project Correction Or Updation </h4>
     <form action="{% url 'TLD-Correction-updation-save' reviews.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="input-group p-3 m-2 mt-4">
@@ -16,7 +16,13 @@
            
         </div>
         <div class="input-group p-3 m-2">
-            <input type="text" class="form-control" name="dpjt_cu_module_name" placeholder="Module Name" style=" color: #fff;">
+            <select  class="form-control"name="dpjt_cu_module_name"  style="background-color:#434a54;border:none; color: #fff;">
+                <option selected class="p-2 m-2">----- Select ----</option>
+                {% for i in modules %}
+                <option class="p-2 m-2" value="{{i.module}}">{{i.module}}</option>
+                {% endfor %}
+                
+            </select>
         </div>
         <div class="input-group p-3 m-2">
             <textarea class="form-control" name="dpjt_cu_module_dese"  rows="5" style=" color: #fff;">Description !</textarea>

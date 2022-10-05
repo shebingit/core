@@ -712,23 +712,20 @@ class DataCollect(models.Model):
 
 #======================Team leader=======================================
 
-class TLDProject(models.Model):
-    tld_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-    tld_project_name=models.CharField(max_length=100,null=True, blank=True)
 
-class TLDPojectDescription(models.Model):
-    tld_project_id=models.ForeignKey(TLDProject,on_delete=models.CASCADE,null=True,blank=True)
-    tld_project_module=models.CharField(max_length=100,null=True, blank=True)
-    tld_project_descrip=models.TextField()
-    tld_project_ui=models.ImageField(upload_to="ProjectUI", null=True)
+class ProjectDocuments(models.Model):
+    projectdoc_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    projectdoc_user=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+
+
 
 class TLDProjectReview(models.Model):
-    tld_project_reviewid=models.ForeignKey(TLDProject,on_delete=models.CASCADE,null=True,blank=True)
+    tld_project_reviewid=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
     tld_project_review_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
 
 
 class TLDProjectCorrectionUpdation(models.Model):
-    tld_project_cu_id=models.ForeignKey(TLDProject,on_delete=models.CASCADE,null=True,blank=True)
+    tld_project_cu_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
     tld_project_cu_review_id=models.ForeignKey(TLDProjectReview,on_delete=models.CASCADE,null=True,blank=True)
     tld_project_cu_module=models.CharField(max_length=100,null=True, blank=True)
     tld_project_cu_descrip=models.TextField()
@@ -742,8 +739,27 @@ class TLDProjectCorrectionUpdation(models.Model):
     tld_project_cu_status=models.CharField(max_length=50,null=True, blank=True)
 
 class TLDProjectWorkers(models.Model):
-    tld_pw_id=models.ForeignKey(TLDProject,on_delete=models.CASCADE,null=True,blank=True)
+    tld_pw_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
     tld_pwn_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
     tld_pw_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     tld_pw_wid=models.CharField(max_length=50,null=True, blank=True)
     tld_pw_workdays=models.IntegerField()
+
+
+    ##################### Document ######################
+
+class PM_ProjectDocumentDetails(models.Model):
+    doc_project_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    doc_project_name=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_currentdate=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    doc_project_startdate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    doc_project_enddate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    doc_project_frontend=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_backend=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_libraries=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_ui=models.ImageField(upload_to="ProjectUI", null=True)
+
+class PM_ProjectDoc_ModuleDetails(models.Model):
+    doc_projectdocd_id=models.ForeignKey(PM_ProjectDocumentDetails,on_delete=models.CASCADE,null=True,blank=True)
+    doc_project_md_name=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_md_dese=models.TextField()

@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container">
-    <h4 class="text-center">{{projects.tld_project_name}} - Review Date </h4>
+    <h4 class="text-center">{{projects.projectdoc_id.project}} - Review Date </h4>
     <form action="{% url 'TL-DProject-review-Date-Add' projects.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="input-group p-3 m-2">

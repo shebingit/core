@@ -12,7 +12,7 @@ from cal import views as calviews
 urlpatterns = [
     re_path('admin/', admin.site.urls),
     
-    #re_path(r'^$', views.login, name='login'),
+    re_path(r'^$', views.login, name='login'),
     
     re_path(r'^logout/$', views.logout, name='logout'),
     re_path(r'^logout4/$', views.logout4, name='logout4'),
@@ -281,6 +281,7 @@ urlpatterns = [
             name='save_trainee_review'),
     re_path(r'^trainee_previousTopic/$', views.trainee_previousTopic,
             name='trainee_previousTopic'),
+
     ###################################  Account & changepassword  #########################################
 
 
@@ -1397,6 +1398,15 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     re_path(r'^pm_createmodule/$', views.pm_createmodule, name='pm_createmodule'),
     re_path(r'^pm_createtable/$', views.pm_createtable, name='pm_createtable'),
     re_path(r'^pm_module_data/$', views.pm_module_data, name='pm_module_data'),
+
+
+    ################# shebin shaji ##################
+
+    path('pm_projectdocument', views.pm_projectdocument, name='pm_projectdocument'),
+    path('project_document_assign/<int:prjdocid>', views.project_document_assign, name='project_document_assign'),
+    path('TLprojectsDocuments', views.TLprojectsDocuments, name='TLprojectsDocuments'),
+    
+
     re_path(r'^pm_projectview/$', views.pm_projectview, name='pm_projectview'),
     re_path(r'^pm_prodata/(?P<id>\d+)/$', views.pm_prodata, name='pm_prodata'),
     re_path(r'^pm_project_assigned/(?P<id>\d+)/$', views.pm_project_assigned, name='pm_project_assigned'),
@@ -1502,14 +1512,13 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
 
 
- path('',views.tl_dashboard, name='TL-Dashboard'),
+ path('tl_dashboard',views.tl_dashboard, name='TL-Dashboard'),
  path('TL-Document',views.tl_document, name='TL-Document'),
  path('TL-DNew-Projectt',views.tl_dnew_project, name='TL-DNew-Project'),
  path('TL-DPrjects',views.tl_dproject, name='TL-DPrjects'),
  path('TL-DProject-Add',views.tl_dproject_add, name='TL-DProject-Add'),
  path('TLD-Project-Description/<int:tldproject_id>',views.tl_dproject_descrip, name='TLD-Project-Description'),
- path('TL-DProject-Descrption-Add',views.tl_dproject_descrption_add, name='TL-DProject-Descrption-Add'),
- path('TLD-Project-Description-Delete/<int:tldproject_desc_delete_id>',views.tl_dproject_description_delete, name='TLD-Project-Description-Delete'),
+ 
  path('TLD-Project-DesecrptionPDF/<int:project_pdf_id>',views.tl_dproject_description_pdf, name='TLD-Project-DesecrptionPDF'),
  path('TLD-Project-review/<int:tldproject_review_id>',views.tl_dproject_review, name='TLD-Project-review'),
  path('TL-DProject-review-Date-Add/<int:ltp_review_date_id>',views. tl_dproject_review_date_add, name='TL-DProject-review-Date-Add'),
@@ -1571,6 +1580,16 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
  path('CP-COMPETITOR-ANALYSIS', views.cp_competitor_analysis, name='CP-COMPETITOR-ANALYSIS'),
  path('CP-WEB-PAGE-CONTENT', views.cp_web_page_content, name='CP-WEB-PAGE-CONTENT'),
  path('CP-ON-PAGE-WORKS', views.cp_on_page_works, name='CP-ON-PAGE-WORKS'), 
+
+
+
+
+ #============================= document =======================
+
+
+ path('PM_project_doc_details/<int:prodoc_id>', views.PM_project_doc_details, name='PM_project_doc_details'),
+ path('Doc_Project_Detail_Save/<int:prjid>', views.Doc_Project_Detail_Save, name='Doc_Project_Detail_Save'), 
+
 
 ]
 
