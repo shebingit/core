@@ -25,34 +25,38 @@
           <table class="table" id="myTable">
             <thead>
               <tr>
+                <th>Project View</th>
                 <th>Project</th>
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Project Details</th>
-                <th>Desecription</th>
                 <th>Correction/Updation</th>
+                <th>Desecription</th>
                 <th>Correction</th>
                 <th>Updation</th>
-                <th>Full Project</th>
+                <th>Project Workers</th>
+                <th>Project Document</th>
               </tr>
             </thead>
             {% if project_data %}
             {% for i in project_data %}
             <tbody>
                 <tr>
+                    <td><a class="btn btn-outline-success" href="{% url 'Project_view' i.id %}" style="cursor:pointer">View</a></td>
                     <td><span class="ps-2">{{i.project}}</span></td>
                     <td>{{i.startdate|date:'d-m-Y'}}</td>
                     <td>{{i.enddate|date:'d-m-Y'}}</td>
                     <td> <a  class="btn btn-outline-primary" href="{% url 'PM_project_doc_details' i.id %}" style="cursor:pointer">Add Details</a></td>
-                    <td><a class="btn btn-outline-success" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Pdf  Download</a></td>
                     <td>
-                      <a class="btn btn-outline-danger" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Correction</a>
-                      <a class="btn btn-outline-info" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Updation</a>
+                      <a class="btn btn-outline-danger" href="{% url 'project_correction' i.id %}" style="cursor:pointer">Correction</a>
+                      <a class="btn btn-outline-info" href="{% url 'project_updation' i.id %}" style="cursor:pointer">Updation</a>
                       
                     </td>
-                    <td><a class="btn btn-outline-warning" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Pdf Download</a></td>
-                    <td><a  class="btn btn-outline-primary" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Pdf Download</a></td>
-                    <td><a  class="btn btn-outline-info" href="{% url 'TLD-Project-Document' i.id %}" style="cursor:pointer">Pdf Download</a></td>
+                    <td><a class="btn btn-outline-success" href="{% url 'Project_Description_pdf' i.id %}" style="cursor:pointer">Pdf  Download</a></td>
+                    <td><a class="btn btn-outline-warning" href="{% url 'project_correction_pdf' i.id %}" style="cursor:pointer">Pdf Download</a></td>
+                    <td><a  class="btn btn-outline-primary" href="{% url 'project_updation_pdf' i.id %}" style="cursor:pointer">Pdf Download</a></td>
+                    <td><a  class="btn btn-outline-primary" href="{% url 'project_workers' i.id %}" style="cursor:pointer">Add Workers</a></td>
+                    <td><a  class="btn btn-outline-info" href="{% url 'project_document_pdf' i.id %}" style="cursor:pointer">Pdf Download</a></td>
                 </tr>
                 {% endfor %}
                 {% else%}

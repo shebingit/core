@@ -16270,59 +16270,8 @@ def tl_document(request):
 def tl_dnew_project(request):
     return render(request,'TL-Module/tl_dnew_project.html')
 
-def tl_dproject(request):
-    projects=TLDProject.objects.all()
-    return render(request,'TL-Module/tl_dproject.html',{'projects':projects})
-
-def tl_dproject_add(request):
-    if request.method == "POST":
-        project_date=request.POST['dproject_date']
-        project_name=request.POST['dproject_name']
-        projects=TLDProject(tld_date=project_date,tld_project_name=project_name)
-        projects.save()
-        msg=1
-        return render(request,'TL-Module/tl_document.html',{'msg':msg})
-    else:
-        msg=0
-        return render(request,'TL-Module/tl_document.html',{'msg':msg})
 
 
-def tl_dproject_descrip(request,tldproject_id):
-    projects=TLDProject.objects.get(id=tldproject_id)
-    project_desc=TLDPojectDescription.objects.filter(tld_project_id=projects)
-    return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc})
-
-
-#==== Project Description Download====
-
-def tl_dproject_description_pdf(request,project_pdf_id):
-    date = datetime.now()  
-    project=TLDProject.objects.get(id=project_pdf_id)
-    project_desc=TLDPojectDescription.objects.filter(tld_project_id=project)
-    template_path = 'TL-Module/tl_dproject_description_pdf.html'
-    context = {'project':project,
-    'project_desc':project_desc,
-    'media_url':settings.MEDIA_URL,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="ProjectDescription.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
 
   
         
@@ -16331,61 +16280,15 @@ def tl_dproject_description_pdf(request,project_pdf_id):
 
 
 
-def tl_dproject_review(request,tldproject_review_id):
-    projects=ProjectDocuments.objects.get(id=tldproject_review_id)
-    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects.projectdoc_id)
-    return render(request,'TL-Module/tl_dproject-review.html',{'projects':projects,'reviews':reviews})
-
-
-def tl_dproject_review_date_add(request,ltp_review_date_id):
-    if request.method == "POST":
-        pjt_review_date=request.POST['dproject_review_date']
-        dprojects=ProjectDocuments.objects.get(id=ltp_review_date_id)
-        projects=project.objects.get(id=dprojects.projectdoc_id.id)
-        reviews=TLDProjectReview(tld_project_reviewid=projects,tld_project_review_date=pjt_review_date)
-        reviews.save()
-        reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects)
-        return render(request,'TL-Module/tl_dproject-review.html',{'projects':projects,'reviews':reviews})
 
 
 
-def tl_dproject_correction_updation(request,tlp_prj_id,tlp_review_id):
-    dprojects=ProjectDocuments.objects.get(id=tlp_prj_id)
-    projects=project.objects.get(id=dprojects.projectdoc_id.id)
-    reviews=TLDProjectReview.objects.get(id=tlp_review_id)
-    modules=project_module_assign.objects.filter(project_name=projects)
-    print(reviews.id)
-    return render(request,'TL-Module/tl_dproject-correction-updation.html',{'projects':projects,'reviews':reviews,'modules':modules})
 
-def tl_dproject_correction_updation_save(request,tlp_cureview_id):
-    if request.method == "POST":
-        reviews=TLDProjectReview.objects.get(id=tlp_cureview_id)
-        p1=request.POST['dpjt_cu']
-        p2=request.POST['dpjt_cu_module_name']
-        p3=request.POST['dpjt_cu_module_dese']
-        p4=request.POST['dpjt_cu_pre_cont']
-        p5=request.FILES.get('dpjt_cu_pre_img')
-        p6=request.POST['dpjt_cu_new_cont']
-        p7=request.FILES.get('dpjt_cu_new_img')
-        p8=reviews.tld_project_review_date
-        p9=request.POST['dpjt_cu_end']
-        p10=request.POST['ddpjt_cu_wdays']
-        dprojects=ProjectDocuments.objects.get(id=reviews.tld_project_reviewid.id)
-        projects=project.objects.get(id=dprojects.projectdoc_id.id)
-        Correctionupdate=TLDProjectCorrectionUpdation(tld_project_cu_status=p1,
-                                                    tld_project_cu_module=p2,
-                                                    tld_project_cu_descrip=p3,
-                                                    tld_project_cu_olddescrip=p4,
-                                                    tld_project_oldui=p5,
-                                                    tld_project_cu_newdescrip=p6,
-                                                    tld_project_cu_newui=p7,
-                                                    tld_project_cu_start=p8,
-                                                    tld_project_cu_end=p9,
-                                                    tld_project_cu_wdays=p10,tld_project_cu_id=projects,tld_project_cu_review_id=reviews)
 
-        Correctionupdate.save()
-        msg=1
-        return render(request,'TL-Module/tl_dproject-correction-updation.html',{'projects':projects,'reviews':reviews,'msg':msg})
+
+
+
+
 
     
 def tl_dproject_corretion_updation_view(request,tlp_cu_view_id):
@@ -16429,142 +16332,6 @@ def tl_dproject_edit_save(request,tlp_edit_save):
         Correctionupdate.save()
         return redirect('TLprojects')
 
-
-def tl_dproject_review_pdf(request,tld_review_pdf_id):
-    date = datetime.now()
-
-    dproject=ProjectDocuments.objects.get(id=tld_review_pdf_id)
-    projects=project.objects.get(id=dproject.projectdoc_id.id)
-    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects)
-    Correctionupdate=TLDProjectCorrectionUpdation.objects.filter(tld_project_cu_id=projects)
-    
-    template_path = 'TL-Module/tl_dproject_review_pdf.html'
-    context = {'projects':projects,
-    'reviews':reviews,
-    'Correctionupdate':Correctionupdate,
-    'media_url':settings.MEDIA_URL,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Review.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-def tl_dproject_workers(request,ltd_prjid):
-    projects=ProjectDocuments.objects.get(id=ltd_prjid)
-    desg=designation.objects.get(designation='developer')
-    developers=user_registration.objects.filter(designation=desg.id)
-    Workers=TLDProjectWorkers.objects.filter(tld_pw_id=ltd_prjid)
-    return render(request,'TL-Module/tl_dproject_Worker_Assign.html',{'projects':projects,'developers':developers,'Workers':Workers})
-
-def tl_dproject_Assign_save(request,tld_prj_save):
-    if request.method == "POST":
-        projects=ProjectDocuments.objects.get(id=tld_prj_save)
-
-        p1=request.POST['assign_date']
-        name=request.POST['dv_name']
-        p2=user_registration.objects.get(fullname=name)
-        p3=request.POST['work_days']
-        Workers=TLDProjectWorkers(tld_pwn_name=p2,tld_pw_date=p1,tld_pw_id=projects,tld_pw_workdays=p3,tld_pw_wid=p2.fullname)
-        Workers.save()
-        Workers=TLDProjectWorkers.objects.filter(tld_pw_id=tld_prj_save)
-        desg=designation.objects.get(designation='developer')
-        developers=user_registration.objects.filter(designation=desg.id)
-        return render(request,'TL-Module/tl_dproject_Worker_Assign.html',{'projects':projects,'developers':developers,'Workers':Workers})
-
-def tl_dproject_workday(request,tld_work_id):
-    Workers=TLDProjectWorkers.objects.get(tld_pw_id=tld_work_id)
-    return render(request,'TL-Module/tl_dproject_Worker_day.html',{'Workers':Workers})
-
-
-def tl_dproject_workday_save(request,tld_work_save):
-     Workers=TLDProjectWorkers.objects.get(tld_pw_id=tld_work_save)
-     if request.method == "POST":
-        p1=request.POST['editwork_days']
-        Workers.tld_pw_workdays=p1
-        Workers.save()
-        wrk=Workers.tld_pw_id.id
-        return redirect('TLD-Project-Worker-Assign',wrk)
-
-
-def tld_project_fulldocument(request,tld_prjdoc_id):
-    date = datetime.now()  
-    dproject=ProjectDocuments.objects.get(id=tld_prjdoc_id)
-    projects=project.objects.get(id=dproject.projectdoc_id.id)
-    reviews=TLDProjectReview.objects.filter(tld_project_reviewid=projects)
-    Correctionupdate=TLDProjectCorrectionUpdation.objects.filter(tld_project_cu_id=projects)
-    project_desc=project_module_assign.objects.filter(project_name=projects)
-   
-    workes=TLDProjectWorkers.objects.filter(tld_pw_id=projects).values('tld_pw_wid').distinct()
-
-    workdays=TLDProjectWorkers.objects.aggregate(Sum('tld_pw_workdays'))
-    template_path = 'TL-Module/tl_dproject_document_pdf.html'
-   
-    context = {'projects':projects,
-    'project_desc':project_desc,
-    'reviews':reviews,
-    'workes':workes,
-    'workdays':workdays,
-    'Correctionupdate':Correctionupdate,
-    'media_url':settings.MEDIA_URL,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-    
-def tl_dprject_desecription_edit(request,tld_dese_edit):
-    project_dese=TLDPojectDescription.objects.get(id=tld_dese_edit)
-    return render(request,'TL-Module/tl_dproject_desecription_update.html',{'project_dese':project_dese})
-
-def tl_dproject_desecriptin_update(request,tld_dese_update_id):
-    project_desc=TLDPojectDescription.objects.get(id=tld_dese_update_id)
-    if request.method == "POST":
-        p1=request.POST.get('updproject_module')
-        p2=request.POST.get('updproject_desc')
-        p3=request.FILES.get('updproject_img')
-        if p3:
-            project_desc.tld_project_ui=p3
-        else:
-             project_desc.tld_project_ui= project_desc.tld_project_ui
-        
-        project_desc.tld_project_module=p1
-        project_desc.tld_project_descrip=p2
-        project_desc.save()
-        projects=ProjectDocuments.objects.get(id=project_desc.tld_project_id.id)
-        project_desc=TLDPojectDescription.objects.filter(tld_project_id=projects)
-        msg=3
-        return render(request,'TL-Module/tl_dproject-Descr.html',{'projects':projects,'project_desc':project_desc,'msg':msg})
 
 
 
@@ -16817,7 +16584,33 @@ def cp_on_page_works(request):
 
 
 
+
+
 ############################### --- Documentation------- ######################################
+
+
+def Project_view(request,proj_view_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        projects=project.objects.get(id=proj_view_id)
+        try:
+            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
+        except PM_ProjectDocumentDetails.DoesNotExist:
+            project_datils=None
+        project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
+        project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
+        project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
+        workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
+        workdays=ProjectWorkers.objects.aggregate(Sum('pw_workdays'))
+        return render(request, 'pm_project_view.html',{'pro':pro,'project_datils':project_datils,'project_desc':project_desc,
+                                                'project_correction':project_correction,'project_updation':project_updation,'workers':workers,
+                                                'workdays':workdays})
+
+
 
 def PM_project_doc_details(request,prodoc_id):
     if 'prid' in request.session:
@@ -16827,12 +16620,8 @@ def PM_project_doc_details(request,prodoc_id):
            return redirect('/')
         pro = user_registration.objects.filter(id=prid)
         projectdoc=project.objects.get(id=prodoc_id)
-        prdetails=PM_ProjectDocumentDetails.objects.get(doc_project_id=projectdoc)
-        if prdetails:
-            status=0
-            print(status)
-        else:
-            status=1
+      
+        status=0
 
         return render(request, 'pm_project_document_details.html',{'pro':pro,'projectdoc':projectdoc,'status':status})
     else:
@@ -16866,4 +16655,536 @@ def Doc_Project_Detail_Save(request,prjid):
             prjdoc.save()
             msg=1
             status=1
-            return render(request, 'pm_project_document_details.html',{'pro':pro,'projectdoc':projectdoc,'status':status,'msg':msg})
+            return render(request, 'pm_project_document_module.html',{'pro':pro,'prjdoc':prjdoc,'status':status,'msg':msg})
+
+
+def Doc_Project_Module(request,prjmd_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        prj=project.objects.get(id=prjmd_id)
+        prjdoc=PM_ProjectDocumentDetails.objects.get(doc_project_id=prj)
+        return render(request, 'pm_project_document_module.html',{'pro':pro,'prjdoc':prjdoc})
+
+def Doc_Project_Module_save(request,prjmsave_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        if request.method =="POST":
+            p1=request.POST['doc_project_mdname']
+            p2=request.POST['doc_project_mddese']
+            prjdoc=PM_ProjectDocumentDetails.objects.get(id=prjmsave_id)
+            prjmodule=PM_ProjectDoc_ModuleDetails(doc_project_md_name=p1,doc_project_md_dese=p2,doc_projectdocd_id=prjdoc)
+            prjmodule.save()
+            msg=1
+            return render(request, 'pm_project_document_module.html',{'pro':pro,'prjdoc':prjdoc,'msg':msg})
+
+
+
+
+def project_correction(request,proj_coret_id):
+     if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        projects=project.objects.get(id=proj_coret_id)
+        try:
+            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
+        except PM_ProjectDocumentDetails.DoesNotExist:
+            project_datils=None
+           
+            return redirect(pm_projectdocument)
+
+        project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
+        return render(request, 'pm_project_correction.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils})
+
+
+def project_correction_save(request,proj_coret_save_id):
+     if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        if request.method =="POST":
+            p1=request.POST['dpjt_c_module_name']
+            p2=request.POST['dpjt_c_module_dese']
+
+            p3=request.POST['dpjt_c_pre_cont']
+            p4=request.FILES.get('dpjt_c_pre_img')
+
+            p5=request.POST['dpjt_c_new_cont']
+            p6=request.FILES.get('dpjt_c_new_img')
+            p7=request.POST['dpjt_c_start']
+            p8=request.POST['dpjt_c_end']
+            p9=request.POST['ddpjt_c_wdays']
+            project_datils=PM_ProjectDocumentDetails.objects.get(id=proj_coret_save_id)
+            project_correction=ProjectCorrectionUpdation(project_cu_module=p1,
+                                                        project_cu_descrip=p2,
+                                                        project_cu_olddescrip=p3,
+                                                        project_oldui=p4,
+                                                        project_cu_newdescrip=p5,
+                                                        project_cu_newui=p6,
+                                                        project_cu_start=p7,
+                                                        project_cu_end=p8,
+                                                        project_cu_wdays=p9,
+                                                        project_cu_status="Correction",
+                                                        project_cu_id=project_datils)
+            project_correction.save()
+            msg=1
+            project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
+            return render(request, 'pm_project_correction.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'msg':msg})                                       
+
+
+    
+
+def project_updation(request,proj_update_id):
+     if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        projects=project.objects.get(id=proj_update_id)
+        try:
+            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
+        except PM_ProjectDocumentDetails.DoesNotExist:
+            project_datils=None
+            return redirect(pm_projectdocument)
+
+        project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
+        return render(request, 'pm_project_updation.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils})
+
+
+
+def project_updation_save(request,proj_update_save_id):
+     if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        if request.method =="POST":
+           p1=request.POST['dpjt_u_module_name']
+           p2=request.POST['dpjt_u_module_dese']
+           p3=request.POST['dpjt_u_pre_cont']
+           p4=request.FILES.get('dpjt_u_pre_img')
+
+           p5=request.POST['dpjt_u_new_cont']
+           p6=request.FILES.get('dpjt_u_new_img')
+           p7=request.POST['dpjt_u_start']
+           p8=request.POST['dpjt_u_end']
+           p9=request.POST['ddpjt_u_wdays']
+
+           project_datils=PM_ProjectDocumentDetails.objects.get(id=proj_update_save_id)
+           project_correction=ProjectCorrectionUpdation(project_cu_module=p1,
+                                                        project_cu_descrip=p2,
+                                                        project_cu_olddescrip=p3,
+                                                        project_oldui=p4,
+                                                        project_cu_newdescrip=p5,
+                                                        project_cu_newui=p6,
+                                                        project_cu_start=p7,
+                                                        project_cu_end=p8,
+                                                        project_cu_wdays=p9,
+                                                        project_cu_status="Updation",
+                                                        project_cu_id=project_datils)
+           project_correction.save()
+           msg=1
+           project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
+           return render(request, 'pm_project_updation.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'msg':msg})     
+
+
+def project_workers(request,proj_wk_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        projects=project.objects.get(id=proj_wk_id)
+        desig=designation.objects.get(designation='developer')
+        develp=user_registration.objects.filter(designation=desig)
+        try:
+            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
+        except PM_ProjectDocumentDetails.DoesNotExist:
+            project_datils=None
+            return redirect(pm_projectdocument)
+            
+        Workers=ProjectWorkers.objects.filter(pw_id=project_datils)
+        return render(request, 'pm_project_workers.html',{'pro':pro,'project_datils':project_datils,'develp':develp,'Workers':Workers})
+
+
+
+
+def project_Assign_save(request,tld_prj_save):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        if request.method == "POST":
+
+            project_datils=PM_ProjectDocumentDetails.objects.get(id=tld_prj_save)
+            p1=request.POST['assign_date']
+            name=request.POST['dv_name']
+            p2=user_registration.objects.get(fullname=name)
+            p3=request.POST['work_days']
+            p4=request.POST['end_date']
+
+            Workers=ProjectWorkers(pwn_name=p2,pw_startdate=p1,pw_enddate=p4,pw_id=project_datils,pw_workdays=p3,pw_wid=p2.fullname)
+            Workers.save()
+            msg=1
+
+            Workers=ProjectWorkers.objects.filter(pw_id=tld_prj_save)
+            desig=designation.objects.get(designation='developer')
+            develp=user_registration.objects.filter(designation=desig)
+            return render(request, 'pm_project_workers.html',{'pro':pro,'project_datils':project_datils,'develp':develp,'Workers':Workers,'msg':msg})
+
+
+def project_workday(request,tld_work_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        Workers=ProjectWorkers.objects.get(id=tld_work_id)
+        return render(request, 'pm_project_workers_days.html',{'pro':pro,'Workers':Workers})
+
+
+def project_workday_save(request,tld_work_save):
+     if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+
+        Workers=ProjectWorkers.objects.get(id=tld_work_save)
+        if request.method == "POST":
+            p1=request.POST['editwork_days']
+            Workers.pw_workdays=p1
+            Workers.save()
+            prd_details=Workers.pw_id.doc_project_id.id
+            return redirect('project_workers', prd_details)
+      
+def project_develper_delete(request,prj_deve_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        Workers=ProjectWorkers.objects.get(id=prj_deve_id)
+        prd_details=Workers.pw_id.doc_project_id.id
+        Workers.delete()
+        return redirect('project_workers', prd_details)
+
+       
+
+ ############################# Edit Save #######################################
+
+def project_desecription_edit(request,dese_edit):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        project_dese=PM_ProjectDoc_ModuleDetails.objects.get(id=dese_edit)
+        return render(request, 'pm_project_desecr_edit.html',{'pro':pro,'project_dese':project_dese})
+
+
+def project_md_save(request,dese_update_id):
+     if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+
+        pro = user_registration.objects.filter(id=prid)
+        project_dese=PM_ProjectDoc_ModuleDetails.objects.get(id=dese_update_id)
+        if request.method == "POST":
+            p1=request.POST.get('updproject_module')
+            p2=request.POST.get('updproject_desc')
+                       
+            project_dese.doc_project_md_name=p1
+            project_dese.doc_project_md_dese=p2
+            project_dese.save()
+            prj=project_dese.doc_projectdocd_id.doc_project_id.id
+            return redirect('Project_view', prj)
+           
+
+def project_correction_edit(request,prj_core_edit):
+     if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+
+        pro = user_registration.objects.filter(id=prid)
+        project_correct_update=ProjectCorrectionUpdation.objects.get(id=prj_core_edit )
+        return render(request, 'pm_project_correction_edit.html',{'pro':pro,'project_correct_update':project_correct_update})
+
+
+def project_updation_edit(request,prj_update_edit):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+
+        pro = user_registration.objects.filter(id=prid)
+        project_correct_update=ProjectCorrectionUpdation.objects.get(id=prj_update_edit )
+        return render(request, 'pm_project_correction_edit.html',{'pro':pro,'project_correct_update':project_correct_update})
+
+
+def project_corret_update_save(request,prj_cu_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+
+        pro = user_registration.objects.filter(id=prid)
+
+        if request.method=="POST":
+
+            Correctionupdate=ProjectCorrectionUpdation.objects.get(id=prj_cu_id)
+
+            if Correctionupdate.project_cu_status == 'Correction':
+
+                Correctionupdate.project_cu_status='Correction'
+                Correctionupdate.project_cu_module=request.POST.get('updpjt_cu_module_name')
+                Correctionupdate.project_cu_descrip=request.POST.get('updpjt_cu_module_dese')
+
+                Correctionupdate.project_cu_olddescrip=request.POST.get('updpjt_cu_pre_cont')
+                oldimg=request.FILES.get('updpjt_cu_pre_img')
+                if oldimg:
+                    Correctionupdate.project_oldui=oldimg
+                else:
+                    Correctionupdate.project_oldui= Correctionupdate.project_oldui
+
+
+                Correctionupdate.project_cu_newdescrip=request.POST.get('updpjt_cu_new_cont')
+                newimg=request.FILES.get('updpjt_cu_new_img')
+                if newimg:
+                    Correctionupdate.project_cu_newui=newimg
+                else:
+                    Correctionupdate.project_cu_newui=Correctionupdate.project_cu_newui
+
+
+                Correctionupdate.project_cu_newui= Correctionupdate.project_cu_newui
+                Correctionupdate.project_cu_end=request.POST.get('updpjt_cu_end')
+
+                Correctionupdate.project_cu_wdays=request.POST.get('upddpjt_cu_wdays')
+                Correctionupdate.save()
+                proj=Correctionupdate.project_cu_id.doc_project_id.id
+                return redirect('Project_view', proj)
+
+            elif Correctionupdate.project_cu_status == 'Updation':
+
+                Correctionupdate.project_cu_status='Updation'
+                Correctionupdate.project_cu_module=request.POST.get('updpjt_cu_module_name')
+                Correctionupdate.project_cu_descrip=request.POST.get('updpjt_cu_module_dese')
+
+                Correctionupdate.project_cu_olddescrip=request.POST.get('updpjt_cu_pre_cont')
+                oldimg=request.FILES.get('updpjt_cu_pre_img')
+                if oldimg:
+                    Correctionupdate.project_oldui=oldimg
+                else:
+                    Correctionupdate.project_oldui= Correctionupdate.project_oldui
+
+
+                Correctionupdate.project_cu_newdescrip=request.POST.get('updpjt_cu_new_cont')
+                newimg=request.FILES.get('updpjt_cu_new_img')
+                if newimg:
+                    Correctionupdate.project_cu_newui=newimg
+                else:
+                    Correctionupdate.project_cu_newui=Correctionupdate.project_cu_newui
+
+
+                Correctionupdate.project_cu_newui= Correctionupdate.project_cu_newui
+                Correctionupdate.project_cu_end=request.POST.get('updpjt_cu_end')
+
+                Correctionupdate.project_cu_wdays=request.POST.get('upddpjt_cu_wdays')
+                Correctionupdate.save()
+                proj=Correctionupdate.project_cu_id.doc_project_id.id
+                return redirect('Project_view', proj)
+
+
+
+    ######################## Document PDF Sections#############################
+
+
+def Project_Description_pdf(request,proj_dese_id):
+    date = datetime.now()  
+    projects=project.objects.get(id=proj_dese_id)
+    try:
+        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
+    except PM_ProjectDocumentDetails.DoesNotExist:
+            project_datils=None
+            return redirect(pm_projectdocument)
+
+    project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
+    
+
+    template_path = 'pm_project_description_pdf.html'
+    context = {'project_datils':project_datils,
+    'project_desc':project_desc,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Desecription.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+# correction pdf
+
+def project_correction_pdf(request,proj_coretpdf_id):
+    date = datetime.now()  
+    projects=project.objects.get(id=proj_coretpdf_id)
+    try:
+        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
+    except PM_ProjectDocumentDetails.DoesNotExist:
+        project_datils=None
+        return redirect(pm_projectdocument)
+
+    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
+    
+    template_path = 'pm_project_correction_pdf.html'
+    context = {'project_datils':project_datils,
+    'project_correction':project_correction,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Corrections.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+# Updation  pdf
+
+def project_updation_pdf(request,proj_updatepdf_id):
+    date = datetime.now()  
+    projects=project.objects.get(id=proj_updatepdf_id)
+    try:
+        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
+    except PM_ProjectDocumentDetails.DoesNotExist:
+        project_datils=None
+        return redirect(pm_projectdocument)
+
+    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
+    
+
+    template_path = 'pm_project_updation_pdf.html'
+    context = {'project_datils':project_datils,
+    'project_correction':project_correction,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Updations.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+    #project Document PDF
+
+
+def project_document_pdf(request,proj_docpdf_id):
+    date = datetime.now()  
+    projects=project.objects.get(id=proj_docpdf_id)
+    try:
+        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
+    except PM_ProjectDocumentDetails.DoesNotExist:
+        project_datils=None
+        return redirect(pm_projectdocument)
+
+    project_module=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
+    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
+    project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
+    workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
+    workdays=ProjectWorkers.objects.aggregate(Sum('pw_workdays'))
+    
+
+    template_path = 'pm_project_document_pdf.html'
+    context = {'project_datils':project_datils,
+    'project_module':project_module,
+    'project_correction':project_correction,
+    'project_updation':project_updation,
+    'workers':workers,
+    'workdays':workdays,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+

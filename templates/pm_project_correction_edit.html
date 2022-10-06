@@ -1,0 +1,53 @@
+{% extends 'promanagerindex.html' %} 
+{% load static %} 
+{% block content %}
+
+
+<div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+            <form action="{% url 'project_corret_update_save' project_correct_update.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="input-group p-3 m-2">
+                    <input type="text" class="form-control" name="updpjt_cu_module_name"  style=" color: #fff;" value="{{project_correct_update.project_cu_module}}">
+                </div>
+                <div class="input-group p-3 m-2">
+                    <textarea class="form-control" name="updpjt_cu_module_dese"  rows="5" style=" color: #fff;">{{project_correct_update.project_cu_descrip}}</textarea>
+                </div>
+                Previous Content and Image
+                <div class="input-group p-3 m-2">
+                  
+                    <textarea class="form-control" name="updpjt_cu_pre_cont"  rows="5" style=" color: #fff;">{{project_correct_update.project_cu_olddescrip}}</textarea>
+                </div>
+              
+                <div class="input-group p-3 m-2">
+                    <input type="file" class="form-control" name="updpjt_cu_pre_img"  accept="ProjectUI/*"  style=" color: #fff;">
+                </div>
+                New Content  and Image:
+                <div class="input-group p-3 m-2">
+                    <textarea class="form-control" name="updpjt_cu_new_cont"  rows="5" style=" color: #fff;">{{project_correct_update.project_cu_newdescrip}}</textarea>
+                </div>
+               
+                <div class="input-group p-3 m-2">
+                    <input type="file" class="form-control" name="updpjt_cu_new_img"  accept="ProjectUI/*" style=" color: #fff;">
+                </div>
+               
+                End Date: {{project_correct_update.project_cu_end |date:'d-m-y'}}
+                <div class="input-group p-3 m-2">
+                    <input type="Date" class="form-control" name="updpjt_cu_end"  value="{{project_correct_update.project_cu_end|date:'d-m-y'}}" style=" color: #fff;">
+                </div>
+                <div class="input-group p-3 m-2">
+                    <input type="text" class="form-control" name="upddpjt_cu_wdays" placeholder="No of Days Worked"  style=" color: #fff;" value="{{project_correct_update.project_cu_wdays}}">
+                </div>
+                <div class="p-3 m-3 text-center">
+                    <button type="submit" class="btn btn-outline-success">SAVE</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

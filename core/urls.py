@@ -1515,26 +1515,18 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
  path('tl_dashboard',views.tl_dashboard, name='TL-Dashboard'),
  path('TL-Document',views.tl_document, name='TL-Document'),
  path('TL-DNew-Projectt',views.tl_dnew_project, name='TL-DNew-Project'),
- path('TL-DPrjects',views.tl_dproject, name='TL-DPrjects'),
- path('TL-DProject-Add',views.tl_dproject_add, name='TL-DProject-Add'),
- path('TLD-Project-Description/<int:tldproject_id>',views.tl_dproject_descrip, name='TLD-Project-Description'),
+
  
- path('TLD-Project-DesecrptionPDF/<int:project_pdf_id>',views.tl_dproject_description_pdf, name='TLD-Project-DesecrptionPDF'),
- path('TLD-Project-review/<int:tldproject_review_id>',views.tl_dproject_review, name='TLD-Project-review'),
- path('TL-DProject-review-Date-Add/<int:ltp_review_date_id>',views. tl_dproject_review_date_add, name='TL-DProject-review-Date-Add'),
- path('TLD-Corretion-Updation/<int:tlp_prj_id>/<int:tlp_review_id>',views.tl_dproject_correction_updation, name='TLD-Corretion-Updation'),
- path('TLD-Correction-updation-save/<int:tlp_cureview_id>',views.tl_dproject_correction_updation_save, name='TLD-Correction-updation-save'),
+ 
  path('TLD-Corretion-Updation-view/<int:tlp_cu_view_id>',views.tl_dproject_corretion_updation_view, name='TLD-Corretion-Updation-view'),
  path('TLD-Correction-Update-Edit/<int:tlp_cu_edit>',views.tl_dproject_corretion_updation_edit, name='TLD-Correction-Update-Edit'),
  path('TLD-Edit-Save/<int:tlp_edit_save>',views.tl_dproject_edit_save, name='TLD-Edit-Save'),
- path('TLD-Project-ReviewPDF/<int:tld_review_pdf_id>',views.tl_dproject_review_pdf, name='TLD-Project-ReviewPDF'),
- path('TLD-Project-Worker-Assign/<int:ltd_prjid>',views.tl_dproject_workers, name='TLD-Project-Worker-Assign'),
- path('TLD-Work Days-Change/<int:tld_work_id>',views.tl_dproject_workday, name='TLD-Work Days-Change'),
- path('TLD-Work-Assign/<int:tld_prj_save>',views.tl_dproject_Assign_save, name='TLD-Work-Assign'),
- path('TLD-Project-Days-Save/<int:tld_work_save>',views.tl_dproject_workday_save, name='TLD-Project-Days-Save'),
- path('TLD-Project-Document/<int:tld_prjdoc_id>',views.tld_project_fulldocument, name='TLD-Project-Document'),
- path('TLD-Project-Description-Edit/<int:tld_dese_edit>',views.tl_dprject_desecription_edit, name='TLD-Project-Description-Edit'),
- path('TL-DProject-Descrption-Update/<int:tld_dese_update_id>',views.tl_dproject_desecriptin_update, name='TL-DProject-Descrption-Update'),
+
+ 
+
+
+
+
 #======================Digital Markenting===================
 
    path('dm_dashboard', views.dm_dashboard, name='DM-Dashboard'),
@@ -1586,9 +1578,39 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
 
  #============================= document =======================
 
-
+ path('Project_view/<int:proj_view_id>', views.Project_view, name='Project_view'),
  path('PM_project_doc_details/<int:prodoc_id>', views.PM_project_doc_details, name='PM_project_doc_details'),
- path('Doc_Project_Detail_Save/<int:prjid>', views.Doc_Project_Detail_Save, name='Doc_Project_Detail_Save'), 
+ path('Doc_Project_Detail_Save/<int:prjid>', views.Doc_Project_Detail_Save, name='Doc_Project_Detail_Save'),
+ path('Doc_Project_Module/<int:prjmd_id>', views.Doc_Project_Module, name='Doc_Project_Module'), 
+ path('Doc_Project_Module_save/<int:prjmsave_id>', views.Doc_Project_Module_save, name='Doc_Project_Module_save'),
+
+ path('project_correction/<int:proj_coret_id>', views.project_correction, name='project_correction'), 
+ path('project_updation/<int:proj_update_id>', views.project_updation, name='project_updation'),
+ path('project_correction_save/<int:proj_coret_save_id>', views.project_correction_save, name='project_correction_save'),
+ path('project_updation_save/<int:proj_update_save_id>', views.project_updation_save, name='project_updation_save'),
+ path('project_workers/<int:proj_wk_id>', views.project_workers, name='project_workers'), 
+ path('project_Assign_save/<int:tld_prj_save>',views.project_Assign_save, name='project_Assign_save'),  
+
+ path('project_workday/<int:tld_work_id>',views.project_workday, name='project_workday'),
+ path('project_workday_save/<int:tld_work_save>',views.project_workday_save, name='project_workday_save'),
+ path('project_develper_delete/<int:prj_deve_id>',views.project_develper_delete, name='project_develper_delete'),
+
+
+ ############################ Edit and Save #######################
+
+ path('project_desecription_edit/<int:dese_edit>',views.project_desecription_edit, name='project_desecription_edit'),
+ path('project_md_save/<int:dese_update_id>',views.project_md_save, name='project_md_save'),
+ path('project_correction_edit/<int:prj_core_edit>',views.project_correction_edit, name='project_correction_edit'),
+ path('project_updation_edit/<int:prj_update_edit>',views.project_updation_edit, name='project_updation_edit'),
+
+ path('project_corret_update_save/<int:prj_cu_id>',views.project_corret_update_save, name='project_corret_update_save'),
+
+ ############### PDF Section ####################
+
+ path('project_document_pdf/<int:proj_docpdf_id>',views.project_document_pdf, name='project_document_pdf'),
+ path('Project_Description_pdf/<int:proj_dese_id>', views.Project_Description_pdf, name='Project_Description_pdf'),
+ path('project_correction_pdf/<int:proj_coretpdf_id>', views.project_correction_pdf, name='project_correction_pdf'),
+ path('project_updation_pdf/<int:proj_updatepdf_id>', views.project_updation_pdf, name='project_updation_pdf'),
 
 
 ]

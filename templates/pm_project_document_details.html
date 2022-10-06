@@ -1,14 +1,17 @@
 {% extends 'promanagerindex.html' %} 
 {% load static %} 
 {% block content %}
+
 <div class="row g-2">
+
     <div class="col-12 grid-margin">
-       
-        {% if status == 0 %}
-        
+
         <form class="card col-12" method="post" action="{% url 'Doc_Project_Detail_Save' projectdoc.id %}" enctype="multipart/form-data">
             {% csrf_token %}
             <h3 class="m-2 mt-5">Project Details Entry</h3><br>
+            <div class="modulebtn text-end">
+                <a href="{% url 'Doc_Project_Module' projectdoc.id %}" class="btn btn-outline-warning">Add Module</a>
+            </div>
             <label class="m-2">Project Name</label>
             <input type="text" class="form-control m-2" name="doc_project_name" value="{{projectdoc.project}}">
 
@@ -30,31 +33,11 @@
             <label class="m-2">Libraries</label>
             <textarea type="text" class="form-control m-2" style="height: 100px;" name="doc_project_lib" ></textarea>
 
-            <button type="submit" class="btn btn-success m-4 p-2">Add Project Details</button>
+            <button type="submit" class="btn btn-outline-success m-4 p-2">Add Project Details</button>
         </form>
-        {% endif %}
+
     </div>
-
-     <!-- Module Add Section -->
-
-    {% if status == 1 %}
-        
-    <div class="col-12 grid-margin">
-        <form class="card col-12 " method="post" action="" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h3 class="m-2 mt-5">Project Module and Desecription Entry</h3><br>
-            <label class="m-2">Module Name</label>
-            <input type="text" class="form-control m-2" >
-
-            <label class="m-2">Module Desecription</label>
-            <textarea type="text" class="form-control m-2" style="height: 150px;" ></textarea>
-
-            <button type="submit" class="btn btn-success m-4 p-2">Add Project Details</button>
-
-        </form>  
-    </div>  
-    {% endif %}  
- 
+    
 </div>
 
 <!-- Sweat aleert -->
