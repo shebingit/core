@@ -710,23 +710,6 @@ class DataCollect(models.Model):
 
 #-------------------------------------------------------------------------------------
 
-#======================Team leader=======================================
-
-
-class ProjectDocuments(models.Model):
-    projectdoc_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
-    projectdoc_user=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
-
-
-
-class TLDProjectReview(models.Model):
-    tld_project_reviewid=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
-    tld_project_review_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-
-
-
-
-
 
     ##################### Document ######################
 
@@ -739,7 +722,7 @@ class PM_ProjectDocumentDetails(models.Model):
     doc_project_frontend=models.CharField(max_length=100,null=True, blank=True)
     doc_project_backend=models.CharField(max_length=100,null=True, blank=True)
     doc_project_libraries=models.CharField(max_length=100,null=True, blank=True)
-    doc_project_ui=models.ImageField(upload_to="ProjectUI", null=True)
+    doc_project_ui=models.FileField(upload_to="ProjectUI", null=True)
 
 class PM_ProjectDoc_ModuleDetails(models.Model):
     doc_projectdocd_id=models.ForeignKey(PM_ProjectDocumentDetails,on_delete=models.CASCADE,null=True,blank=True)
@@ -769,3 +752,9 @@ class ProjectWorkers(models.Model):
     pw_enddate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     pw_wid=models.CharField(max_length=50,null=True, blank=True)
     pw_workdays=models.IntegerField()
+
+
+class ProjectDeveloperDesign(models.Model):
+    ui_project_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    project_ui_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    project_ui_design=models.FileField(upload_to="ProjectUI", null=True)

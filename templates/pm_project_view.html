@@ -50,8 +50,10 @@
         <h6 class="m-3 p-2">Project Work Days : {{workdays.pw_workdays__sum}}  Days
       </div>
       <div class="card-footer text-end">
-        <a href="#" class="btn btn-outline-primary">UI Design</a>
-        <a href="#" class="btn btn-outline-warning">Edit</a>
+        {% if project_datils.doc_project_ui %}
+          <a href="{{project_datils.doc_project_ui.url}}" class="btn btn-outline-primary">UI Design Download</a>
+        {% endif %}
+        <a href="{% url 'project_details_edit' project_datils.id %}" class="btn btn-outline-warning">Edit</a>
       </div>
     </div>
   </div>
@@ -79,10 +81,25 @@
       <div class="card-body">
         <h5 class="mt-3 mb-4">{{i.project_cu_module}}</h5>
         <h6 class="mt-3">{{i.project_cu_descrip}}</h6>
+
         <h5 class="text-center mt-3 p-3">Prvious Data</h5>
         <h6>{{i.project_cu_olddescrip}}</h6>
+
+        {% if i.project_oldui %}
+        <div class="row p-3 mt-2">
+          <img src="{{i.project_oldui.url}}">
+        </div>
+        {% endif %}
+
         <h5 class="text-center mt-3 p-3">New Data</h5>
         <h6>{{i.project_cu_newdescrip}}</h6>
+
+        {% if i.project_cu_newui %}
+        <div class="row p-3 mt-2">
+          <img src="{{i.project_cu_newui.url}}">
+        </div>
+        {% endif %}
+
         <p>Start Date : {{i.project_cu_start}} </p>
         <p>End Date : {{i.project_cu_end}}</p>  
         <p>Work Days : {{i.project_cu_wdays}}</p>

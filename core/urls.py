@@ -1400,13 +1400,6 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     re_path(r'^pm_module_data/$', views.pm_module_data, name='pm_module_data'),
 
 
-    ################# shebin shaji ##################
-
-    path('pm_projectdocument', views.pm_projectdocument, name='pm_projectdocument'),
-    path('project_document_assign/<int:prjdocid>', views.project_document_assign, name='project_document_assign'),
-    path('TLprojectsDocuments', views.TLprojectsDocuments, name='TLprojectsDocuments'),
-    
-
     re_path(r'^pm_projectview/$', views.pm_projectview, name='pm_projectview'),
     re_path(r'^pm_prodata/(?P<id>\d+)/$', views.pm_prodata, name='pm_prodata'),
     re_path(r'^pm_project_assigned/(?P<id>\d+)/$', views.pm_project_assigned, name='pm_project_assigned'),
@@ -1508,25 +1501,6 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
 
 
-#========================= Team Leader======================
-
-
-
- path('tl_dashboard',views.tl_dashboard, name='TL-Dashboard'),
- path('TL-Document',views.tl_document, name='TL-Document'),
- path('TL-DNew-Projectt',views.tl_dnew_project, name='TL-DNew-Project'),
-
- 
- 
- path('TLD-Corretion-Updation-view/<int:tlp_cu_view_id>',views.tl_dproject_corretion_updation_view, name='TLD-Corretion-Updation-view'),
- path('TLD-Correction-Update-Edit/<int:tlp_cu_edit>',views.tl_dproject_corretion_updation_edit, name='TLD-Correction-Update-Edit'),
- path('TLD-Edit-Save/<int:tlp_edit_save>',views.tl_dproject_edit_save, name='TLD-Edit-Save'),
-
- 
-
-
-
-
 #======================Digital Markenting===================
 
    path('dm_dashboard', views.dm_dashboard, name='DM-Dashboard'),
@@ -1576,7 +1550,8 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
 
 
 
- #============================= document =======================
+ #============================= Project Manager Document =======================
+ path('pm_projectdocument', views.pm_projectdocument, name='pm_projectdocument'),
 
  path('Project_view/<int:proj_view_id>', views.Project_view, name='Project_view'),
  path('PM_project_doc_details/<int:prodoc_id>', views.PM_project_doc_details, name='PM_project_doc_details'),
@@ -1595,9 +1570,14 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
  path('project_workday_save/<int:tld_work_save>',views.project_workday_save, name='project_workday_save'),
  path('project_develper_delete/<int:prj_deve_id>',views.project_develper_delete, name='project_develper_delete'),
 
+ path('project_design/<int:proj_design>',views.project_design, name='project_design'),
+ path('project_design_save/<int:prj_save>',views.project_design_save, name='project_design_save'),
 
- ############################ Edit and Save #######################
 
+ ############################ Project Manager Document Edit and Save #######################
+
+ path('project_details_edit/<int:proj_detail_edit_id>',views.project_details_edit, name='project_details_edit'),
+ path('Doc_Project_Detail_edit_Save/<int:proj_detail_edit_save>',views.Doc_Project_Detail_edit_Save, name='Doc_Project_Detail_edit_Save'),
  path('project_desecription_edit/<int:dese_edit>',views.project_desecription_edit, name='project_desecription_edit'),
  path('project_md_save/<int:dese_update_id>',views.project_md_save, name='project_md_save'),
  path('project_correction_edit/<int:prj_core_edit>',views.project_correction_edit, name='project_correction_edit'),
@@ -1605,13 +1585,25 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
 
  path('project_corret_update_save/<int:prj_cu_id>',views.project_corret_update_save, name='project_corret_update_save'),
 
- ############### PDF Section ####################
+ ############### Project Manager Document PDF Section ####################
 
  path('project_document_pdf/<int:proj_docpdf_id>',views.project_document_pdf, name='project_document_pdf'),
  path('Project_Description_pdf/<int:proj_dese_id>', views.Project_Description_pdf, name='Project_Description_pdf'),
  path('project_correction_pdf/<int:proj_coretpdf_id>', views.project_correction_pdf, name='project_correction_pdf'),
  path('project_updation_pdf/<int:proj_updatepdf_id>', views.project_updation_pdf, name='project_updation_pdf'),
 
+
+ ########################### Admin - Project Document ################################
+
+ path('BRadmin_project_documents', views.BRadmin_project_documents, name='BRadmin_project_documents'),
+ path('BRadmin_projectui/<int:ad_ui_id>', views.BRadmin_projectui, name='BRadmin_projectui'),
+
+ ########################### Admin - Project Document PDF ################################
+
+ path('BRadminProject_Description_pdf/<int:brproj_dese_id>', views.BRadminProject_Description_pdf, name='BRadminProject_Description_pdf'),
+ path('BRadminproject_correction_pdf/<int:brproj_coretpdf_id>', views.BRadminproject_correction_pdf, name='BRadminproject_correction_pdf'),
+ path('BRadminproject_updation_pdf/<int:brproj_updatepdf_id>', views.BRadminproject_updation_pdf, name='BRadminproject_updation_pdf'),
+ path('BRadminproject_document_pdf/<int:brproj_docpdf_id>', views.BRadminproject_document_pdf, name='BRadminproject_document_pdf'),
 
 ]
 

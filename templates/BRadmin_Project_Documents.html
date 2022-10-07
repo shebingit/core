@@ -1,0 +1,92 @@
+{% extends 'BRadmin_index.html' %}
+{% block content %}
+  {% load static %}
+
+  <style>
+  #a
+  {
+    font-size: 100%;
+  }
+      
+
+  </style>
+<div class="row ">
+  <div class="col-12 grid-margin">
+    <h2>  <small class="text-muted">Projects Documents </small></h2>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+         
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+              <div class="input-group input-group-sm mb-3">
+                <input
+                  type="text"
+                  class="form-control text-white"
+                  id="myInput"
+                  onkeyup="myFunction()"
+                  placeholder="Search . . ."
+                  style="border: green"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="table-responsive">
+            <table class="table" id="myTable">
+              <thead>
+                <tr>
+                 
+                  <th>Project</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Project UI</th>
+                  <th>Desecription</th>
+                  <th>Correction</th>
+                  <th>Updation</th>
+                  <th>Project Document</th>
+                  
+                </tr>
+              </thead>
+              {% if project_data %}
+              {% for i in project_data %}
+              <tbody>
+                  <tr>
+                     
+                      <td><span class="ps-2">{{i.project}}</span></td>
+                      <td>{{i.startdate|date:'d-m-Y'}}</td>
+                      <td>{{i.enddate|date:'d-m-Y'}}</td>
+                      <td><a class="btn btn-outline-secondary" href="{% url 'BRadmin_projectui' i.id %}" style="cursor:pointer">View</a></td>
+                      <td><a class="btn btn-outline-success" href="{% url 'BRadminProject_Description_pdf' i.id %}" style="cursor:pointer">Pdf  Download</a></td>
+                      <td><a class="btn btn-outline-warning" href="{% url 'BRadminproject_correction_pdf' i.id %}" style="cursor:pointer">Pdf Download</a></td>
+                      <td><a  class="btn btn-outline-primary" href="{% url 'BRadminproject_updation_pdf' i.id %}" style="cursor:pointer">Pdf Download</a></td>
+                      <td><a  class="btn btn-outline-info" href="{% url 'BRadminproject_document_pdf' i.id %}" style="cursor:pointer">Pdf Download</a></td>
+                      
+                  </tr>
+                  {% endfor %}
+                  {% else%}
+                      <h5 style="text-align:center">Nothing to display!</h5>
+                  {% endif %}
+              </tbody>
+          </table>
+      </div>
+  </div>
+      
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    
+  
+  </script>
+
+ {%endblock%}
