@@ -11,7 +11,9 @@
 
                 <center>
                     <h3 class="card-title">PROFILE</h3>
-                    <img src="{% static '/assets/images/faces/face5.jpg' %}" alt="image" style="border-radius: 50%;" width="130" height="130" />
+                    {% if tel.photo %}
+                        <img src="{{tel.photo.url}}" alt="image" style="border-radius: 50%;" width="130" height="130" />
+                    {% endif %}
 
                     <!-- <canvas id="transaction-history" class="transaction-chart"></canvas> -->
                     <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
@@ -22,7 +24,7 @@
                         </div>
                         <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
                              <!-- <h6 class="text-muted mb-0">{{ i.joiningdate|date:"d-m-Y" }}</h6> -->
-                             <h6 class="text-muted mb-0">10-02-2022</h6>
+                             <h6 class="text-muted mb-0">{{tel.joiningdate}}</h6>
                         </div>
                     </div>
                     <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
@@ -32,7 +34,7 @@
                         </div>
                         <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
                             <!-- <h6 class="text-muted mb-0">{{ i.designation }}</h6> -->
-                            <h6 class="text-muted mb-0">Telecaller</h6>
+                            <h6 class="text-muted mb-0">{{tel.designation.designation}}</h6>
                         </div>
                     </div>
                 </center>
@@ -63,7 +65,7 @@
                                         <!-- <p class="text-muted">15 minutes ago</p>
                       <p class="text-muted mb-0">30 tasks, 5 issues </p> -->
                                         <!-- <h6 class="preview-subject">{{ i.fullname }}</h6> -->
-                                        <h6 class="preview-subject">Shebin</h6>
+                                        <h6 class="preview-subject">{{tel.fullname}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +84,7 @@
                                         <!-- <p class="text-muted">1 hour ago</p>
                       <p class="text-muted mb-0">23 tasks, 5 issues </p> -->
                                         <!-- <h6 class="preview-subject">{{ i.department }}</h6> -->
-                                        <h6 class="preview-subject">Digital Marketing</h6>
+                                        <h6 class="preview-subject">{{tel.department.department}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -101,7 +103,7 @@
                                         <!-- <p class="text-muted">35 minutes ago</p>
                       <p class="text-muted mb-0">15 tasks, 2 issues</p> -->
                                         <!-- <h6 class="preview-subject">{{ i.email }}</h6> -->
-                                        <h6 class="preview-subject">shebin@gmail.com</h6>
+                                        <h6 class="preview-subject">{{tel.email}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -120,7 +122,7 @@
                                         <!-- <p class="text-muted">55 minutes ago</p>
                       <p class="text-muted mb-0">35 tasks, 7 issues </p> -->
                                         <!-- <h6 class="preview-subject">{{ i.mobile }}</h6> -->
-                                        <h6 class="preview-subject">989768765</h6>
+                                        <h6 class="preview-subject">{{tel.mobile}}</h6>
                                     </div>
                                 </div>
                             </div>

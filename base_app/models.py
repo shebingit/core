@@ -679,7 +679,7 @@ class income(models.Model):
     pay_status = models.IntegerField(default=0)
 
 
-#==== Digital Marketing======
+#====================     Digital Marketing     ===========================
 
 class Work(models.Model):
      
@@ -688,9 +688,10 @@ class Work(models.Model):
     work_name = models.CharField(max_length=200,null=True, blank=True)
     work_status=models.CharField(max_length=50,null=True, blank=True)
 
+
 class TaskAssign(models.Model):
-     task_date = models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-     employee_name=models.CharField(max_length=200,null=True, blank=True)
+     task_date = models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+     employee_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
      task_work=models.ForeignKey(Work,on_delete=models.CASCADE,null=True,blank=True)
      task_category=models.CharField(max_length=200,null=True, blank=True)
      task_status=models.CharField(max_length=50,null=True, blank=True)

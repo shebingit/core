@@ -172,6 +172,16 @@ def login(request):
                 request.session['prid'] = member.id
                
                 return redirect('pmanager_dash')
+
+    ######## Digital Marketing ##########
+    
+        design2 = designation.objects.get(designation="Digital Marketing")
+            
+        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design2.id,status="active").exists():
+                member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+                request.session['dmid'] = member.id
+               
+                return redirect('DM-Dashboard')
             
         design3 = designation.objects.get(designation="developer")
         
@@ -186,6 +196,15 @@ def login(request):
                 request.session['hr_id'] = member.id
                 
                 return redirect('HR_Dashboard')
+
+        
+        design5 = designation.objects.get(designation="Telecaller")
+            
+        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design5.id,status="active").exists():
+                member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+                request.session['telid'] = member.id
+               
+                return redirect('TEL-Dashboard')
                
             
         else:
@@ -16230,84 +16249,225 @@ def MAN_project_table(request,id):
     #====================== Digital Markemting ==============
 
 
+def Dmlogout(request):
+    if 'dmid' in request.session:  
+        request.session.flush()
+        return redirect('/')
+    else:
+        return redirect('/') 
+
+
 def dm_dashboard(request):
-    return render(request,'DigitalMarketing/DM_dashboard.html')
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        labels = []
+        data = []
+        queryset = user_registration.objects.filter(id=dmid)
+       
+        for i in queryset:
+            labels = [i.workperformance, i.attitude, i.creativity]
+
+            data = [i.workperformance, i.attitude, i.creativity]
+        return render(request, 'DigitalMarketing/DM_dashboard.html', {'dm': dm, "labels": labels, "data": data})
+    else:
+        return redirect('/')
+
 
 
 def dm_in_house_project(request):
-    prid=0
-    return render(request,'DigitalMarketing/DM_In-House-Project.html',{'prid':prid})
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        labels = []
+        data = []
+        queryset = user_registration.objects.filter(id=dmid)
+       
+        for i in queryset:
+            labels = [i.workperformance, i.attitude, i.creativity]
+
+            data = [i.workperformance, i.attitude, i.creativity]
+        prid=0
+        return render(request, 'DigitalMarketing/DM_In-House-Project.html', {'prid':prid,'dm': dm, "labels": labels, "data": data})
+    else:
+        return redirect('/')
+    
+    
 
 def dm_client_project(request):
-    prid=1
-    return render(request,'DigitalMarketing/DM_Client-Project.html',{'prid':prid})
+     if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        labels = []
+        data = []
+        queryset = user_registration.objects.filter(id=dmid)
+       
+        for i in queryset:
+            labels = [i.workperformance, i.attitude, i.creativity]
+
+            data = [i.workperformance, i.attitude, i.creativity]
+        prid=1
+        return render(request,'DigitalMarketing/DM_Client-Project.html',{'prid':prid,'dm': dm, "labels": labels, "data": data})
+     else:
+        return redirect('/')
+    
 
 
 def dm_works(request,wk):
-    if wk == 0:
-        wc=0
-        works=Work.objects.filter(work_head='House Project')
-    else:
-        wc=1
-        works=Work.objects.filter(work_head='Client Project')
-    
-    return render(request,'DigitalMarketing/DM_Works.html',{'works':works,'wc':wc})
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        labels = []
+        data = []
+        queryset = user_registration.objects.filter(id=dmid)
+       
+        for i in queryset:
+            labels = [i.workperformance, i.attitude, i.creativity]
 
+            data = [i.workperformance, i.attitude, i.creativity]
+        if wk == 0:
+            wc=0
+            works=Work.objects.filter(work_head='House Project')
+        else:
+            wc=1
+            works=Work.objects.filter(work_head='Client Project')
+    
+        return render(request,'DigitalMarketing/DM_Works.html',{'works':works,'wc':wc,'dm': dm, "labels": labels, "data": data})
+
+    else:
+        return redirect('/')
     #================================
 
 def dm_project_view(request,dm_project_id):
-    tasks=TaskAssign.objects.filter(task_work=dm_project_id)
-    return render(request,'DigitalMarketing/DM_Project_View.html',{'tasks':tasks})
-
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        labels = []
+        data = []
+        queryset = user_registration.objects.filter(id=dmid)
+        tasks=TaskAssign.objects.filter(task_work=dm_project_id)
+        return render(request,'DigitalMarketing/DM_Project_View.html',{'tasks':tasks,'dm': dm, "labels": labels, "data": data})
+    else:
+        return redirect('/')
+    
      #================================ 
 
 def dm_Work_add(request,waid):
-    if request.method == "POST":
-        wdate=request.POST['wdate']
-        wname=request.POST['wname']
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        labels = []
+        data = []
+        queryset = user_registration.objects.filter(id=dmid)
+       
+        for i in queryset:
+            labels = [i.workperformance, i.attitude, i.creativity]
 
-        print(waid)
-        wstatus="Pending"
-        if waid == 0: 
-            works=Work(work_date=wdate,work_name=wname,work_status=wstatus,work_head='House Project')
-            works.save()
-            mesg=1
-            wc=0
-            works=Work.objects.filter(work_head=works.work_head)
-            return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc})
-        elif waid == 1: 
-            works=Work(work_date=wdate,work_name=wname,work_status=wstatus,work_head='Client Project')
-            works.save()
-            mesg=1
-            wc=1
-            works=Work.objects.filter(work_head=works.work_head)
-            return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc})
-    
+            data = [i.workperformance, i.attitude, i.creativity]
+        if request.method == "POST":
+            wdate=request.POST['wdate']
+            wname=request.POST['wname']
+
+            print(waid)
+            wstatus="Pending"
+            if waid == 0: 
+                works=Work(work_date=wdate,work_name=wname,work_status=wstatus,work_head='House Project')
+                works.save()
+                mesg=1
+                wc=0
+                works=Work.objects.filter(work_head=works.work_head)
+                return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc,'dm': dm, "labels": labels, "data": data})
+            elif waid == 1: 
+                works=Work(work_date=wdate,work_name=wname,work_status=wstatus,work_head='Client Project')
+                works.save()
+                mesg=1
+                wc=1
+                works=Work.objects.filter(work_head=works.work_head)
+                return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc,'dm': dm, "labels": labels, "data": data})
+    else:
+        return redirect('/')
+
+
 
 def dm_Work_Delete(request,dm_work_delete_id):
-    works=Work.objects.get(id=dm_work_delete_id)
-    whnane=works.work_head
-    works.delete()
-    if whnane == 'House Project':
-        works=Work.objects.filter(work_head=whnane)
-        wc=0
-    else:
-         works=Work.objects.filter(work_head=whnane)
-         wc=1
-    mesg=0
-    return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc})
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        labels = []
+        data = []
+        queryset = user_registration.objects.filter(id=dmid)
+       
+        for i in queryset:
+            labels = [i.workperformance, i.attitude, i.creativity]
 
+            data = [i.workperformance, i.attitude, i.creativity]
     
+        works=Work.objects.get(id=dm_work_delete_id)
+        whnane=works.work_head
+        works.delete()
+        if whnane == 'House Project':
+            works=Work.objects.filter(work_head=whnane)
+            wc=0
+        else:
+            works=Work.objects.filter(work_head=whnane)
+            wc=1
+        mesg=0
+        return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc,'dm': dm, "labels": labels, "data": data})
+    else:
+        return redirect('/')
+
+
+
 #loadin for data collections
 
 def dm_data_collect(request):
-    return render(request,'DigitalMarketing/DM_Date-Collection.html')
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        datacollect=DataCollect.objects.all()
+        return render(request,'DigitalMarketing/DM_Data-Collection.html',{'datacollect':datacollect,'dm':dm})
+    else:
+        return redirect('/')
 
 
 #loadin for backlink_details
 
 def dm_backlink_details(request):
-    return render(request,'DigitalMarketing/DM_Backlins-Details.html')
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        backlink=None
+        return render(request,'DigitalMarketing/DM_Backlins-Details.html',{'dm':dm ,'backlink':backlink})
+    else:
+        return redirect('/')
+  
 
 #loadin for backlink_details
 
@@ -16323,88 +16483,200 @@ def dm_smm_post_calender(request):
 #loadin for backlink_details
 
 def dm_web_page_content(request):
-    return render(request,'DigitalMarketing/DM_Web-Page-Content.html')
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        webpagecontent=None
+        return render(request,'DigitalMarketing/DM_Web-Page-Content.html',{'dm':dm ,'webpagecontent':webpagecontent})
+    else:
+        return redirect('/')
+   
 
 
 def dm_work_create(request,wcid):
-    wc=wcid
-    if wc == 0: 
-         works=Work.objects.filter(work_head='House Project')
-    elif wc == 1: 
-         works=Work.objects.filter(work_head='Client Project')
-    return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'wc':wc})
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        labels = []
+        data = []
+        queryset = user_registration.objects.filter(id=dmid)
+       
+        for i in queryset:
+            labels = [i.workperformance, i.attitude, i.creativity]
+
+            data = [i.workperformance, i.attitude, i.creativity]
+    
+        wc=wcid
+        if wc == 0: 
+            works=Work.objects.filter(work_head='House Project')
+        elif wc == 1: 
+             works=Work.objects.filter(work_head='Client Project')
+        return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'wc':wc,'dm': dm, "labels": labels, "data": data})
+
+    else:
+        return redirect('/')
+    
 
 #loadin for backlink_details
 
 def dm_on_page_works(request):
-    return render(request,'DigitalMarketing/DM_On-Page-Works.html')
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        onpage=None
+        return render(request,'DigitalMarketing/DM_On-Page-Works.html',{'dm':dm ,'onpage':onpage})
+    else:
+        return redirect('/')
+   
 
 #loadin for backlink_details
 
 def dm_competitor_analysis(request):
-    return render(request,'DigitalMarketing/DM_CompetitorAnalysis.html')
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        comp_analysis=None
+        return render(request,'DigitalMarketing/DM_CompetitorAnalysis.html',{'dm':dm ,'comp_analysis':comp_analysis})
+    else:
+        return redirect('/')
+
 
 
 #loadin for backlink_details
 
 def dm_data_collection_client(request):
-    return render(request,'DigitalMarketing/DM_DataCollection-Client.html')
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        cl_data_coll=None
+        return render(request,'DigitalMarketing/DM_DataCollection-Client.html',{'dm':dm ,'cl_data_coll':cl_data_coll})
+    else:
+        return redirect('/')
+
 
 
 #loadin task assign page
+
 def dm_Task_Assign(request,taid):
-    if taid == 0:
-        works=Work.objects.filter(work_head='House Project')
-        wc=0
-    else:
-        wc=1
-        works=Work.objects.filter(work_head='Client Project')
-    tasks=TaskAssign.objects.all()
-
-    des=designation.objects.get(designation='Telecaller')
-    worker=user_registration.objects.filter(designation=des.id)
-    return render(request,'DigitalMarketing/DM_Task-Assign.html',{'works':works,'worker':worker,'tasks':tasks,'wc':wc})
-
-def dm_task_assigning(request):
-   
-    des=designation.objects.get(designation='Telecaller')
-    worker=user_registration.objects.filter(designation=des.id)
-    if request.method =="POST":
-        tdate=request.POST['tdate']
-        empname=request.POST['empname']
-        twork=request.POST['twork']
-        tworks=Work.objects.get(work_name=twork)
-        tworks.work_status='Assigned'
-        whname=tworks.work_head
-        if whname =='House Project':
-            wc=0
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        if taid == 0:
             works=Work.objects.filter(work_head='House Project')
-        elif whname =='Client Project':
+            wc=0
+        else:
             wc=1
             works=Work.objects.filter(work_head='Client Project')
+        tasks=TaskAssign.objects.all()
 
-        tworks.save()
-        tcateg=request.POST['tcateg']
-        tstatus="Assigned"
-        task=TaskAssign(task_date=tdate,employee_name=empname,task_work=tworks,task_category=tcateg,task_status=tstatus)
-        task.save()
-        tasks=TaskAssign.objects.filter(task_work=tworks.id)
-        mesg=1
-        return render(request,'DigitalMarketing/DM_Task-Assign.html',{'tasks':tasks,'mesg':mesg,'works':works,'worker':worker,'wc':wc})
+        des=designation.objects.get(designation='Telecaller')
+        worker=user_registration.objects.filter(designation=des.id)
+        return render(request,'DigitalMarketing/DM_Task-Assign.html',{'works':works,'worker':worker,'tasks':tasks,'wc':wc,'dm':dm})
 
+    else:
+        return redirect('/') 
 
+def dm_task_assigning(request):
+    if 'dmid' in request.session:
+        if request.session.has_key('dmid'):
+            dmid = request.session['dmid']
+        else:
+            return redirect('/')
+        dm = user_registration.objects.get(id=dmid)
+        des=designation.objects.get(designation='Telecaller')
+        worker=user_registration.objects.filter(designation=des.id)
+        if request.method =="POST":
+          
+            p1=request.POST['empname']
+            empname=user_registration.objects.get(designation=des , id=p1)
+            twork=request.POST['twork']
+            tworks=Work.objects.get(work_name=twork)
+            tworks.work_status='Assigned'
+            whname=tworks.work_head
+            if whname =='House Project':
+                wc=0
+                works=Work.objects.filter(work_head='House Project')
+            elif whname =='Client Project':
+                wc=1
+                works=Work.objects.filter(work_head='Client Project')
+
+            tworks.save()
+            tcateg=request.POST['tcateg']
+            tstatus="Assigned"
+            task=TaskAssign(employee_name=empname,task_work=tworks,task_category=tcateg,task_status=tstatus)
+            task.save()
+            tasks=TaskAssign.objects.filter(task_work=tworks.id)
+            mesg=1
+            return render(request,'DigitalMarketing/DM_Task-Assign.html',{'tasks':tasks,'mesg':mesg,'works':works,'worker':worker,'wc':wc,'dm':dm})
+
+    else:
+        return redirect('/') 
 
 def dm_telecalers(request):
     return render(request,'DigitalMarketing/DM_Telecaller.html')
 
+
+
 #==========Teliecaller===============
 
+
+def Tellogout(request):
+    if 'telid' in request.session:  
+        request.session.flush()
+        return redirect('/')
+    else:
+        return redirect('/') 
+
+
 def TEL_dashboard(request):
-    return render(request,'DigitalMarketing/Telicaller/TEL_Dashboard.html')
+    if 'telid' in request.session:
+        if request.session.has_key('telid'):
+            telid = request.session['telid']
+        else:
+            return redirect('/')
+        tel = user_registration.objects.get(id=telid)
+        labels = []
+        data = []
+        queryset = user_registration.objects.filter(id=telid)
+       
+        for i in queryset:
+            labels = [i.workperformance, i.attitude, i.creativity]
+
+            data = [i.workperformance, i.attitude, i.creativity]
+        return render(request, 'DigitalMarketing/Telicaller/TEL_Dashboard.html', {'tel': tel, "labels": labels, "data": data})
+    else:
+        return redirect('/')
+   
 
 def tel_assign_works(request):
-    works=TaskAssign.objects.filter(employee_name='trainingmanager1',task_status='Assigned')
-    return render(request,'DigitalMarketing/Telicaller/TEL_Assing_works.html',{'works':works})
+    if 'telid' in request.session:
+        if request.session.has_key('telid'):
+            telid = request.session['telid']
+        else:
+            return redirect('/')
+        tel = user_registration.objects.get(id=telid)
+        works=TaskAssign.objects.filter(employee_name=tel,task_status='Assigned').order_by()
+        return render(request,'DigitalMarketing/Telicaller/TEL_Assing_works.html',{'works':works,'tel':tel})
+    else:
+        return redirect('/')
 
 def tel_works_table(request,tel_task_id):
     task=TaskAssign.objects.get(id=tel_task_id)
@@ -16514,6 +16786,7 @@ def Project_view(request,proj_view_id):
             project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
         except PM_ProjectDocumentDetails.DoesNotExist:
             project_datils=None
+            return redirect('pm_projectdocument')
         project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
         project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
         project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
@@ -17020,7 +17293,7 @@ def project_design_save(request,prj_save):
 
 
 
-    ######################## Document PDF Sections#############################
+    ######################## Document PDF Sections #############################
 
 
 def Project_Description_pdf(request,proj_dese_id):
@@ -17153,7 +17426,7 @@ def project_document_pdf(request,proj_docpdf_id):
     project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
     project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
     workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
-    workdays=ProjectWorkers.objects.aggregate(Sum('pw_workdays'))
+    workdays=ProjectWorkers.objects.filter(pw_id=project_datils).aggregate(Sum('pw_workdays'))
     
 
     template_path = 'pm_project_document_pdf.html'
@@ -17364,7 +17637,7 @@ def  BRadminproject_document_pdf(request,brproj_docpdf_id):
     project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
     project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
     workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
-    workdays=ProjectWorkers.objects.aggregate(Sum('pw_workdays'))
+    workdays=ProjectWorkers.objects.filter(pw_id=project_datils).aggregate(Sum('pw_workdays'))
     
 
     template_path = 'pm_project_document_pdf.html'

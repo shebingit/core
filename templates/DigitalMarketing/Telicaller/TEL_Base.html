@@ -45,7 +45,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
 
-          <a class="sidebar-brand brand-logo text-light text-decoration-none" href="{% url 'DM-Dashboard' %}"><p style="color: white; opacity: 1; font-size: 35px;
+          <a class="sidebar-brand brand-logo text-light text-decoration-none" href="{% url 'TEL-Dashboard' %}"><p style="color: white; opacity: 1; font-size: 35px;
             margin-top: 3vh;">ALTOS</p></a>
            <a class="sidebar-brand brand-logo-mini text-light text-decoration-none" href="#"><p style="color: white; opacity: 1; font-size: 35px;margin-top: 3vh;">A</p></a>
       </div>
@@ -54,11 +54,13 @@
             <div class="profile-desc">
               <div class="profile-pic">
                 <div class="count-indicator">
-                  <img class="img-xs rounded-circle " src="{% static '/assets/images/faces/face5.jpg' %}" alt="">
+                  {% if tel.photo %}
+                    <img class="img-xs rounded-circle " src="{{tel.photo.url}}" alt="">
+                  {% endif %}
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal">Robert Jr</h5>
+                  <h5 class="mb-0 font-weight-normal">{{tel.fullname}}</h5>
                   <span>Telecaller</span>
                 </div>
               </div>
@@ -151,8 +153,10 @@
               <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                   <div class="navbar-profile">
-                    <img class="img-xs rounded-circle" src="{% static '/assets/images/faces/face5.jpg' %}" alt="">
-                    <p class="mb-0 d-none d-sm-block navbar-profile-name">Robert Jr</p>
+                    {% if tel.photo %}
+                      <img class="img-xs rounded-circle" src="{{tel.photo.url}}" alt="">
+                    {% endif %}
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">{{tel.fullname}}</p>
                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                   </div>
                 </a>
@@ -161,7 +165,7 @@
                   <div class="dropdown-divider"></div>
    
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
+                  <a class="dropdown-item preview-item" href="{% url 'Tellogout' %}">
                     <div class="preview-thumbnail">
                       <div class="preview-icon bg-dark rounded-circle">
                         <i class="mdi mdi-logout text-danger"></i>

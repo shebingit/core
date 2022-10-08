@@ -66,11 +66,11 @@
 
             <div class="container">
                 <div class="row">
-                    <h4  class="title">Project Descriptions</h4>
+                    <h4  class="title ">Project Descriptions</h4>
                    {% for i in project_desc %} 
                     <div class="col-lg-12">
-                        <h2 class="">{{i.doc_project_md_name}}</h2>
-                        <p>* {{i.doc_project_md_dese}}</p>
+                        <h2 class="">Module : &nbsp;<span style="color: #007cae;">{{i.doc_project_md_name}}</span></h2>
+                        <p><b>Module Desecription </b>: &nbsp; {{i.doc_project_md_dese}}</p>
                     </div>
                     {% endfor %}
                 </div>

@@ -4,7 +4,7 @@
 {% block content %}
 
 
-<div class="container" id="Competitor">
+<!--<div class="container" id="Competitor">
     <h4 class="text-center m-4">COMPETITOR &nbsp; ANALYSIA &nbsp;/ WEBSITE &nbsp;AUDIT</h4>
     <form action="#" method="post">
         {% csrf_token %}
@@ -24,33 +24,69 @@
         
     </form>
 </div>
+<button type="button" class="text-center p-2 btn btn-secondary mb-3" id="data-btn" onclick="myFunction()">Collect Data</button>-->
 
-<div class="container">
-    <button type="button" class="text-center p-2 btn btn-secondary mb-3" id="data-btn" onclick="myFunction()">Collect Data</button>
-    <div class="row">
-        <h4 class="text-start mt-3 mb-4">Competitor &nbsp; analysis / &nbsp;Website Audit</h4>
-    </div>
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-              <th scope="col">Sl no</th>
-              <th scope="col">Date</th>
-              <th scope="col">Company Name</th>
-              <th scope="col">Action</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>22-09-2022</td>
-              <td>Altos </td>
-              <td><a href="#" class="btn btn-warning">Forword</a></td>
-            </tr>
-          </tbody>
-    
-    </table>
+  
+<div class="row">
+       
 </div>
+<div class="col-12 grid-margin">
+  <div class="card">
+    <div class="card-body">
+        <h4 class="text-center mb-4"> Competitor &nbsp; analysis / &nbsp;Website Audit</h4>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+              <div class="input-group input-group-sm mb-3">
+                <input
+                  type="text"
+                  class="form-control text-white"
+                  id="myInput"
+                  onkeyup="myFunction()"
+                  placeholder="Search . . ."
+                  style="border: green"
+                />
+              </div>
+            </form>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table" id="myTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Sl no</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Company Name</th>
+                    <th scope="col">Action</th>
+      
+                  </tr>
+                  </thead>
+              
+            {% if comp_analysis %}
+              
+              <tbody>
+                {% for i in comp_analysis %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{i.dc_date}}</td>
+                    <td>{{i.dc_name}} </td>
+                    <td>{{i.dc_email}}</td>
+                   
+                    
+                </tr>
+                  
+              {% endfor %}
+            {% else%}
+                <h5 style="text-align:center">Nothing to display!</h5>
+            {% endif %}
+              </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
 <style>
     #Competitor
     {
@@ -72,5 +108,18 @@
       }
 </script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script>
+     $(document).ready(function () {
+       $("#myInput").on("keyup", function () {
+         var value = $(this).val().toLowerCase();
+         $("#myTable tr").filter(function () {
+           $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+         });
+       });
+     });
+     
+   
+   </script>
 
 {% endblock %}

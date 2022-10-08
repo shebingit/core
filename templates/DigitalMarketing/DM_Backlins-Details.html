@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div class="container" id="Backlink-Details">
+<!-- <div class="container" id="Backlink-Details">
     <h4 class="text-center m-4">BACKLINK DETAILS ADD</h4>
     <form action="#" method="post">
         <div class="input-group p-3 m-2">
@@ -42,38 +42,67 @@
         
     </form>
 </div>
+<button type="button" class="text-center p-2 btn btn-secondary mb-3" id="data-btn" onclick="myFunction()">Collect Data</button>-->
 
-<div class="container">
-    <button type="button" class="text-center p-2 btn btn-secondary mb-3" id="data-btn" onclick="myFunction()">Collect Data</button>
-    <div class="row">
-        <h4 class="text-start mt-3 mb-3">BACK LINK DETAILS</h4>
+
+<div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+          <h4 class="text-center mb-4"> BACK LINK DETAILS</h4>
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+              <form>
+                <div class="input-group input-group-sm mb-3">
+                  <input
+                    type="text"
+                    class="form-control text-white"
+                    id="myInput"
+                    onkeyup="myFunction()"
+                    placeholder="Search . . ."
+                    style="border: green"
+                  />
+                </div>
+              </form>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table" id="myTable">
+                  <thead>
+                    <tr>
+                        <th scope="col">Sl no</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Work</th>
+                        <th scope="col">Url</th>
+                        <th scope="col">Types</th>
+                        <th scope="col">Remarks/Status</th>
+                       
+                      </tr>
+                    </thead>
+                
+              {% if backlink %}
+                
+                <tbody>
+                  {% for i in backlink %}
+                  <tr>
+                      <th scope="row">{{forloop.counter}}</th>
+                      <td>{{i.dc_date}}</td>
+                      <td>{{i.dc_name}} </td>
+                      <td>{{i.dc_email}}</td>
+                      <td>{{i.dc_phone}}</td>
+                      <td>{{i.dc_loc}}</td>          
+                  </tr>
+                    
+                {% endfor %}
+              {% else%}
+                  <h5 style="text-align:center">Nothing to display!</h5>
+              {% endif %}
+                </tbody>
+            </table>
+        </div>
+      </div>
     </div>
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-              <th scope="col">Sl no</th>
-              <th scope="col">Date</th>
-              <th scope="col">Work</th>
-              <th scope="col">Url</th>
-              <th scope="col">Types</th>
-              <th scope="col">Remarks/Status</th>
-              <th scope="col">Acton</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>22-09-2022</td>
-              <td>Altos</td>
-              <td>https://www.alive-directory.com/ALTOS-TECHNOLGIES_566353.html </td>
-              <td>Directory</td>
-              <td>Pending</td>
-              <td><a href="#" class="btn btn-warning">Forword</a></td>
-            </tr>
-          </tbody>
-    
-    </table>
-</div>
+  </div>
+
+
 <style>
     #Backlink-Details
     {
@@ -95,5 +124,16 @@
       }
 </script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script>
+     $(document).ready(function () {
+       $("#myInput").on("keyup", function () {
+         var value = $(this).val().toLowerCase();
+         $("#myTable tr").filter(function () {
+           $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+         });
+       });
+     });
+    </script>
 
 {% endblock %}

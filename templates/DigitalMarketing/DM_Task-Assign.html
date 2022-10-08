@@ -18,7 +18,7 @@
         <select id="Employee" name="empname" class="form-select" required>
           <option class="p-2">Select Employee</option>
           {% for i in worker %}
-            <option class="p-2" value="{{i.fullname}}">{{i.fullname}}</option>
+            <option class="p-2" value="{{i.id}}">{{i.fullname}}</option>
           {% endfor %}
        
         </select>
@@ -47,10 +47,7 @@
         </select>
 
     </div>
-    <div class="Dates mt-2 mb-3">
-        <label for="dates" class="form-label mt-3 mb-3 ">Choose Date</label><br>
-        <input type="date" id="dates" name="tdate" class="w-100 p-2" required>
-    </div>
+    
     <div class="text-end mb-5 p-2">
         <button type="submit" class="btn btn-success p-2">Assign Task</button>
     </div>
@@ -79,7 +76,7 @@
                       <tr>
 
                         <td>{{i.task_date}}</td>
-                        <td>{{i.employee_name}} </td>
+                        <td>{{i.employee_name.fullname}} </td>
                         <td>{{i.task_work.work_name}}</td>
                         <td>
                           {{i.task_category}}
@@ -94,7 +91,7 @@
                       
                      
                       <td>{{i.task_date}}</td>
-                      <td>{{i.employee_name}} </td>
+                      <td>{{i.employee_name.fullname}} </td>
                       <td>{{i.task_work.work_name}}</td>
                       <td>
                         {{i.task_category}}

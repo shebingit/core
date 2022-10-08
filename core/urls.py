@@ -1503,6 +1503,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
 #======================Digital Markenting===================
 
+   path('Dmlogout', views.Dmlogout, name='Dmlogout'),
    path('dm_dashboard', views.dm_dashboard, name='DM-Dashboard'),
    path('DM-In-House-Project', views.dm_in_house_project, name='DM-In-House-Project'),
    path('DM-Client-Project', views.dm_client_project, name='DM-Client-Project'),
@@ -1531,8 +1532,11 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
  path('DM-WORK-Delete/<int:dm_work_delete_id>', views.dm_Work_Delete, name='DM-WORK-Delete'),
 
-#========Telecaller==============
 
+
+#===================================== Telecaller =============================================================
+
+ path('Tellogout', views.Tellogout, name='Tellogout'),
  path('TEL-Dashboard', views.TEL_dashboard, name='TEL-Dashboard'),
  path('TEL-Assign-Works', views.tel_assign_works, name='TEL-Assign-Works'),
  path('TEL-Work-Table/<int:tel_task_id>', views.tel_works_table, name='TEL-Work-Table'),
