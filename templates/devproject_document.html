@@ -2,14 +2,28 @@
 {%load static%}
 {%block content%}
 <div class="row">
+    <h3 class="mb-5">Projects</h3>
 {% for i in projetsdoc %}
+
   <div class="col-md-4 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        {{i.pw_id.doc_project_name}}
-      </div>
-    </div>
+   
+        <div class="card text-center">
+        <div class="card-body">
+            {% for p in pro %}
+            
+            {% if i.project_cu_id.doc_project_id.id == p.id %}           
+
+            <h4 class="mb-0" style="color:white;"><a href="{% url 'DEVproject_doc_add' p.id %}" style="text-decoration:none;color:white; ">{{p.project}}</a></h4>
+
+            {% endif %}
+            
+        {% endfor %}
+        </div>
+        </div>
+   
   </div>
+
+
 {% endfor %}
 </div>
 

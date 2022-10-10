@@ -1,0 +1,43 @@
+{%extends 'devindex.html'%}
+{%load static%}
+{%block content%}
+
+<div class="row g-2">  
+    <h4 class="text-center">Correction Section</h4>
+    <div class="col-12 grid-margin">
+        <div class="card p-4">
+        <form action="{% url 'DEVproject_docupdate_save' correction.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            
+
+            <label>Previous Content and Image:</label>
+            
+            <div class="input-group p-3 m-2">
+              
+                <textarea class="form-control" name="devpjt_c_pre_cont"   style=" color: #fff; height:200px;">Previous Content !</textarea>
+            </div>
+          
+            <div class="input-group p-3 m-2">
+                <input type="file" class="form-control" name="devpjt_c_pre_img"  accept="ProjectUI/*"  style=" color: #fff;">
+            </div>
+            <br>
+           <label> New Content and Image:</label>
+            <div class="input-group p-3 m-2">
+                <textarea class="form-control" name="devpjt_c_new_cont"  rows="5" style=" color: #fff;height:200px;">New Content !</textarea>
+            </div>
+        
+            <div class="input-group p-3 m-2">
+                <input type="file" class="form-control" name="devpjt_c_new_img"  accept="ProjectUI/*" style=" color: #fff;">
+            </div>
+           
+            
+            <div class="p-3 m-3 text-center">
+                <button type="submit" class="btn btn-outline-success">SAVE</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+{%endblock%}

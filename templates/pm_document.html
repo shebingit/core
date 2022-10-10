@@ -30,7 +30,6 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Project Details</th>
-                <th>Project Workers</th>
                 <th>Correction/Updation</th>
                 <th>Desecription</th>
                 <th>Correction</th>
@@ -49,7 +48,7 @@
                     <td>{{i.startdate|date:'d-m-Y'}}</td>
                     <td>{{i.enddate|date:'d-m-Y'}}</td>
                     <td> <a  class="btn btn-outline-primary" href="{% url 'PM_project_doc_details' i.id %}" style="cursor:pointer">Add Details</a></td>
-                    <td><a  class="btn btn-outline-primary" href="{% url 'project_workers' i.id %}" style="cursor:pointer">Add Workers</a></td>
+                  
                     <td>
                       <a class="btn btn-outline-danger" href="{% url 'project_correction' i.id %}" style="cursor:pointer">Correction</a>
                       <a class="btn btn-outline-info" href="{% url 'project_updation' i.id %}" style="cursor:pointer">Updation</a>

@@ -733,6 +733,7 @@ class PM_ProjectDoc_ModuleDetails(models.Model):
 
 class ProjectCorrectionUpdation(models.Model):
     project_cu_id=models.ForeignKey(PM_ProjectDocumentDetails,on_delete=models.CASCADE,null=True,blank=True)
+    pdev_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
     project_cu_module=models.CharField(max_length=100,null=True, blank=True)
     project_cu_descrip=models.TextField()
     project_oldui=models.ImageField(upload_to="ProjectUI", null=True)

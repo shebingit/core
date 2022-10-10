@@ -16791,10 +16791,10 @@ def Project_view(request,proj_view_id):
         project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
         project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
         project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
-        workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
-        workdays=ProjectWorkers.objects.aggregate(Sum('pw_workdays'))
+       
+        workdays=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils).aggregate(Sum('project_cu_wdays'))
         return render(request, 'pm_project_view.html',{'pro':pro,'project_datils':project_datils,'project_desc':project_desc,
-                                                'project_correction':project_correction,'project_updation':project_updation,'workers':workers,
+                                                'project_correction':project_correction,'project_updation':project_updation,
                                                 'workdays':workdays})
 
 
@@ -16886,6 +16886,8 @@ def project_correction(request,proj_coret_id):
         else:
            return redirect('/')
         pro = user_registration.objects.filter(id=prid)
+        desig=designation.objects.get(designation='developer')
+        develp=user_registration.objects.filter(designation=desig)
         projects=project.objects.get(id=proj_coret_id)
         try:
             project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
@@ -16895,7 +16897,7 @@ def project_correction(request,proj_coret_id):
             return redirect(pm_projectdocument)
 
         project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-        return render(request, 'pm_project_correction.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils})
+        return render(request, 'pm_project_correction.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'develp':develp})
 
 
 def project_correction_save(request,proj_coret_save_id):
@@ -16908,22 +16910,15 @@ def project_correction_save(request,proj_coret_save_id):
         if request.method =="POST":
             p1=request.POST['dpjt_c_module_name']
             p2=request.POST['dpjt_c_module_dese']
-
-            p3=request.POST['dpjt_c_pre_cont']
-            p4=request.FILES.get('dpjt_c_pre_img')
-
-            p5=request.POST['dpjt_c_new_cont']
-            p6=request.FILES.get('dpjt_c_new_img')
+            p3=request.POST['dvco_name']
+            dev=user_registration.objects.get(id=p3)
             p7=request.POST['dpjt_c_start']
             p8=request.POST['dpjt_c_end']
             p9=request.POST['ddpjt_c_wdays']
             project_datils=PM_ProjectDocumentDetails.objects.get(id=proj_coret_save_id)
             project_correction=ProjectCorrectionUpdation(project_cu_module=p1,
                                                         project_cu_descrip=p2,
-                                                        project_cu_olddescrip=p3,
-                                                        project_oldui=p4,
-                                                        project_cu_newdescrip=p5,
-                                                        project_cu_newui=p6,
+                                                        pdev_name=dev,
                                                         project_cu_start=p7,
                                                         project_cu_end=p8,
                                                         project_cu_wdays=p9,
@@ -16944,6 +16939,8 @@ def project_updation(request,proj_update_id):
         else:
            return redirect('/')
         pro = user_registration.objects.filter(id=prid)
+        desig=designation.objects.get(designation='developer')
+        develp=user_registration.objects.filter(designation=desig)
         projects=project.objects.get(id=proj_update_id)
         try:
             project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
@@ -16952,7 +16949,7 @@ def project_updation(request,proj_update_id):
             return redirect(pm_projectdocument)
 
         project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-        return render(request, 'pm_project_updation.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils})
+        return render(request, 'pm_project_updation.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'develp':develp})
 
 
 
@@ -16966,11 +16963,8 @@ def project_updation_save(request,proj_update_save_id):
         if request.method =="POST":
            p1=request.POST['dpjt_u_module_name']
            p2=request.POST['dpjt_u_module_dese']
-           p3=request.POST['dpjt_u_pre_cont']
-           p4=request.FILES.get('dpjt_u_pre_img')
-
-           p5=request.POST['dpjt_u_new_cont']
-           p6=request.FILES.get('dpjt_u_new_img')
+           p3=request.POST['dvup_name']
+           dev=user_registration.objects.get(id=p3)
            p7=request.POST['dpjt_u_start']
            p8=request.POST['dpjt_u_end']
            p9=request.POST['ddpjt_u_wdays']
@@ -16978,10 +16972,7 @@ def project_updation_save(request,proj_update_save_id):
            project_datils=PM_ProjectDocumentDetails.objects.get(id=proj_update_save_id)
            project_correction=ProjectCorrectionUpdation(project_cu_module=p1,
                                                         project_cu_descrip=p2,
-                                                        project_cu_olddescrip=p3,
-                                                        project_oldui=p4,
-                                                        project_cu_newdescrip=p5,
-                                                        project_cu_newui=p6,
+                                                        pdev_name=dev,
                                                         project_cu_start=p7,
                                                         project_cu_end=p8,
                                                         project_cu_wdays=p9,
@@ -16993,24 +16984,7 @@ def project_updation_save(request,proj_update_save_id):
            return render(request, 'pm_project_updation.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'msg':msg})     
 
 
-def project_workers(request,proj_wk_id):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        projects=project.objects.get(id=proj_wk_id)
-        desig=designation.objects.get(designation='developer')
-        develp=user_registration.objects.filter(designation=desig)
-        try:
-            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-        except PM_ProjectDocumentDetails.DoesNotExist:
-            project_datils=None
-            return redirect(pm_projectdocument)
 
-        Workers=ProjectWorkers.objects.filter(pw_id=project_datils)
-        return render(request, 'pm_project_workers.html',{'pro':pro,'project_datils':project_datils,'develp':develp,'Workers':Workers})
 
 
 
@@ -17427,7 +17401,7 @@ def project_document_pdf(request,proj_docpdf_id):
     project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
     project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
     workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
-    workdays=ProjectWorkers.objects.filter(pw_id=project_datils).aggregate(Sum('pw_workdays'))
+    workdays=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils).aggregate(Sum('project_cu_wdays'))
     
 
     template_path = 'pm_project_document_pdf.html'
@@ -17638,7 +17612,7 @@ def  BRadminproject_document_pdf(request,brproj_docpdf_id):
     project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
     project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
     workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
-    workdays=ProjectWorkers.objects.filter(pw_id=project_datils).aggregate(Sum('pw_workdays'))
+    workdays=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils).aggregate(Sum('project_cu_wdays'))
     
 
     template_path = 'pm_project_document_pdf.html'
@@ -17680,8 +17654,71 @@ def DEVproject_document(request):
         dev = user_registration.objects.filter(id=devid)
         user=user_registration.objects.get(id=devid)
         pro=project.objects.all()
-        projetsdoc=ProjectWorkers.objects.filter(pwn_name=user).Values('').distinct()
-        return render(request, 'devproject_document.html', {'dev': dev,'projetsdoc':projetsdoc})
+        projetsdoc=ProjectCorrectionUpdation.objects.filter(pdev_name=user)
+        return render(request, 'devproject_document.html', {'dev': dev,'projetsdoc':projetsdoc,'pro':pro})
     else:
        return redirect('/')
+
+
     
+def DEVproject_doc_add(request,devpro_id):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+        dev = user_registration.objects.filter(id=devid)
+        proje=project.objects.get(id=devpro_id)
+        try:
+            proj=PM_ProjectDocumentDetails.objects.get(doc_project_id=proje)
+        except PM_ProjectDocumentDetails.DoesNotExist:
+            proj=None
+            return redirect('DEVproject_document')
+        return render(request, 'devproject_document_add.html', {'dev': dev,'proj':proj})
+    else:
+       return redirect('/')
+
+
+def DEVproject_doc_libraries_add(request):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+        dev = user_registration.objects.filter(id=devid)
+        return render(request, 'devproject_document_libraries_add.html', {'dev': dev})
+    else:
+       return redirect('/')
+
+def DEVproject_doc_coorection(request,devpdoc_id):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+        dev = user_registration.objects.filter(id=devid)
+        user=user_registration.objects.get(id=devid)
+        correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=devpdoc_id , project_cu_status='Correction' , pdev_name=user)
+        return render(request, 'devproject_document_correction.html', {'dev': dev,'correction':correction})
+    else:
+       return redirect('/')
+
+def DEVproject_correction_update(request,devdoc_upid):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+        dev = user_registration.objects.filter(id=devid)
+        correction=ProjectCorrectionUpdation.objects.get(id=devdoc_upid )
+        return render(request, 'devproject_document_correction_upate.html', {'dev': dev,'correction':correction})
+    else:
+       return redirect('/')
+
+    
+def DEVproject_docupdate_save(request,devdoc_upsave_id):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+        dev = user_registration.objects.filter(id=devid)
+        correction=ProjectCorrectionUpdation.objects.get(id=devdoc_upsave_id )
+        if request.method == 'POST':
+            correction.project_cu_olddescrip = request.POST.get('devpjt_c_pre_cont')
+            correction.project_oldui = request.FILES.get('devpjt_c_pre_img')
+            correction.project_cu_newdescrip = request.POST.get('devpjt_c_new_cont')
+            correction.project_cu_newui = request.FILES.get('devpjt_c_new_img')
+          
+            correction.save()
+            prodoc=correction.project_cu_id.id
+            return redirect('DEVproject_doc_coorection', prodoc)
+
+        return render(request, 'devproject_document_correction_upate.html', {'dev': dev,'correction':correction})
+    else:
+       return redirect('/')

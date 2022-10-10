@@ -1567,7 +1567,7 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
  path('project_updation/<int:proj_update_id>', views.project_updation, name='project_updation'),
  path('project_correction_save/<int:proj_coret_save_id>', views.project_correction_save, name='project_correction_save'),
  path('project_updation_save/<int:proj_update_save_id>', views.project_updation_save, name='project_updation_save'),
- path('project_workers/<int:proj_wk_id>', views.project_workers, name='project_workers'), 
+ 
  path('project_Assign_save/<int:tld_prj_save>',views.project_Assign_save, name='project_Assign_save'),  
 
  path('project_workday/<int:tld_work_id>',views.project_workday, name='project_workday'),
@@ -1612,6 +1612,11 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
 
  ############################### Developer ###############################################
  path('DEVproject_document', views.DEVproject_document, name='DEVproject_document'),
+ path('DEVproject_doc_add/<int:devpro_id>', views.DEVproject_doc_add, name='DEVproject_doc_add'),
+ path('DEVproject_doc_libraries_add', views.DEVproject_doc_libraries_add, name='DEVproject_doc_libraries_add'),
+ path('DEVproject_doc_coorection/<int:devpdoc_id>', views.DEVproject_doc_coorection, name='DEVproject_doc_coorection'),
+path('DEVproject_correction_update/<int:devdoc_upid>', views.DEVproject_correction_update, name='DEVproject_correction_update'),
+path('DEVproject_docupdate_save/<int:devdoc_upsave_id>', views.DEVproject_docupdate_save, name='DEVproject_docupdate_save'),
 
 ]
 

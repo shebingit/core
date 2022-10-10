@@ -1,0 +1,43 @@
+{%extends 'devindex.html'%}
+{%load static%}
+{%block content%}
+<div class="row">
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card text-center">
+            <div class="card-body">
+                <h4 class="mb-0" style="color:white;"><a href="{% url 'DEVproject_doc_libraries_add' %}" style="text-decoration:none;color:white; ">Libraries</a></h4>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card text-center">
+            <div class="card-body">
+                <h4 class="mb-0" style="color:white;"><a href="{% url 'DEVproject_doc_coorection' proj.id %}" style="text-decoration:none;color:white; ">Correction </a></h4>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card text-center">
+            <div class="card-body">
+                <h4 class="mb-0" style="color:white;"><a href="#" style="text-decoration:none;color:white; ">Updation</a></h4>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card text-center">
+            <div class="card-body">
+                <h4 class="mb-0" style="color:white;"><a href="#" style="text-decoration:none;color:white; ">Project Design</a></h4>
+
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+{%endblock%}

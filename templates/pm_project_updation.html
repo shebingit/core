@@ -23,11 +23,11 @@
                 </select>
             </div>
             <div class="input-group p-3 m-2">
-                <textarea class="form-control" name="dpjt_u_module_dese"  rows="5" style=" color: #fff;">Description !</textarea>
+                <textarea class="form-control" name="dpjt_u_module_dese"  rows="15" style=" color: #fff;">Description !</textarea>
             </div>
             <br>
 
-            <label>Previous Content and Image:</label>
+           <!-- <label>Previous Content and Image:</label>
             
             <div class="input-group p-3 m-2">
               
@@ -45,7 +45,16 @@
         
             <div class="input-group p-3 m-2">
                 <input type="file" class="form-control" name="dpjt_u_new_img"  accept="ProjectUI/*" style=" color: #fff;">
-            </div>
+            </div>-->
+            <label class="m-2">Developer Name</label>
+                   
+                        <div class="input-group p-3 m-2">
+                            <select class="form-control" name="dvup_name" style=" color: #fff;">
+                                {% for i in develp %}
+                                  <option value="{{i.id}}">{{i.fullname}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
             Start Date:
             <div class="input-group p-3 m-2">
                 <input type="Date" class="form-control" name="dpjt_u_start"  style=" color: #fff;">
@@ -56,7 +65,7 @@
                 <input type="Date" class="form-control" name="dpjt_u_end"  style=" color: #fff;">
             </div>
             <div class="input-group p-3 m-2">
-                <input type="number" class="form-control" name="ddpjt_u_wdays" placeholder="No of Days Worked"  style=" color: #fff;">
+                <input type="number" class="form-control" name="ddpjt_u_wdays" placeholder="No of Days for Compete"  style=" color: #fff;">
             </div>
             <div class="p-3 m-3 text-center">
                 <button type="submit" class="btn btn-outline-success">SAVE</button>
