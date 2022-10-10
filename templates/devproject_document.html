@@ -1,0 +1,17 @@
+{%extends 'devindex.html'%}
+{%load static%}
+{%block content%}
+<div class="row">
+{% for i in projetsdoc %}
+  <div class="col-md-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        {{i.pw_id.doc_project_name}}
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+
+{%endblock%}

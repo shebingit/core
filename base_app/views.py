@@ -2,6 +2,7 @@ from curses.ascii import NUL
 from enum import Flag
 from genericpath import exists
 from logging import exception
+from optparse import Values
 from urllib import request
 import qrcode 
 from num2words import num2words
@@ -188,8 +189,8 @@ def login(request):
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design3.id,status="active").exists():
                 member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
                 request.session['devid'] = member.id
-                
                 return redirect('devdashboard')
+
         design4 = designation.objects.get(designation="hr")    
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design4.id,status="active").exists():
                 member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
@@ -8082,7 +8083,6 @@ def devdashboard(request):
        return redirect('/')
     
 
-
     user_id = user_registration.objects.get(id=devid)
     conf_sal = user_id.confirm_salary
     if conf_sal == "":
@@ -8094,6 +8094,7 @@ def devdashboard(request):
     start_day_of_prev_month = date.today().replace(day=1) - timedelta(days=last_day_of_prev_month.day)
 
     start_day_of_this_month = date.today().replace(day=1)
+
 
     def last_day_of_month(any_day):
         # get close to the end of the month for any day, and add 4 days 'over'
@@ -17667,3 +17668,20 @@ def  BRadminproject_document_pdf(request,brproj_docpdf_id):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+
+################################ Developer Shebin Shaji ####################################
+
+
+def DEVproject_document(request):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+   
+        dev = user_registration.objects.filter(id=devid)
+        user=user_registration.objects.get(id=devid)
+        pro=project.objects.all()
+        projetsdoc=ProjectWorkers.objects.filter(pwn_name=user).Values('').distinct()
+        return render(request, 'devproject_document.html', {'dev': dev,'projetsdoc':projetsdoc})
+    else:
+       return redirect('/')
+    

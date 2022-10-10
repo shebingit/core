@@ -1609,6 +1609,10 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
  path('BRadminproject_updation_pdf/<int:brproj_updatepdf_id>', views.BRadminproject_updation_pdf, name='BRadminproject_updation_pdf'),
  path('BRadminproject_document_pdf/<int:brproj_docpdf_id>', views.BRadminproject_document_pdf, name='BRadminproject_document_pdf'),
 
+
+ ############################### Developer ###############################################
+ path('DEVproject_document', views.DEVproject_document, name='DEVproject_document'),
+
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
