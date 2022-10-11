@@ -760,3 +760,17 @@ class ProjectDeveloperDesign(models.Model):
     ui_project_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
     project_ui_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     project_ui_design=models.FileField(upload_to="ProjectUI", null=True)
+
+
+class ProjectDocAssign(models.Model):
+    tl_docproject_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    tl_docprojectdetail=models.ForeignKey(PM_ProjectDocumentDetails,on_delete=models.CASCADE,null=True,blank=True)
+    tl_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    tl_docprojectco_up=models.ForeignKey(ProjectCorrectionUpdation,on_delete=models.CASCADE,null=True,blank=True)
+    docstatus=models.CharField(max_length=50,null=True, blank=True)
+
+class DevprojectDoc(models.Model):
+    devprdoc_id=models.ForeignKey(ProjectDocAssign,on_delete=models.CASCADE,null=True,blank=True)
+    dv_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    devassign_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    devstatus=models.CharField(max_length=50, null=True, blank=True, default='Not Assigned')

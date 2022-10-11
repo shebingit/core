@@ -5,7 +5,7 @@
     <div class="col-md-3 grid-margin stretch-card">
         <div class="card text-center">
             <div class="card-body">
-                <h4 class="mb-0" style="color:white;"><a href="{% url 'DEVproject_doc_libraries_add' %}" style="text-decoration:none;color:white; ">Libraries</a></h4>
+                <h4 class="mb-0" style="color:white;"><a href="{% url 'DEVproject_doc_libraries_add' proj.id %}" style="text-decoration:none;color:white; ">Libraries</a></h4>
 
             </div>
         </div>
@@ -23,7 +23,7 @@
     <div class="col-md-3 grid-margin stretch-card">
         <div class="card text-center">
             <div class="card-body">
-                <h4 class="mb-0" style="color:white;"><a href="#" style="text-decoration:none;color:white; ">Updation</a></h4>
+                <h4 class="mb-0" style="color:white;"><a href="{% url 'DEVproject_doc_updation' proj.id  %}" style="text-decoration:none;color:white; ">Updation</a></h4>
 
             </div>
         </div>

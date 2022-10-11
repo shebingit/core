@@ -43,7 +43,10 @@
             {% for i in project_data %}
             <tbody>
                 <tr>
-                    <td><a class="btn btn-outline-success" href="{% url 'Project_view' i.id %}" style="cursor:pointer">View</a></td>
+                    <td>
+                      <a class="btn btn-outline-danger" href="{% url 'Project_delete' i.id %}" style="cursor:pointer">Remove</a>
+                      <a class="btn btn-outline-success" href="{% url 'Project_view' i.id %}" style="cursor:pointer">View</a>
+                    </td>
                     <td><span class="ps-2">{{i.project}}</span></td>
                     <td>{{i.startdate|date:'d-m-Y'}}</td>
                     <td>{{i.enddate|date:'d-m-Y'}}</td>

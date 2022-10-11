@@ -5,10 +5,10 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card text-center">
             <div class="card-body">
-                <form class="card col-12" method="post" action="#" enctype="multipart/form-data">
+                <form class="card col-12" method="post" action="{% url 'DEVprojectlib_save' projdoc.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <label class="m-2">Libraries</label>
-                    <textarea type="text" class="form-control m-2" style="height: 100px;" name="doc_project_lib" ></textarea>
+                    <textarea type="text" class="form-control m-2" style="height: 100px;" name="dev_project_lib" >{{projdoc.doc_project_libraries}}</textarea>
                     <button type="submit" class="btn btn-outline-success m-4 p-2">Add Project Details</button>
                 </form>
             </div>

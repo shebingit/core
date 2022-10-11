@@ -1557,6 +1557,8 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
  #============================= Project Manager Document =======================
  path('pm_projectdocument', views.pm_projectdocument, name='pm_projectdocument'),
 
+ path('Project_delete/<int:proj_dele_id>', views.Project_delete, name='Project_delete'), 
+
  path('Project_view/<int:proj_view_id>', views.Project_view, name='Project_view'),
  path('PM_project_doc_details/<int:prodoc_id>', views.PM_project_doc_details, name='PM_project_doc_details'),
  path('Doc_Project_Detail_Save/<int:prjid>', views.Doc_Project_Detail_Save, name='Doc_Project_Detail_Save'),
@@ -1613,10 +1615,21 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
  ############################### Developer ###############################################
  path('DEVproject_document', views.DEVproject_document, name='DEVproject_document'),
  path('DEVproject_doc_add/<int:devpro_id>', views.DEVproject_doc_add, name='DEVproject_doc_add'),
- path('DEVproject_doc_libraries_add', views.DEVproject_doc_libraries_add, name='DEVproject_doc_libraries_add'),
+ path('DEVproject_doc_libraries_add/<int:devlip>', views.DEVproject_doc_libraries_add, name='DEVproject_doc_libraries_add'),
  path('DEVproject_doc_coorection/<int:devpdoc_id>', views.DEVproject_doc_coorection, name='DEVproject_doc_coorection'),
 path('DEVproject_correction_update/<int:devdoc_upid>', views.DEVproject_correction_update, name='DEVproject_correction_update'),
 path('DEVproject_docupdate_save/<int:devdoc_upsave_id>', views.DEVproject_docupdate_save, name='DEVproject_docupdate_save'),
+path('DEVproject_doc_updation/<int:devpdocup_id>', views.DEVproject_doc_updation, name='DEVproject_doc_updation'),
+path('DEVproject_updation_update/<int:devpdocupdation_id>', views.DEVproject_updation_update, name='DEVproject_updation_update'),
+path('DEVproject_docupdation_save/<int:devdocup_save_id>', views.DEVproject_docupdation_save, name='DEVproject_docupdation_save'),
+path('DEVprojectlib_save/<int:dev_lib_save>', views.DEVprojectlib_save, name='DEVprojectlib_save'),
+
+
+################################## Team Lead ############################################
+path('TLprojects_doc', views.TLprojects_doc, name='TLprojects_doc'),
+path('Tlprojectdocs_view/<int:tldoc_view_id>', views.Tlprojectdocs_view, name='Tlprojectdocs_view'),
+path('devproctdoc_assign/<int:devdoc_id>', views.devproctdoc_assign, name='devproctdoc_assign'),
+path('Devprojectdoc_submit/<int:devsubmit>', views.Devprojectdoc_submit, name='Devprojectdoc_submit'),
 
 ]
 

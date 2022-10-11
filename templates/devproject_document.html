@@ -1,31 +1,114 @@
 {%extends 'devindex.html'%}
 {%load static%}
 {%block content%}
+
+
+
 <div class="row">
-    <h3 class="mb-5">Projects</h3>
-{% for i in projetsdoc %}
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+          <h4 class="text-center mb-4">PROJECT DOCUMENTS TASK</h4>
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+              <form>
+                <div class="input-group input-group-sm mb-3">
+                  <input
+                    type="text"
+                    class="form-control text-white"
+                    id="myInput"
+                    onkeyup="myFunction()"
+                    placeholder="Search . . ."
+                    style="border: green"
+                  />
+                </div>
+              </form>
+            </div>
 
-  <div class="col-md-4 grid-margin stretch-card">
-   
-        <div class="card text-center">
-        <div class="card-body">
-            {% for p in pro %}
-            
-            {% if i.project_cu_id.doc_project_id.id == p.id %}           
-
-            <h4 class="mb-0" style="color:white;"><a href="{% url 'DEVproject_doc_add' p.id %}" style="text-decoration:none;color:white; ">{{p.project}}</a></h4>
-
-            {% endif %}
-            
-        {% endfor %}
+            <div class="table-responsive">
+              
+              <table class="table" id="myTable">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Project  </th>
+                    <th>Project Module </th>
+                    <th>Module Desecription </th>
+                  
+                    <th>Assign Date </th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <td>Work Days </td>
+                    <td>Work Type </td>
+                    <td>Complete </td>
+                    <td>Work Status </td>
+                    
+    
+                  </tr>
+                </thead>
+              {% if projetsdoc %}
+                  <tbody>
+                  {% for i in projetsdoc %}
+                  
+                      <tr>
+                          <td>{{forloop.counter}}</td>
+                      
+                          <td>{{i.devprdoc_id.tl_docproject_id.project}}</td>
+                          <td>{{i.devprdoc_id.tl_docprojectco_up.project_cu_module}}</td>
+                          <td>{{i.devprdoc_id.tl_docprojectco_up.project_cu_descrip}}</td>
+                          <td>{{i.devassign_date}}</td>
+                          <td>{{i.devprdoc_id.tl_docprojectco_up.project_cu_start}}</td>
+                          <td>{{i.devprdoc_id.tl_docprojectco_up.project_cu_end}}</td>
+                          <td>{{i.devprdoc_id.tl_docprojectco_up.project_cu_wdays}}</td>
+                          {% if i.devprdoc_id.tl_docprojectco_up.project_cu_status == 'Updation' %}
+                            <td><a href="{% url 'DEVproject_doc_updation' i.devprdoc_id.tl_docprojectdetail.id  %}" class="btn btn-outline-warning">Updation</a></td>
+                          {% elif i.devprdoc_id.tl_docprojectco_up.project_cu_status == 'Correction' %}
+                            <td><a href="{% url 'DEVproject_doc_coorection' i.devprdoc_id.tl_docprojectdetail.id %}" class="btn btn-outline-danger">Correction</a></td>
+                          {% endif %}
+                          <td><a href="{% url 'Devprojectdoc_submit' i.id %}" class="btn btn-outline-primary">Submit</a></td>
+                          <td>{{i.devstatus}}</td>
+                          
+                          
+                      </tr>
+                  
+                  {% endfor %}
+              {% else %}
+                        <h5 style="text-align:center">Nothing to display!</h5>
+              {% endif %}
+                </tbody>
+            </table>
+         
         </div>
-        </div>
-   
+      </div>
+    </div>
   </div>
-
-
-{% endfor %}
 </div>
+ 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function () {
+  $("#myInput").on("keyup", function () {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
+</script>
+
+
+<!-- Sweat aleert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if msg == 1 %}
+  <script>
+    swal("Good job!","Data Successfuly Submited.", "success");
+  </script>
+{% elif  msg == 0 %}
+  <script>
+    swal("Sorry!","Data Error .", "error");
+  </script>
+{% endif %}
 
 
 {%endblock%}
