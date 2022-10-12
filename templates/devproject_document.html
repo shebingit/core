@@ -30,6 +30,7 @@
                 <thead>
                   <tr>
                     <th>No</th>
+                    <th>Libraries/Design</th>
                     <th>Project  </th>
                     <th>Project Module </th>
                     <th>Module Desecription </th>
@@ -51,7 +52,10 @@
                   
                       <tr>
                           <td>{{forloop.counter}}</td>
-                      
+                          <td>
+                            <a href="{% url 'DEVproject_doc_libraries_add' i.devprdoc_id.tl_docprojectdetail.id %}" class="btn btn-primary">Libraries</a>
+                            <a href="{% url 'devproject_design' i.devprdoc_id.tl_docproject_id.id %}" class="btn btn-secondary">Design</a>
+                          </td>
                           <td>{{i.devprdoc_id.tl_docproject_id.project}}</td>
                           <td>{{i.devprdoc_id.tl_docprojectco_up.project_cu_module}}</td>
                           <td>{{i.devprdoc_id.tl_docprojectco_up.project_cu_descrip}}</td>
@@ -63,6 +67,8 @@
                             <td><a href="{% url 'DEVproject_doc_updation' i.devprdoc_id.tl_docprojectdetail.id  %}" class="btn btn-outline-warning">Updation</a></td>
                           {% elif i.devprdoc_id.tl_docprojectco_up.project_cu_status == 'Correction' %}
                             <td><a href="{% url 'DEVproject_doc_coorection' i.devprdoc_id.tl_docprojectdetail.id %}" class="btn btn-outline-danger">Correction</a></td>
+                          {% elif i.devprdoc_id.tl_docprojectco_up.project_cu_status == 'Start Work' %}
+                            <td><a href="{% url 'DEVproject_doc_start' i.devprdoc_id.tl_docprojectdetail.id %}" class="btn btn-outline-success">Start Work</a></td>
                           {% endif %}
                           <td><a href="{% url 'Devprojectdoc_submit' i.id %}" class="btn btn-outline-primary">Submit</a></td>
                           <td>{{i.devstatus}}</td>

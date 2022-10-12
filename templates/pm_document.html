@@ -30,7 +30,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Project Details</th>
-                <th>Correction/Updation</th>
+                <th>Start Doc/Correction/Updation</th>
                 <th>Desecription</th>
                 <th>Correction</th>
                 <th>Updation</th>
@@ -45,7 +45,7 @@
                 <tr>
                     <td>
                       <a class="btn btn-outline-danger" href="{% url 'Project_delete' i.id %}" style="cursor:pointer">Remove</a>
-                      <a class="btn btn-outline-success" href="{% url 'Project_view' i.id %}" style="cursor:pointer">View</a>
+                      <a class="btn btn-outline-secondary" href="{% url 'Project_view' i.id %}" style="cursor:pointer">View</a>
                     </td>
                     <td><span class="ps-2">{{i.project}}</span></td>
                     <td>{{i.startdate|date:'d-m-Y'}}</td>
@@ -53,6 +53,7 @@
                     <td> <a  class="btn btn-outline-primary" href="{% url 'PM_project_doc_details' i.id %}" style="cursor:pointer">Add Details</a></td>
                   
                     <td>
+                      <a class="btn btn-outline-success" href="{% url 'project_startdoc' i.id %}" style="cursor:pointer">Start Doc</a>
                       <a class="btn btn-outline-danger" href="{% url 'project_correction' i.id %}" style="cursor:pointer">Correction</a>
                       <a class="btn btn-outline-info" href="{% url 'project_updation' i.id %}" style="cursor:pointer">Updation</a>
                       

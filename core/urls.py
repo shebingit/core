@@ -1565,6 +1565,8 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
  path('Doc_Project_Module/<int:prjmd_id>', views.Doc_Project_Module, name='Doc_Project_Module'), 
  path('Doc_Project_Module_save/<int:prjmsave_id>', views.Doc_Project_Module_save, name='Doc_Project_Module_save'),
 
+ path('project_startdoc/<int:proj_start_id>', views.project_startdoc, name='project_startdoc'), 
+ path('project_startdoc_save/<int:proj_start_save_id>', views.project_startdoc_save, name='project_startdoc_save'), 
  path('project_correction/<int:proj_coret_id>', views.project_correction, name='project_correction'), 
  path('project_updation/<int:proj_update_id>', views.project_updation, name='project_updation'),
  path('project_correction_save/<int:proj_coret_save_id>', views.project_correction_save, name='project_correction_save'),
@@ -1616,6 +1618,10 @@ path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-CO
  path('DEVproject_document', views.DEVproject_document, name='DEVproject_document'),
  path('DEVproject_doc_add/<int:devpro_id>', views.DEVproject_doc_add, name='DEVproject_doc_add'),
  path('DEVproject_doc_libraries_add/<int:devlip>', views.DEVproject_doc_libraries_add, name='DEVproject_doc_libraries_add'),
+ path('DEVproject_doc_start/<int:devstart>', views.DEVproject_doc_start, name='DEVproject_doc_start'),
+ path('DEVproject_doc_update/<int:devdocstart_upid>', views.DEVproject_doc_update, name='DEVproject_doc_update'),
+path('DEVproject_startdoc_save/<int:dev_start_save>', views.DEVproject_startdoc_save, name='DEVproject_startdoc_save'),
+
  path('DEVproject_doc_coorection/<int:devpdoc_id>', views.DEVproject_doc_coorection, name='DEVproject_doc_coorection'),
 path('DEVproject_correction_update/<int:devdoc_upid>', views.DEVproject_correction_update, name='DEVproject_correction_update'),
 path('DEVproject_docupdate_save/<int:devdoc_upsave_id>', views.DEVproject_docupdate_save, name='DEVproject_docupdate_save'),
@@ -1623,13 +1629,16 @@ path('DEVproject_doc_updation/<int:devpdocup_id>', views.DEVproject_doc_updation
 path('DEVproject_updation_update/<int:devpdocupdation_id>', views.DEVproject_updation_update, name='DEVproject_updation_update'),
 path('DEVproject_docupdation_save/<int:devdocup_save_id>', views.DEVproject_docupdation_save, name='DEVproject_docupdation_save'),
 path('DEVprojectlib_save/<int:dev_lib_save>', views.DEVprojectlib_save, name='DEVprojectlib_save'),
-
+path('devproject_design/<int:devproj_design>', views.devproject_design, name='devproject_design'),
+path('devproject_design_save/<int:ddev_design_save>', views.devproject_design_save, name='devproject_design_save'),
 
 ################################## Team Lead ############################################
 path('TLprojects_doc', views.TLprojects_doc, name='TLprojects_doc'),
 path('Tlprojectdocs_view/<int:tldoc_view_id>', views.Tlprojectdocs_view, name='Tlprojectdocs_view'),
 path('devproctdoc_assign/<int:devdoc_id>', views.devproctdoc_assign, name='devproctdoc_assign'),
 path('Devprojectdoc_submit/<int:devsubmit>', views.Devprojectdoc_submit, name='Devprojectdoc_submit'),
+path('devproctdocdays_edit/<int:tldayedit_id>', views.devproctdocdays_edit, name='devproctdocdays_edit'),
+path('devproctdocdays_edit_save/<int:tldevwork_day_save>', views.devproctdocdays_edit_save, name='devproctdocdays_edit_save'),
 
 ]
 

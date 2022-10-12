@@ -16812,11 +16812,11 @@ def Project_view(request,proj_view_id):
         project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
         project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
         project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
-       
+        workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
         workdays=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils).aggregate(Sum('project_cu_wdays'))
         return render(request, 'pm_project_view.html',{'pro':pro,'project_datils':project_datils,'project_desc':project_desc,
                                                 'project_correction':project_correction,'project_updation':project_updation,
-                                                'workdays':workdays})
+                                                'workdays':workdays,'workers':workers})
 
 
 
@@ -16897,6 +16897,59 @@ def Doc_Project_Module_save(request,prjmsave_id):
             msg=1
             return render(request, 'pm_project_document_module.html',{'pro':pro,'prjdoc':prjdoc,'msg':msg})
 
+
+
+def project_startdoc(request,proj_start_id):
+
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        desig=designation.objects.get(designation='team leader')
+        develp=user_registration.objects.filter(designation=desig)
+        projects=project.objects.get(id=proj_start_id)
+        try:
+            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
+        except PM_ProjectDocumentDetails.DoesNotExist:
+            project_datils=None
+           
+            return redirect(pm_projectdocument)
+
+        project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
+        return render(request, 'pm_project_startdoc.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'develp':develp})
+
+
+def project_startdoc_save(request,proj_start_save_id):
+     if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        if request.method =="POST":
+            p1=request.POST['dpjt_c_module_name']
+            p2=request.POST['dpjt_c_module_dese']
+            p3=request.POST['dvco_name']
+            dev=user_registration.objects.get(id=p3)
+            project_datils=PM_ProjectDocumentDetails.objects.get(id=proj_start_save_id)
+            project_correction=ProjectCorrectionUpdation(project_cu_module=p1,
+                                                        project_cu_descrip=p2,
+                                                        pdev_name=dev,
+                                                        project_cu_status="Start Work",
+                                                        project_cu_wdays=0,
+                                                        project_cu_id=project_datils)
+            project_correction.save()
+            proj=project.objects.get(id=project_datils.doc_project_id.id)
+            docassign=ProjectDocAssign(tl_docproject_id=proj,
+                                    tl_docprojectdetail=project_datils,
+                                    tl_name=dev,
+                                    tl_docprojectco_up=project_correction,docstatus='Assigned')
+            docassign.save()
+            msg=1
+            project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
+            return render(request, 'pm_project_startdoc.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'msg':msg}) 
 
 
 
@@ -17738,13 +17791,53 @@ def DEVprojectlib_save(request,dev_lib_save):
            return redirect('DEVproject_document')
 
 
+def DEVproject_doc_start(request,devstart):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+        dev = user_registration.objects.filter(id=devid)
+        user=user_registration.objects.get(id=devid)
+        p=PM_ProjectDocumentDetails.objects.get(id=devstart)
+        correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=p, project_cu_status='Start Work')
+       
+        return render(request,'devproject_document_start.html',{'dev': dev,'correction':correction})
+    else:
+       return redirect('/')
+       
+
+def DEVproject_doc_update(request,devdocstart_upid):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+        dev = user_registration.objects.filter(id=devid)
+        correction=ProjectCorrectionUpdation.objects.get(id=devdocstart_upid )
+        return render(request, 'devproject_document_Start_upate.html', {'dev': dev,'correction':correction})
+    else:
+       return redirect('/')
+
+
+def DEVproject_startdoc_save(request,dev_start_save):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+        dev = user_registration.objects.filter(id=devid)
+        correction=ProjectCorrectionUpdation.objects.get(id=dev_start_save )
+        if request.method == 'POST':
+            correction.project_cu_newdescrip = request.POST.get('devpjt_c_new_cont')
+            correction.project_cu_newui = request.FILES.get('devpjt_c_new_img')
+          
+            correction.save()
+            prodoc=correction.project_cu_id.id
+            return redirect('DEVproject_doc_start', prodoc)
+
+        return render(request, 'devproject_document_correction_upate.html', {'dev': dev,'correction':correction})
+    else:
+       return redirect('/')
+
+
 def DEVproject_doc_coorection(request,devpdoc_id):
     if request.session.has_key('devid'):
         devid = request.session['devid']
         dev = user_registration.objects.filter(id=devid)
         user=user_registration.objects.get(id=devid)
-       
-        print(devpdoc_id)
+
         p=PM_ProjectDocumentDetails.objects.get(id=devpdoc_id)
         correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=p, project_cu_status='Correction')
        
@@ -17825,6 +17918,43 @@ def DEVproject_docupdation_save(request,devdocup_save_id):
 
 
 
+
+
+def devproject_design(request,devproj_design):
+     if request.session.has_key('devid'):
+        devid = request.session['devid']
+        dev = user_registration.objects.filter(id=devid)
+        projects=project.objects.get(id=devproj_design)
+        ui=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
+        try:
+            designs=ProjectDeveloperDesign.objects.filter(ui_project_id=projects)
+           
+        except ProjectDeveloperDesign.DoesNotExist:
+            designs=None
+            return redirect('devproject_design', devproj_design)
+
+        return render(request, 'devproject_design_add_view.html',{'dev': dev,'designs':designs,'projects':projects,'ui':ui}) 
+
+
+def devproject_design_save(request,ddev_design_save):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+        dev = user_registration.objects.filter(id=devid)
+
+        if request.method == "POST":
+
+            projects=project.objects.get(id=ddev_design_save)
+            p1=request.POST['prj_desig_date']
+            p2=request.FILES.get('prj_desig_file')
+
+            designs=ProjectDeveloperDesign(project_ui_date=p1,project_ui_design=p2,ui_project_id=projects)
+            designs.save()
+            return redirect('devproject_design', ddev_design_save)  
+    else:
+        return redirect('/')
+
+
+
 ####################################### Team Lead #################################
 
 def TLprojects_doc(request):
@@ -17883,14 +18013,63 @@ def devproctdoc_assign(request,devdoc_id):
             cor_update.project_cu_end=p3
             cor_update.project_cu_wdays=p4
             cor_update.save()
+
             devp=user_registration.objects.get(fullname=p1)
             devassign=DevprojectDoc(devprdoc_id=assign,dv_name=devp,devstatus='Assinged')
             devassign.save()
+
+            workers=ProjectWorkers(pwn_name=devp,pw_startdate=p2,
+                                    pw_enddate=p3,pw_workdays=p4,
+                                    pw_wid=p1,pw_id=assign.tl_docprojectdetail,pwscu=cor_update)
+            workers.save()
+
             prj=assign.tl_docproject_id.id
             return redirect('Tlprojectdocs_view', prj)
 
     else:
         return redirect('/')
+
+
+
+def devproctdocdays_edit(request,tldayedit_id):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=tlid)
+        tl = user_registration.objects.get(id=tlid)
+        docview=ProjectDocAssign.objects.get(id=tldayedit_id)
+        projectscu=ProjectCorrectionUpdation.objects.get(id=docview.tl_docprojectco_up.id)
+        return render(request, 'TLprojects_doc_day_edit.html',{'mem':mem,'docview':docview,'projectscu':projectscu})
+
+    else:
+            return redirect('/')
+
+def devproctdocdays_edit_save(request,tldevwork_day_save):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=tlid)
+        p3=request.POST.get('dateedit')
+        p4=request.POST.get('dayedit')
+        cor_update=ProjectCorrectionUpdation.objects.get(id=tldevwork_day_save)
+        cor_update.project_cu_end=p3
+        cor_update.project_cu_wdays=p4
+        cor_update.save()
+        workers=ProjectWorkers.objects.get(pwscu=cor_update)
+        workers.pw_enddate=p3
+        workers.pw_workdays=p4
+        workers.save()
+        proj=cor_update.project_cu_id.doc_project_id.id
+
+        return redirect('Tlprojectdocs_view', proj )
+
+    else:
+            return redirect('/')
+    
 
 
 

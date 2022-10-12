@@ -33,10 +33,11 @@
                       <th>Project Module </th>
                       <th>Module Desecription </th>
                       <th>Work Type </th>
-                      <th>Developer </th>
+                      <th>Developer  Name</th>
                       <th>Start Date</th>
                       <th>End Date</th>
                       <td>Work Days </td>
+                      <td>Edit Days </td>
                       <th>Status </th>
                       <th>Assign </th>
                       
@@ -55,7 +56,7 @@
                             <td>{{i.tl_docprojectco_up.project_cu_status}}</td>
                             <form  action="{% url 'devproctdoc_assign' i.id %}" method="post">
                                 {% csrf_token %}
-                                <td>
+                                <td class="w-100">
                                     <select class="form-control w-100" style="color:#fff ;" name="devname">
                                         {% for i in devel %}
                                             <option value="{{i.fullname}}">{{i.fullname}}</option>
@@ -70,7 +71,9 @@
                                 </td>
                                 <td>
                                     <input type="number" class="form-control w-100" name="devworkday">
+                                   
                                 </td>
+                                <td> <a href="{% url 'devproctdocdays_edit' i.id %}" class="btn btn-outline-warning">Edit</a></td>
                                
                                 <td>
                                 {% if assigned %}

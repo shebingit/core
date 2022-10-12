@@ -42,7 +42,10 @@
         <h6 class="m-3 p-2">Project Start date : <span>{{project_datils.doc_project_startdate}}</span>  Project End date : <span>{{project_datils.doc_project_enddate}}</span>  </h6>
         <h6  class="m-3 p-2">Project Front End : <span>{{project_datils.doc_project_frontend}}</span> Project Back End : <span>{{project_datils.doc_project_backend}}</span> </h6>
         <h6  class="m-3 p-2">Libraries : <span>{{project_datils.doc_project_libraries}}</span></h6>
-        <h6 class="m-3 p-2">Developers : 
+        <h6 class="m-3 p-2">Developers : &nbsp;&nbsp;
+          {% for i in workers %}
+            {{i.pw_wid}} &nbsp;&nbsp;
+          {% endfor %}
         
         </h6>
         <h6 class="m-3 p-2">Project Work Days : {{workdays.project_cu_wdays__sum}}  Days

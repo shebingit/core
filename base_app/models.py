@@ -749,6 +749,7 @@ class ProjectCorrectionUpdation(models.Model):
 
 class ProjectWorkers(models.Model):
     pw_id=models.ForeignKey(PM_ProjectDocumentDetails,on_delete=models.CASCADE,null=True,blank=True)
+    pwscu=models.ForeignKey(ProjectCorrectionUpdation,on_delete=models.CASCADE,null=True,blank=True)
     pwn_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
     pw_startdate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     pw_enddate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
