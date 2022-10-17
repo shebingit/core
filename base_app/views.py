@@ -1,13 +1,4 @@
-from curses.ascii import NUL
-from enum import Flag
-from genericpath import exists
-from logging import exception
-from optparse import Values
-from urllib import request
-import qrcode 
-from num2words import num2words
-from xhtml2pdf import pisa
-from django.db.models import Sum
+import qrcode
 import random
 import os, json, math
 # import psycopg2
@@ -27,7 +18,7 @@ from io import BytesIO
 from django.core.files import File
 from django.conf import settings
 from django.db.models import Q
-from django.core.exceptions import ObjectDoesNotExist
+from num2words import num2words
 
 from django.core.mail import send_mail
 
@@ -35,7 +26,7 @@ from django.core.files.storage import FileSystemStorage
 
 from django.http import HttpResponse
 from django.template.loader import get_template
-
+from xhtml2pdf import pisa
 
 from cal.models import *
 
@@ -138,22 +129,22 @@ def login(request):
                 trcount=user_registration.objects.filter(designation=Trainer).count()
                 return redirect('BRadmin_profiledash')
             
-        # design2 = designation.objects.get(designation="tester")   
-        # if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation_id=design2.id,status="active").exists():
+        design2 = designation.objects.get(designation="tester")   
+        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation_id=design2.id,status="active").exists():
                
-        #         member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
-        #         request.session['usernamets'] = member.designation_id
-        #         request.session['usernamets1'] = member.fullname
-        #         request.session['usernamehr2'] = member.branch_id
-        #         request.session['usernametsid'] = member.id
-        #         if request.session.has_key('usernamets'):
-        #             usernamets = request.session['usernamets']
-        #         if request.session.has_key('usernamets1'):
-        #             usernamets1 = request.session['usernamets1']
-        #         else:
-        #            return redirect('/')
-        #         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
-        #         return render(request,'TSdashboard.html',{'mem':mem})
+                member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+                request.session['usernamets'] = member.designation_id
+                request.session['usernamets1'] = member.fullname
+                request.session['usernamehr2'] = member.branch_id
+                request.session['usernametsid'] = member.id
+                if request.session.has_key('usernamets'):
+                    usernamets = request.session['usernamets']
+                if request.session.has_key('usernamets1'):
+                    usernamets1 = request.session['usernamets1']
+                else:
+                   return redirect('/')
+                mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
+                return render(request,'TSdashboard.html',{'mem':mem})
     
         design = designation.objects.get(designation="team leader")
         
@@ -163,50 +154,42 @@ def login(request):
                  request.session['tlid'] = member.id
                  
                  return redirect('TLdashboard')
-
-
-
+        
         design1 = designation.objects.get(designation="project manager")
-            
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design1.id,status="active").exists():
                 member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
                 request.session['prid'] = member.id
                
                 return redirect('pmanager_dash')
-
-    ######## Digital Marketing ##########
-    
-        design2 = designation.objects.get(designation="Digital Marketing")
-            
-        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design2.id,status="active").exists():
-                member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
-                request.session['dmid'] = member.id
-               
-                return redirect('DM-Dashboard')
             
         design3 = designation.objects.get(designation="developer")
         
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design3.id,status="active").exists():
                 member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
                 request.session['devid'] = member.id
+                
                 return redirect('devdashboard')
-
+        
         design4 = designation.objects.get(designation="hr")    
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design4.id,status="active").exists():
                 member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
                 request.session['hr_id'] = member.id
                 
                 return redirect('HR_Dashboard')
-
         
-        design5 = designation.objects.get(designation="Telecaller")
-            
+        design5 = designation.objects.get(designation="Digital manager")    
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design5.id,status="active").exists():
-                member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
-                request.session['telid'] = member.id
+                dmmanager=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+                request.session['pm_id'] = dmmanager.id
+                
+                return redirect('dm_pmdashboard')
                
-                return redirect('TEL-Dashboard')
-               
+        design6 = designation.objects.get(designation="Digital Developer")    
+        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design6.id,status="active").exists():
+                dmdev=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+                request.session['dmdev_id'] = dmdev.id
+                
+                return redirect('dm_devdashboard')
             
         else:
                 context = {'msg_error': 'Invalid data'}
@@ -559,7 +542,6 @@ def Trainers_Calendar(request):
         return render(request,'Trainers_Calendar.html',{'mem':mem, 'vars':vars})
     else:
         return redirect('/')
-
 def Trainers_Attendancetable(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -579,7 +561,6 @@ def Trainers_Attendancetable(request):
         return render(request, 'Trainers_Attendancetable.html',{'mem':mem,'vars':attend})
     else:
         return redirect('/')
-
 def Trainee(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -607,7 +588,6 @@ def reportedissue(request):
         return render(request, 'reportedissue.html', {'mem': mem})
     else:
         return redirect('/')
-
 def reportissuetrainers(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -621,7 +601,6 @@ def reportissuetrainers(request):
         return render(request, 'reportissuetrainers.html', {'mem': mem})
     else:
         return redirect('/')
-
 def trainerunsolvedissue(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -644,7 +623,6 @@ def trainerunsolvedissue(request):
         return render(request,'trainerunsolvedissue.html',context)
     else:
         return redirect('/')
-
 def savetmreplaytrnr(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -670,7 +648,6 @@ def savetmreplaytrnr(request):
         return redirect('reportissuetrainers')
     else:
         return redirect('/')
-
 def trainersolvedissue(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -3452,7 +3429,6 @@ def BRadmin_promanattendsort(request,id):
         return redirect('/') 
 
 
-
 #***********************praveen************************
 def BRadmin_trainerstable(request,did):
     if 'Adm_id' in request.session:
@@ -4909,7 +4885,7 @@ def BRadmin_taskdesignation(request):
     # Desig = designation.objects.filter(department_id=dept_id)
     Desig = designation.objects.all()
     
-    return render(request, 'BRadmin_taskdesignation.html', {'Desig': Desig})
+    return render(request, 'BRadmin_taskdesignation.html', {'Desig': Desig,'Adm':Adm})
     
 
 def BRadmin_taskemployee(request): 
@@ -4918,7 +4894,7 @@ def BRadmin_taskemployee(request):
     desig_id = request.GET.get('desig_id')
     emp = user_registration.objects.filter(designation_id=desig_id).filter(department_id=dept_id)
    
-    return render(request, 'BRadmin_taskemployee.html', {'emp': emp})
+    return render(request, 'BRadmin_taskemployee.html', {'emp': emp,'Adm':Adm})
   
 
 def BRadmin_currenttasks(request):
@@ -4959,9 +4935,6 @@ def BRadmin_trainersdepartment(request):
         return redirect('/')
 
 ############## end ##########
-
-
-
 
 #upcoming projects -safdhar -admin mod
 
@@ -5221,7 +5194,7 @@ def MAN_seradmindesig(request):
         
         dept_id = request.GET.get('dept_id')
         Desig = designation.objects.filter(~Q(designation='admin'),~Q(designation='manager'),~Q(designation='account'))
-        
+        pr
         return render(request, 'MAN_giveprojectdropdown.html', {'Desig': Desig,'mem':mem})
     else:
         return redirect('/')
@@ -5235,7 +5208,7 @@ def Manager_selectproject(request):
     return render(request,'manager_selectproject.html',{'project':proj})
     
     
-#************************* meenu **********************
+#*************************meenu**********************
 def newdept(request):
     if 'Adm_id' in request.session:
         if request.session.has_key('Adm_id'):
@@ -5337,7 +5310,7 @@ def man_delete(request, id):
 ############## end ##########
 
 
-########################### christin ########################
+#######################################################christin########################
 
 def logout(request):
     if 'usernametsid' in request.session:
@@ -5408,7 +5381,7 @@ def internship_save(request):
            
             msg_success="Your application has been sent successfully"
             Flag='True'
-            return render(request, 'internship.html',{'msg_success':msg_success,'Flag':Flag})
+            return render(request, 'internship.html',{'msg_success':msg_success})
         except:
             message = "Enter all details !!!"
             return render(request, 'internship.html',{'message':message})
@@ -5486,7 +5459,7 @@ def man_registration_form(request):
             email_id=x.email
             x.save()
             y1 = user_registration.objects.get(id=a.id)
-            qr = qrcode.make("https://altoscore.in/offerletter/" + str(y1.id))
+            qr = qrcode.make("http://altoscore.in/offerletter/" + str(y1.id))
             qr.save(settings.MEDIA_ROOT + "/images"+"//" +"offer"+str(y1.id) + ".png")
             with open(settings.MEDIA_ROOT + "/images"+"//"+"offer"+ str(y1.id) +".png","rb") as reopen:
                     djangofile = File(reopen)
@@ -5494,14 +5467,14 @@ def man_registration_form(request):
                     y1.save()
     
             y2 = user_registration.objects.get(id=a.id)
-            qr1 = qrcode.make("https://altoscore.in/relieveletter/" + str(y2.id))
+            qr1 = qrcode.make("http://altoscore.in/relieveletter/" + str(y2.id))
             qr1.save(settings.MEDIA_ROOT + "/images"+"//"+"re" +str(y2.id) + ".png")
             with open(settings.MEDIA_ROOT + "/images"+"//"+"re" + str(y2.id) + ".png", "rb") as reopen:
                     djangofile = File(reopen)
                     y2.relieveqr = djangofile
                     y2.save()
             y3 = user_registration.objects.get(id=a.id)
-            qr2 = qrcode.make("https://altoscore.in/experienceletter/" + str(y3.id))
+            qr2 = qrcode.make("http://altoscore.in/experienceletter/" + str(y3.id))
             qr2.save(settings.MEDIA_ROOT + "/images"+"//"+"exp" +str(y3.id) + ".png")
             with open(settings.MEDIA_ROOT + "/images"+"//"+"exp" + str(y3.id) + ".png", "rb") as reopen:
                     djangofile = File(reopen)
@@ -5572,240 +5545,41 @@ def render_pdfof_view(request,id):
     con = conditions.objects.get(id=1)
     mem = user_registration.objects.get(id=id)
     br_admin = branch_registration.objects.get(id=mem.branch_id)
+    template_path = 'pdfof.html'
+    context = {'mem': mem,
+    'con':con,
+    'media_url':settings.MEDIA_URL,
+    'date':date,
+    'br_admin':br_admin
+    }
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="certificate.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
 
-     #==== HR offer letter ===
-
-    if mem.designation.designation == 'hr':
-        hr=designation.objects.get(designation = 'hr')
-        hrname=user_registration.objects.get(designation_id=hr)
-        template_path = 'pdfhrof.html'
-        context = {'mem': mem,
-        'con':con,
-        'media_url':settings.MEDIA_URL,
-        'date':date,
-        'hr':hrname,
-        'br_admin':br_admin
-        }
-        
-        # Create a Django response object, and specify content_type as pdf
-        response = HttpResponse(content_type='application/pdf')
-        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-        response['Content-Disposition'] = 'filename="certificate.pdf"'
-        # find the template and render it.
-        template = get_template(template_path)
-        html = template.render(context)
-
-        # create a pdf
-        pisa_status = pisa.CreatePDF(
-        html, dest=response)
-
-        # if error then show some funy view
-        if pisa_status.err:
-            return HttpResponse('We had some errors <pre>' + html + '</pre>')
-        return response
-
-
-        #====software developer offer letter ===
-
-    elif mem.designation.designation == 'developer':
-        hr=designation.objects.get(designation = 'hr')
-        hrname=user_registration.objects.get(designation_id=hr)
-        template_path = 'pdfsdof.html'
-        context = {'mem': mem,
-        'con':con,
-        'media_url':settings.MEDIA_URL,
-        'date':date,
-        'hr':hrname,
-        'br_admin':br_admin
-        }
-        
-        # Create a Django response object, and specify content_type as pdf
-        response = HttpResponse(content_type='application/pdf')
-        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-        response['Content-Disposition'] = 'filename="certificate.pdf"'
-        # find the template and render it.
-        template = get_template(template_path)
-        html = template.render(context)
-
-        # create a pdf
-        pisa_status = pisa.CreatePDF(
-        html, dest=response)
-
-        # if error then show some funy view
-        if pisa_status.err:
-            return HttpResponse('We had some errors <pre>' + html + '</pre>')
-        return response
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
     
-     #====Team leader offer letter ===
-    
-    elif mem.designation.designation == 'team leader':
-        hr=designation.objects.get(designation = 'hr')
-        hrname=user_registration.objects.get(designation_id=hr)
-        template_path = 'pdftlof.html'
-        context = {'mem': mem,
-        'con':con,
-        'media_url':settings.MEDIA_URL,
-        'date':date,
-        'hr':hrname,
-        'br_admin':br_admin
-        }
-        
-        # Create a Django response object, and specify content_type as pdf
-        response = HttpResponse(content_type='application/pdf')
-        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-        response['Content-Disposition'] = 'filename="certificate.pdf"'
-        # find the template and render it.
-        template = get_template(template_path)
-        html = template.render(context)
-
-        # create a pdf
-        pisa_status = pisa.CreatePDF(
-        html, dest=response)
-
-        # if error then show some funy view
-        if pisa_status.err:
-            return HttpResponse('We had some errors <pre>' + html + '</pre>')
-        return response
-
-     #====Project Manager offer letter ===
-    
-    elif mem.designation.designation == 'project manager':
-        hr=designation.objects.get(designation = 'hr')
-        hrname=user_registration.objects.get(designation_id=hr)
-        template_path = 'pdfpmof.html'
-        context = {'mem': mem,
-        'con':con,
-        'media_url':settings.MEDIA_URL,
-        'date':date,
-        'hr':hrname,
-        'br_admin':br_admin
-        }
-        
-        # Create a Django response object, and specify content_type as pdf
-        response = HttpResponse(content_type='application/pdf')
-        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-        response['Content-Disposition'] = 'filename="certificate.pdf"'
-        # find the template and render it.
-        template = get_template(template_path)
-        html = template.render(context)
-
-        # create a pdf
-        pisa_status = pisa.CreatePDF(
-        html, dest=response)
-
-        # if error then show some funy view
-        if pisa_status.err:
-            return HttpResponse('We had some errors <pre>' + html + '</pre>')
-        return response
 
 
-    #====Digital Marketing offer letter === Business Development Executive
-    
-    elif mem.designation.designation == 'Digital Marketing':
-        hr=designation.objects.get(designation = 'hr')
-        hrname=user_registration.objects.get(designation_id=hr)
-        template_path = 'pdfdmof.html'
-        context = {'mem': mem,
-        'con':con,
-        'media_url':settings.MEDIA_URL,
-        'date':date,
-        'hr':hrname,
-        'br_admin':br_admin
-        }
-        
-        # Create a Django response object, and specify content_type as pdf
-        response = HttpResponse(content_type='application/pdf')
-        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-        response['Content-Disposition'] = 'filename="certificate.pdf"'
-        # find the template and render it.
-        template = get_template(template_path)
-        html = template.render(context)
-
-        # create a pdf
-        pisa_status = pisa.CreatePDF(
-        html, dest=response)
-
-        # if error then show some funy view
-        if pisa_status.err:
-            return HttpResponse('We had some errors <pre>' + html + '</pre>')
-        return response
-
-    #====Business Development Executive Offer letter
-    
-    elif mem.designation.designation == 'Business Development Executive':
-        hr=designation.objects.get(designation = 'hr')
-        hrname=user_registration.objects.get(designation_id=hr)
-        template_path = 'pdfbdeof.html'
-        context = {'mem': mem,
-        'con':con,
-        'media_url':settings.MEDIA_URL,
-        'date':date,
-        'hr':hrname,
-        'br_admin':br_admin
-        }
-        
-        # Create a Django response object, and specify content_type as pdf
-        response = HttpResponse(content_type='application/pdf')
-        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-        response['Content-Disposition'] = 'filename="certificate.pdf"'
-        # find the template and render it.
-        template = get_template(template_path)
-        html = template.render(context)
-
-        # create a pdf
-        pisa_status = pisa.CreatePDF(
-        html, dest=response)
-
-        # if error then show some funy view
-        if pisa_status.err:
-            return HttpResponse('We had some errors <pre>' + html + '</pre>')
-        return response
-
-    #====Telecallers Offer letter
-    
-    elif mem.designation.designation == 'Telecaller':
-        hr=designation.objects.get(designation = 'hr')
-        hrname=user_registration.objects.get(designation_id=hr)
-        template_path = 'pdftelof.html'
-        context = {'mem': mem,
-        'con':con,
-        'media_url':settings.MEDIA_URL,
-        'date':date,
-        'hr':hrname,
-        'br_admin':br_admin
-        }
-        
-        # Create a Django response object, and specify content_type as pdf
-        response = HttpResponse(content_type='application/pdf')
-        #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-        response['Content-Disposition'] = 'filename="certificate.pdf"'
-        # find the template and render it.
-        template = get_template(template_path)
-        html = template.render(context)
-
-        # create a pdf
-        pisa_status = pisa.CreatePDF(
-        html, dest=response)
-
-        # if error then show some funy view
-        if pisa_status.err:
-            return HttpResponse('We had some errors <pre>' + html + '</pre>')
-        return response
-
-
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
 
 def render_pdfre_view(request,id):
 
     date = datetime.now()   
     mem = user_registration.objects.get(id=id)
     br_admin = branch_registration.objects.get(id=mem.branch_id)
-    hr=designation.objects.get(designation = 'hr')
-    hrname=user_registration.objects.get(designation_id=hr)
     template_path = 'pdfre.html'
     context = {'mem': mem,
     'media_url':settings.MEDIA_URL,
     'date':date,
-    'hr':hrname,
     'br_admin':br_admin
     }
     # Create a Django response object, and specify content_type as pdf
@@ -5832,14 +5606,10 @@ def render_pdfex_view(request,id):
     date = datetime.now()   
     mem = user_registration.objects.get(id=id)
     br_admin = branch_registration.objects.get(id=mem.branch_id)
-    hr=designation.objects.get(designation = 'hr')
-    hrname=user_registration.objects.get(designation_id=hr)
-   
     template_path = 'pdfex.html'
     context = {'mem': mem,
     'media_url':settings.MEDIA_URL,
     'date':date,
-    'hr':hrname,
     'br_admin':br_admin
     }
     # Create a Django response object, and specify content_type as pdf
@@ -5852,16 +5622,15 @@ def render_pdfex_view(request,id):
 
     # create a pdf
     pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
+       html, dest=response)
     
 
 
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+    
 def render_pdfau_view(request,id):
 
     date = datetime.now()   
@@ -5963,7 +5732,7 @@ def projectmanager_assignproject(request):
         pro = user_registration.objects.filter(id=prid)
         desi_id = user_registration.objects.get(id=prid)
         d = designation.objects.get(designation="team leader")
-        t = designation.objects.get(designation="developer")
+        t = designation.objects.get(designation="tester")
         
         
         tes = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= t.id)
@@ -6017,9 +5786,6 @@ def projectmanager_assignproject(request):
         return render(request, 'projectmanager_assignproject.html', {'pro':pro,'spa':spa,'pvar':pvar,'tes':tes})
     else:
         return redirect('/')
-
-
-
 
 def projectmanager_projectstatus(request,id):
     if 'prid' in request.session:
@@ -7382,7 +7148,6 @@ def TLprojects(request):
         mem = user_registration.objects.filter(id=tlid)
         display1 = project.objects.all()
         display=project_taskassign.objects.filter(developer_id=tlid).values('project_id').distinct()
-        project_user = user_registration.objects.get(id=tlid)
         return render(request, 'TLprojects.html',{'display':display,'mem':mem,'display1':display1})
     else:
         return redirect('/')
@@ -7439,13 +7204,6 @@ def tlprojecttasks(request,id):
             return render(request, 'TLprojecttasks.html',{'display1':display1,'time':time,'display':display,'mem':mem,'mem1':mem1,'mem2':mem2,'taskstatus':taskstatus,'tasks':tasks})
     else:
         return redirect('/')
-
-def TLwork(request,id):
-    if request.method == "POST":
-        n = project_taskassign.objects.get(id=id)
-        n.workaccept = request.FILES['work']
-        n.save()
-        return redirect("TLprojects")
 
 def extensionsave(request,id):
     if request.method == 'POST':
@@ -8081,6 +7839,7 @@ def devdashboard(request):
        return redirect('/')
     
 
+
     user_id = user_registration.objects.get(id=devid)
     conf_sal = user_id.confirm_salary
     if conf_sal == "":
@@ -8092,7 +7851,6 @@ def devdashboard(request):
     start_day_of_prev_month = date.today().replace(day=1) - timedelta(days=last_day_of_prev_month.day)
 
     start_day_of_this_month = date.today().replace(day=1)
-
 
     def last_day_of_month(any_day):
         # get close to the end of the month for any day, and add 4 days 'over'
@@ -8643,13 +8401,6 @@ def DEVtable(request, id):
     time = datetime.now()
     return render(request, 'DEVtable.html', {'dev': dev, 'devp': devp, 'time': time, 'teststatus': teststatus, 'testerstatus': testerstatus})
 
-def DEVwork(request,id):
-    if request.method == 'POST':
-        new = project_taskassign.objects.get(id=id)
-        new.workaccept = request.FILES['work']
-       
-        new.save()
-        return redirect("DEVprojects")
 
 def DEVtaskstatus(request, id):
     if request.session.has_key('devid'):
@@ -8930,12 +8681,9 @@ def render_pdf_view(request,id):
 
     date = datetime.now()   
     mem = internship.objects.get(id=id)
-    hr=designation.objects.get(designation = 'hr')
-    hrname=user_registration.objects.get(designation_id=hr)
     template_path = 'pdf.html'
     context = {'mem': mem,
     'media_url':settings.MEDIA_URL,
-    'hr':hrname,
     'date':date
     }
     # Create a Django response object, and specify content_type as pdf
@@ -9063,7 +8811,7 @@ def man_registration_update(request, id):
 
         admins = user_registration.objects.get(id=Adm_id)
 
-        br_name = branch_registration.objects.get(id=admins.branch.id)
+        br_name = branch_registration.objects.get(id=admins.id)
 
         return render(request, 'man_registration_update.html', {'con': con, 'mem4': mem4, 'qem': qem, 'xem': xem, 'Adm': Adm, 'des': des, 'br_name': br_name, 'desig':desig})
     else:
@@ -9229,22 +8977,11 @@ def registrationupdatesave(request, id):
         
 def registrationdelete(request,id):
     man = user_registration.objects.get(id=id)
-   
-    try:
-
-        man2 = qualification.objects.get(user_id=man.id)
-        man2.delete()
-    
-    except ObjectDoesNotExist:
-        print("No data")
-
-
-    try:
-        man1 = extracurricular.objects.get(user_id=man.id)
-        man1.delete()
-    except ObjectDoesNotExist:
-        print("No data")
-   
+  
+    man1 = extracurricular.objects.get(user_id=man.id)
+    man2 = qualification.objects.get(user_id=man.id)
+    man2.delete()
+    man1.delete()
     man.delete()
     os.remove(man.idproof.path)
     os.remove(man.photo.path)
@@ -11284,7 +11021,7 @@ def trainer_currentprogress(request,id):
             
             msg_success = "Progress submitted"
             return render(request, 'trainer_currentprogress.html', {'z': z,'msg_success':msg_success,'var':var})
-        return render(request, 'trainer_currentprogress.html', {'z': z,'var':var})
+        return render(request, 'trainer_currentprogress.html', {'z': z,'var':var, 'old_pr':old_pr})
     else:
         return render('/')
         
@@ -14909,7 +14646,6 @@ def pm_createmodule(request):
         return redirect('/')
 
 
-
 def pm_createtable(request):
     if 'prid' in request.session:
         if request.session.has_key('prid'):
@@ -16188,9 +15924,27 @@ def tm_leave(request):
     tdate = request.GET.get('tdate')
     leaves = leave.objects.filter(user_id=emp,from_date__gte=fdate,to_date__lte=tdate)
     return render(request,'tm_leave.html', {'names':leaves})
+    
+#**********************Developer section new edit(10-09-2022)******* 
 
+def DEVwork(request,id):
+    if request.method == 'POST':
+        new = project_taskassign.objects.get(id=id)
+        new.workaccept = request.FILES['work']
+       
+        new.save()
+        return redirect("DEVprojects")
+        
+#**********************TL section new edit(10-09-2022)******* 
 
-#**********************Manager section new edit*******
+def TLwork(request,id):
+    if request.method == "POST":
+        n = project_taskassign.objects.get(id=id)
+        n.workaccept = request.FILES['work']
+        n.save()
+        return redirect("TLprojects")
+        
+#**********************Manager section new edit(10-09-2022)*******
 
 def MAN_project_dept(request):
     if 'm_id' in request.session:
@@ -16238,1839 +15992,567 @@ def MAN_project_table(request,id):
     else:
         return redirect('/')
 
-#-----------------------------------------------------------------------------------------------------------
 
 
+##########################################################################################################
 
-
-
-
-    #====================== Digital Markemting ==============
-
-
-def Dmlogout(request):
-    if 'dmid' in request.session:  
+#********************************* Digital marketing - (15/10/22-shebin shaji) *********************#
+def dmmanagerlogout(request):
+    if 'pm_id' in request.session:  
         request.session.flush()
         return redirect('/')
     else:
         return redirect('/') 
 
-
-def dm_dashboard(request):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
+def dm_pmdashboard(request):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
         else:
             return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        labels = []
-        data = []
-        queryset = user_registration.objects.filter(id=dmid)
+        mem = user_registration.objects.filter(id=pm_id)
+        try:
+            desig=designation.objects.get(designation='Digital Developer')
+            dmdeveloper=user_registration.objects.filter(designation=desig).count()
+        except designation.DoesNotExist:
+            desig=None
+            dmdeveloper=None
+        try:
+            num1=DM_projects.objects.filter(dm_project_categ='In House Project').count()
+        except DM_projects.DoesNotExist:
+            num1=None
+        try:
+            num2=DM_projects.objects.filter(dm_project_categ='Client Project').count()
+        except DM_projects.DoesNotExist:
+            num2=None
+
        
-        for i in queryset:
-            labels = [i.workperformance, i.attitude, i.creativity]
-
-            data = [i.workperformance, i.attitude, i.creativity]
-        return render(request, 'DigitalMarketing/DM_dashboard.html', {'dm': dm, "labels": labels, "data": data})
-    else:
-        return redirect('/')
-
-
-
-def dm_in_house_project(request):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
-        else:
-            return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        labels = []
-        data = []
-        queryset = user_registration.objects.filter(id=dmid)
-       
-        for i in queryset:
-            labels = [i.workperformance, i.attitude, i.creativity]
-
-            data = [i.workperformance, i.attitude, i.creativity]
-        prid=0
-        return render(request, 'DigitalMarketing/DM_In-House-Project.html', {'prid':prid,'dm': dm, "labels": labels, "data": data})
-    else:
-        return redirect('/')
-    
-    
-
-def dm_client_project(request):
-     if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
-        else:
-            return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        labels = []
-        data = []
-        queryset = user_registration.objects.filter(id=dmid)
-       
-        for i in queryset:
-            labels = [i.workperformance, i.attitude, i.creativity]
-
-            data = [i.workperformance, i.attitude, i.creativity]
-        prid=1
-        return render(request,'DigitalMarketing/DM_Client-Project.html',{'prid':prid,'dm': dm, "labels": labels, "data": data})
-     else:
-        return redirect('/')
-    
-
-
-def dm_works(request,wk):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
-        else:
-            return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        labels = []
-        data = []
-        queryset = user_registration.objects.filter(id=dmid)
-       
-        for i in queryset:
-            labels = [i.workperformance, i.attitude, i.creativity]
-
-            data = [i.workperformance, i.attitude, i.creativity]
-        if wk == 0:
-            wc=0
-            works=Work.objects.filter(work_head='House Project')
-        else:
-            wc=1
-            works=Work.objects.filter(work_head='Client Project')
-    
-        return render(request,'DigitalMarketing/DM_Works.html',{'works':works,'wc':wc,'dm': dm, "labels": labels, "data": data})
-
-    else:
-        return redirect('/')
-    #================================
-
-    
-
-
-def dm_project_view(request,dm_project_id):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
-        else:
-            return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        labels = []
-        data = []
-        queryset = user_registration.objects.filter(id=dmid)
-        tasks=TaskAssign.objects.filter(task_work=dm_project_id)
-        return render(request,'DigitalMarketing/DM_Project_View.html',{'tasks':tasks,'dm': dm, "labels": labels, "data": data})
-    else:
-        return redirect('/')
-    
-     #================================ 
-
-def dm_Work_add(request,waid):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
-        else:
-            return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        labels = []
-        data = []
-        queryset = user_registration.objects.filter(id=dmid)
-       
-        for i in queryset:
-            labels = [i.workperformance, i.attitude, i.creativity]
-
-            data = [i.workperformance, i.attitude, i.creativity]
-        if request.method == "POST":
-            wdate=request.POST['wdate']
-            wname=request.POST['wname']
-
-            print(waid)
-            wstatus="Pending"
-            if waid == 0: 
-                works=Work(work_date=wdate,work_name=wname,work_status=wstatus,work_head='House Project')
-                works.save()
-                mesg=1
-                wc=0
-                works=Work.objects.filter(work_head=works.work_head)
-                return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc,'dm': dm, "labels": labels, "data": data})
-            elif waid == 1: 
-                works=Work(work_date=wdate,work_name=wname,work_status=wstatus,work_head='Client Project')
-                works.save()
-                mesg=1
-                wc=1
-                works=Work.objects.filter(work_head=works.work_head)
-                return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc,'dm': dm, "labels": labels, "data": data})
-    else:
-        return redirect('/')
-
-
-
-def dm_Work_Delete(request,dm_work_delete_id):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
-        else:
-            return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        labels = []
-        data = []
-        queryset = user_registration.objects.filter(id=dmid)
-       
-        for i in queryset:
-            labels = [i.workperformance, i.attitude, i.creativity]
-
-            data = [i.workperformance, i.attitude, i.creativity]
-    
-        works=Work.objects.get(id=dm_work_delete_id)
-        whnane=works.work_head
-        works.delete()
-        if whnane == 'House Project':
-            works=Work.objects.filter(work_head=whnane)
-            wc=0
-        else:
-            works=Work.objects.filter(work_head=whnane)
-            wc=1
-        mesg=0
-        return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'mesg':mesg,'wc':wc,'dm': dm, "labels": labels, "data": data})
-    else:
-        return redirect('/')
-
-
-
-#loadin for data collections
-
-def dm_data_collect(request):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
-        else:
-            return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        datacollect=DataCollect.objects.all()
-        return render(request,'DigitalMarketing/DM_Data-Collection.html',{'datacollect':datacollect,'dm':dm})
-    else:
-        return redirect('/')
-
-
-#loadin for backlink_details
-
-def dm_backlink_details(request):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
-        else:
-            return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        backlink=None
-        return render(request,'DigitalMarketing/DM_Backlins-Details.html',{'dm':dm ,'backlink':backlink})
-    else:
-        return redirect('/')
-  
-
-#loadin for backlink_details
-
-def dm_blog_calender(request):
-    return render(request,'DigitalMarketing/DM_Blog-calender.html')
-
-#loadin for backlink_details
-
-def dm_smm_post_calender(request):
-    return render(request,'DigitalMarketing/DM_Smm-Post-Calender.html')
-
-
-#loadin for backlink_details
-
-def dm_web_page_content(request):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
-        else:
-            return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        webpagecontent=None
-        return render(request,'DigitalMarketing/DM_Web-Page-Content.html',{'dm':dm ,'webpagecontent':webpagecontent})
-    else:
-        return redirect('/')
-   
-
-
-def dm_work_create(request,wcid):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
-        else:
-            return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        labels = []
-        data = []
-        queryset = user_registration.objects.filter(id=dmid)
-       
-        for i in queryset:
-            labels = [i.workperformance, i.attitude, i.creativity]
-
-            data = [i.workperformance, i.attitude, i.creativity]
-    
-        wc=wcid
-        if wc == 0: 
-            works=Work.objects.filter(work_head='House Project')
-        elif wc == 1: 
-             works=Work.objects.filter(work_head='Client Project')
-        return render(request,'DigitalMarketing/DM_Work_Create.html',{'works':works,'wc':wc,'dm': dm, "labels": labels, "data": data})
-
+        return render(request, 'DigitalMarketing/DM_projectmanager_dashboard.html', {'mem': mem,'dmdeveloper':dmdeveloper,'num1':num1,'num2':num2})
     else:
         return redirect('/')
     
 
-#loadin for backlink_details
-
-def dm_on_page_works(request):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
+def DM_project_works(request):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
         else:
             return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        onpage=None
-        return render(request,'DigitalMarketing/DM_On-Page-Works.html',{'dm':dm ,'onpage':onpage})
+        mem = user_registration.objects.filter(id=pm_id)
+        desig=designation.objects.get(designation='Digital Developer')
+        dmdeveloper=user_registration.objects.filter(designation=desig)
+        projects=DM_projects.objects.filter(dm_project_status='Work Started')
+        return render(request, 'DigitalMarketing/DM_project_work.html', {'mem': mem,'dmdeveloper':dmdeveloper,'projects':projects})
     else:
         return redirect('/')
-   
+    
 
-#loadin for backlink_details
-
-def dm_competitor_analysis(request):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
+def DM_inhouseproject(request):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
         else:
             return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        comp_analysis=None
-        return render(request,'DigitalMarketing/DM_CompetitorAnalysis.html',{'dm':dm ,'comp_analysis':comp_analysis})
+        mem = user_registration.objects.filter(id=pm_id)
+        projects=DM_projects.objects.filter(dm_project_categ='In House Project').order_by('-id')
+        return render(request, 'DigitalMarketing/DM_Inhouseproject.html', {'mem': mem,'projects':projects})
     else:
         return redirect('/')
 
-
-
-#loadin for backlink_details
-
-def dm_data_collection_client(request):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
+    
+def DM_Clientproject(request):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
         else:
             return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        cl_data_coll=None
-        return render(request,'DigitalMarketing/DM_DataCollection-Client.html',{'dm':dm ,'cl_data_coll':cl_data_coll})
+        mem = user_registration.objects.filter(id=pm_id)
+        projects=DM_projects.objects.filter(dm_project_categ='Client Project').order_by('-id')
+        return render(request, 'DigitalMarketing/DM_clientproject.html', {'mem': mem,'projects':projects})
+    else:
+        return redirect('/')
+
+    
+def DM_project_save(request,project_save):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+
+        if request.method == 'POST':
+            project = request.POST['pro_name']
+
+        if project_save == 0:
+            projects=DM_projects(dm_project_name=project,dm_project_categ='In House Project')
+            projects.save()
+            return redirect('DM_inhouseproject')
+        
+        elif project_save == 1:
+            projects=DM_projects(dm_project_name=project,dm_project_categ='Client Project')
+            projects.save()
+            return redirect('DM_Clientproject')
     else:
         return redirect('/')
 
 
+    
 
-#loadin task assign page
-
-def dm_Task_Assign(request,taid):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
+def DM_empolyees(request):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
         else:
             return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        if taid == 0:
-            works=Work.objects.filter(work_head='House Project')
-            wc=0
-        else:
-            wc=1
-            works=Work.objects.filter(work_head='Client Project')
-        tasks=TaskAssign.objects.all()
-
-        des=designation.objects.get(designation='Telecaller')
-        worker=user_registration.objects.filter(designation=des.id)
-        return render(request,'DigitalMarketing/DM_Task-Assign.html',{'works':works,'worker':worker,'tasks':tasks,'wc':wc,'dm':dm})
-
+        mem = user_registration.objects.filter(id=pm_id)
+        desig=designation.objects.get(designation='Digital Developer')
+        dmdeveloper=user_registration.objects.filter(designation=desig)
+        return render(request, 'DigitalMarketing/DM_employees.html', {'mem': mem,'dmdeveloper':dmdeveloper})
     else:
-        return redirect('/') 
+        return redirect('/')
 
-def dm_task_assigning(request):
-    if 'dmid' in request.session:
-        if request.session.has_key('dmid'):
-            dmid = request.session['dmid']
+
+def Dm_project_start(request,proj_start):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
         else:
             return redirect('/')
-        dm = user_registration.objects.get(id=dmid)
-        des=designation.objects.get(designation='Telecaller')
-        worker=user_registration.objects.filter(designation=des.id)
-        if request.method =="POST":
-          
-            p1=request.POST['empname']
-            empname=user_registration.objects.get(designation=des , id=p1)
-            twork=request.POST['twork']
-            tworks=Work.objects.get(work_name=twork)
-            tworks.work_status='Assigned'
-            whname=tworks.work_head
-            if whname =='House Project':
-                wc=0
-                works=Work.objects.filter(work_head='House Project')
-            elif whname =='Client Project':
-                wc=1
-                works=Work.objects.filter(work_head='Client Project')
+        mem = user_registration.objects.filter(id=pm_id)
+        projects=DM_projects.objects.get(id=proj_start)
+        projects.dm_project_status="Work Started"
+        projects.dm_project_start=date.today()
+        projects.save()
+        return redirect('DM_project_works')
+    else:
+        return redirect('/')
+    
 
-            tworks.save()
-            tcateg=request.POST['tcateg']
-            tstatus="Assigned"
-            task=TaskAssign(employee_name=empname,task_work=tworks,task_category=tcateg,task_status=tstatus)
+def DM_project_tasks(request,proj_taskid):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        proj=DM_projects.objects.get(id=proj_taskid)
+        tasks=Dm_project_Task.objects.filter(dm_project_id=proj)
+        return render(request, 'DigitalMarketing/DM_project_task.html', {'mem': mem,'tasks':tasks})
+    else:
+        return redirect('/')
+
+    
+def DM_project_task_assign(request,proj_assign):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        
+        if request.method == 'POST':
+            dev_name = request.POST['dev_name']
+            task_name = request.POST['task_name']
+        projects=DM_projects.objects.get(id=proj_assign)
+        dev=user_registration.objects.get(fullname=dev_name)
+        task=Dm_project_Task(dm_project_id=projects,dm_user_name=dev,dm_task_name=task_name,dm_task_status="Assinged")
+        task.save()
+        return redirect('DM_project_works')
+    else:
+        return redirect('/')
+
+
+    #****************************** digital Marketing 8 Tasks (17/10/22 -Shebin Shaji) *************
+
+
+def devstart_task(request,task_id):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        task=Dm_project_Task.objects.get(id=task_id)
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        user = user_registration.objects.get(id=dmdev_id)
+        if task.dm_task_name == 'Data Collection':
+            task.dm_task_status='pending'
             task.save()
-            tasks=TaskAssign.objects.filter(task_work=tworks.id)
-            mesg=1
-            return render(request,'DigitalMarketing/DM_Task-Assign.html',{'tasks':tasks,'mesg':mesg,'works':works,'worker':worker,'wc':wc,'dm':dm})
+            datacollect=DataCollect.objects.filter(Project_name=task, Employeeid=user)
+            rcount=DataCollect.objects.filter(Project_name=task, Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Data-Collection.html',{'task':task,'dmdev':dmdev,'datacollect':datacollect,'rcount':rcount})
 
+        # backlink Details
+
+        elif task.dm_task_name == 'Backlink Details':
+            task.dm_task_status='pending'
+            task.save()
+            backlink=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user)
+            rcount=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Backlins-Details.html',{'task':task,'dmdev':dmdev,'backlink':backlink})
+
+         # Webpage Content creatio
+        
+        elif task.dm_task_name == 'Webpage Content creation':
+            task.dm_task_status='pending'
+            task.save()
+            webcontent=WebpageContent.objects.filter(web_taskid=task, web_Employeeid=user)
+            rcount=WebpageContent.objects.filter(web_taskid=task, web_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Web-Page-Content.html',{'dmdev':dmdev ,'webcontent':webcontent,'task':task})
+
+
+        #Competitor analysis/Website Audit
+
+        elif task.dm_task_name == 'Competitor analysis/Website Audit':
+            task.dm_task_status='pending'
+            task.save()
+            comp_analysis=CompanyAnalysis.objects.filter(analysis_taskid=task, analysis_Employeeid=user)
+            rcount=CompanyAnalysis.objects.filter(analysis_taskid=task, analysis_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_CompetitorAnalysis.html',{'task':task,'dmdev':dmdev ,'comp_analysis':comp_analysis})
+
+        #Data collection - Client
+        elif task.dm_task_name == 'Data collection - Client':
+            task.dm_task_status='pending'
+            task.save()
+            clientdata=ClientData.objects.filter(cd_taskid=task, cd_Employeeid=user)
+            rcount=ClientData.objects.filter(cd_taskid=task, cd_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_DataCollection-Client.html',{'task':task,'dmdev':dmdev ,'clientdata':clientdata})
+
+        #On page works
+        elif task.dm_task_name == 'On page works':
+            task.dm_task_status='pending'
+            task.save()
+            onpage=OnPage.objects.filter(op_taskid=task, op_Employeeid=user)
+            rcount=OnPage.objects.filter(op_taskid=task, op_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_On-Page-Works.html',{'task':task,'dmdev':dmdev ,'onpage':onpage})
+        
+        elif task.dm_task_name == 'Blog calender':
+            datacollect=None
+            return render(request,'DigitalMarketing/DM_Blog-calender.html',{'dmdev':dmdev })
+
+
+        elif task.dm_task_name == 'SMM Post Calender':
+            datacollect=None
+            return render(request,'DigitalMarketing/DM_Smm-Post-Calender.html',{'dmdev':dmdev })
+
+    
     else:
-        return redirect('/') 
+        return redirect('/')
 
-def dm_telecalers(request):
-    return render(request,'DigitalMarketing/DM_Telecaller.html')
+    
+def devstart_task_submit(request,task_submit):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        task=Dm_project_Task.objects.get(id=task_submit)
+        task.dm_task_status='Completed'
+        task.save()
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        return redirect('DM_devprojects')
+    else:
+        return redirect('/')
+
+
+#data colection
+
+def data_collect_save(request,task_dcid):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        user = user_registration.objects.get(id=dmdev_id)
+        if request.method =="POST":
+            dcdate=request.POST['dcdate']
+            dcname=request.POST['dcname']
+            dcmail=request.POST['dcmail']
+            dcphno=request.POST['dcphno']
+            dcloc=request.POST['dcloc']
+            dcinternship=request.POST['dcinternship']
+            dcfrex=request.POST['dcfr_ex']
+            dcstatus=request.POST['dcstatus']
+            dcreason=request.POST['dcreason']
+            task=Dm_project_Task.objects.get(id=task_dcid)
+            
+            datacollect=DataCollect(dc_date=dcdate,dc_name=dcname,dc_email=dcmail,dc_phone=dcphno,dc_loc=dcloc,
+                                    dc_internship=dcinternship,dc_Fr_Ex=dcfrex,dc_status=dcstatus,dc_reason=dcreason,Employeeid=user,Project_name=task)
+            datacollect.save()
+            datacollect=DataCollect.objects.filter(Project_name=task, Employeeid=user)
+            rcount=DataCollect.objects.filter(Project_name=task, Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Data-Collection.html',{'task':task,'dmdev':dmdev,'datacollect':datacollect,'rcount':rcount})
+    else:
+        return redirect('/')
+
+# showing all the task data
+
+def devdata_collect_view(request,dc_view):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        user = user_registration.objects.get(id=dmdev_id)
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        task=Dm_project_Task.objects.get(id=dc_view)
+        if task.dm_task_name == 'Data Collection':
+            datacollect=DataCollect.objects.filter(Project_name=task, Employeeid=user)
+            rcount=DataCollect.objects.filter(Project_name=task, Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Data-Collection_view.html',{'datacollect':datacollect,'rcount':rcount,'dmdev':dmdev})
+        
+        #Backlink Details
+        elif task.dm_task_name == 'Backlink Details':
+            backlink=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user)
+            rcount=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Backlink_view.html',{'backlink':backlink,'rcount':rcount,'dmdev':dmdev})
+
+        #Webpage Content creation
+        elif task.dm_task_name == 'Webpage Content creation':
+            webcontent=WebpageContent.objects.filter(web_taskid=task, web_Employeeid=user)
+            rcount=WebpageContent.objects.filter(web_taskid=task, web_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Webpage_view.html',{'webcontent':webcontent,'rcount':rcount,'dmdev':dmdev})
+
+        #Competitor analysis/Website Audit
+        elif task.dm_task_name == 'Competitor analysis/Website Audit':
+            comp_analysis=CompanyAnalysis.objects.filter(analysis_taskid=task, analysis_Employeeid=user)
+            rcount=CompanyAnalysis.objects.filter(analysis_taskid=task, analysis_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_CompanyAnalysis_view.html',{'comp_analysis':comp_analysis,'rcount':rcount,'dmdev':dmdev})
+
+        #Data collection - Client
+        elif task.dm_task_name == 'Data collection - Client':
+            clientdata=ClientData.objects.filter(cd_taskid=task, cd_Employeeid=user)
+            rcount=ClientData.objects.filter(cd_taskid=task, cd_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Data-Collection-Client_view.html',{'clientdata':clientdata,'rcount':rcount,'dmdev':dmdev})
+
+         #onpage
+        elif task.dm_task_name == 'On page works':
+            onpage=OnPage.objects.filter(op_taskid=task, op_Employeeid=user)
+            rcount=OnPage.objects.filter(op_taskid=task, op_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Onpage_view.html',{'onpage':onpage,'rcount':rcount,'dmdev':dmdev})
+
+
+        elif task.dm_task_name == 'Data Collection':
+            backlink=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user)
+            rcount=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Data-Collection_view.html',{'datacollect':datacollect,'rcount':rcount,'dmdev':dmdev})
+
+
+        elif task.dm_task_name == 'Data Collection':
+            backlink=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user)
+            rcount=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Data-Collection_view.html',{'datacollect':datacollect,'rcount':rcount,'dmdev':dmdev})
+        
+
+        
+        
+    else:
+        return redirect('/')
+
+
+# backlink collect
+    
+def dev_backlink_save(request,bd_id):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        user = user_registration.objects.get(id=dmdev_id)
+        if request.method =="POST":
+            bddate=request.POST['bd_date']
+            bdurl=request.POST['bd_url']
+            bdtype=request.POST['bd_type']
+            bdstatus=request.POST['bd_status']
+
+            task=Dm_project_Task.objects.get(id=bd_id)
+            
+            backlink=Backlinks(bd_date=bddate,bd_url=bdurl,bd_type=bdtype,bd_status=bdstatus,
+                                    bd_Employeeid=user,bd_taskid=task)
+            backlink.save()
+            backlink=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user)
+            rcount=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Backlins-Details.html',{'task':task,'dmdev':dmdev,'backlink':backlink,'rcount':rcount})
+    else:
+        return redirect('/')
+
+
+#web page content
+    
+def dev_webpagecontent_save(request,web_id):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        user = user_registration.objects.get(id=dmdev_id)
+        if request.method =="POST":
+            bddate=request.POST['web_date']
+            bdurl=request.POST['web_url']
+            bdtype=request.POST['web_dese']
+            bdstatus=request.POST['web_key']
+
+            task=Dm_project_Task.objects.get(id=web_id)
+            
+            webcontent=WebpageContent(web_date=bddate,web_url=bdurl,web_dese=bdtype,web_key=bdstatus,
+                                    web_Employeeid=user,web_taskid=task)
+            webcontent.save()
+            webcontent=WebpageContent.objects.filter(web_taskid=task, web_Employeeid=user)
+            rcount=WebpageContent.objects.filter(web_taskid=task, web_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Web-Page-Content.html',{'task':task,'dmdev':dmdev,'webcontent':webcontent,'rcount':rcount})
+    else:
+        return redirect('/')
+
+    
+#web analysi Audit
+
+def dev_webanalysi_save(request,audit_id):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        user = user_registration.objects.get(id=dmdev_id)
+        if request.method =="POST":
+            bddate=request.POST['cawa_date']
+            comp=request.POST['cawa_compname']
+        
+            task=Dm_project_Task.objects.get(id=audit_id)
+            
+            comp_analysis=CompanyAnalysis(analysis_date=bddate,analysis_compname=comp,analysis_Employeeid=user,analysis_taskid=task)
+            comp_analysis.save()
+            comp_analysis=CompanyAnalysis.objects.filter(analysis_taskid=task, analysis_Employeeid=user)
+            rcount=CompanyAnalysis.objects.filter(analysis_taskid=task, analysis_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_CompetitorAnalysis.html',{'task':task,'dmdev':dmdev,'comp_analysis':comp_analysis,'rcount':rcount})
+    else:
+        return redirect('/')
+
+# data collection client
+ 
+def dev_datacollect_client_save(request,dcc_id):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        user = user_registration.objects.get(id=dmdev_id)
+        if request.method =="POST":
+            bddate=request.POST['dcc_date']
+            name=request.POST['dcc_fullname']
+            email=request.POST['dcc_email']
+            phno=request.POST['dcc_number']
+            bussines=request.POST['dcc_busines']
+        
+        
+            task=Dm_project_Task.objects.get(id=dcc_id)
+            
+            clientdata=ClientData(cd_date=bddate,cd_name=name,cd_email=email,
+                                  cd_phno=phno,cd_bussines=bussines,cd_Employeeid=user,cd_taskid=task)
+            clientdata.save()
+            clientdata=ClientData.objects.filter(cd_taskid=task, cd_Employeeid=user)
+            rcount=ClientData.objects.filter(cd_taskid=task, cd_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_DataCollection-Client.html',{'task':task,'dmdev':dmdev,'clientdata':clientdata,'rcount':rcount})
+    else:
+        return redirect('/')
+
+
+ #on page    
+def dev_onpage_save(request,onpage_id):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        user = user_registration.objects.get(id=dmdev_id)
+        if request.method =="POST":
+            bddate=request.POST['op_date']
+            op_url=request.POST['op_url']
+            opwork=request.POST['op_work']
+            opstatus=request.POST['op_status']
+        
+            task=Dm_project_Task.objects.get(id=onpage_id)
+            
+            onpage=OnPage(op_date=bddate,op_url=op_url,op_work=opwork,
+                                  op_status=opstatus,op_Employeeid=user,op_taskid=task)
+            onpage.save()
+            onpage=OnPage.objects.filter(op_taskid=task, op_Employeeid=user)
+            rcount=OnPage.objects.filter(op_taskid=task, op_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_On-Page-Works.html',{'task':task,'dmdev':dmdev,'onpage':onpage,'rcount':rcount})
+    else:
+        return redirect('/')
+    
+
+def dev_onpge_edit_save(request,onpage_edit):
+    print(onpage_edit)
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        onpage=OnPage.objects.get(id=onpage_edit)
+        onpage.op_status=request.POST.get('op_editstatus')
+        onpage.save()
+        on_id=onpage.op_taskid.id
+        print(on_id)
+        return redirect('devstart_task', on_id)
+    else:
+        return redirect('/')
 
 
 
-#==========Teliecaller===============
-
-
-def Tellogout(request):
-    if 'telid' in request.session:  
+#********************************* Digital marketing - (15/10/22-shebin shaji) *********************
+def dmdevlogout(request):
+    if 'dmdev_id' in request.session:  
         request.session.flush()
         return redirect('/')
     else:
         return redirect('/') 
 
-
-def TEL_dashboard(request):
-    if 'telid' in request.session:
-        if request.session.has_key('telid'):
-            telid = request.session['telid']
+def dm_devdashboard(request):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
         else:
             return redirect('/')
-        tel = user_registration.objects.get(id=telid)
-        labels = []
-        data = []
-        queryset = user_registration.objects.filter(id=telid)
-       
-        for i in queryset:
-            labels = [i.workperformance, i.attitude, i.creativity]
-
-            data = [i.workperformance, i.attitude, i.creativity]
-        return render(request, 'DigitalMarketing/Telicaller/TEL_Dashboard.html', {'tel': tel, "labels": labels, "data": data})
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        
+        return render(request, 'DigitalMarketing/DM_devdasbord.html', {'dmdev': dmdev})
     else:
-        return redirect('/')
-   
+        return redirect('/') 
+    
 
-def tel_assign_works(request):
-    if 'telid' in request.session:
-        if request.session.has_key('telid'):
-            telid = request.session['telid']
+def DM_devprojects(request):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
         else:
             return redirect('/')
-        tel = user_registration.objects.get(id=telid)
-        works=TaskAssign.objects.filter(employee_name=tel,task_status='Assigned').order_by()
-        return render(request,'DigitalMarketing/Telicaller/TEL_Assing_works.html',{'works':works,'tel':tel})
-    else:
-        return redirect('/')
-
-def tel_works_table(request,tel_task_id):
-    task=TaskAssign.objects.get(id=tel_task_id)
-    task.task_status='Pending'
-    task.save()
-    tasks=TaskAssign.objects.filter(task_status='Pending')
-    return render(request,'DigitalMarketing/Telicaller/TEL_Work_Table.html',{'tasks':tasks})
-
-def tel_work_table_view(request):
-    tasks=TaskAssign.objects.filter(task_status='Pending')
-    return render(request,'DigitalMarketing/Telicaller/TEL_Work_Table.html',{'tasks':tasks})
-
-def tel_start_work(request,start_id):
-    t_category=TaskAssign.objects.get(id=start_id)
-    
-    value=t_category.task_category
-    print(value)
-
-    if value == 'DATA Collection':
-        proname=t_category.task_work.work_name
-        return render(request,'DigitalMarketing/Telicaller/TEL_DataCollect.html',{'proname':proname})
-
-    elif value == 'Webpage Content creation':
-        return render(request,'DigitalMarketing/Telicaller/TEL_Webpage_Content.html')
-    
-    tasks=TaskAssign.objects.filter(task_status='Pending')
-    return render(request,'DigitalMarketing/Telicaller/TEL_Work_Table.html',{'tasks':tasks})
-
-
-def tel_data_collection_add(request):
-    if request.method =="POST":
-        dcdate=request.POST['dcdate']
-        dcname=request.POST['dcname']
-        dcmail=request.POST['dcmail']
-        dcphno=request.POST['dcphno']
-        dcloc=request.POST['dcloc']
-        dcinternship=request.POST['dcinternship']
-        dcfrex=request.POST['dcfr_ex']
-        dcstatus=request.POST['dcstatus']
-        dcreason=request.POST['dcreason']
-        pname=Work.objects.get(work_name=request.POST['pname'])
-        
-        emp=user_registration.objects.get(fullname='trainingmanager1')
-
-        datacollect=DataCollect(dc_date=dcdate,dc_name=dcname,dc_email=dcmail,dc_phone=dcphno,dc_loc=dcloc,
-                                dc_internship=dcinternship,dc_Fr_Ex=dcfrex,dc_status=dcstatus,dc_reason=dcreason,Employeeid=emp,Project_name=pname)
-        datacollect.save()
-        msg=1
-        record_count=DataCollect.objects.all().count
-        return render(request,'DigitalMarketing/Telicaller/TEL_DataCollect.html',{'msg':msg})
-
-
-
-
-
-
-#==========Client section=====
-
-def cp_competitor_analysis(request):
-    return render(request,'DigitalMarketing/Client-data/CP_CompetitorAnalysis.html')
-
-
-def cp_web_page_content(request):
-    return render(request,'DigitalMarketing/Client-data/CP_Web-Page-Content.html')
-
-
-def cp_on_page_works(request):
-    return render(request,'DigitalMarketing/Client-data/CP_On-Page-Works.html')
-
-
-
-
-
-############################### --- Documentation------- ######################################
-
-
-############################# shebin shaji ############
-
-def pm_projectdocument(request):
-
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        desi_id = user_registration.objects.get(id=prid)
-        d = designation.objects.get(designation="team leader")
-        spa = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= d.id)
-        pro = user_registration.objects.filter(id=prid)
-        project_data = project.objects.filter(projectmanager_id=prid)
-        return render(request, 'pm_document.html',{'pro':pro,'project_data':project_data,'spa':spa})
-    else:
-        return redirect('/')
-
-
-
-
-
-def Project_delete(request,proj_dele_id):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        projects=project.objects.get(id=proj_dele_id)
-        try:
-            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-            project_datils.delete()
-            return redirect('pm_projectdocument')
-        except PM_ProjectDocumentDetails.DoesNotExist:
-            project_datils=None
-            return redirect('pm_projectdocument')
-        
-
-
-
-def Project_view(request,proj_view_id):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        projects=project.objects.get(id=proj_view_id)
-        try:
-            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-        except PM_ProjectDocumentDetails.DoesNotExist:
-            project_datils=None
-            return redirect('pm_projectdocument')
-        project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-        project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
-        project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
-        workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
-        workdays=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils).aggregate(Sum('project_cu_wdays'))
-        return render(request, 'pm_project_view.html',{'pro':pro,'project_datils':project_datils,'project_desc':project_desc,
-                                                'project_correction':project_correction,'project_updation':project_updation,
-                                                'workdays':workdays,'workers':workers})
-
-
-
-def PM_project_doc_details(request,prodoc_id):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        projectdoc=project.objects.get(id=prodoc_id)
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        project=DM_projects.objects.all()
+        user = user_registration.objects.get(id=dmdev_id)
+        tasks=Dm_project_Task.objects.filter(dm_user_name=user).values('dm_project_id').distinct()
       
-        status=0
-
-        return render(request, 'pm_project_document_details.html',{'pro':pro,'projectdoc':projectdoc,'status':status})
+        return render(request, 'DigitalMarketing/DM_devproject.html', {'dmdev': dmdev,'tasks':tasks,'project':project})
     else:
-        return redirect('/')
-
-def Doc_Project_Detail_Save(request,prjid):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        projectdoc=project.objects.get(id=prjid)
-        if request.method =="POST":
-            p1=request.POST['doc_project_name']
-            p2=request.POST['doc_project_stdate']
-            p3=request.POST['doc_project_enddate']
-            p4=request.FILES.get('doc_project_ui')
-            p5=request.POST['doc_project_frend']
-            p6=request.POST['doc_project_baend']
-            p7=request.POST['doc_project_lib']
-
-            prjdoc=PM_ProjectDocumentDetails(doc_project_name=p1,
-                                            doc_project_startdate=p2,
-                                            doc_project_enddate=p3,
-                                            doc_project_ui=p4,
-                                            doc_project_frontend=p5,
-                                            doc_project_backend=p6,
-                                            doc_project_libraries=p7,
-                                            doc_project_id=projectdoc)
-            prjdoc.save()
-            msg=1
-            status=1
-            return render(request, 'pm_project_document_module.html',{'pro':pro,'prjdoc':prjdoc,'status':status,'msg':msg})
-
-
-def Doc_Project_Module(request,prjmd_id):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        prj=project.objects.get(id=prjmd_id)
-        try:
-            prjdoc=PM_ProjectDocumentDetails.objects.get(doc_project_id=prj)
-        except PM_ProjectDocumentDetails.DoesNotExist:
-                prjdoc=None
-                return redirect(pm_projectdocument)
-        return render(request, 'pm_project_document_module.html',{'pro':pro,'prjdoc':prjdoc})
-
-def Doc_Project_Module_save(request,prjmsave_id):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        if request.method =="POST":
-            p1=request.POST['doc_project_mdname']
-            p2=request.POST['doc_project_mddese']
-            prjdoc=PM_ProjectDocumentDetails.objects.get(id=prjmsave_id)
-            prjmodule=PM_ProjectDoc_ModuleDetails(doc_project_md_name=p1,doc_project_md_dese=p2,doc_projectdocd_id=prjdoc)
-            prjmodule.save()
-            msg=1
-            return render(request, 'pm_project_document_module.html',{'pro':pro,'prjdoc':prjdoc,'msg':msg})
-
-
-
-def project_startdoc(request,proj_start_id):
-
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        desig=designation.objects.get(designation='team leader')
-        develp=user_registration.objects.filter(designation=desig)
-        projects=project.objects.get(id=proj_start_id)
-        try:
-            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-        except PM_ProjectDocumentDetails.DoesNotExist:
-            project_datils=None
-           
-            return redirect(pm_projectdocument)
-
-        project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-        return render(request, 'pm_project_startdoc.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'develp':develp})
-
-
-def project_startdoc_save(request,proj_start_save_id):
-     if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        if request.method =="POST":
-            p1=request.POST['dpjt_c_module_name']
-            p2=request.POST['dpjt_c_module_dese']
-            p3=request.POST['dvco_name']
-            dev=user_registration.objects.get(id=p3)
-            project_datils=PM_ProjectDocumentDetails.objects.get(id=proj_start_save_id)
-            project_correction=ProjectCorrectionUpdation(project_cu_module=p1,
-                                                        project_cu_descrip=p2,
-                                                        pdev_name=dev,
-                                                        project_cu_status="Start Work",
-                                                        project_cu_wdays=0,
-                                                        project_cu_id=project_datils)
-            project_correction.save()
-            proj=project.objects.get(id=project_datils.doc_project_id.id)
-            docassign=ProjectDocAssign(tl_docproject_id=proj,
-                                    tl_docprojectdetail=project_datils,
-                                    tl_name=dev,
-                                    tl_docprojectco_up=project_correction,docstatus='Assigned')
-            docassign.save()
-            msg=1
-            project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-            return render(request, 'pm_project_startdoc.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'msg':msg}) 
-
-
-
-def project_correction(request,proj_coret_id):
-     if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        desig=designation.objects.get(designation='team leader')
-        develp=user_registration.objects.filter(designation=desig)
-        projects=project.objects.get(id=proj_coret_id)
-        try:
-            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-        except PM_ProjectDocumentDetails.DoesNotExist:
-            project_datils=None
-           
-            return redirect(pm_projectdocument)
-
-        project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-        return render(request, 'pm_project_correction.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'develp':develp})
-
-
-def project_correction_save(request,proj_coret_save_id):
-     if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        if request.method =="POST":
-            p1=request.POST['dpjt_c_module_name']
-            p2=request.POST['dpjt_c_module_dese']
-            p3=request.POST['dvco_name']
-            dev=user_registration.objects.get(id=p3)
-            project_datils=PM_ProjectDocumentDetails.objects.get(id=proj_coret_save_id)
-            project_correction=ProjectCorrectionUpdation(project_cu_module=p1,
-                                                        project_cu_descrip=p2,
-                                                        pdev_name=dev,
-                                                        project_cu_status="Correction",
-                                                        project_cu_wdays=0,
-                                                        project_cu_id=project_datils)
-            project_correction.save()
-            proj=project.objects.get(id=project_datils.doc_project_id.id)
-            docassign=ProjectDocAssign(tl_docproject_id=proj,
-                                    tl_docprojectdetail=project_datils,
-                                    tl_name=dev,
-                                    tl_docprojectco_up=project_correction,docstatus='Assigned')
-            docassign.save()
-            msg=1
-            project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-            return render(request, 'pm_project_correction.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'msg':msg})                                       
-
-
+        return redirect('/') 
     
 
-def project_updation(request,proj_update_id):
-     if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
+def DM_devproject_tasks(request,dev_prj_task):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
         else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        desig=designation.objects.get(designation='team leader')
-        develp=user_registration.objects.filter(designation=desig)
-        projects=project.objects.get(id=proj_update_id)
-        try:
-            project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-        except PM_ProjectDocumentDetails.DoesNotExist:
-            project_datils=None
-            return redirect(pm_projectdocument)
-
-        project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-        return render(request, 'pm_project_updation.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'develp':develp})
-
-
-
-def project_updation_save(request,proj_update_save_id):
-     if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        if request.method =="POST":
-           p1=request.POST['dpjt_u_module_name']
-           p2=request.POST['dpjt_u_module_dese']
-           p3=request.POST['dvup_name']
-           dev=user_registration.objects.get(id=p3)
-           project_datils=PM_ProjectDocumentDetails.objects.get(id=proj_update_save_id)
-           project_correction=ProjectCorrectionUpdation(project_cu_module=p1,
-                                                        project_cu_descrip=p2,
-                                                        pdev_name=dev,
-                                                        project_cu_status="Updation",
-                                                        project_cu_wdays=0,
-                                                        project_cu_id=project_datils)
-           project_correction.save()
-           proj=project.objects.get(id=project_datils.doc_project_id.id)
-           docassign=ProjectDocAssign(tl_docproject_id=proj,
-                                    tl_docprojectdetail=project_datils,
-                                    tl_name=dev,
-                                    tl_docprojectco_up=project_correction,docstatus='Assigned')
-           docassign.save()
-           msg=1
-           project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-           return render(request, 'pm_project_updation.html',{'pro':pro,'project_desc':project_desc,'project_datils':project_datils,'msg':msg})     
-
-
-
-
-
-
-
-def project_Assign_save(request,tld_prj_save):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        if request.method == "POST":
-
-            project_datils=PM_ProjectDocumentDetails.objects.get(id=tld_prj_save)
-            p1=request.POST['assign_date']
-            name=request.POST['dv_name']
-            p2=user_registration.objects.get(fullname=name)
-            p3=request.POST['work_days']
-            p4=request.POST['end_date']
-
-            Workers=ProjectWorkers(pwn_name=p2,pw_startdate=p1,pw_enddate=p4,pw_id=project_datils,pw_workdays=p3,pw_wid=p2.fullname)
-            Workers.save()
-            msg=1
-
-            Workers=ProjectWorkers.objects.filter(pw_id=tld_prj_save)
-            desig=designation.objects.get(designation='developer')
-            develp=user_registration.objects.filter(designation=desig)
-            return render(request, 'pm_project_workers.html',{'pro':pro,'project_datils':project_datils,'develp':develp,'Workers':Workers,'msg':msg})
-
-
-def project_workday(request,tld_work_id):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        Workers=ProjectWorkers.objects.get(id=tld_work_id)
-        return render(request, 'pm_project_workers_days.html',{'pro':pro,'Workers':Workers})
-
-
-def project_workday_save(request,tld_work_save):
-     if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-
-        Workers=ProjectWorkers.objects.get(id=tld_work_save)
-        if request.method == "POST":
-            p1=request.POST['editwork_days']
-            Workers.pw_workdays=p1
-            Workers.save()
-            prd_details=Workers.pw_id.doc_project_id.id
-            return redirect('project_workers', prd_details)
-      
-def project_develper_delete(request,prj_deve_id):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        Workers=ProjectWorkers.objects.get(id=prj_deve_id)
-        prd_details=Workers.pw_id.doc_project_id.id
-        Workers.delete()
-        return redirect('project_workers', prd_details)
+            return redirect('/')
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        project=DM_projects.objects.get(id=dev_prj_task)
+        tasks=Dm_project_Task.objects.filter(dm_project_id=project)
+        return render(request, 'DigitalMarketing/DM_devproject_tasks.html', {'dmdev': dmdev,'tasks':tasks})
+    else:
+        return redirect('/')
 
        
-
- ############################# Edit Save #######################################
-
-
-def project_details_edit(request,proj_detail_edit_id):
-     if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        proj_details=PM_ProjectDocumentDetails.objects.get(id=proj_detail_edit_id)
-        return render(request, 'pm_project_details_edit.html',{'pro':pro,'proj_details':proj_details})
-
-
-def Doc_Project_Detail_edit_Save(request,proj_detail_edit_save):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        project_details=PM_ProjectDocumentDetails.objects.get(id=proj_detail_edit_save)
-        if request.method == "POST":
-           project_details.doc_project_name =request.POST.get('doc_project_name')
-           p1=request.POST.get('doc_project_edit_stdate')
-           p2=request.POST.get('doc_project_edit_enddate')
-           p3=request.FILES.get('doc_project_edit_ui')
-
-           project_details.doc_project_startdate=p1
-           project_details.doc_project_enddate=p2
-            
-           if p3 :
-                project_details.doc_project_ui=p3
-           else:
-                 project_details.doc_project_ui= project_details.doc_project_ui
-
-           project_details.doc_project_frontend =request.POST.get('doc_project_edit_frend')
-           project_details.doc_project_backend =request.POST.get('doc_project_edit_baend')
-           project_details.doc_project_libraries =request.POST.get('doc_project_edit_lib')
-           project_details.save()
-
-           proj=project_details.doc_project_id.id
-           return redirect('Project_view', proj)
-
-
-
-def project_desecription_edit(request,dese_edit):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        project_dese=PM_ProjectDoc_ModuleDetails.objects.get(id=dese_edit)
-        return render(request, 'pm_project_desecr_edit.html',{'pro':pro,'project_dese':project_dese})
-
-
-def project_md_save(request,dese_update_id):
-     if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-
-        pro = user_registration.objects.filter(id=prid)
-        project_dese=PM_ProjectDoc_ModuleDetails.objects.get(id=dese_update_id)
-        if request.method == "POST":
-            p1=request.POST.get('updproject_module')
-            p2=request.POST.get('updproject_desc')
-                       
-            project_dese.doc_project_md_name=p1
-            project_dese.doc_project_md_dese=p2
-            project_dese.save()
-            prj=project_dese.doc_projectdocd_id.doc_project_id.id
-            return redirect('Project_view', prj)
-           
-
-def project_correction_edit(request,prj_core_edit):
-     if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-
-        pro = user_registration.objects.filter(id=prid)
-        project_correct_update=ProjectCorrectionUpdation.objects.get(id=prj_core_edit )
-        return render(request, 'pm_project_correction_edit.html',{'pro':pro,'project_correct_update':project_correct_update})
-
-
-def project_updation_edit(request,prj_update_edit):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-
-        pro = user_registration.objects.filter(id=prid)
-        project_correct_update=ProjectCorrectionUpdation.objects.get(id=prj_update_edit )
-        return render(request, 'pm_project_correction_edit.html',{'pro':pro,'project_correct_update':project_correct_update})
-
-
-def project_corret_update_save(request,prj_cu_id):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-
-        pro = user_registration.objects.filter(id=prid)
-
-        if request.method=="POST":
-
-            Correctionupdate=ProjectCorrectionUpdation.objects.get(id=prj_cu_id)
-
-            if Correctionupdate.project_cu_status == 'Correction':
-
-                Correctionupdate.project_cu_status='Correction'
-                Correctionupdate.project_cu_module=request.POST.get('updpjt_cu_module_name')
-                Correctionupdate.project_cu_descrip=request.POST.get('updpjt_cu_module_dese')
-
-                Correctionupdate.project_cu_olddescrip=request.POST.get('updpjt_cu_pre_cont')
-                oldimg=request.FILES.get('updpjt_cu_pre_img')
-                if oldimg:
-                    Correctionupdate.project_oldui=oldimg
-                else:
-                    Correctionupdate.project_oldui= Correctionupdate.project_oldui
-
-                newimg=request.FILES.get('updpjt_cu_new_img')
-                if newimg:
-                    Correctionupdate.project_cu_newui=newimg
-                else:
-                    Correctionupdate.project_cu_newui=Correctionupdate.project_cu_newui
-
-                Correctionupdate.project_cu_end=request.POST.get('updpjt_cu_end')
-
-                Correctionupdate.project_cu_wdays=request.POST.get('upddpjt_cu_wdays')
-                Correctionupdate.save()
-                proj=Correctionupdate.project_cu_id.doc_project_id.id
-                return redirect('Project_view', proj)
-
-            elif Correctionupdate.project_cu_status == 'Updation':
-
-                Correctionupdate.project_cu_status='Updation'
-                Correctionupdate.project_cu_module=request.POST.get('updpjt_cu_module_name')
-                Correctionupdate.project_cu_descrip=request.POST.get('updpjt_cu_module_dese')
-
-                Correctionupdate.project_cu_olddescrip=request.POST.get('updpjt_cu_pre_cont')
-                oldimg=request.FILES.get('updpjt_cu_pre_img')
-                if oldimg:
-                    Correctionupdate.project_oldui=oldimg
-                else:
-                    Correctionupdate.project_oldui= Correctionupdate.project_oldui
-
-
-                Correctionupdate.project_cu_newdescrip=request.POST.get('updpjt_cu_new_cont')
-                newimg=request.FILES.get('updpjt_cu_new_img')
-                if newimg:
-                    Correctionupdate.project_cu_newui=newimg
-                else:
-                    Correctionupdate.project_cu_newui=Correctionupdate.project_cu_newui
-
-
-                Correctionupdate.project_cu_newui= Correctionupdate.project_cu_newui
-                Correctionupdate.project_cu_end=request.POST.get('updpjt_cu_end')
-
-                Correctionupdate.project_cu_wdays=request.POST.get('upddpjt_cu_wdays')
-                Correctionupdate.save()
-                proj=Correctionupdate.project_cu_id.doc_project_id.id
-                return redirect('Project_view', proj)
-
-
-
-def project_design(request,proj_design):
-     if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        projects=project.objects.get(id=proj_design)
-        try:
-            designs=ProjectDeveloperDesign.objects.filter(ui_project_id=projects)
-           
-        except ProjectDeveloperDesign.DoesNotExist:
-            designs=None
-            return redirect('project_design', proj_design)
-
-        return render(request, 'pm_project_design_add_view.html',{'pro':pro,'designs':designs,'projects':projects})  
-
-
-def project_design_save(request,prj_save):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid)
-        if request.method == "POST":
-
-            projects=project.objects.get(id=prj_save)
-            p1=request.POST['prj_desig_date']
-            p2=request.FILES.get('prj_desig_file')
-
-            designs=ProjectDeveloperDesign(project_ui_date=p1,project_ui_design=p2,ui_project_id=projects)
-            designs.save()
-            return redirect('project_design', prj_save)  
-    else:
-        return redirect('/')
-
-
-
-
-    ######################## Document PDF Sections #############################
-
-
-def Project_Description_pdf(request,proj_dese_id):
-    date = datetime.now()  
-    projects=project.objects.get(id=proj_dese_id)
-    try:
-        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-    except PM_ProjectDocumentDetails.DoesNotExist:
-            project_datils=None
-            return redirect(pm_projectdocument)
-
-    project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-    
-
-    template_path = 'pm_project_description_pdf.html'
-    context = {'project_datils':project_datils,
-    'project_desc':project_desc,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Desecription.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-# correction pdf
-
-def project_correction_pdf(request,proj_coretpdf_id):
-    date = datetime.now()  
-    projects=project.objects.get(id=proj_coretpdf_id)
-    try:
-        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-    except PM_ProjectDocumentDetails.DoesNotExist:
-        project_datils=None
-        return redirect(pm_projectdocument)
-
-    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
-    
-    template_path = 'pm_project_correction_pdf.html'
-    context = {'project_datils':project_datils,
-    'project_correction':project_correction,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Corrections.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-
-# Updation  pdf
-
-def project_updation_pdf(request,proj_updatepdf_id):
-    date = datetime.now()  
-    projects=project.objects.get(id=proj_updatepdf_id)
-    try:
-        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-    except PM_ProjectDocumentDetails.DoesNotExist:
-        project_datils=None
-        return redirect(pm_projectdocument)
-
-    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
-    
-
-    template_path = 'pm_project_updation_pdf.html'
-    context = {'project_datils':project_datils,
-    'project_correction':project_correction,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Updations.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-
-
-    #project Document PDF
-
-
-def project_document_pdf(request,proj_docpdf_id):
-    date = datetime.now()  
-    projects=project.objects.get(id=proj_docpdf_id)
-    try:
-        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-    except PM_ProjectDocumentDetails.DoesNotExist:
-        project_datils=None
-        return redirect(pm_projectdocument)
-
-    project_module=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
-    project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
-    workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
-    workdays=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils).aggregate(Sum('project_cu_wdays'))
-    
-
-    template_path = 'pm_project_document_pdf.html'
-    context = {'project_datils':project_datils,
-    'project_module':project_module,
-    'project_correction':project_correction,
-    'project_updation':project_updation,
-    'workers':workers,
-    'workdays':workdays,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-
-##############################################################################################################
-
-#---------------------------------------Admin Project Documents -----------------------------------------------------------
-
-
-def BRadmin_project_documents(request):
-    if 'Adm_id' in request.session:
-        if request.session.has_key('Adm_id'):
-            Adm_id = request.session['Adm_id']
-        else:
-            return redirect('/')
-        Adm = user_registration.objects.filter(id=Adm_id)
-        project_data = project.objects.all()
-        return render(request,'BRadmin_Project_Documents.html',{'Adm':Adm,'project_data':project_data})
-    else:
-        return redirect('/')
-
-
-def BRadmin_projectui(request,ad_ui_id):
-    if 'Adm_id' in request.session:
-        if request.session.has_key('Adm_id'):
-            Adm_id = request.session['Adm_id']
-        else:
-            return redirect('/')
-        Adm = user_registration.objects.filter(id=Adm_id)
-        projects=project.objects.get(id=ad_ui_id)
-
-        try:
-           projdetails=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-        except PM_ProjectDocumentDetails.DoesNotExist:
-            projdetails=None
-        try:
-            designs=ProjectDeveloperDesign.objects.filter(ui_project_id=projects)
-           
-        except ProjectDeveloperDesign.DoesNotExist:
-            designs=None
-        
-        return render(request,'BRadmin_Project_Ui.html',{'Adm':Adm,'projdetails':projdetails,'designs':designs})
-    else:
-        return redirect('/')
-
-
-################################### admin Project pdf #########################################
-
-
-def BRadminProject_Description_pdf(request,brproj_dese_id):
-    date = datetime.now()  
-    projects=project.objects.get(id=brproj_dese_id)
-    try:
-        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-    except PM_ProjectDocumentDetails.DoesNotExist:
-            project_datils=None
-            return redirect(BRadmin_project_documents)
-
-    project_desc=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-    
-
-    template_path = 'pm_project_description_pdf.html'
-    context = {'project_datils':project_datils,
-    'project_desc':project_desc,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Desecription.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-    #------------------------------------------------------
-
-# correction pdf
-
-def  BRadminproject_correction_pdf(request,brproj_coretpdf_id):
-    date = datetime.now()  
-    projects=project.objects.get(id=brproj_coretpdf_id)
-    try:
-        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-    except PM_ProjectDocumentDetails.DoesNotExist:
-        project_datils=None
-        return redirect(BRadmin_project_documents)
-
-    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
-    
-    template_path = 'pm_project_correction_pdf.html'
-    context = {'project_datils':project_datils,
-    'project_correction':project_correction,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Corrections.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-    #------------------------------------------------------
-
-
-# Updation  pdf
-
-def  BRadminproject_updation_pdf(request,brproj_updatepdf_id):
-    date = datetime.now()  
-    projects=project.objects.get(id=brproj_updatepdf_id)
-    try:
-        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-    except PM_ProjectDocumentDetails.DoesNotExist:
-        project_datils=None
-        return redirect(BRadmin_project_documents)
-
-    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
-    
-
-    template_path = 'pm_project_updation_pdf.html'
-    context = {'project_datils':project_datils,
-    'project_correction':project_correction,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Updations.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-#-----------------------------------------------------------------------
-
-    #project Document PDF
-
-
-def  BRadminproject_document_pdf(request,brproj_docpdf_id):
-    date = datetime.now()  
-    projects=project.objects.get(id=brproj_docpdf_id)
-    try:
-        project_datils=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-    except PM_ProjectDocumentDetails.DoesNotExist:
-        project_datils=None
-        return redirect(BRadmin_project_documents)
-
-    project_module=PM_ProjectDoc_ModuleDetails.objects.filter(doc_projectdocd_id=project_datils)
-    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Correction' )
-    project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils , project_cu_status='Updation' )
-    workers=ProjectWorkers.objects.filter(pw_id=project_datils).values('pw_wid').distinct()
-    workdays=ProjectCorrectionUpdation.objects.filter(project_cu_id=project_datils).aggregate(Sum('project_cu_wdays'))
-    
-
-    template_path = 'pm_project_document_pdf.html'
-    context = {'project_datils':project_datils,
-    'project_module':project_module,
-    'project_correction':project_correction,
-    'project_updation':project_updation,
-    'workers':workers,
-    'workdays':workdays,
-    'date':date,
-    }
-        
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
-     # find the template and render it.
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-    html, dest=response)
-
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-
-################################ Developer Shebin Shaji ####################################
-
-def Devprojectdoc_submit(request,devsubmit):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-   
-        dev = user_registration.objects.filter(id=devid)
-        user=user_registration.objects.get(id=devid)
-        pro=PM_ProjectDocumentDetails.objects.all()
-        submit=DevprojectDoc.objects.get(id=devsubmit)
-        submit.devstatus='Submited'
-        submit.save()
-        msg=1
-        projetsdoc=DevprojectDoc.objects.filter(dv_name=user)
-        return render(request, 'devproject_document.html', {'dev': dev,'projetsdoc':projetsdoc,'pro':pro,'msg':msg})
-    else:
-       return redirect('/')
-
-
-def DEVproject_document(request):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-   
-        dev = user_registration.objects.filter(id=devid)
-        user=user_registration.objects.get(id=devid)
-        pro=PM_ProjectDocumentDetails.objects.all()
-
-        projetsdoc=DevprojectDoc.objects.filter(dv_name=user)
-      
-        return render(request, 'devproject_document.html', {'dev': dev,'projetsdoc':projetsdoc,'pro':pro})
-    else:
-       return redirect('/')
-
-
-    
-def DEVproject_doc_add(request,devpro_id):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-      
-        try:
-            proj=PM_ProjectDocumentDetails.objects.get(id=devpro_id)
-        except PM_ProjectDocumentDetails.DoesNotExist:
-            proj=None
-            return redirect('DEVproject_document')
-        return render(request, 'devproject_document_add.html', {'dev': dev,'proj':proj})
-    else:
-       return redirect('/')
-
-
-def DEVproject_doc_libraries_add(request,devlip):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        projdoc=PM_ProjectDocumentDetails.objects.get(id=devlip)
-        return render(request, 'devproject_document_libraries_add.html', {'dev': dev,'projdoc':projdoc})
-    else:
-       return redirect('/')
-
-
-
-def DEVprojectlib_save(request,dev_lib_save):
-     if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        projdoc=PM_ProjectDocumentDetails.objects.get(id=dev_lib_save)
-        if request.method =="POST":
-           projdoc.doc_project_libraries=request.POST['dev_project_lib']
-           projdoc.save()
-           return redirect('DEVproject_document')
-
-
-def DEVproject_doc_start(request,devstart):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        user=user_registration.objects.get(id=devid)
-        p=PM_ProjectDocumentDetails.objects.get(id=devstart)
-        correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=p, project_cu_status='Start Work')
-       
-        return render(request,'devproject_document_start.html',{'dev': dev,'correction':correction})
-    else:
-       return redirect('/')
-       
-
-def DEVproject_doc_update(request,devdocstart_upid):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        correction=ProjectCorrectionUpdation.objects.get(id=devdocstart_upid )
-        return render(request, 'devproject_document_Start_upate.html', {'dev': dev,'correction':correction})
-    else:
-       return redirect('/')
-
-
-def DEVproject_startdoc_save(request,dev_start_save):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        correction=ProjectCorrectionUpdation.objects.get(id=dev_start_save )
-        if request.method == 'POST':
-            correction.project_cu_newdescrip = request.POST.get('devpjt_c_new_cont')
-            correction.project_cu_newui = request.FILES.get('devpjt_c_new_img')
-          
-            correction.save()
-            prodoc=correction.project_cu_id.id
-            return redirect('DEVproject_doc_start', prodoc)
-
-        return render(request, 'devproject_document_correction_upate.html', {'dev': dev,'correction':correction})
-    else:
-       return redirect('/')
-
-
-def DEVproject_doc_coorection(request,devpdoc_id):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        user=user_registration.objects.get(id=devid)
-
-        p=PM_ProjectDocumentDetails.objects.get(id=devpdoc_id)
-        correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=p, project_cu_status='Correction')
-       
-        return render(request,'devproject_document_correction.html',{'dev': dev,'correction':correction})
-    else:
-       return redirect('/')
-
-def DEVproject_correction_update(request,devdoc_upid):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        correction=ProjectCorrectionUpdation.objects.get(id=devdoc_upid )
-        return render(request, 'devproject_document_correction_upate.html', {'dev': dev,'correction':correction})
-    else:
-       return redirect('/')
-
-    
-def DEVproject_docupdate_save(request,devdoc_upsave_id):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        correction=ProjectCorrectionUpdation.objects.get(id=devdoc_upsave_id )
-        if request.method == 'POST':
-            correction.project_cu_olddescrip = request.POST.get('devpjt_c_pre_cont')
-            correction.project_oldui = request.FILES.get('devpjt_c_pre_img')
-            correction.project_cu_newdescrip = request.POST.get('devpjt_c_new_cont')
-            correction.project_cu_newui = request.FILES.get('devpjt_c_new_img')
-          
-            correction.save()
-            prodoc=correction.project_cu_id.id
-            return redirect('DEVproject_doc_coorection', prodoc)
-
-        return render(request, 'devproject_document_correction_upate.html', {'dev': dev,'correction':correction})
-    else:
-       return redirect('/')
-
-
-def DEVproject_doc_updation(request,devpdocup_id):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        user=user_registration.objects.get(id=devid)
-        p=PM_ProjectDocumentDetails.objects.get(id=devpdocup_id)
-        updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=p , project_cu_status='Updation')
-        return render(request, 'devproject_document_updation.html', {'dev': dev,'updation':updation})
-    else:
-       return redirect('/')
-
-
-def DEVproject_updation_update(request,devpdocupdation_id):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        updation=ProjectCorrectionUpdation.objects.get(id=devpdocupdation_id )
-        return render(request, 'devproject_document_updation_upate.html', {'dev': dev,'updation':updation})
-    else:
-       return redirect('/')
-
-
-def DEVproject_docupdation_save(request,devdocup_save_id):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        updation=ProjectCorrectionUpdation.objects.get(id=devdocup_save_id )
-        if request.method == 'POST':
-            updation.project_cu_olddescrip = request.POST.get('devpjt_c_pre_cont')
-            updation.project_oldui = request.FILES.get('devpjt_c_pre_img')
-            updation.project_cu_newdescrip = request.POST.get('devpjt_c_new_cont')
-            updation.project_cu_newui = request.FILES.get('devpjt_c_new_img')
-          
-            updation.save()
-            prodoc=updation.project_cu_id.id
-            return redirect('DEVproject_doc_updation', prodoc)
-
-        return render(request, 'devproject_document_updation_upate.html', {'dev': dev,'updation':updation})
-    else:
-       return redirect('/')
-
-
-
-
-
-def devproject_design(request,devproj_design):
-     if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-        projects=project.objects.get(id=devproj_design)
-        ui=PM_ProjectDocumentDetails.objects.get(doc_project_id=projects)
-        try:
-            designs=ProjectDeveloperDesign.objects.filter(ui_project_id=projects)
-           
-        except ProjectDeveloperDesign.DoesNotExist:
-            designs=None
-            return redirect('devproject_design', devproj_design)
-
-        return render(request, 'devproject_design_add_view.html',{'dev': dev,'designs':designs,'projects':projects,'ui':ui}) 
-
-
-def devproject_design_save(request,ddev_design_save):
-    if request.session.has_key('devid'):
-        devid = request.session['devid']
-        dev = user_registration.objects.filter(id=devid)
-
-        if request.method == "POST":
-
-            projects=project.objects.get(id=ddev_design_save)
-            p1=request.POST['prj_desig_date']
-            p2=request.FILES.get('prj_desig_file')
-
-            designs=ProjectDeveloperDesign(project_ui_date=p1,project_ui_design=p2,ui_project_id=projects)
-            designs.save()
-            return redirect('devproject_design', ddev_design_save)  
-    else:
-        return redirect('/')
-
-
-
-####################################### Team Lead #################################
-
-def TLprojects_doc(request):
-    if 'tlid' in request.session:
-        if request.session.has_key('tlid'):
-            tlid = request.session['tlid']
-        else:
-            return redirect('/')
-        mem = user_registration.objects.filter(id=tlid)
-        tl = user_registration.objects.get(id=tlid)
-        tlprojectdoc=ProjectDocAssign.objects.filter(tl_name=tl).values('tl_docproject_id').distinct()
-        pro=project.objects.all()
-      
-        return render(request, 'TLprojects_doc.html',{'mem':mem,'tlprojectdoc':tlprojectdoc,'pro':pro})
-    else:
-        return redirect('/')
-
-
-def Tlprojectdocs_view(request,tldoc_view_id):
-    if 'tlid' in request.session:
-        if request.session.has_key('tlid'):
-            tlid = request.session['tlid']
-        else:
-            return redirect('/')
-        mem = user_registration.objects.filter(id=tlid)
-        tl = user_registration.objects.get(id=tlid)
-        proj=project.objects.get(id=tldoc_view_id)
-        docview=ProjectDocAssign.objects.filter(tl_docproject_id=proj , tl_name=tl)
-        desig=designation.objects.get(designation='developer')
-        devel=user_registration.objects.filter(designation=desig)
-        assigned=DevprojectDoc.objects.all()
-       
-        return render(request, 'TLprojects_doc_view.html',{'mem':mem,'docview':docview,'devel':devel,'assigned':assigned})
-
-    else:
-        return redirect('/')
-
-def devproctdoc_assign(request,devdoc_id):
-    if 'tlid' in request.session:
-        if request.session.has_key('tlid'):
-            tlid = request.session['tlid']
-        else:
-            return redirect('/')
-        mem = user_registration.objects.filter(id=tlid)
-        tl = user_registration.objects.get(id=tlid)
-        if request.method == 'POST':
-            p1=request.POST['devname']
-            print(p1)
-            p2=request.POST.get('devstartdate')
-        
-            p3=request.POST.get('devenddate')
-            p4=request.POST.get('devworkday')
-            assign=ProjectDocAssign.objects.get(id=devdoc_id)
-            cor_update=ProjectCorrectionUpdation.objects.get(id=assign.tl_docprojectco_up.id)
-            cor_update.project_cu_start=p2
-            cor_update.project_cu_end=p3
-            cor_update.project_cu_wdays=p4
-            cor_update.save()
-
-            devp=user_registration.objects.get(fullname=p1)
-            devassign=DevprojectDoc(devprdoc_id=assign,dv_name=devp,devstatus='Assinged')
-            devassign.save()
-
-            workers=ProjectWorkers(pwn_name=devp,pw_startdate=p2,
-                                    pw_enddate=p3,pw_workdays=p4,
-                                    pw_wid=p1,pw_id=assign.tl_docprojectdetail,pwscu=cor_update)
-            workers.save()
-
-            prj=assign.tl_docproject_id.id
-            return redirect('Tlprojectdocs_view', prj)
-
-    else:
-        return redirect('/')
-
-
-
-def devproctdocdays_edit(request,tldayedit_id):
-    if 'tlid' in request.session:
-        if request.session.has_key('tlid'):
-            tlid = request.session['tlid']
-        else:
-            return redirect('/')
-        mem = user_registration.objects.filter(id=tlid)
-        tl = user_registration.objects.get(id=tlid)
-        docview=ProjectDocAssign.objects.get(id=tldayedit_id)
-        projectscu=ProjectCorrectionUpdation.objects.get(id=docview.tl_docprojectco_up.id)
-        return render(request, 'TLprojects_doc_day_edit.html',{'mem':mem,'docview':docview,'projectscu':projectscu})
-
-    else:
-            return redirect('/')
-
-def devproctdocdays_edit_save(request,tldevwork_day_save):
-    if 'tlid' in request.session:
-        if request.session.has_key('tlid'):
-            tlid = request.session['tlid']
-        else:
-            return redirect('/')
-        mem = user_registration.objects.filter(id=tlid)
-        p3=request.POST.get('dateedit')
-        p4=request.POST.get('dayedit')
-        cor_update=ProjectCorrectionUpdation.objects.get(id=tldevwork_day_save)
-        cor_update.project_cu_end=p3
-        cor_update.project_cu_wdays=p4
-        cor_update.save()
-        workers=ProjectWorkers.objects.get(pwscu=cor_update)
-        workers.pw_enddate=p3
-        workers.pw_workdays=p4
-        workers.save()
-        proj=cor_update.project_cu_id.doc_project_id.id
-
-        return redirect('Tlprojectdocs_view', proj )
-
-    else:
-            return redirect('/')
-    
-
-
-
-    

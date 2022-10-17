@@ -1,0 +1,94 @@
+{% extends 'DigitalMarketing/DM_devindex.html' %} 
+{% load static %}
+
+{% block content %}
+
+<div class="card">
+    <div class="row"> 
+        <div class="col-12 grid-margin">
+          <div class="card">
+            <div class="card-body">
+                <h4 class="text-center mb-4"> DATA COLLECTION</h4>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                  <h6 class="p-2 mdi mdi-account-plus">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                    <form>
+                      <div class="input-group input-group-sm mb-3">
+                        <input
+                          type="text"
+                          class="form-control text-white"
+                          id="myInput"
+                          onkeyup="myFunction()"
+                          placeholder="Search . . ."
+                          style="border: green"
+                        />
+                      </div>
+                    </form>
+                  </div>
+    
+                  <div class="table-responsive">
+                    <table class="table" id="myTable">
+                        <thead>
+                            <tr>
+                              <th scope="col">Sl no</th>
+                              <th scope="col">Date</th>
+                              <th scope="col">Full Name</th>
+                              <th scope="col">Email Id</th>
+                              <th scope="col">Phone No</th>
+                              <th scope="col">Location</th>
+                              <th scope="col">Applied Internship</th>
+                              <th scope="col">Experienced/Fresher</th>
+                              <th scope="col">Status/Remarks</th>
+                             
+                            </tr>
+                          </thead>
+                      
+                    {% if datacollect %}
+                      
+                      <tbody>
+                        {% for i in datacollect %}
+                        <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{i.dc_date}}</td>
+                            <td>{{i.dc_name}} </td>
+                            <td>{{i.dc_email}}</td>
+                            <td>{{i.dc_phone}}</td>
+                            <td>{{i.dc_loc}}</td>
+                            <td>{{i.dc_internship}}</td>
+                            <td>{{i.dc_Fr_Ex}}</td>
+                            {% if i.dc_status == 'Waiting' %}
+                                <td>{{i.dc_status}}&nbsp;-&nbsp; {{i.dc_reason}}</td>
+                            {% else %}
+                            <td>{{i.dc_status}}</td>
+                            {% endif %}
+                            
+                        </tr>
+                          
+                      {% endfor %}
+                    {% else%}
+                        <h5 style="text-align:center">Nothing to display!</h5>
+                    {% endif %}
+                      </tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  
+
+</script>
+ 
+{% endblock %}

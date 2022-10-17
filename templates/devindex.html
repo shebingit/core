@@ -57,7 +57,7 @@
             <div class="profile-pic">
               <div class="count-indicator">
                   {% for d in dev %}           
-                    <img class="img-xs rounded-circle " src="{{d.photo.url}}" alt="">
+                <img class="img-xs rounded-circle " src="{{d.photo.url}}" alt="">
                    {% endfor %}
                 <span class="count bg-success"></span>
               </div>
@@ -140,14 +140,6 @@
               <i class="mdi mdi-table-large"></i>
             </span>
             <span class="menu-title">Projects</span>
-          </a>
-        </li>
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="{% url 'DEVproject_document' %}">
-            <span class="menu-icon">
-              <i class="mdi mdi-table-large"></i>
-            </span>
-            <span class="menu-title">Projects Documents</span>
           </a>
         </li>
         <li class="nav-item menu-items">

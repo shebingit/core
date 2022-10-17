@@ -1,35 +1,26 @@
-{% extends 'DigitalMarketing/DM_base.html' %}
+{% extends 'DigitalMarketing/DM_devindex.html' %} 
 {% load static %}
 
 {% block content %}
 
 
-<!--<div class="container" id="web-page">
+<div class="card" id="web-page">
     <h4 class="text-center m-4">WEB PAGE CONTENT CREATION ADD</h4>
-    <form action="#" method="post">
+    <form action="{% url 'dev_webpagecontent_save' task.id %}" method="post">
         {% csrf_token %}
         <div class="input-group p-3 m-2">
-            <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+            <input type="date" class="form-control" name="web_date" placeholder="DATE" style=" color: #fff;">
+        </div>
+        
+        
+        <div class="input-group p-3  m-2">
+            <input type="url" class="form-control" name="web_url" placeholder="PASTE PAGE URL" style=" color: #fff;">
         </div>
         <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="SL NO" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3 m-2">
-           
-              <select id="Category" class="form-select p-2">
-                <option class="p-2" selected>Altos</option>
-                <option class="p-2">Sq Gallery</option>
-               
-              </select>
+            <textarea type="text" class="form-control" name="web_dese" style=" color: #fff; height:150px;">Desecription !</textarea>
         </div>
         <div class="input-group p-3  m-2">
-            <input type="url" class="form-control" placeholder="PASTE PAGE URL" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="DESCRIPTION  ON CONTENT" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="KEYWORDS IF ANY" style=" color: #fff;">
+            <textarea type="text" class="form-control" name="web_key" style=" color: #fff;  height:150px;">Keywords if any !</textarea>
         </div>
         <center>
             <div class="p-3 m-3 text-center">
@@ -40,16 +31,15 @@
         
     </form>
 </div>
-<button type="button" class="text-center p-2 btn btn-secondary mb-3" id="data-btn" onclick="myFunction()">Collect Data</button>-->
+<br>
 
 
 <div class="row">
-       
-</div>
+    
 <div class="col-12 grid-margin">
   <div class="card">
     <div class="card-body">
-        <h4 class="text-center mb-4"> DATA COLLECTION CLIENT</h4>
+        <h4 class="text-center mb-4">WEB PAGE CONTENT</h4>
         <div class="col-12 col-sm-12 col-md-12 col-lg-12">
             <form>
               <div class="input-group input-group-sm mb-3">
@@ -72,7 +62,6 @@
                         <tr>
                             <th scope="col">Sl no</th>
                             <th scope="col">Date</th>
-                            <th scope="col">Work</th>
                             <th scope="col">Url</th>
                             <th scope="col">Discription Of Content</th>
                             <th scope="col">Keywords If Any</th>
@@ -82,17 +71,17 @@
                     </tr>
                   </thead>
               
-            {% if webpagecontent %}
+            {% if webcontent %}
               
               <tbody>
-                {% for i in webpagecontent %}
+                {% for i in webcontent %}
                 <tr>
                     <th scope="row">{{forloop.counter}}</th>
-                    <td>{{i.dc_date}}</td>
-                    <td>{{i.dc_name}} </td>
-                    <td>{{i.dc_email}}</td>
-                    <td>{{i.dc_phone}}</td>
-                    <td>{{i.dc_loc}}</td>
+                    <td>{{i.web_date}}</td>
+                    <td>{{i.web_url}} </td>
+                    <td>{{i.web_dese}}</td>
+                    <td>{{i.web_key}}</td>
+                   
                     
                 </tr>
                   
@@ -109,26 +98,6 @@
 </div>
 
 
-<style>
-    #web-page
-    {
-        display: none;
-    }
-
-</style>
-
-<script>
-    function myFunction() {
-        var x = document.getElementById("web-page");
-        if (x.style.display === "none") {
-          x.style.display = "block";
-          
-        } else {
-          x.style.display = "none";
-          
-        }
-      }
-</script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    <script>

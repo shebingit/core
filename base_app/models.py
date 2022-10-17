@@ -1,4 +1,5 @@
 from email.policy import default
+from unittest.util import _MAX_LENGTH
 from xmlrpc.client import boolean
 from django.contrib.auth.models import User
 from django.db import models
@@ -679,25 +680,28 @@ class income(models.Model):
     pay_status = models.IntegerField(default=0)
 
 
-#====================     Digital Marketing     ===========================
-
-class Work(models.Model):
-     
-    work_date = models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-    work_head = models.CharField(max_length=200,null=True, blank=True)
-    work_name = models.CharField(max_length=200,null=True, blank=True)
-    work_status=models.CharField(max_length=50,null=True, blank=True)
+############################## Digital Marketing (15-10-22 Shebin Shaji) ###################################################
 
 
-class TaskAssign(models.Model):
-     task_date = models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
-     employee_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
-     task_work=models.ForeignKey(Work,on_delete=models.CASCADE,null=True,blank=True)
-     task_category=models.CharField(max_length=200,null=True, blank=True)
-     task_status=models.CharField(max_length=50,null=True, blank=True)
+
+class DM_projects(models.Model):
+    dm_date = models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    dm_project_name=models.CharField(max_length=255,null=True, blank=True)
+    dm_project_categ=models.CharField(max_length=150,null=True, blank=True)
+    dm_project_start=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    dm_project_status=models.CharField(max_length=50,null=True, blank=True, default="Not Started")
+
+class Dm_project_Task(models.Model):
+    dm_project_id=models.ForeignKey(DM_projects,on_delete=models.CASCADE,null=True,blank=True)
+    dm_user_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    dm_task_name=models.CharField(max_length=255,null=True, blank=True)
+    dm_task_assigndate= models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    dm_task_status=models.CharField(max_length=100,null=True, blank=True)
+
+#*************************************** Tasks *****************************************************
 
 class DataCollect(models.Model):
-      Project_name=models.ForeignKey(Work,on_delete=models.CASCADE,null=True,blank=True)
+      Project_name=models.ForeignKey(Dm_project_Task,on_delete=models.CASCADE,null=True,blank=True)
       Employeeid=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
       dc_date = models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
       dc_name=models.CharField(max_length=100,null=True, blank=True)
@@ -709,69 +713,41 @@ class DataCollect(models.Model):
       dc_status=models.CharField(max_length=50,null=True, blank=True)
       dc_reason=models.CharField(max_length=50,null=True, blank=True)
 
-#-------------------------------------------------------------------------------------
+class Backlinks(models.Model):
+    bd_taskid=models.ForeignKey(Dm_project_Task,on_delete=models.CASCADE,null=True,blank=True)
+    bd_Employeeid=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    bd_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    bd_url=models.URLField()
+    bd_type=models.CharField(max_length=150,null=True, blank=True)
+    bd_status=models.CharField(max_length=50,null=True, blank=True)
 
+class WebpageContent(models.Model):
+    web_taskid=models.ForeignKey(Dm_project_Task,on_delete=models.CASCADE,null=True,blank=True)
+    web_Employeeid=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    web_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    web_url=models.URLField()
+    web_dese=models.TextField()
+    web_key=models.TextField()
 
-    ##################### Document ######################
+class CompanyAnalysis(models.Model):
+    analysis_taskid=models.ForeignKey(Dm_project_Task,on_delete=models.CASCADE,null=True,blank=True)
+    analysis_Employeeid=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    analysis_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    analysis_compname=models.CharField(max_length=150,null=True, blank=True)
 
-class PM_ProjectDocumentDetails(models.Model):
-    doc_project_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
-    doc_project_name=models.CharField(max_length=100,null=True, blank=True)
-    doc_project_currentdate=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
-    doc_project_startdate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-    doc_project_enddate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-    doc_project_frontend=models.CharField(max_length=100,null=True, blank=True)
-    doc_project_backend=models.CharField(max_length=100,null=True, blank=True)
-    doc_project_libraries=models.CharField(max_length=100,null=True, blank=True)
-    doc_project_ui=models.FileField(upload_to="ProjectUI", null=True)
+class ClientData(models.Model):
+    cd_taskid=models.ForeignKey(Dm_project_Task,on_delete=models.CASCADE,null=True,blank=True)
+    cd_Employeeid=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    cd_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    cd_name=models.CharField(max_length=150,null=True, blank=True)
+    cd_email=models.EmailField()
+    cd_phno=models.CharField(max_length=50,null=True, blank=True)
+    cd_bussines=models.TextField()
 
-class PM_ProjectDoc_ModuleDetails(models.Model):
-    doc_projectdocd_id=models.ForeignKey(PM_ProjectDocumentDetails,on_delete=models.CASCADE,null=True,blank=True)
-    doc_project_md_name=models.CharField(max_length=100,null=True, blank=True)
-    doc_project_md_dese=models.TextField()
-
-
-class ProjectCorrectionUpdation(models.Model):
-    project_cu_id=models.ForeignKey(PM_ProjectDocumentDetails,on_delete=models.CASCADE,null=True,blank=True)
-    pdev_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
-    project_cu_module=models.CharField(max_length=100,null=True, blank=True)
-    project_cu_descrip=models.TextField()
-    project_oldui=models.ImageField(upload_to="ProjectUI", null=True)
-    project_cu_olddescrip=models.TextField()
-    project_cu_newui=models.ImageField(upload_to="ProjectUI", null=True)
-    project_cu_newdescrip=models.TextField()
-    project_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
-    project_cu_start=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-    project_cu_end=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-    project_cu_wdays=models.IntegerField()
-    project_cu_status=models.CharField(max_length=50,null=True, blank=True)
-
-
-class ProjectWorkers(models.Model):
-    pw_id=models.ForeignKey(PM_ProjectDocumentDetails,on_delete=models.CASCADE,null=True,blank=True)
-    pwscu=models.ForeignKey(ProjectCorrectionUpdation,on_delete=models.CASCADE,null=True,blank=True)
-    pwn_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
-    pw_startdate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-    pw_enddate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-    pw_wid=models.CharField(max_length=50,null=True, blank=True)
-    pw_workdays=models.IntegerField()
-
-
-class ProjectDeveloperDesign(models.Model):
-    ui_project_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
-    project_ui_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
-    project_ui_design=models.FileField(upload_to="ProjectUI", null=True)
-
-
-class ProjectDocAssign(models.Model):
-    tl_docproject_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
-    tl_docprojectdetail=models.ForeignKey(PM_ProjectDocumentDetails,on_delete=models.CASCADE,null=True,blank=True)
-    tl_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
-    tl_docprojectco_up=models.ForeignKey(ProjectCorrectionUpdation,on_delete=models.CASCADE,null=True,blank=True)
-    docstatus=models.CharField(max_length=50,null=True, blank=True)
-
-class DevprojectDoc(models.Model):
-    devprdoc_id=models.ForeignKey(ProjectDocAssign,on_delete=models.CASCADE,null=True,blank=True)
-    dv_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
-    devassign_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
-    devstatus=models.CharField(max_length=50, null=True, blank=True, default='Not Assigned')
+class OnPage(models.Model):
+    op_taskid=models.ForeignKey(Dm_project_Task,on_delete=models.CASCADE,null=True,blank=True)
+    op_Employeeid=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    op_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    op_url=models.URLField()
+    op_work=models.TextField()
+    op_status=models.CharField(max_length=50,null=True, blank=True)

@@ -1,34 +1,25 @@
-{% extends 'DigitalMarketing/DM_base.html' %}
+{% extends 'DigitalMarketing/DM_devindex.html' %} 
 {% load static %}
 
 {% block content %}
 
 
-<div class="container" id="onpage">
+<div class="card" id="onpage">
     <h4 class="text-center m-4">ON PAGE WORKS</h4>
-    <form action="#" method="post">
+    <form action="{% url 'dev_onpage_save' task.id %}" method="post">
         {% csrf_token %}
         <div class="input-group p-3 m-2">
-            <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+            <input type="date" class="form-control" name="op_date" placeholder="DATE" style=" color: #fff;">
+        </div>
+
+        <div class="input-group p-3  m-2">
+            <input type="url" class="form-control"  name="op_url" placeholder="PASTE PAGE URL" style=" color: #fff;">
         </div>
         <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="SL NO" style=" color: #fff;">
-        </div>
-        <div class="input-group m-2 p-3">
-              <select id="Category" class="form-select p-2">
-                <option class="p-2" selected>Altos</option>
-                <option class="p-2">Sq Gallery</option>
-               
-              </select>
-        </div>
-        <div class="input-group p-3  m-2">
-            <input type="url" class="form-control" placeholder="PASTE PAGE URL" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3  m-2">
-            <textarea  class="form-control" row="5" style=" color: #fff;">WORK DETAILS !</textarea>
+            <textarea  class="form-control"  name="op_work" style=" color: #fff; height:150px;">WORK DETAILS !</textarea>
         </div>
         <div class="input-group p-3 m-2">
-            <select id="Employee" class="form-control" style="background-color:#434a54;border:none; color: #fff;">
+            <select id="Employee" class="form-control"  name="op_status" style="background-color:#434a54;border:none; color: #fff;">
                 <option selected class="p-2 m-2">REMARKS/STATUS</option>
                 <option class="p-2 m-2">In edit</option>
                 <option class="p-2 m-2">Done</option>
@@ -42,12 +33,11 @@
 
     </form>
 </div>
-<button type="button" class="text-center p-2 btn btn-secondary mb-3" id="data-btn" onclick="myFunction()">Collect Data</button>
 
+<br>
 
 <div class="row">
        
-</div>
 <div class="col-12 grid-margin">
   <div class="card">
     <div class="card-body">
@@ -73,12 +63,12 @@
                     <tr>
                         <th scope="col">Sl no</th>
                         <th scope="col">Date</th>
-                        <th scope="col">Work</th>
+                       
                         <th scope="col">Url</th>
                         <th scope="col">Work Details</th>
                         <th scope="col">Remarks/Status</th>
-                       
-          
+                        <th scope="col">Action</th>
+   
                       </tr>
                   </thead>
               
@@ -88,11 +78,25 @@
                 {% for i in onpage %}
                 <tr>
                     <th scope="row">{{forloop.counter}}</th>
-                    <td>{{i.dc_date}}</td>
-                    <td>{{i.dc_name}} </td>
-                    <td>{{i.dc_email}}</td>
-                    <td>{{i.dc_phone}}</td>
-                    <td>{{i.dc_loc}}</td>
+                    <td>{{i.op_date}}</td>
+                    <td>{{i.op_url}} </td>
+                    <td>{{i.op_work}}</td>
+                    <form action="{% url 'dev_onpge_edit_save' i.id %}" method="post">
+                      {% csrf_token %}
+                      <td>
+                        <select id="Employee" class="form-control"  name="op_editstatus" style="background-color:#434a54;border:none; color: #fff;">
+                          <option selected class="p-2 m-2">{{i.op_status}}</option>
+                          <option class="p-2 m-2">In edit</option>
+                          <option class="p-2 m-2">Done</option>
+                          <option class="p-2 m-2">Uploaded</option>
+                        </select>
+                      </td>
+                      <td><button type="submit" class="btn btn-outline-warning mdi mdi-grease-pencil">&nbsp;Save</button></td>
+
+                    </form>
+                     
+                    
+                  
                    
                 </tr>
                   
@@ -110,26 +114,7 @@
 
 
 
-<style>
-    #onpage
-    {
-        display: none;
-    }
 
-</style>
-
-<script>
-    function myFunction() {
-        var x = document.getElementById("onpage");
-        if (x.style.display === "none") {
-          x.style.display = "block";
-          
-        } else {
-          x.style.display = "none";
-          
-        }
-      }
-</script>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

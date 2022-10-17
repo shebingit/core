@@ -1,31 +1,29 @@
-{% extends 'DigitalMarketing/DM_base.html' %}
+{% extends 'DigitalMarketing/DM_devindex.html' %} 
 {% load static %}
 
 {% block content %}
 
 
-<!--<div class="container" id="data-collection-client">
+<div class="card" id="data-collection-client">
     <h4 class="text-center m-4">DATA COLLECTION CLIENT</h4>
-    <form action="#" method="post">
+    <form action="{% url 'dev_datacollect_client_save' task.id %}" method="post">
         {% csrf_token %}
         <div class="input-group p-3 m-2">
-            <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+            <input type="date" class="form-control"  name="dcc_date" placeholder="DATE" style=" color: #fff;">
+        </div>
+        
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" name="dcc_fullname" placeholder="FULL NAME" style=" color: #fff;">
         </div>
         <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="SL NO" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="FULL NAME" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3  m-2">
-            <input type="email" class="form-control" placeholder="EMAIL ID" style=" color: #fff;">
+            <input type="email" class="form-control" name="dcc_email" placeholder="EMAIL ID" style=" color: #fff;">
         </div>
         <div class="input-group p-3 m-2">
-            <input type="tel" class="form-control" placeholder="PHONE NUMBER" style=" color: #fff;">
+            <input type="tel" class="form-control" name="dcc_number" placeholder="PHONE NUMBER" style=" color: #fff;">
         </div>
       
         <div class="input-group p-3 m-2">
-            <textarea class="form-control" style=" color: #fff;">Business Details! </textarea>
+            <textarea class="form-control" name="dcc_busines" style=" color: #fff;height:150px;">Business Details! </textarea>
         </div>
         
         <center>
@@ -38,12 +36,11 @@
     </form>
 </div>
 
-<button type="button" class="text-center p-2 btn btn-secondary mb-3" id="data-btn" onclick="myFunction()">Collect Data</button>-->
 
-  
+
+  <br>
 <div class="row">
-       
-</div>
+
 <div class="col-12 grid-margin">
   <div class="card">
     <div class="card-body">
@@ -78,17 +75,17 @@
                       </tr>
                   </thead>
               
-            {% if datacollect %}
+            {% if clientdata %}
               
               <tbody>
-                {% for i in datacollect %}
+                {% for i in clientdata %}
                 <tr>
                     <th scope="row">{{forloop.counter}}</th>
-                    <td>{{i.dc_date}}</td>
-                    <td>{{i.dc_name}} </td>
-                    <td>{{i.dc_email}}</td>
-                    <td>{{i.dc_phone}}</td>
-                    <td>{{i.dc_loc}}</td>
+                    <td>{{i.cd_date}}</td>
+                    <td>{{i.cd_name}} </td>
+                    <td>{{i.cd_email}}</td>
+                    <td>{{i.cd_phno}}</td>
+                    <td>{{i.cd_bussines}}</td>
                     
                 </tr>
                   
@@ -104,27 +101,6 @@
 </div>
 </div>
 
-
-<style>
-    #data-collection-client
-    {
-        display: none;
-    }
-
-</style>
-
-<script>
-    function myFunction() {
-        var x = document.getElementById("data-collection-client");
-        if (x.style.display === "none") {
-          x.style.display = "block";
-          
-        } else {
-          x.style.display = "none";
-          
-        }
-      }
-</script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>

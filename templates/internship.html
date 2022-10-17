@@ -15,7 +15,6 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <title>Internship Registration</title>
-
 <style>
  /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -132,6 +131,7 @@ input[type=number] {
     }
 </style>
 
+
 <body style="background: url('/static/Login_bg.jpg') 100% 100% no-repeat fixed;background-size: cover;">
   <section>
     <div class="row px-4">
@@ -191,18 +191,18 @@ input[type=number] {
                   style="border-radius:5px; " autocomplete="off" required>
               </div>
             </div>
-            <!-- <div class="row">
-              <div class="container">
-                <div class="text-left mt-3 ">Branch</div>
-                <select name="branch" id="course" class="form-control mt-2 text-light" style="border-radius:5px; " required>
-                  <option style="color:#636d87;" class="">--select branch--</option>
-                  {% for i in branch %}
-                  <option class="" value="{{i.id}}">{{i.branch_name}}</option>
-                  {% endfor %}
-                </select>
+            <!--<div class="row">-->
+            <!--  <div class="container">-->
+            <!--    <div class="text-left mt-3 ">Branch</div>-->
+            <!--    <select name="branch" id="course" class="form-control mt-2 text-light" style="border-radius:5px; " required>-->
+            <!--      <option style="color:#636d87;" class="">--select branch--</option>-->
+            <!--      {% for i in branch %}-->
+            <!--      <option class="" value="{{i.id}}">{{i.branch_name}}</option>-->
+            <!--      {% endfor %}-->
+            <!--    </select>-->
                 
-              </div>
-            </div> -->
+            <!--  </div>-->
+            <!--</div>-->
             <div class="row">
               <div class="col-md-6">
                 <div class="text-left mt-3 ">Start Date</div>
@@ -267,28 +267,26 @@ input[type=number] {
     </div>
     <div class="col-md-3"></div>
   </section>
-
 {% if Flag == 'True' %}
 <script>
-  alert("Your application send")
+  alert("Your application has been sent successfully")
 </script>
 {% endif %}
-
-<!--  {% if msg_success %}
-    <script>
+<!--{% if msg_success %}-->
+<!--    <script>-->
      
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            text: '{{ msg_success }}',
-            showConfirmButton: true,
-            button:"OK"
+<!--        Swal.fire({-->
+<!--            position: 'center',-->
+<!--            icon: 'success',-->
+<!--            text: '{{ msg_success }}',-->
+<!--            showConfirmButton: true,-->
+<!--            button:"OK"-->
             
-        }).then(function () {
-            javascript: history.go(-1);
-        })
-    </script>
-  {% endif %}-->
+<!--        }).then(function () {-->
+<!--            javascript: history.go(-1);-->
+<!--        })-->
+<!--    </script>-->
+<!--{% endif %}-->
   {% if msg_error %}
     <script>
         Swal.fire({
@@ -419,6 +417,8 @@ input[type=number] {
     })
   });
 </script>
-
 </body>
+
+
+
 </html>

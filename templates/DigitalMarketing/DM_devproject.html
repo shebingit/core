@@ -1,0 +1,45 @@
+{% extends 'DigitalMarketing/DM_devindex.html' %} 
+{% load static %} 
+{% block content %}
+
+
+<div class="row">
+{% if tasks %}
+{% for i in tasks %}
+    {% for j in project %}
+    {% if i.dm_project_id == j.id %}
+        <div class="col-sm-4 grid-margin">
+            <div class="card">
+                <a href="{% url 'DM_devproject_tasks' j.id %}" style="text-decoration: none; color: white;">
+                    <div class="card-body">
+                        <h5>{{j.dm_project_name}}</h5>
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <h2 class="mb-0">{{ num1 }}</h2>
+                                    <!-- <p class="text-success ms-2 mb-0 font-weight-medium">+3.5%</p> -->
+                                </div>
+                                <!-- <h6 class="text-muted font-weight-normal">11.38% Since last month</h6> -->
+                            </div>
+                            <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                <i class="icon-lg mdi mdi-clipboard-text text-primary ms-auto"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+    {% endfor %}
+{% endfor %}  
+</div>
+{% else %}
+<div class="text-center">
+    <div class="card" style="height:15vh ;">
+        <h4 class="p-5">Nothing to Display....</h4>
+    </div>
+    
+</div>
+{% endif %}
+
+{% endblock %}

@@ -28,7 +28,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_cleanup.apps.CleanupConfig',
     'base_app',
-    'qr_code',
     'cal',
     # 'marketingapp',
 ]
@@ -67,10 +66,20 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'infoxtec_dbcore',
+#         'USER':'infoxtec_dbcore',
+#         'PASSWORD':'infoxtec_dbcore',
+#         'HOST':'localhost',
+#         'PORT':'3306',
+#     }
+# }
 DATABASES = {
     'default': {
          'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'core',
+        'NAME': 'infoxtec_dbcore',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
@@ -141,9 +150,25 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'career.infoxtechnologies@gmail.com'
+# EMAIL_HOST_PASSWORD = 'rjvdncvxvxhrtkxn'
+# EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+# console.EmailBackend 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'infoxtechnologykochi@gmail.com'
-EMAIL_HOST_PASSWORD = 'ulhtkwtusbtpeyur'
+EMAIL_HOST_USER = 'altostechnologieskochi@gmail.com'
+EMAIL_HOST_PASSWORD = 'Altostech@10&23'
+# EMAIL_HOST_USER = 'career.infoxtechnologies@gmail.com'
+# EMAIL_HOST_PASSWORD = 'zumnbexqdxobodhx'
+# EMAIL_HOST_USER = 'infoxtechnologykochi@gmail.com'
+# EMAIL_HOST_PASSWORD = 'ulhtkwtusbtpeyur'
+# EMAIL_HOST_USER = 'creatiftestproject@gmail.com'
+# EMAIL_HOST_PASSWORD = 'nhwrxjazyozhwmzn'
+
+# EMAIL_HOST_PASSWORD = 'infoxtechnology2000'

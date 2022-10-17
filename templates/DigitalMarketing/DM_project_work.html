@@ -1,0 +1,113 @@
+{% extends 'DigitalMarketing/DM_Index.html' %} 
+{% load static %} 
+{% block content %}
+<!-- <div class="content-wrapper"> -->
+<div class="row">
+    <div class="col-md-12grid-margin stretch-card">
+        <div class="card">
+           
+            <div class="card-body">
+                
+                <div class="container">
+                    <div class="row mt-3">
+                      <div class="card">
+                        <div class="pl-2 pr-2 pt-3 pb-3">
+                            <div class="text-light" style="font-size:18px;font-weight:400;">Started  Project List</div>
+                            <div class="mt-3"><input type="text" class="form-control text-light" id="myInput" onkeyup="myFunction()" placeholder="Search for names" ></div>
+                          <div class="table-responsive mt-4">
+                            <table class="table ">
+                              <thead>
+                                <tr>
+                                    <th scope="col" >Sl no</th>
+                                    <th scope="col" >Project Category</th>
+                                    <th scope="col" >Date</th>
+                                    <th scope="col" >Project Name</th>
+                                    <th scope="col" >Work Start Date</th>
+                                    <th scope="col" >Developers</th>
+                                    <th scope="col" >Project Tasks</th>
+                                    <th scope="col" >Assign Task</th>
+                                 
+                                  
+                                </tr>
+                              </thead>
+                              <style>
+                                a{
+                                    text-decoration: none;
+                                }
+                              </style>
+                              
+                              {% for d in projects %}
+                  
+                              <tbody  id="myTable">
+                                <tr data-href="#">
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{d.dm_project_categ}}</td>
+                                  <td>{{d.dm_date|date:'d-m-y'}}</td>
+                                  <td><a href="{% url 'DM_project_tasks' d.id %}"><span style="margin-left: 10px;">{{d.dm_project_name}}</span></a> </td>
+                                  <td>{{d.dm_project_start|date:'d-m-y'}}</td>
+                                  <form action="{% url 'DM_project_task_assign' d.id %}" method="post">
+                                    {% csrf_token %}
+
+                                    <td>
+                                        <select class="form-control" name="dev_name">
+                                            <option>----Select----</option>
+                                            {% for i in dmdeveloper %}
+                                                <option  value="{{i.fullname}}">{{i.fullname}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" name="task_name">
+                                            <option class="p-2" selected>----Select----</option>
+                                            <option class="p-2" value="Data Collection">Data Collection</option>
+                                            <option class="p-2" value="Backlink Details">Backlink Details</option>
+                                            <option class="p-2" value="Blog calender">Blog calender</option>
+                                            <option class="p-2" value="SMM Post Calender">SMM Post Calender</option>
+                                            <option class="p-2" value="Webpage Content creation">Webpage Content creation</option>
+                                            <option class="p-2" value="On page works">On page works</option>
+                                            <option class="p-2" value="Competitor analysis/Website Audit">Competitor analysis/Website Audit</option>
+                                            <option class="p-2" value="Data collection - Client">Data collection - Client</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-outline-warning">Task Assign</button>
+                                    </td>
+                                  </form>
+                                </tr>
+                              </tbody>                          
+                              {% endfor %}             
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>   
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // table row click
+    document.addEventListener("DOMContentLoaded", () => {
+        const rows = document.querySelectorAll("tr[data-href]");
+        rows.forEach(row => {
+            row.addEventListener("click", () => {
+                window.location.href = row.dataset.href;
+            });
+        });
+    }); 
+
+// search table details
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+    </script>
+{% endblock %}

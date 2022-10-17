@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from django.urls import re_path, include ,path
+from django.urls import re_path, include,path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
@@ -281,7 +281,6 @@ urlpatterns = [
             name='save_trainee_review'),
     re_path(r'^trainee_previousTopic/$', views.trainee_previousTopic,
             name='trainee_previousTopic'),
-
     ###################################  Account & changepassword  #########################################
 
 
@@ -826,7 +825,6 @@ urlpatterns = [
     re_path(r'^TLtasks/$', views.TLtasks, name='TLtasks'),
     re_path(r'^TLleave/$', views.TLleave, name='TLleave'),
     re_path(r'^tlprojecttasks/(?P<id>\d+)/$', views.tlprojecttasks, name='tlprojecttasks'),
-    re_path(r'^TLwork/(?P<id>\d+)/$', views.TLwork, name='TLwork'),
     re_path(r'^TLreportedissue1/$', views.TLreportedissue1, name='TLreportedissue1'),
     re_path(r'^TLreportedissue2/(?P<id>\d+)/$', views.TLreportedissue2, name='TLreportedissue2'),
     re_path(r'^TLreport1/$', views.TLreport1, name='TLreport1'),
@@ -903,7 +901,6 @@ urlpatterns = [
     re_path(r'^DEVprojects/$', views.DEVprojects, name='DEVprojects'),
     re_path(r'^DEVsuccess/$', views.DEVsuccess, name='DEVsuccess'),
     re_path(r'^DEVtable/(?P<id>\d+)/$', views.DEVtable, name='DEVtable'),
-    re_path(r'^DEVwork/(?P<id>\d+)/$', views.DEVwork, name='DEVwork'),
     re_path(r'^DEVtask/(?P<id>\d+)/$', views.DEVtask, name='DEVtask'),
     re_path(r'^DEVtaskform/(?P<id>\d+)/$', views.DEVtaskform, name='DEVtaskform'),
     re_path(r'^DEVtaskmain/$', views.DEVtaskmain, name='DEVtaskmain'),
@@ -1398,8 +1395,6 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     re_path(r'^pm_createmodule/$', views.pm_createmodule, name='pm_createmodule'),
     re_path(r'^pm_createtable/$', views.pm_createtable, name='pm_createtable'),
     re_path(r'^pm_module_data/$', views.pm_module_data, name='pm_module_data'),
-
-
     re_path(r'^pm_projectview/$', views.pm_projectview, name='pm_projectview'),
     re_path(r'^pm_prodata/(?P<id>\d+)/$', views.pm_prodata, name='pm_prodata'),
     re_path(r'^pm_project_assigned/(?P<id>\d+)/$', views.pm_project_assigned, name='pm_project_assigned'),
@@ -1492,153 +1487,65 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     re_path(r'^tm_designation/$', views.tm_designation, name='tm_designation'),
     re_path(r'^tm_emp_ajax/$', views.tm_emp_ajax, name='tm_emp_ajax'),
     re_path(r'^tm_leave/$', views.tm_leave, name='tm_leave'),
-
-#**********************Manager section new edit*******   
+    
+    #**********************Developer section new edit(10-09-2022)*******
+    
+    re_path(r'^DEVwork/(?P<id>\d+)/$', views.DEVwork, name='DEVwork'),
+    
+    #**********************TL section new edit(10-09-2022)******* 
+    
+    re_path(r'^TLwork/(?P<id>\d+)/$', views.TLwork, name='TLwork'),
+    
+    #**********************Manager section new edit(10-09-2022)*******   
     
     re_path(r'^MAN_project_dept/$', views.MAN_project_dept, name='MAN_project_dept'),
     re_path(r'^MAN_project_list/(?P<id>\d+)/$', views.MAN_project_list, name='MAN_project_list'),
     re_path(r'^MAN_project_table/(?P<id>\d+)/$', views.MAN_project_table, name='MAN_project_table'),
 
+    re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
 
 
-#======================Digital Markenting===================
-
-   path('Dmlogout', views.Dmlogout, name='Dmlogout'),
-   path('dm_dashboard', views.dm_dashboard, name='DM-Dashboard'),
-   path('DM-In-House-Project', views.dm_in_house_project, name='DM-In-House-Project'),
-   path('DM-Client-Project', views.dm_client_project, name='DM-Client-Project'),
-
-   path('DM-WORKS/<int:wk>', views.dm_works, name='DM-WORKS'),
-   path('DM-PROJECT-VIEW/<int:dm_project_id>', views.dm_project_view, name='DM-PROJECT-VIEW'),
-   path('DM-Data-Collect', views.dm_data_collect, name='DM-Data-Collect'),
-   path('DM-Backlink-Details', views.dm_backlink_details, name='DM-Backlink-Details'),
-   path('DM-Blog-Calender', views.dm_blog_calender, name='DM-Blog-Calender'),
-   path('DM-SMM-POST-CALENDER', views.dm_smm_post_calender, name='DM-SMM-POST-CALENDER'),
-   path('DM-WEB-PAGE-CONTENT', views.dm_web_page_content, name='DM-WEB-PAGE-CONTENT'),
-   path('DM-ON-PAGE-WORKS', views.dm_on_page_works, name='DM-ON-PAGE-WORKS'),
-   path('DM-COMPETITOR-ANALYSIS', views.dm_competitor_analysis, name='DM-COMPETITOR-ANALYSIS'),
-   path('DM-DATA-COLLECTION-CLIENT', views.dm_data_collection_client, name='DM-DATA-COLLECTION-CLIENT'),
-   path('DM_TASK-ASSIGN/<int:taid>', views.dm_Task_Assign, name='DM_TASK-ASSIGN'),
-   path('DM_WORK_CREATE/<int:wcid>', views.dm_work_create, name='DM_WORK_CREATE'),
-   path('DM-Telecallers', views.dm_telecalers, name='DM-Telecallers'),
+    #************************* Digital Marketing *******************************
+        
+    path('dmmanagerlogout', views.dmmanagerlogout, name='dmmanagerlogout'),
+    path('dm_pmdashboard', views.dm_pmdashboard, name='dm_pmdashboard'),
+    path('DM_project_works', views.DM_project_works, name='DM_project_works'),
+    path('DM_inhouseproject', views.DM_inhouseproject, name='DM_inhouseproject'),
+    path('DM_Clientproject', views.DM_Clientproject, name='DM_Clientproject'),
+    path('DM_empolyees', views.DM_empolyees, name='DM_empolyees'),
+    path('DM_project_save/<int:project_save>',views.DM_project_save, name='DM_project_save'), 
+    path('Dm_project_start/<int:proj_start>',views.Dm_project_start, name='Dm_project_start'),
+    path('DM_project_tasks/<int:proj_taskid>',views.DM_project_tasks, name='DM_project_tasks'),
+    path('DM_project_task_assign/<int:proj_assign>',views.DM_project_task_assign, name='DM_project_task_assign'),
 
 
-#======= Digital Marketing Creation Section=====
+      
+    #************************* Digital Marketing developer *******************************
 
- path('DM-WORK-ADD/<int:waid>', views.dm_Work_add, name='DM-WORK-ADD'),
- path('DM-Task-ASSIGNED', views.dm_task_assigning, name='DM-Task-ASSIGNED'),
-
-#====== Digital Marketing Deletion=========
-
- path('DM-WORK-Delete/<int:dm_work_delete_id>', views.dm_Work_Delete, name='DM-WORK-Delete'),
-
+    path('dmdevlogout', views.dmdevlogout, name='dmdevlogout'),
+    path('dm_devdashboard', views.dm_devdashboard, name='dm_devdashboard'),
+    path('DM_devprojects', views.DM_devprojects, name='DM_devprojects'),
+    path('DM_devproject_tasks/<int:dev_prj_task>',views.DM_devproject_tasks, name='DM_devproject_tasks'),
 
 
-#===================================== Telecaller =============================================================
+    #************  Digital Marketing 8 alocate task *******************************
 
- path('Tellogout', views.Tellogout, name='Tellogout'),
- path('TEL-Dashboard', views.TEL_dashboard, name='TEL-Dashboard'),
- path('TEL-Assign-Works', views.tel_assign_works, name='TEL-Assign-Works'),
- path('TEL-Work-Table/<int:tel_task_id>', views.tel_works_table, name='TEL-Work-Table'),
- path('TEL-Work-Table-View', views.tel_work_table_view, name='TEL-Work-Table-View'),
- path('TEL-Start-Work/<int:start_id>', views.tel_start_work, name='TEL-Start-Work'),
+   path('devstart_task/<int:task_id>',views.devstart_task, name='devstart_task'),
+   path('devstart_task_submit/<int:task_submit>',views.devstart_task_submit, name='devstart_task_submit'),
+   path('data_collect_save/<int:task_dcid>',views.data_collect_save, name='data_collect_save'), 
+   path('dev_backlink_save/<int:bd_id>',views.dev_backlink_save, name='dev_backlink_save'),
+   path('dev_webpagecontent_save/<int:web_id>',views.dev_webpagecontent_save, name='dev_webpagecontent_save'), 
+   path('dev_webanalysi_save/<int:audit_id>',views.dev_webanalysi_save, name='dev_webanalysi_save'), 
+   path('dev_datacollect_client_save/<int:dcc_id>',views.dev_datacollect_client_save, name='dev_datacollect_client_save'), 
+   path('dev_onpage_save/<int:onpage_id>',views.dev_onpage_save, name='dev_onpage_save'), 
+   path('dev_onpge_edit_save/<int:onpage_edit>',views.dev_onpge_edit_save, name='dev_onpge_edit_save'), 
 
+   #**************************** task View******************
+   path('devdata_collect_view/<int:dc_view>',views.devdata_collect_view, name='devdata_collect_view'), 
+  
 
-path('TEL-DATA-COLLECTION-ADD', views.tel_data_collection_add, name='TEL-DATA-COLLECTION-ADD'),
+    
 
-#===============Client project =================== 
- path('CP-COMPETITOR-ANALYSIS', views.cp_competitor_analysis, name='CP-COMPETITOR-ANALYSIS'),
- path('CP-WEB-PAGE-CONTENT', views.cp_web_page_content, name='CP-WEB-PAGE-CONTENT'),
- path('CP-ON-PAGE-WORKS', views.cp_on_page_works, name='CP-ON-PAGE-WORKS'), 
-
-
-
-
- #============================= Project Manager Document =======================
- path('pm_projectdocument', views.pm_projectdocument, name='pm_projectdocument'),
-
- path('Project_delete/<int:proj_dele_id>', views.Project_delete, name='Project_delete'), 
-
- path('Project_view/<int:proj_view_id>', views.Project_view, name='Project_view'),
- path('PM_project_doc_details/<int:prodoc_id>', views.PM_project_doc_details, name='PM_project_doc_details'),
- path('Doc_Project_Detail_Save/<int:prjid>', views.Doc_Project_Detail_Save, name='Doc_Project_Detail_Save'),
- path('Doc_Project_Module/<int:prjmd_id>', views.Doc_Project_Module, name='Doc_Project_Module'), 
- path('Doc_Project_Module_save/<int:prjmsave_id>', views.Doc_Project_Module_save, name='Doc_Project_Module_save'),
-
- path('project_startdoc/<int:proj_start_id>', views.project_startdoc, name='project_startdoc'), 
- path('project_startdoc_save/<int:proj_start_save_id>', views.project_startdoc_save, name='project_startdoc_save'), 
- path('project_correction/<int:proj_coret_id>', views.project_correction, name='project_correction'), 
- path('project_updation/<int:proj_update_id>', views.project_updation, name='project_updation'),
- path('project_correction_save/<int:proj_coret_save_id>', views.project_correction_save, name='project_correction_save'),
- path('project_updation_save/<int:proj_update_save_id>', views.project_updation_save, name='project_updation_save'),
- 
- path('project_Assign_save/<int:tld_prj_save>',views.project_Assign_save, name='project_Assign_save'),  
-
- path('project_workday/<int:tld_work_id>',views.project_workday, name='project_workday'),
- path('project_workday_save/<int:tld_work_save>',views.project_workday_save, name='project_workday_save'),
- path('project_develper_delete/<int:prj_deve_id>',views.project_develper_delete, name='project_develper_delete'),
-
- path('project_design/<int:proj_design>',views.project_design, name='project_design'),
- path('project_design_save/<int:prj_save>',views.project_design_save, name='project_design_save'),
-
-
- ############################ Project Manager Document Edit and Save #######################
-
- path('project_details_edit/<int:proj_detail_edit_id>',views.project_details_edit, name='project_details_edit'),
- path('Doc_Project_Detail_edit_Save/<int:proj_detail_edit_save>',views.Doc_Project_Detail_edit_Save, name='Doc_Project_Detail_edit_Save'),
- path('project_desecription_edit/<int:dese_edit>',views.project_desecription_edit, name='project_desecription_edit'),
- path('project_md_save/<int:dese_update_id>',views.project_md_save, name='project_md_save'),
- path('project_correction_edit/<int:prj_core_edit>',views.project_correction_edit, name='project_correction_edit'),
- path('project_updation_edit/<int:prj_update_edit>',views.project_updation_edit, name='project_updation_edit'),
-
- path('project_corret_update_save/<int:prj_cu_id>',views.project_corret_update_save, name='project_corret_update_save'),
-
- ############### Project Manager Document PDF Section ####################
-
- path('project_document_pdf/<int:proj_docpdf_id>',views.project_document_pdf, name='project_document_pdf'),
- path('Project_Description_pdf/<int:proj_dese_id>', views.Project_Description_pdf, name='Project_Description_pdf'),
- path('project_correction_pdf/<int:proj_coretpdf_id>', views.project_correction_pdf, name='project_correction_pdf'),
- path('project_updation_pdf/<int:proj_updatepdf_id>', views.project_updation_pdf, name='project_updation_pdf'),
-
-
- ########################### Admin - Project Document ################################
-
- path('BRadmin_project_documents', views.BRadmin_project_documents, name='BRadmin_project_documents'),
- path('BRadmin_projectui/<int:ad_ui_id>', views.BRadmin_projectui, name='BRadmin_projectui'),
-
- ########################### Admin - Project Document PDF ################################
-
- path('BRadminProject_Description_pdf/<int:brproj_dese_id>', views.BRadminProject_Description_pdf, name='BRadminProject_Description_pdf'),
- path('BRadminproject_correction_pdf/<int:brproj_coretpdf_id>', views.BRadminproject_correction_pdf, name='BRadminproject_correction_pdf'),
- path('BRadminproject_updation_pdf/<int:brproj_updatepdf_id>', views.BRadminproject_updation_pdf, name='BRadminproject_updation_pdf'),
- path('BRadminproject_document_pdf/<int:brproj_docpdf_id>', views.BRadminproject_document_pdf, name='BRadminproject_document_pdf'),
-
-
- ############################### Developer ###############################################
- path('DEVproject_document', views.DEVproject_document, name='DEVproject_document'),
- path('DEVproject_doc_add/<int:devpro_id>', views.DEVproject_doc_add, name='DEVproject_doc_add'),
- path('DEVproject_doc_libraries_add/<int:devlip>', views.DEVproject_doc_libraries_add, name='DEVproject_doc_libraries_add'),
- path('DEVproject_doc_start/<int:devstart>', views.DEVproject_doc_start, name='DEVproject_doc_start'),
- path('DEVproject_doc_update/<int:devdocstart_upid>', views.DEVproject_doc_update, name='DEVproject_doc_update'),
-path('DEVproject_startdoc_save/<int:dev_start_save>', views.DEVproject_startdoc_save, name='DEVproject_startdoc_save'),
-
- path('DEVproject_doc_coorection/<int:devpdoc_id>', views.DEVproject_doc_coorection, name='DEVproject_doc_coorection'),
-path('DEVproject_correction_update/<int:devdoc_upid>', views.DEVproject_correction_update, name='DEVproject_correction_update'),
-path('DEVproject_docupdate_save/<int:devdoc_upsave_id>', views.DEVproject_docupdate_save, name='DEVproject_docupdate_save'),
-path('DEVproject_doc_updation/<int:devpdocup_id>', views.DEVproject_doc_updation, name='DEVproject_doc_updation'),
-path('DEVproject_updation_update/<int:devpdocupdation_id>', views.DEVproject_updation_update, name='DEVproject_updation_update'),
-path('DEVproject_docupdation_save/<int:devdocup_save_id>', views.DEVproject_docupdation_save, name='DEVproject_docupdation_save'),
-path('DEVprojectlib_save/<int:dev_lib_save>', views.DEVprojectlib_save, name='DEVprojectlib_save'),
-path('devproject_design/<int:devproj_design>', views.devproject_design, name='devproject_design'),
-path('devproject_design_save/<int:ddev_design_save>', views.devproject_design_save, name='devproject_design_save'),
-
-################################## Team Lead ############################################
-path('TLprojects_doc', views.TLprojects_doc, name='TLprojects_doc'),
-path('Tlprojectdocs_view/<int:tldoc_view_id>', views.Tlprojectdocs_view, name='Tlprojectdocs_view'),
-path('devproctdoc_assign/<int:devdoc_id>', views.devproctdoc_assign, name='devproctdoc_assign'),
-path('Devprojectdoc_submit/<int:devsubmit>', views.Devprojectdoc_submit, name='Devprojectdoc_submit'),
-path('devproctdocdays_edit/<int:tldayedit_id>', views.devproctdocdays_edit, name='devproctdocdays_edit'),
-path('devproctdocdays_edit_save/<int:tldevwork_day_save>', views.devproctdocdays_edit_save, name='devproctdocdays_edit_save'),
 
 ]
 

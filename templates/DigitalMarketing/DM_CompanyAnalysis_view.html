@@ -1,0 +1,77 @@
+{% extends 'DigitalMarketing/DM_devindex.html' %} 
+{% load static %}
+
+{% block content %}
+
+<div class="card">
+    <div class="row"> 
+        <div class="col-12 grid-margin">
+            <div class="card">
+              <div class="card-body">
+                  <h4 class="text-center mb-4"> Competitor &nbsp; analysis / &nbsp;Website Audit</h4>
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                      <form>
+                        <div class="input-group input-group-sm mb-3">
+                          <input
+                            type="text"
+                            class="form-control text-white"
+                            id="myInput"
+                            onkeyup="myFunction()"
+                            placeholder="Search . . ."
+                            style="border: green"
+                          />
+                        </div>
+                      </form>
+                    </div>
+          
+                    <div class="table-responsive">
+                      <table class="table" id="myTable">
+                          <thead>
+                            <tr>
+                              <th scope="col">Sl no</th>
+                              <th scope="col">Date</th>
+                              <th scope="col">Company Name</th>
+                              
+                
+                            </tr>
+                            </thead>
+                        
+                      {% if comp_analysis %}
+                        
+                        <tbody>
+                          {% for i in comp_analysis %}
+                          <tr>
+                              <th scope="row">{{forloop.counter}}</th>
+                              <td>{{i.analysis_date}}</td>
+                              <td>{{i.analysis_compname}} </td>
+                          </tr>
+                            
+                        {% endfor %}
+                      {% else%}
+                          <h5 style="text-align:center">Nothing to display!</h5>
+                      {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  
+
+</script>
+ 
+{% endblock %}
