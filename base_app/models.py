@@ -751,3 +751,22 @@ class OnPage(models.Model):
     op_url=models.URLField()
     op_work=models.TextField()
     op_status=models.CharField(max_length=50,null=True, blank=True)
+
+class BlogCalander(models.Model):
+    blog_taskid=models.ForeignKey(Dm_project_Task,on_delete=models.CASCADE,null=True,blank=True)
+    blog_Employeeid=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    blog_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    blog_title=models.CharField(max_length=50,null=True, blank=True)
+    blog_key=models.TextField()
+    blog_status=models.CharField(max_length=50,null=True, blank=True)
+    
+class SmmPoster(models.Model):
+    smm_taskid=models.ForeignKey(Dm_project_Task,on_delete=models.CASCADE,null=True,blank=True)
+    smm_Employeeid=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    smm_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    smm_sub=models.CharField(max_length=100,null=True, blank=True)
+    smm_type=models.CharField(max_length=50,null=True, blank=True)
+    smm_content=models.TextField()
+    smm_dese=models.TextField()
+    smm_satus=models.CharField(max_length=50,null=True, blank=True)
+    smm_file=models.ImageField(upload_to="poster", null=True)

@@ -1,0 +1,41 @@
+{% extends 'DigitalMarketing/DM_Index.html' %} 
+{% load static %} 
+{% block content %}
+
+    <style>
+        a{
+            text-decoration: none;
+        }
+    </style>
+<div class="row">
+    <div class="col-sm-12 grid-margin">
+        <div class="card p-3">
+            <h4 class="text-center p-2"> Upload Reports</h4>
+           <form>
+            <label style="font-size:13px;">Select Task :</label>
+            <div class="input-group mt-3 mb-3" class="form-control">
+            <select class="form-control" name="task_name">
+                <option class="p-2" selected>----Select----</option>
+                <option class="p-2" value="Data Collection">Data Collection</option>
+                <option class="p-2" value="Backlink Details">Backlink Details</option>
+                <option class="p-2" value="Blog calender">Blog calender</option>
+                <option class="p-2" value="SMM Post Calender">SMM Post Calender</option>
+                <option class="p-2" value="Webpage Content creation">Webpage Content creation</option>
+                <option class="p-2" value="On page works">On page works</option>
+                <option class="p-2" value="Competitor analysis/Website Audit">Competitor analysis/Website Audit</option>
+                <option class="p-2" value="Data collection - Client">Data collection - Client</option>
+            </select>
+            </div>
+            <div class="input-group mt-5 mb-5" class="form-control">
+                <input type="file">
+            </div>
+            
+            <button type="submit" class="btn btn-outline-success">Upload</button>
+                
+           </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

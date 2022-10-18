@@ -32,7 +32,7 @@
                               {% for d in dmdeveloper %}
                   
                               <tbody  id="myTable">
-                                <tr data-href="{% url 'projectmanDevDashboard' d.id %}">
+                                <tr data-href="#">
                                     <td>{{forloop.counter}}</td>
                                   <td><img src="{{d.photo.url}}" class="rounded-circle " width="50" height="50" >
                                     <span style="margin-left: 10px;">{{d.fullname}}</span></td>

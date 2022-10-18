@@ -1518,6 +1518,19 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('DM_project_tasks/<int:proj_taskid>',views.DM_project_tasks, name='DM_project_tasks'),
     path('DM_project_task_assign/<int:proj_assign>',views.DM_project_task_assign, name='DM_project_task_assign'),
 
+    #***************** genaral ************
+     path('DM_manager_attende', views.DM_manager_attende, name='DM_manager_attende'),
+     path('DM_manager_leave', views.DM_manager_leave, name='DM_manager_leave'),
+     path('DM_manager_leave_apply', views.DM_manager_leave_apply, name='DM_manager_leave_apply'),
+     path('DM_manager_report', views.DM_manager_report, name='DM_manager_report'),
+     path('DM_project_full_tasks/<int:full_task_id>', views.DM_project_full_tasks, name='DM_project_full_tasks'),
+     path('Dm_report_data/<int:report_data>',views.Dm_report_data, name='Dm_report_data'),
+
+
+        #Task data view
+    path('DM_project_task_data/<int:dmtask_id>/<int:dmuser_id>',views.DM_project_task_data, name='DM_project_task_data'),
+    path('DM_project_task_fulldata/<int:task_full>/<int:task_pro>',views.DM_project_task_fulldata, name='DM_project_task_fulldata'),
+
 
       
     #************************* Digital Marketing developer *******************************
@@ -1538,7 +1551,9 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    path('dev_webanalysi_save/<int:audit_id>',views.dev_webanalysi_save, name='dev_webanalysi_save'), 
    path('dev_datacollect_client_save/<int:dcc_id>',views.dev_datacollect_client_save, name='dev_datacollect_client_save'), 
    path('dev_onpage_save/<int:onpage_id>',views.dev_onpage_save, name='dev_onpage_save'), 
-   path('dev_onpge_edit_save/<int:onpage_edit>',views.dev_onpge_edit_save, name='dev_onpge_edit_save'), 
+   path('dev_onpge_edit_save/<int:onpage_edit>',views.dev_onpge_edit_save, name='dev_onpge_edit_save'),
+   path('dev_blog_calander_save/<int:blog_id>',views.dev_blog_calander_save, name='dev_blog_calander_save'), 
+   path('dev_smm_poster_save/<int:smm_id>',views.dev_smm_poster_save, name='dev_smm_poster_save'), 
 
    #**************************** task View******************
    path('devdata_collect_view/<int:dc_view>',views.devdata_collect_view, name='devdata_collect_view'), 

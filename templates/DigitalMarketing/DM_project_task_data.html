@@ -1,0 +1,542 @@
+{% extends 'DigitalMarketing/DM_Index.html' %} 
+{% load static %} 
+{% block content %}
+
+{% if task_data %}
+
+    <div class="card">
+        <div class="row"> 
+            <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="text-center mb-4"> DATA COLLECTION</h4>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                    <h6 class="p-2 mdi mdi-application ">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                        <form>
+                        <div class="input-group input-group-sm mb-3">
+                            <input
+                            type="text"
+                            class="form-control text-white"
+                            id="myInput"
+                            onkeyup="myFunction()"
+                            placeholder="Search . . ."
+                            style="border: green"
+                            />
+                        </div>
+                        </form>
+                    </div>
+        
+                    <div class="table-responsive">
+                        <table class="table" id="myTable">
+                            <thead>
+                                <tr>
+                                <th scope="col">Sl no</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Full Name</th>
+                                <th scope="col">Email Id</th>
+                                <th scope="col">Phone No</th>
+                                <th scope="col">Location</th>
+                                <th scope="col">Applied Internship</th>
+                                <th scope="col">Experienced/Fresher</th>
+                                <th scope="col">Status/Remarks</th>
+                                
+                                </tr>
+                            </thead>
+                        
+                        {% if task_data %}
+                        
+                        <tbody>
+                            {% for i in task_data %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{i.dc_date}}</td>
+                                <td>{{i.dc_name}} </td>
+                                <td>{{i.dc_email}}</td>
+                                <td>{{i.dc_phone}}</td>
+                                <td>{{i.dc_loc}}</td>
+                                <td>{{i.dc_internship}}</td>
+                                <td>{{i.dc_Fr_Ex}}</td>
+                                {% if i.dc_status == 'Waiting' %}
+                                    <td>{{i.dc_status}}&nbsp;-&nbsp; {{i.dc_reason}}</td>
+                                {% else %}
+                                <td>{{i.dc_status}}</td>
+                                {% endif %}
+                                
+                            </tr>
+                            
+                        {% endfor %}
+                        {% else%}
+                            <h5 style="text-align:center">Nothing to display!</h5>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    </div>
+{% elif task_data1 %}
+    <div class="card">
+        <div class="row"> 
+            <div class="col-12 grid-margin">
+                <div class="card">
+                <div class="card-body">
+                    <h4 class="text-center mb-4"> BACK LINK DETAILS</h4>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <h6 class="p-2 mdi mdi-application ">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                        <form>
+                            <div class="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                class="form-control text-white"
+                                id="myInput"
+                                onkeyup="myFunction()"
+                                placeholder="Search . . ."
+                                style="border: green"
+                            />
+                            </div>
+                        </form>
+                        </div>
+            
+                        <div class="table-responsive">
+                        <table class="table" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Sl no</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Url</th>
+                                    <th scope="col">Types</th>
+                                    <th scope="col">Remarks/Status</th>
+                                
+                                </tr>
+                                </thead>
+                            
+                        {% if task_data1 %}
+                            
+                            <tbody>
+                            {% for i in task_data1 %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{i.bd_date}}</td>
+                                <td>{{i.bd_url}} </td>
+                                <td>{{i.bd_type}}</td>
+                                <td>{{i.bd_status}}</td>          
+                            </tr>
+                                
+                            {% endfor %}
+                        {% else%}
+                            <h5 style="text-align:center">Nothing to display!</h5>
+                        {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% elif task_data2 %}
+    <div class="card">
+        <div class="row"> 
+            <div class="col-12 grid-margin">
+                <div class="card">
+                <div class="card-body">
+                    <h4 class="text-center mb-4">WEB PAGE CONTENT</h4>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                        <form>
+                            <div class="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                class="form-control text-white"
+                                id="myInput"
+                                onkeyup="myFunction()"
+                                placeholder="Search . . ."
+                                style="border: green"
+                            />
+                            </div>
+                        </form>
+                        </div>
+            
+                        <div class="table-responsive">
+                        <table class="table" id="myTable">
+                            <thead>
+                                <tr>
+                                    <tr>
+                                        <th scope="col">Sl no</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Url</th>
+                                        <th scope="col">Discription Of Content</th>
+                                        <th scope="col">Keywords If Any</th>
+                                        
+                                        </tr>
+                                
+                                </tr>
+                                </thead>
+                            
+                        {% if task_data2 %}
+                            
+                            <tbody>
+                            {% for i in task_data2 %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{i.web_date}}</td>
+                                <td>{{i.web_url}} </td>
+                                <td>{{i.web_dese}}</td>
+                                <td>{{i.web_key}}</td>
+                                
+                                
+                            </tr>
+                                
+                            {% endfor %}
+                        {% else%}
+                            <h5 style="text-align:center">Nothing to display!</h5>
+                        {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% elif task_data3 %}
+    <div class="card">
+        <div class="row"> 
+            <div class="col-12 grid-margin">
+                <div class="card">
+                <div class="card-body">
+                    <h4 class="text-center mb-4"> Competitor &nbsp; analysis / &nbsp;Website Audit</h4>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                        <form>
+                            <div class="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                class="form-control text-white"
+                                id="myInput"
+                                onkeyup="myFunction()"
+                                placeholder="Search . . ."
+                                style="border: green"
+                            />
+                            </div>
+                        </form>
+                        </div>
+            
+                        <div class="table-responsive">
+                        <table class="table" id="myTable">
+                            <thead>
+                                <tr>
+                                <th scope="col">Sl no</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Company Name</th>
+                                
+                    
+                                </tr>
+                                </thead>
+                            
+                        {% if task_data3 %}
+                            
+                            <tbody>
+                            {% for i in task_data3 %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{i.analysis_date}}</td>
+                                <td>{{i.analysis_compname}} </td>
+                            </tr>
+                                
+                            {% endfor %}
+                        {% else%}
+                            <h5 style="text-align:center">Nothing to display!</h5>
+                        {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% elif task_data4 %}
+    <div class="card">
+        <div class="row"> 
+            <div class="col-12 grid-margin">
+                <div class="card">
+                <div class="card-body">
+                    <h4 class="text-center mb-4">DATA COLLECTION CLIENT</h4>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                        <form>
+                            <div class="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                class="form-control text-white"
+                                id="myInput"
+                                onkeyup="myFunction()"
+                                placeholder="Search . . ."
+                                style="border: green"
+                            />
+                            </div>
+                        </form>
+                        </div>
+            
+                        <div class="table-responsive">
+                        <table class="table" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Sl no</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Email Id</th>
+                                    <th scope="col">Phone No</th>
+                                    <th scope="col">Bussines Details</th>
+                                    
+                        
+                                    </tr>
+                                </thead>
+                            
+                        {% if task_data4 %}
+                            
+                            <tbody>
+                            {% for i in task_data4 %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{i.cd_date}}</td>
+                                <td>{{i.cd_name}} </td>
+                                <td>{{i.cd_email}}</td>
+                                <td>{{i.cd_phno}}</td>
+                                <td>{{i.cd_bussines}}</td>
+                                
+                            </tr>
+                                
+                            {% endfor %}
+                        {% else%}
+                            <h5 style="text-align:center">Nothing to display!</h5>
+                        {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% elif task_data5 %}
+    <div class="card">
+        <div class="row"> 
+            <div class="col-12 grid-margin">
+                <div class="card">
+                <div class="card-body">
+                    <h4 class="text-center mb-4">On Page Works</h4>
+                    <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        
+                        <form>
+                            <div class="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                class="form-control text-white"
+                                id="myInput"
+                                onkeyup="myFunction()"
+                                placeholder="Search . . ."
+                                style="border: green"
+                            />
+                            </div>
+                        </form>
+                        </div>
+            
+                        <div class="table-responsive">
+                        <table class="table" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Sl no</th>
+                                    <th scope="col">Date</th>
+                                    
+                                    <th scope="col">Url</th>
+                                    <th scope="col">Work Details</th>
+                                    <th scope="col">Remarks/Status</th>
+                                    
+                                    </tr>
+                                </thead>
+                            
+                        {% if task_data5 %}
+                            
+                            <tbody>
+                            {% for i in task_data5 %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{i.op_date}}</td>
+                                <td>{{i.op_url}} </td>
+                                <td>{{i.op_work}}</td>
+                                <td>{{i.op_status}}</td>
+                            </tr>
+                                
+                            {% endfor %}
+                        {% else%}
+                            <h5 style="text-align:center">Nothing to display!</h5>
+                        {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% elif task_data6 %}
+<div class="card">
+    <div class="row"> 
+        <div class="col-12 grid-margin">
+            <div class="card">
+              <div class="card-body">
+                  <h4 class="text-center mb-4">BLOG CALENDER</h4>
+                  <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                      <form>
+                        <div class="input-group input-group-sm mb-3">
+                          <input
+                            type="text"
+                            class="form-control text-white"
+                            id="myInput"
+                            onkeyup="myFunction()"
+                            placeholder="Search . . ."
+                            style="border: green"
+                          />
+                        </div>
+                      </form>
+                    </div>
+          
+                    <div class="table-responsive">
+                      <table class="table" id="myTable">
+                          <thead>
+                              <tr>
+                                  <th scope="col">Sl no</th>
+                                  <th scope="col">Date</th>
+                                  <th scope="col">Blog Title</th>
+                                  <th scope="col">Keywords</th>
+                                  <th scope="col">Remarks/Status</th>
+                                 
+                                </tr>
+                            </thead>
+                        
+                      {% if task_data6 %}
+                        
+                        <tbody>
+                          {% for i in task_data6 %}
+                          <tr>
+                              <th scope="row">{{forloop.counter}}</th>
+                              <td>{{i.blog_date}}</td>
+                              <td>{{i.blog_title}} </td>
+                              <td>{{i.blog_key}}</td>
+                             <td>{{i.blog_status}}</td>
+                          </tr>
+                            
+                        {% endfor %}
+                      {% else%}
+                          <h5 style="text-align:center">Nothing to display!</h5>
+                      {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% elif task_data7 %}
+<div class="card">
+    <div class="row"> 
+        <div class="col-12 grid-margin">
+            <div class="card">
+              <div class="card-body">
+                  <h4 class="text-center mb-4">SMM POST CALENDER</h4>
+                  <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                      <form>
+                        <div class="input-group input-group-sm mb-3">
+                          <input
+                            type="text"
+                            class="form-control text-white"
+                            id="myInput"
+                            onkeyup="myFunction()"
+                            placeholder="Search . . ."
+                            style="border: green"
+                          />
+                        </div>
+                      </form>
+                    </div>
+          
+                    <div class="table-responsive">
+                      <table class="table" id="myTable">
+                          <thead>
+                              <tr>
+                                  <th scope="col">Sl no</th>
+                                  <th scope="col">Date</th>
+                                  <th scope="col">Subject</th>
+                                  <th scope="col">Posting Type</th>
+                                  <th scope="col">Inner Content</th>
+                                  <th scope="col">Description</th>
+                                  <th scope="col">Remarks/Status</th>
+                                  <th scope="col">Poster</th>
+                                 
+                                </tr>
+                            </thead>
+                        
+                      {% if task_data7 %}
+                        
+                        <tbody>
+                          {% for i in task_data7 %}
+                          <tr>
+                              <th scope="row">{{forloop.counter}}</th>
+                              <td>{{i.op_date}}</td>
+                              <td>{{i.smm_sub}} </td>
+                              <td>{{i.smm_type}}</td>
+                              <td>{{i.smm_content}}</td>
+                              <td>{{i.smm_dese}}</td>
+                              <td>{{i.smm_satus}}</td>
+                              {% if i.smm_file %}
+                                <td><img src="{{i.smm_file.url}}" style="width:15vh; height:14vh;"></td>
+                              {% endif %}
+                          </tr>
+                            
+                        {% endfor %}
+                      {% else%}
+                          <h5 style="text-align:center">Nothing to display!</h5>
+                      {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  
+
+</script>
+ 
+{% endblock %}

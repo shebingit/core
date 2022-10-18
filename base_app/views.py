@@ -16155,11 +16155,268 @@ def DM_project_task_assign(request,proj_assign):
             task_name = request.POST['task_name']
         projects=DM_projects.objects.get(id=proj_assign)
         dev=user_registration.objects.get(fullname=dev_name)
-        task=Dm_project_Task(dm_project_id=projects,dm_user_name=dev,dm_task_name=task_name,dm_task_status="Assinged")
-        task.save()
-        return redirect('DM_project_works')
+        today = date.today()
+        try:
+
+            leave_status=leave.objects.get(user=dev,from_date=today)
+            msg=1
+            mem = user_registration.objects.filter(id=pm_id)
+            desig=designation.objects.get(designation='Digital Developer')
+            dmdeveloper=user_registration.objects.filter(designation=desig)
+            projects=DM_projects.objects.filter(dm_project_status='Work Started')
+            return render(request, 'DigitalMarketing/DM_project_work.html', {'mem': mem,'dmdeveloper':dmdeveloper,'projects':projects,'msg':msg})
+
+        except leave.DoesNotExist:
+
+            task=Dm_project_Task(dm_project_id=projects,dm_user_name=dev,dm_task_name=task_name,dm_task_status="Assinged")
+            task.save()
+            msg=0
+            mem = user_registration.objects.filter(id=pm_id)
+            desig=designation.objects.get(designation='Digital Developer')
+            dmdeveloper=user_registration.objects.filter(designation=desig)
+            projects=DM_projects.objects.filter(dm_project_status='Work Started')
+            return render(request, 'DigitalMarketing/DM_project_work.html', {'mem': mem,'dmdeveloper':dmdeveloper,'projects':projects,'msg':msg})
+            
+        
     else:
         return redirect('/')
+
+
+# task data view related to Digital marketing developers/Workers
+
+def DM_project_task_data(request,dmtask_id,dmuser_id):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        
+        task=Dm_project_Task.objects.get(id=dmtask_id)
+        user=user_registration.objects.get(id=dmuser_id)
+        if task.dm_task_name == 'Data Collection':
+            task_data=DataCollect.objects.filter(Project_name=task,Employeeid=user)
+            rcount=DataCollect.objects.filter(Project_name=task,Employeeid=user).count()
+            return render(request, 'DigitalMarketing/DM_project_task_data.html', {'mem': mem,'task_data':task_data,'rcount':rcount})
+        
+        elif task.dm_task_name == 'Backlink Details':
+            task_data1=Backlinks.objects.filter(bd_taskid=task,bd_Employeeid=user)
+            rcount=Backlinks.objects.filter(bd_taskid=task,bd_Employeeid=user).count()
+            return render(request, 'DigitalMarketing/DM_project_task_data.html', {'mem': mem,'task_data1':task_data1,'rcount':rcount})
+        
+        elif task.dm_task_name == 'Webpage Content creation':
+            task_data2=WebpageContent.objects.filter(web_taskid=task,web_Employeeid=user)
+            rcount=WebpageContent.objects.filter(web_taskid=task,web_Employeeid=user).count()
+            return render(request, 'DigitalMarketing/DM_project_task_data.html', {'mem': mem,'task_data2':task_data2,'rcount':rcount})
+        
+        elif task.dm_task_name == 'Competitor analysis/Website Audit':
+            task_data3=CompanyAnalysis.objects.filter(analysis_taskid=task,analysis_Employeeid=user)
+            rcount=CompanyAnalysis.objects.filter(analysis_taskid=task,analysis_Employeeid=user).count()
+            return render(request, 'DigitalMarketing/DM_project_task_data.html', {'mem': mem,'task_data3':task_data3,'rcount':rcount})
+
+        elif task.dm_task_name == 'Data collection - Client':
+            task_data4=ClientData.objects.filter(cd_taskid=task,cd_Employeeid=user)
+            rcount=ClientData.objects.filter(cd_taskid=task,cd_Employeeid=user).count()
+            return render(request, 'DigitalMarketing/DM_project_task_data.html', {'mem': mem,'task_data4':task_data4,'rcount':rcount})
+        
+        elif task.dm_task_name == 'On page works':
+            task_data5=OnPage.objects.filter(op_taskid=task,op_Employeeid=user)
+            rcount=OnPage.objects.filter(op_taskid=task,op_Employeeid=user).count()
+            return render(request, 'DigitalMarketing/DM_project_task_data.html', {'mem': mem,'task_data5':task_data5,'rcount':rcount})
+        
+        elif task.dm_task_name == 'Blog calender':
+            task_data6=BlogCalander.objects.filter(blog_taskid=task,blog_Employeeid=user)
+            rcount=BlogCalander.objects.filter(blog_taskid=task,blog_Employeeid=user).count()
+            return render(request, 'DigitalMarketing/DM_project_task_data.html', {'mem': mem,'task_data6':task_data6,'rcount':rcount})
+        
+        elif task.dm_task_name == 'SMM Post Calender':
+            task_data7=SmmPoster.objects.filter(smm_taskid=task,smm_Employeeid=user)
+            rcount=SmmPoster.objects.filter(smm_taskid=task,smm_Employeeid=user).count()
+            return render(request, 'DigitalMarketing/DM_project_task_data.html', {'mem': mem,'task_data7':task_data7,'rcount':rcount})
+        
+    else:
+        return redirect('/')
+
+
+# Full data related to each task
+    
+def DM_project_task_fulldata(request,task_full,task_pro):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        task=Dm_project_Task.objects.get(id=task_full)
+        proj=DM_projects.objects.get(id=task_pro)
+
+        if task.dm_task_name == 'Data Collection':
+            task_data=DataCollect.objects.all()
+            rcount=0
+            for i in task_data:
+                if i.Project_name.dm_project_id.id == proj.id :
+                    rcount=rcount+1
+            return render(request, 'DigitalMarketing/DM_project_task_fulldata.html',{'mem': mem,'task_data':task_data,'rcount':rcount,'proj':proj})
+    
+        if task.dm_task_name == 'Backlink Details':
+            task_data1=Backlinks.objects.all()
+            rcount=0
+            for i in task_data1:
+                if i.bd_taskid.dm_project_id.id == proj.id :
+                    rcount=rcount+1
+            return render(request, 'DigitalMarketing/DM_project_task_fulldata.html',{'mem': mem,'task_data1':task_data1,'rcount':rcount,'proj':proj})
+        
+        if task.dm_task_name == 'Webpage Content creation':
+            task_data2=WebpageContent.objects.all()
+            rcount=0
+            for i in task_data2:
+                if i.web_taskid.dm_project_id.id == proj.id :
+                    rcount=rcount+1
+            return render(request, 'DigitalMarketing/DM_project_task_fulldata.html',{'mem': mem,'task_data2':task_data2,'rcount':rcount,'proj':proj})
+
+        if task.dm_task_name == 'Competitor analysis/Website Audit':
+            task_data3=CompanyAnalysis.objects.all()
+            rcount=0
+            for i in task_data3:
+                if i.analysis_taskid.dm_project_id.id == proj.id :
+                    rcount=rcount+1
+            return render(request, 'DigitalMarketing/DM_project_task_fulldata.html',{'mem': mem,'task_data3':task_data3,'rcount':rcount,'proj':proj})
+        
+        if task.dm_task_name == 'Data collection - Client':
+            task_data4=ClientData.objects.all()
+            rcount=0
+            for i in task_data4:
+                if i.cd_taskid.dm_project_id.id == proj.id :
+                    rcount=rcount+1
+            return render(request, 'DigitalMarketing/DM_project_task_fulldata.html',{'mem': mem,'task_data4':task_data4,'rcount':rcount,'proj':proj})
+        
+           
+        if task.dm_task_name == 'On page works':
+            task_data5=OnPage.objects.all()
+            rcount=0
+            for i in task_data5:
+                if i.op_taskid.dm_project_id.id == proj.id :
+                    rcount=rcount+1
+            return render(request, 'DigitalMarketing/DM_project_task_fulldata.html',{'mem': mem,'task_data5':task_data5,'rcount':rcount,'proj':proj})
+        
+        if task.dm_task_name == 'Blog calender':
+            task_data6=BlogCalander.objects.all()
+            rcount=0
+            for i in task_data6:
+                if i.blog_taskid.dm_project_id.id == proj.id :
+                    rcount=rcount+1
+            return render(request, 'DigitalMarketing/DM_project_task_fulldata.html',{'mem': mem,'task_data6':task_data6,'rcount':rcount,'proj':proj})
+        
+        if task.dm_task_name == 'SMM Post Calender':
+            task_data7=SmmPoster.objects.all()
+            rcount=0
+            for i in task_data7:
+                if i.smm_taskid.dm_project_id.id == proj.id :
+                    rcount=rcount+1
+            return render(request, 'DigitalMarketing/DM_project_task_fulldata.html',{'mem': mem,'task_data7':task_data7,'rcount':rcount,'proj':proj})
+    
+    else:
+        return redirect('/')
+
+# Digital Marketing manager  Attendece
+    
+def DM_manager_attende(request):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        user1 = user_registration.objects.get(id=pm_id)
+        attend=attendance.objects.filter(user=user1).order_by('-id')
+        return render(request, 'DigitalMarketing/DM_manager_attend.html',{'mem': mem,'attend':attend})
+    else:
+        return redirect('/')
+
+
+def DM_manager_leave(request):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        user1 = user_registration.objects.get(id=pm_id)
+        leaves=leave.objects.filter(user=user1).order_by('-id')
+        return render(request, 'DigitalMarketing/DM_manager_leave.html',{'mem': mem,'leaves':leaves})
+    else:
+        return redirect('/')
+    
+
+def DM_manager_leave_apply(request):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        user1 = user_registration.objects.get(id=pm_id)
+        if request.method == 'POST':
+            sdate = request.POST['fromdate']
+            edate = request.POST['todate']
+            day = request.POST['day']
+            reson = request.POST['reson']
+            apply=leave(from_date=sdate,to_date=edate,reason=reson,leave_status=day,user=user1,designation_id=user1.designation.id)
+            apply.save()
+            msg=1
+            leaves=leave.objects.filter(user=user1).order_by('-id')
+            return render(request, 'DigitalMarketing/DM_manager_leave.html',{'mem': mem,'leaves':leaves,'msg':msg})
+    else:
+        return redirect('/')
+    
+
+def DM_manager_report(request):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        projects=DM_projects.objects.all()
+        return render(request, 'DigitalMarketing/DM_manager_report.html',{'mem': mem,'projects':projects})
+    else:
+        return redirect('/')
+    
+
+
+
+def DM_project_full_tasks(request,full_task_id):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        proj=DM_projects.objects.get(id=full_task_id)
+        return render(request, 'DigitalMarketing/DM_current_month_report.html',{'mem': mem,'tasks':tasks,'proj':proj})
+    else:
+        return redirect('/')
+
+    
+def Dm_report_data(request,report_data):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        proj=DM_projects.objects.get(id=report_data)
+        rcount=0
+        task_data=DataCollect.objects.all()
+        for i in task_data:
+            if i.Project_name.dm_project_id.id == proj.id :
+                rcount=rcount+1
+        return render(request, 'DigitalMarketing/DM_report_data.html',{'mem': mem,'task_data':task_data,'proj':proj,'rcount':rcount})
+    else:
+        return redirect('/')
+
+
+
 
 
     #****************************** digital Marketing 8 Tasks (17/10/22 -Shebin Shaji) *************
@@ -16188,7 +16445,7 @@ def devstart_task(request,task_id):
             task.save()
             backlink=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user)
             rcount=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user).count()
-            return render(request,'DigitalMarketing/DM_Backlins-Details.html',{'task':task,'dmdev':dmdev,'backlink':backlink})
+            return render(request,'DigitalMarketing/DM_Backlins-Details.html',{'task':task,'dmdev':dmdev,'backlink':backlink,'rcount':rcount})
 
          # Webpage Content creatio
         
@@ -16197,7 +16454,7 @@ def devstart_task(request,task_id):
             task.save()
             webcontent=WebpageContent.objects.filter(web_taskid=task, web_Employeeid=user)
             rcount=WebpageContent.objects.filter(web_taskid=task, web_Employeeid=user).count()
-            return render(request,'DigitalMarketing/DM_Web-Page-Content.html',{'dmdev':dmdev ,'webcontent':webcontent,'task':task})
+            return render(request,'DigitalMarketing/DM_Web-Page-Content.html',{'dmdev':dmdev ,'webcontent':webcontent,'task':task,'rcount':rcount})
 
 
         #Competitor analysis/Website Audit
@@ -16207,7 +16464,7 @@ def devstart_task(request,task_id):
             task.save()
             comp_analysis=CompanyAnalysis.objects.filter(analysis_taskid=task, analysis_Employeeid=user)
             rcount=CompanyAnalysis.objects.filter(analysis_taskid=task, analysis_Employeeid=user).count()
-            return render(request,'DigitalMarketing/DM_CompetitorAnalysis.html',{'task':task,'dmdev':dmdev ,'comp_analysis':comp_analysis})
+            return render(request,'DigitalMarketing/DM_CompetitorAnalysis.html',{'task':task,'dmdev':dmdev ,'comp_analysis':comp_analysis,'rcount':rcount})
 
         #Data collection - Client
         elif task.dm_task_name == 'Data collection - Client':
@@ -16215,7 +16472,7 @@ def devstart_task(request,task_id):
             task.save()
             clientdata=ClientData.objects.filter(cd_taskid=task, cd_Employeeid=user)
             rcount=ClientData.objects.filter(cd_taskid=task, cd_Employeeid=user).count()
-            return render(request,'DigitalMarketing/DM_DataCollection-Client.html',{'task':task,'dmdev':dmdev ,'clientdata':clientdata})
+            return render(request,'DigitalMarketing/DM_DataCollection-Client.html',{'task':task,'dmdev':dmdev ,'clientdata':clientdata,'rcount':rcount})
 
         #On page works
         elif task.dm_task_name == 'On page works':
@@ -16223,16 +16480,23 @@ def devstart_task(request,task_id):
             task.save()
             onpage=OnPage.objects.filter(op_taskid=task, op_Employeeid=user)
             rcount=OnPage.objects.filter(op_taskid=task, op_Employeeid=user).count()
-            return render(request,'DigitalMarketing/DM_On-Page-Works.html',{'task':task,'dmdev':dmdev ,'onpage':onpage})
+            return render(request,'DigitalMarketing/DM_On-Page-Works.html',{'task':task,'dmdev':dmdev ,'onpage':onpage,'rcount':rcount})
         
+        # Blog Calander
         elif task.dm_task_name == 'Blog calender':
-            datacollect=None
-            return render(request,'DigitalMarketing/DM_Blog-calender.html',{'dmdev':dmdev })
+            task.dm_task_status='pending'
+            task.save()
+            blog=BlogCalander.objects.filter(blog_taskid=task, blog_Employeeid=user)
+            rcount=BlogCalander.objects.filter(blog_taskid=task, blog_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Blog-calender.html',{'task':task,'dmdev':dmdev,'blog':blog,'rcount':rcount })
 
-
+        # Smm Poster
         elif task.dm_task_name == 'SMM Post Calender':
-            datacollect=None
-            return render(request,'DigitalMarketing/DM_Smm-Post-Calender.html',{'dmdev':dmdev })
+            task.dm_task_status='pending'
+            task.save()
+            smm=SmmPoster.objects.filter(smm_taskid=task, smm_Employeeid=user)
+            rcount=SmmPoster.objects.filter(smm_taskid=task, smm_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Smm-Post-Calender.html',{'task':task,'smm':smm,'dmdev':dmdev,'rcount':rcount })
 
     
     else:
@@ -16325,23 +16589,23 @@ def devdata_collect_view(request,dc_view):
             rcount=ClientData.objects.filter(cd_taskid=task, cd_Employeeid=user).count()
             return render(request,'DigitalMarketing/DM_Data-Collection-Client_view.html',{'clientdata':clientdata,'rcount':rcount,'dmdev':dmdev})
 
-         #onpage
+        #onpage
         elif task.dm_task_name == 'On page works':
             onpage=OnPage.objects.filter(op_taskid=task, op_Employeeid=user)
             rcount=OnPage.objects.filter(op_taskid=task, op_Employeeid=user).count()
             return render(request,'DigitalMarketing/DM_Onpage_view.html',{'onpage':onpage,'rcount':rcount,'dmdev':dmdev})
 
+        #Blog Calander
+        elif task.dm_task_name == 'Blog calender':
+            blog=BlogCalander.objects.filter(blog_taskid=task, blog_Employeeid=user)
+            rcount=BlogCalander.objects.filter(blog_taskid=task, blog_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Blog_calander_view.html',{'blog':blog,'rcount':rcount,'dmdev':dmdev})
 
-        elif task.dm_task_name == 'Data Collection':
-            backlink=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user)
-            rcount=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user).count()
-            return render(request,'DigitalMarketing/DM_Data-Collection_view.html',{'datacollect':datacollect,'rcount':rcount,'dmdev':dmdev})
-
-
-        elif task.dm_task_name == 'Data Collection':
-            backlink=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user)
-            rcount=Backlinks.objects.filter(bd_taskid=task, bd_Employeeid=user).count()
-            return render(request,'DigitalMarketing/DM_Data-Collection_view.html',{'datacollect':datacollect,'rcount':rcount,'dmdev':dmdev})
+        #Smm Post Calander
+        elif task.dm_task_name == 'SMM Post Calender':
+            smm=SmmPoster.objects.filter(smm_taskid=task, smm_Employeeid=user)
+            rcount=SmmPoster.objects.filter(smm_taskid=task, smm_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_SmmPost_view.html',{'smm':smm,'rcount':rcount,'dmdev':dmdev})
         
 
         
@@ -16503,6 +16767,63 @@ def dev_onpge_edit_save(request,onpage_edit):
     else:
         return redirect('/')
 
+#bloag calander
+
+def dev_blog_calander_save(request,blog_id):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        user = user_registration.objects.get(id=dmdev_id)
+        if request.method =="POST":
+            bddate=request.POST['bc_date']
+            title=request.POST['bc_blogt']
+            keyw=request.POST['bc_key']
+            blogstatus=request.POST['bc_status']
+        
+            task=Dm_project_Task.objects.get(id=blog_id)
+            
+            blog=BlogCalander(blog_date=bddate,blog_title=title,blog_key=keyw,
+                                  blog_status=blogstatus,blog_Employeeid=user,blog_taskid=task)
+            blog.save()
+            blog=BlogCalander.objects.filter(blog_taskid=task, blog_Employeeid=user)
+            rcount=BlogCalander.objects.filter(blog_taskid=task, blog_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Blog-calender.html',{'task':task,'dmdev':dmdev,'blog':blog,'rcount':rcount})
+    else:
+        return redirect('/')
+
+
+# Smm Poster
+def dev_smm_poster_save(request,smm_id):
+    if 'dmdev_id' in request.session:
+        if request.session.has_key('dmdev_id'):
+            dmdev_id = request.session['dmdev_id']
+        else:
+            return redirect('/')
+        dmdev = user_registration.objects.filter(id=dmdev_id)
+        user = user_registration.objects.get(id=dmdev_id)
+        if request.method =="POST":
+            date=request.POST['smm_date']
+            sub=request.POST['smm_sub']
+            types=request.POST['smm_pt']
+            cont=request.POST['smm_con']
+            dese=request.POST['smm_dese']
+            status=request.POST['smm_status']
+            files=request.FILES.get('smm_file')
+        
+            task=Dm_project_Task.objects.get(id=smm_id)
+            
+            smm=SmmPoster(smm_date=date,smm_sub=sub,smm_type=types,
+                                  smm_content=cont,smm_dese=dese,smm_satus=status,
+                                  smm_file=files,smm_Employeeid=user,smm_taskid=task)
+            smm.save()
+            smm=SmmPoster.objects.filter(smm_taskid=task, smm_Employeeid=user)
+            rcount=SmmPoster.objects.filter(smm_taskid=task, smm_Employeeid=user).count()
+            return render(request,'DigitalMarketing/DM_Smm-Post-Calender.html',{'task':task,'dmdev':dmdev,'smm':smm,'rcount':rcount})
+    else:
+        return redirect('/')
 
 
 #********************************* Digital marketing - (15/10/22-shebin shaji) *********************

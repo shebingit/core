@@ -88,6 +88,19 @@
     </div>
 </div>
 
+<!-- Sweat aleert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if msg == 0 %}
+  <script>
+    swal("Good job!","Work Successfuly Added.", "success");
+  </script>
+{% elif  msg == 1 %}
+  <script>
+    swal("Sorry!","The Employee is Leave Today", "error");
+  </script>
+
+{% endif %}
+
 
 <script>
     // table row click

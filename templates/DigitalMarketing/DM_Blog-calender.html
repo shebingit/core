@@ -4,24 +4,27 @@
 {% block content %}
 
 
-<div class="container">
+<div class="card">
     <h4 class="text-center m-4">BLOG CALENDER ADD</h4>
-    <form action="#" method="post">
+    <form action="{% url 'dev_blog_calander_save' task.id %}" method="post">
         {% csrf_token %}
         <div class="input-group p-3 m-2">
-            <input type="date" class="form-control" placeholder="DATE" style=" color: #fff;">
+            <input type="date" class="form-control" name="bc_date" placeholder="DATE" style=" color: #fff;">
+        </div>
+        
+        <div class="input-group p-3  m-2">
+            <input type="text" class="form-control" name="bc_blogt" placeholder="BLOG TOPIC" style=" color: #fff;">
         </div>
         <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="SL NO" style=" color: #fff;">
+            <textarea type="text" class="form-control" name="bc_key" style=" color: #fff; height:150px;">Keywords !</textarea>
         </div>
         <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="BLOG TOPIC" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="KEYWORDS" style=" color: #fff;">
-        </div>
-        <div class="input-group p-3  m-2">
-            <input type="text" class="form-control" placeholder="REMARKS / STATUS" style=" color: #fff;">
+          
+            <select id="selectbox" class="form-control" name="bc_status" style="border:none; ">
+                <option class="p-2 m-2" >REMARKS / STATUS</option>   
+                <option class="p-2 m-2" value="Writing">Writing</option>
+                <option class="p-2 m-2" value="Done">Done</option>
+            </select>
         </div>
         <center>
             <div class="p-3 m-3 text-center">
@@ -32,4 +35,78 @@
         
     </form>
 </div>
+
+<br>
+<div class="row"> 
+    <div class="col-12 grid-margin">
+        <div class="card">
+          <div class="card-body">
+              <h4 class="text-center mb-4">BLOG CALENDER</h4>
+              <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                  <form>
+                    <div class="input-group input-group-sm mb-3">
+                      <input
+                        type="text"
+                        class="form-control text-white"
+                        id="myInput"
+                        onkeyup="myFunction()"
+                        placeholder="Search . . ."
+                        style="border: green"
+                      />
+                    </div>
+                  </form>
+                </div>
+      
+                <div class="table-responsive">
+                  <table class="table" id="myTable">
+                      <thead>
+                          <tr>
+                              <th scope="col">Sl no</th>
+                              <th scope="col">Date</th>
+                              <th scope="col">Blog Title</th>
+                              <th scope="col">Keywords</th>
+                              <th scope="col">Remarks/Status</th>
+                             
+                            </tr>
+                        </thead>
+                    
+                  {% if blog %}
+                    
+                    <tbody>
+                      {% for i in blog %}
+                      <tr>
+                          <th scope="row">{{forloop.counter}}</th>
+                          <td>{{i.blog_date}}</td>
+                          <td>{{i.blog_title}} </td>
+                          <td>{{i.blog_key}}</td>
+                         <td>{{i.blog_status}}</td>
+                      </tr>
+                        
+                    {% endfor %}
+                  {% else%}
+                      <h5 style="text-align:center">Nothing to display!</h5>
+                  {% endif %}
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  
+
+</script>
 {% endblock %}
