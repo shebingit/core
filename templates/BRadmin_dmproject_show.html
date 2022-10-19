@@ -1,26 +1,27 @@
-{% extends 'DigitalMarketing/DM_Index.html' %} 
-{% load static %} 
+{% extends 'BRadmin_index.html' %}
+{% load static %}
 {% block content %}
 
-    <style>
-        a{
-            text-decoration: none;
-            padding: 1vh;
-        }
-    </style>
+<style>
+    a{
+        text-decoration: none;
+        padding: 1vh;
+    }
+</style>
+
 <div class="row">
     <div class="col-sm-12 grid-margin">
         <div class="card p-3">
             <h3 class="text-center m-2">Project Tasks</h3>
            
-            <a href="{% url 'DM_report_full_data' 1 proj.id %}">1. Data Collection</a>
-            <a href="{% url 'DM_report_full_data' 2  proj.id %}">2. Backlink Details</a>
-            <a href="{% url 'DM_report_full_data' 3  proj.id %}">3. Blog calender</a>
-            <a href="{% url 'DM_report_full_data' 4  proj.id %}">4. SMM Post Calender</a>
-            <a href="{% url 'DM_report_full_data' 5  proj.id %}">5 .Webpage Content creation</a>
-            <a href="{% url 'DM_report_full_data' 6  proj.id %}">6. On page works</a>
-            <a href="{% url 'DM_report_full_data' 7  proj.id %}">7. Competitor analysis/Website Audit</a>
-            <a href="{% url 'DM_report_full_data' 8  proj.id %}">8. Data collection - Client</a>
+            <a href="{% url 'BRadmin_dm_report_full_data' 1 proj.id %}">1. Data Collection</a>
+            <a href="{% url 'BRadmin_dm_report_full_data' 2 proj.id %}">2. Backlink Details</a>
+            <a href="{% url 'BRadmin_dm_report_full_data' 3 proj.id %}">3. Blog calender</a>
+            <a href="{% url 'BRadmin_dm_report_full_data' 4 proj.id %}">4. SMM Post Calender</a>
+            <a href="{% url 'BRadmin_dm_report_full_data' 5 proj.id %}">5 .Webpage Content creation</a>
+            <a href="{% url 'BRadmin_dm_report_full_data' 6 proj.id %}">6. On page works</a>
+            <a href="{% url 'BRadmin_dm_report_full_data' 7 proj.id %}">7. Competitor analysis/Website Audit</a>
+            <a href="{% url 'BRadmin_dm_report_full_data' 8 proj.id %}">8. Data collection - Client</a>
         </div>
     </div>
 </div>
@@ -28,7 +29,7 @@
 {% if task_data %}
 
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'Dm_datereport_data' 1 proj.id %}" method="post">
+        <form class="m-3 p-2" action="{% url 'BRadmin_dm_datereport_data' 1 proj.id %}" method="post">
             {% csrf_token %}
             <label>From</label>
             <input type="date" class="form-control m-3 p-2" name="report_from" required>
@@ -119,7 +120,7 @@
     </div>
 {% elif task_data1 %}
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'Dm_datereport_data' 2 proj.id %}" method="post">
+        <form class="m-3 p-2" action="{% url 'BRadmin_dm_datereport_data' 2 proj.id %}" method="post">
             {% csrf_token %}
             <label>From</label>
             <input type="date" class="form-control m-3 p-2" name="report_from" required>
@@ -193,7 +194,7 @@
     </div>
 {% elif task_data2 %}
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'Dm_datereport_data' 3 proj.id %}" method="post">
+        <form class="m-3 p-2" action="{% url 'BRadmin_dm_datereport_data' 3 proj.id %}" method="post">
             {% csrf_token %}
             <label>From</label>
             <input type="date" class="form-control m-3 p-2" name="report_from" required>
@@ -271,7 +272,7 @@
     </div>
 {% elif task_data3 %}
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'Dm_datereport_data' 4 proj.id %}" method="post">
+        <form class="m-3 p-2" action="{% url 'BRadmin_dm_datereport_data' 4 proj.id %}" method="post">
             {% csrf_token %}
             <label>From</label>
             <input type="date" class="form-control m-3 p-2" name="report_from" required>
@@ -341,7 +342,7 @@
     </div>
 {% elif task_data4 %}
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'Dm_datereport_data' 5 proj.id %}" method="post">
+        <form class="m-3 p-2" action="{% url 'BRadmin_dm_datereport_data' 5 proj.id %}" method="post">
             {% csrf_token %}
             <label>From</label>
             <input type="date" class="form-control m-3 p-2" name="report_from" required>
@@ -419,7 +420,7 @@
     </div>
 {% elif task_data5 %}
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'Dm_datereport_data' 6 proj.id %}" method="post">
+        <form class="m-3 p-2" action="{% url 'BRadmin_dm_datereport_data' 6 proj.id %}" method="post">
             {% csrf_token %}
             <label>From</label>
             <input type="date" class="form-control m-3 p-2" name="report_from" required>
@@ -493,7 +494,7 @@
 
 {% elif task_data6 %}
 <div class="card">
-    <form class="m-3 p-2" action="{% url 'Dm_datereport_data' 7 proj.id %}" method="post">
+    <form class="m-3 p-2" action="{% url 'BRadmin_dm_datereport_data' 7 proj.id %}" method="post">
         {% csrf_token %}
         <label>From</label>
         <input type="date" class="form-control m-3 p-2" name="report_from" required>
@@ -567,7 +568,7 @@
 
 {% elif task_data7 %}
 <div class="card">
-    <form class="m-3 p-2" action="{% url 'Dm_datereport_data' 8 proj.id %}" method="post">
+    <form class="m-3 p-2" action="{% url 'BRadmin_dm_datereport_data' 8 proj.id %}" method="post">
         {% csrf_token %}
         <label>From</label>
         <input type="date" class="form-control m-3 p-2" name="report_from" required>
@@ -663,5 +664,6 @@
   
 
 </script>
+
 
 {% endblock %}

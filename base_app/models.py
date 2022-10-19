@@ -1,4 +1,5 @@
 from email.policy import default
+from pickle import TRUE
 from unittest.util import _MAX_LENGTH
 from xmlrpc.client import boolean
 from django.contrib.auth.models import User
@@ -770,3 +771,11 @@ class SmmPoster(models.Model):
     smm_dese=models.TextField()
     smm_satus=models.CharField(max_length=50,null=True, blank=True)
     smm_file=models.ImageField(upload_to="poster", null=True)
+
+
+class DM_Project_Report(models.Model):
+    report_project_id=models.ForeignKey(DM_projects,on_delete=models.CASCADE,null=True,blank=True)
+    report_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    re_project_name=models.CharField(max_length=100,null=True, blank=True)
+    re_project_task=models.CharField(max_length=150,null=True, blank=True)
+    re_project_task_file=models.FileField(upload_to="report",null=True,default=None)

@@ -1521,16 +1521,23 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     #***************** genaral ************
      path('DM_manager_attende', views.DM_manager_attende, name='DM_manager_attende'),
      path('DM_manager_leave', views.DM_manager_leave, name='DM_manager_leave'),
+     path('DM_manager_report_isssue', views.DM_manager_report_isssue, name='DM_manager_report_isssue'),
+     path('DM_manager_payment', views.DM_manager_payment, name='DM_manager_payment'),
      path('DM_manager_leave_apply', views.DM_manager_leave_apply, name='DM_manager_leave_apply'),
      path('DM_manager_report', views.DM_manager_report, name='DM_manager_report'),
      path('DM_project_full_tasks/<int:full_task_id>', views.DM_project_full_tasks, name='DM_project_full_tasks'),
      path('Dm_report_data/<int:report_data>',views.Dm_report_data, name='Dm_report_data'),
+     path('DM_report_add', views.DM_report_add, name='DM_report_add'),
+     path('DM_report_full_data/<int:report_data_id>/<int:repoj_id>',views.DM_report_full_data, name='DM_report_full_data'),
+     path('Dm_datereport_data/<int:retask_id>/<int:repj_id>',views.Dm_datereport_data, name='Dm_datereport_data'),
+     path('DM_report_upload', views.DM_report_upload, name='DM_report_upload'),
+
 
 
         #Task data view
     path('DM_project_task_data/<int:dmtask_id>/<int:dmuser_id>',views.DM_project_task_data, name='DM_project_task_data'),
     path('DM_project_task_fulldata/<int:task_full>/<int:task_pro>',views.DM_project_task_fulldata, name='DM_project_task_fulldata'),
-
+    path('BRadmin_dm_datereport_data/<int:br_retask_id>/<int:br_repj_id>',views.BRadmin_dm_datereport_data, name='BRadmin_dm_datereport_data'),
 
       
     #************************* Digital Marketing developer *******************************
@@ -1538,6 +1545,9 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('dmdevlogout', views.dmdevlogout, name='dmdevlogout'),
     path('dm_devdashboard', views.dm_devdashboard, name='dm_devdashboard'),
     path('DM_devprojects', views.DM_devprojects, name='DM_devprojects'),
+    path('Dm_devattends', views.Dm_devattends, name='Dm_devattends'),
+    path('Dm_devleave', views.Dm_devleave, name='Dm_devleave'),
+    path('DM_developer_leave_apply', views.DM_developer_leave_apply, name='DM_developer_leave_apply'),
     path('DM_devproject_tasks/<int:dev_prj_task>',views.DM_devproject_tasks, name='DM_devproject_tasks'),
 
 
@@ -1557,6 +1567,12 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
    #**************************** task View******************
    path('devdata_collect_view/<int:dc_view>',views.devdata_collect_view, name='devdata_collect_view'), 
+
+
+   #********************************** Admin -Digital Marketing section 19-10-22
+
+    path('BRadmin_dmproject/<int:br_dmproj_id>',views.BRadmin_dmproject, name='BRadmin_dmproject'), 
+    path('BRadmin_dm_report_full_data/<int:brtask_id>/<int:br_proj_id>',views.BRadmin_dm_report_full_data, name='BRadmin_dm_report_full_data'),
   
 
     
