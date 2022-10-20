@@ -779,3 +779,6 @@ class DM_Project_Report(models.Model):
     re_project_name=models.CharField(max_length=100,null=True, blank=True)
     re_project_task=models.CharField(max_length=150,null=True, blank=True)
     re_project_task_file=models.FileField(upload_to="report",null=True,default=None)
+    re_project_fromdate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    re_project_todate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    re_project_dese=models.TextField(default=" ")

@@ -1,5 +1,9 @@
+from fileinput import filename
+from importlib.resources import contents
+from urllib import response
 import qrcode
 import random
+import csv
 import os, json, math
 # import psycopg2
 from django.contrib.auth import authenticate, login, logout
@@ -16486,6 +16490,42 @@ def Dm_datereport_data(request,retask_id,repj_id):
             return render(request, 'DigitalMarketing/DM_current_month_report.html',{'mem': mem,'task_data4':task_data4,'rcount':rcount,'proj':proj})
     else:
         return redirect('/')
+
+
+# task data download based on date
+    
+def Dm_datereport_download_data(request,drep_task):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        
+        proj=DM_projects.objects.get(id=drep_task)
+
+        if request.method == 'POST':
+          fromdate = request.POST['report_from']
+          todate = request.POST['report_to']
+          task_name=request.POST['task_name']
+
+
+        if task_name == 'Data Collection':
+            response=HttpResponse(content_type='text/csv')
+            response['Content-Disposition']='attachment ; filename=Data.csv'
+
+            writer=csv.writer(response)
+
+            writer.writerow(['Date' ,'Name' ,'Email','Phone Number' ,'Internship', 'Location' ,'Status','Reason'])  
+            data=DataCollect.objects.filter(dc_date__gte=fromdate, dc_date__lte=todate) 
+            for i in data:
+                if i.Project_name.dm_project_id.id == proj.id:
+                    writer.writerow([i.dc_date, i.dc_name, i.dc_email, i.dc_phone, i.dc_internship, i.dc_loc, i.dc_status, i.dc_reason])
+            return response
+
+    else:
+        return redirect('/')
+
     
 
 # Digital Marketing manager  Attendece
@@ -16623,10 +16663,13 @@ def DM_report_upload(request):
         if request.method == 'POST':
             p_name = request.POST['Project_name']
             t_name = request.POST['task_name']
+            fdate = request.POST['client_report_from']
+            tdate = request.POST['client_report_to']
+            t_dese = request.POST['client_dese']
             t_file = request.FILES.get('task_file')
             prj=DM_projects.objects.get(dm_project_name=p_name)
-            report=DM_Project_Report(re_project_name=p_name,re_project_task=t_name,
-                                    re_project_task_file=t_file,report_project_id=prj)
+            report=DM_Project_Report(re_project_name=p_name,re_project_task=t_name,re_project_fromdate=fdate,re_project_todate=tdate,
+                                   re_project_dese=t_dese,re_project_task_file=t_file,report_project_id=prj)
             report.save()
             msg=1
             proj=DM_projects.objects.all()
@@ -17344,5 +17387,199 @@ def BRadmin_dm_datereport_data(request,br_retask_id,br_repj_id):
             return render(request, 'BRadmin_dmproject_show.html',{'Adm': Adm,'task_data4':task_data4,'rcount':rcount,'proj':proj})
     else:
         return redirect('/')
+    
+
+
+    
+# Excel File Download
+def excel_file_download(request,dwl_task,dwd_prj_id):
+    
+    proj=DM_projects.objects.get(id=dwd_prj_id)
+    if 1 == dwl_task:
+        response=HttpResponse(content_type='text/csv')
+        response['Content-Disposition']='attachment ; filename=Data.csv'
+
+        writer=csv.writer(response)
+
+        writer.writerow(['Date' ,'Name' ,'Email','Phone Number' ,'Internship', 'Location' ,'Status','Reason'])  
+        data=DataCollect.objects.all() 
+        for i in data:
+            if i.Project_name.dm_project_id.id == proj.id:
+                writer.writerow([i.dc_date, i.dc_name, i.dc_email, i.dc_phone, i.dc_internship, i.dc_loc, i.dc_status, i.dc_reason])
+        return response
+    
+    elif 2 == dwl_task:
+        response=HttpResponse(content_type='text/csv')
+        response['Content-Disposition']='attachment ; filename=Backlins.csv'
+
+        writer=csv.writer(response)
+        
+        writer.writerow(['Date' ,'Url' ,'Type', 'Status']) 
+        data=Backlinks.objects.all() 
+        for i in data:
+            if i.bd_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.bd_date, i.bd_url, i.bd_type, i.bd_status])
+        return response
+    
+    elif 3 == dwl_task:
+        response=HttpResponse(content_type='text/csv')
+        response['Content-Disposition']='attachment ; filename=BlogCalander.csv'
+
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Title' ,'Key', 'Status']) 
+        data=BlogCalander.objects.all() 
+        for i in data:
+            if i.blog_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.blog_date, i.blog_title, i.blog_key, i.blog_status])
+        return response
+    
+    elif 4 == dwl_task:
+        response=HttpResponse(content_type='text/csv')
+        response['Content-Disposition']='attachment ; filename=SMMPoster.csv'
+
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Subject' ,'Type', 'Content', 'Desecription','Status']) 
+        data=SmmPoster.objects.all() 
+        for i in data:
+            if i.smm_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.smm_date, i.smm_sub, i.smm_type, i.smm_content, i.smm_dese, i.smm_satus])
+        return response
+    
+    elif 5 == dwl_task:
+        response=HttpResponse(content_type='text/csv')
+        response['Content-Disposition']='attachment ; filename=Webcontent.csv'
+
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Url' ,'Desecription', 'Key']) 
+        data=WebpageContent.objects.all() 
+        for i in data:
+            if i.web_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.web_date, i.web_url, i.web_dese, i.web_key])
+        return response
+    
+    elif 6 == dwl_task:
+        response=HttpResponse(content_type='text/csv')
+        response['Content-Disposition']='attachment ; filename=Onpage.csv'
+
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Url' ,'Work', 'Status']) 
+        data=OnPage.objects.all() 
+        for i in data:
+            if i.op_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.op_date, i.op_url, i.op_work, i.op_status])
+        return response
+    
+    elif 7 == dwl_task:
+        response=HttpResponse(content_type='text/csv')
+        response['Content-Disposition']='attachment ; filename=CompanyAnalysis.csv'
+
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Company Name']) 
+        data=CompanyAnalysis.objects.all() 
+        for i in data:
+            if i.analysis_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.analysis_date, i.analysis_compname])
+        return response
+    
+    elif 8 == dwl_task:
+        response=HttpResponse(content_type='text/csv')
+        response['Content-Disposition']='attachment ; filename=ClientData.csv'
+
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Name' ,'Email', 'Phone Number', 'Bussines']) 
+        data=ClientData.objects.all() 
+        for i in data:
+            if i.cd_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.cd_date, i.cd_name, i.cd_email, i.cd_phno, i.cd_bussines])
+        return response
+
+
+    
+
+def Dm_project_report_download(request):
+   if request.method == 'POST':
+        p_name = request.POST['proj_name']
+        fdate = request.POST['prj_from']
+        tdate = request.POST['prj_to']
+        proj=DM_projects.objects.get(dm_project_name=p_name)
+
+        response=HttpResponse(content_type='text/csv')
+        response['Content-Disposition']='attachment ; filename=Report.csv'
+      
+        data=DataCollect.objects.filter(dc_date__gte=fdate, dc_date__lte=tdate)
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Name' ,'Email','Phone Number' ,'Internship', 'Location' ,'Status','Reason'])  
+
+        for i in data:
+            if i.Project_name.dm_project_id.id == proj.id:
+             writer.writerow([i.dc_date, i.dc_name, i.dc_email, i.dc_phone, i.dc_internship, i.dc_loc, i.dc_status, i.dc_reason])
+    
+
+        data=Backlinks.objects.filter(bd_date__gte=fdate,bd_date__lte=tdate)
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Url' ,'Type', 'Status']) 
+        
+        for i in data:
+            if i.bd_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.bd_date, i.bd_url, i.bd_type, i.bd_status])
+
+
+        
+        data=BlogCalander.objects.filter(blog_date__gte=fdate, blog_date__lte=tdate) 
+        writer=csv.writer(response)
+        writer.writerow(['']) 
+        writer.writerow(['Blog Calander Data']) 
+        writer.writerow(['']) 
+        writer.writerow(['Date' ,'Title' ,'Key', 'Status']) 
+        for i in data:
+            if i.blog_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.blog_date, i.blog_title, i.blog_key, i.blog_status])
+        
+       
+       
+        data=SmmPoster.objects.filter(smm_date__gte=fdate, smm_date__lte=tdate) 
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Subject' ,'Type', 'Content', 'Desecription','Status']) 
+
+        for i in data:
+            if i.smm_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.smm_date, i.smm_sub, i.smm_type, i.smm_content, i.smm_dese, i.smm_satus])
+
+        
+        
+        data=WebpageContent.objects.filter(web_date__gte=fdate, web_date__lte=tdate) 
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Url' ,'Desecription', 'Key']) 
+        for i in data:
+            if i.web_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.web_date, i.web_url, i.web_dese, i.web_key])
+
+        
+        
+        data=OnPage.objects.filter(op_date__gte=fdate, op_date__lte=tdate)
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Url' ,'Work', 'Status'])  
+        for i in data:
+            if i.op_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.op_date, i.op_url, i.op_work, i.op_status])
+
 
        
+        data=CompanyAnalysis.objects.filter(analysis_date__gte=fdate, analysis_date__lte=tdate) 
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Company Name']) 
+        for i in data:
+            if i.analysis_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.analysis_date, i.analysis_compname])
+
+
+        
+        data=ClientData.objects.filter(cd_date__gte=fdate, cd_date__lte=tdate) 
+        writer=csv.writer(response)
+        writer.writerow(['Date' ,'Name' ,'Email', 'Phone Number', 'Bussines']) 
+        for i in data:
+            if i.cd_taskid.dm_project_id.id == proj.id:
+                writer.writerow([i.cd_date, i.cd_name, i.cd_email, i.cd_phno, i.cd_bussines])
+
+
+        return response

@@ -1575,8 +1575,10 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('BRadmin_dm_report_full_data/<int:brtask_id>/<int:br_proj_id>',views.BRadmin_dm_report_full_data, name='BRadmin_dm_report_full_data'),
   
 
-    
-
+  #*************** Excel File Download  
+ path('excel_file_download/<int:dwl_task>/<int:dwd_prj_id>', views.excel_file_download, name='excel_file_download'),
+ path('Dm_datereport_download_data/<int:drep_task>', views.Dm_datereport_download_data, name='Dm_datereport_download_data'),
+ path('Dm_project_report_download', views.Dm_project_report_download, name='Dm_project_report_download'),
 
 ]
 

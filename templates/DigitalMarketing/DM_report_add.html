@@ -7,6 +7,20 @@
             text-decoration: none;
         }
     </style>
+
+    <div class="row">
+      <div class="col-sm-3 grid-margin">
+          <div class="card p-1">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download_projectdata">
+              Project Data Download
+          </button>
+
+          </div>
+      </div>
+    </div>
+
+
+
 <div class="row">
     <div class="col-sm-12 grid-margin">
         <div class="card p-3">
@@ -36,6 +50,14 @@
                 <option class="p-2" value="Data collection - Client">Data collection - Client</option>
             </select>
             </div>
+            <label style="font-size:13px;">From</label>
+            <input type="date" class="form-control mt-3 p-2 mb-3" name="client_report_from" required>
+            <label style="font-size:13px;">To</label>
+            <input type="date" class="form-control mt-3 p-2 mb-3" name="client_report_to" required>
+
+            <label style="font-size:13px;">Desecription If Any</label>
+            <textarea class="form-control mt-3 p-2 mb-3" name="client_dese" style="height: 150px;"></textarea>
+
             <div class="input-group mt-5 mb-5" class="form-control">
                 <input type="file" accept="report/*" name="task_file">
             </div>
@@ -78,6 +100,10 @@
                               <th scope="col">Date</th>
                               <th scope="col">Project Name</th>
                               <th scope="col">Task Name</th>
+                              <th scope="col">From Date</th>
+                              <th scope="col">To Date</th>
+                              <th scope="col">Desecription</th>
+
                               <th scope="col">Action</th>
                             </tr>
                           </thead>
@@ -91,6 +117,9 @@
                             <td>{{i.report_date}}</td>
                             <td>{{i.re_project_name}} </td>
                             <td>{{i.re_project_task}}</td>
+                            <td>{{i.re_project_fromdate}}</td>
+                            <td>{{i.re_project_todate}}</td>
+                            <td>{{i.re_project_dese}}</td>
                             <td><a href="{{i.re_project_task_file.url}}" class="btn btn-primary">Download</a></td>
 
                         </tr>
@@ -109,6 +138,46 @@
 
 </div>
 
+
+<!-- data download based on date-->
+
+<div class="modal fade" id="download_projectdata" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content modal-xl" style="background-color: #191c24;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Download By Date</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form class="m-3 p-2" action="{% url 'Dm_project_report_download' %}" method="post">
+              {% csrf_token %}
+              <label>From</label>
+              <input type="date" class="form-control m-3 p-2" name="prj_from" required>
+              <label>To</label>
+              <input type="date" class="form-control m-3 p-2" name="prj_to" required>
+              <label>Project</label>
+              <select class="form-control m-3 p-2" name="proj_name">
+                  <option class="p-2" selected>----Select----</option>
+                  {% for i in proj %}
+                    <option class="p-2" value="{{i.dm_project_name}}">{{i.dm_project_name}}</option>
+                  {% endfor %}
+                  
+              </select>
+
+
+              <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-outline-success"></i>OK</button>
+              </div>
+              
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- Sweat aleert -->

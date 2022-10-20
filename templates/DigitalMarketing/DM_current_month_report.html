@@ -12,15 +12,37 @@
     <div class="col-sm-12 grid-margin">
         <div class="card p-3">
             <h3 class="text-center m-2">Project Tasks</h3>
+            <br>
+           <div class="row">
+                <div class="col-sm-6">
+                    <a href="{% url 'DM_report_full_data' 1 proj.id %}">1. Data Collection</a>
+                </div>
+                <div class="col-sm-6 text-end">
+                    <a href="{% url 'excel_file_download' 1 proj.id %}" class="btn btn-primary mb-3"><i class="mdi mdi-folder-download"></i>Download</a>
+                </div>
+                <div class="col-sm-6"> <a href="{% url 'DM_report_full_data' 2 proj.id %}">2. Backlink Details</a></div>
+                <div class="col-sm-6 text-end"> <a href="{% url 'excel_file_download' 2 proj.id %}" class="btn btn-primary mb-3"><i class="mdi mdi-folder-download"></i>Download</a></div>
+                <div class="col-sm-6 "> <a href="{% url 'DM_report_full_data' 3 proj.id %}">3. Blog calender</a></div>
+                <div class="col-sm-6 text-end"> <a href="{% url 'excel_file_download' 3 proj.id %}" class="btn btn-primary mb-3"><i class="mdi mdi-folder-download"></i>Download</a></div>
+                <div class="col-sm-6"> <a href="{% url 'DM_report_full_data' 4 proj.id %}">4. SMM Post Calender</a></div>
+                <div class="col-sm-6 text-end"> <a href="{% url 'excel_file_download' 4 proj.id %}" class="btn btn-primary mb-3"><i class="mdi mdi-folder-download"></i>Download</a></div>
+                <div class="col-sm-6 "> <a href="{% url 'DM_report_full_data' 5 proj.id %}">5 .Webpage Content creation</a></div>
+                <div class="col-sm-6 text-end"> <a href="{% url 'excel_file_download' 5 proj.id %}" class="btn btn-primary mb-3"><i class="mdi mdi-folder-download"></i>Download</a></div>
+                <div class="col-sm-6 "> <a href="{% url 'DM_report_full_data' 6 proj.id %}">6. On page works</a></div>
+                <div class="col-sm-6 text-end"> <a href="{% url 'excel_file_download' 6 proj.id %}" class="btn btn-primary mb-3"><i class="mdi mdi-folder-download"></i>Download</a></div>
+                <div class="col-sm-6 "> <a href="{% url 'DM_report_full_data' 7 proj.id %}">7. Competitor analysis/Website Audit</a></div>
+                <div class="col-sm-6 text-end"> <a href="{% url 'excel_file_download' 7 proj.id %}" class="btn btn-primary mb-3"><i class="mdi mdi-folder-download"></i>Download</a></div>
+                <div class="col-sm-6 "> <a href="{% url 'DM_report_full_data' 8 proj.id %}">8. Data collection - Client</a></div>
+                <div class="col-sm-6 text-end"> <a href="{% url 'excel_file_download' 8 proj.id %}" class="btn btn-primary mb-3"><i class="mdi mdi-folder-download"></i>Download</a></div>
+
+           </div>
+            
            
-            <a href="{% url 'DM_report_full_data' 1 proj.id %}">1. Data Collection</a>
-            <a href="{% url 'DM_report_full_data' 2  proj.id %}">2. Backlink Details</a>
-            <a href="{% url 'DM_report_full_data' 3  proj.id %}">3. Blog calender</a>
-            <a href="{% url 'DM_report_full_data' 4  proj.id %}">4. SMM Post Calender</a>
-            <a href="{% url 'DM_report_full_data' 5  proj.id %}">5 .Webpage Content creation</a>
-            <a href="{% url 'DM_report_full_data' 6  proj.id %}">6. On page works</a>
-            <a href="{% url 'DM_report_full_data' 7  proj.id %}">7. Competitor analysis/Website Audit</a>
-            <a href="{% url 'DM_report_full_data' 8  proj.id %}">8. Data collection - Client</a>
+           
+           
+           
+            
+           
         </div>
     </div>
 </div>
@@ -39,11 +61,17 @@
             </div>
             
         </form>
+         <br>
         <div class="row"> 
             <div class="col-12 grid-margin">
             <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4"> DATA COLLECTION</h4>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download_data">
+                            Download
+                        </button>
+                    </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                     <h6 class="p-2 mdi mdi-application ">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
                     <div class="text-end">
@@ -130,11 +158,18 @@
             </div>
             
         </form>
+        <br>
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4"> BACK LINK DETAILS</h4>
+
+                    <div class="text-end">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download_data">
+                            Download
+                        </button>
+                    </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                         <h6 class="p-2 mdi mdi-application ">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
                         <form>
@@ -204,11 +239,17 @@
             </div>
             
         </form>
+        <br>
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4">WEB PAGE CONTENT</h4>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download_data">
+                            Download
+                        </button>
+                    </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                         <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
                         <form>
@@ -282,11 +323,17 @@
             </div>
             
         </form>
+        <br>
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4"> Competitor &nbsp; analysis / &nbsp;Website Audit</h4>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download_data">
+                            Download
+                        </button>
+                    </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                         <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
                         <form>
@@ -352,12 +399,17 @@
             </div>
             
         </form>
-       
+        <br>
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4">DATA COLLECTION CLIENT</h4>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download_data">
+                            Download
+                        </button>
+                    </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                         <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
                         <form>
@@ -430,11 +482,17 @@
             </div>
             
         </form>
+        <br>
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4">On Page Works</h4>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download_data">
+                            Download
+                        </button>
+                    </div>
                     <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                         
@@ -504,11 +562,17 @@
         </div>
         
     </form>
+    <br>
     <div class="row"> 
         <div class="col-12 grid-margin">
             <div class="card">
               <div class="card-body">
                   <h4 class="text-center mb-4">BLOG CALENDER</h4>
+                  <div class="text-end">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download_data">
+                        Download
+                    </button>
+                </div>
                   <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
                   <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                       <form>
@@ -578,11 +642,17 @@
         </div>
         
     </form>
+    <br>
     <div class="row"> 
         <div class="col-12 grid-margin">
             <div class="card">
               <div class="card-body">
                   <h4 class="text-center mb-4">SMM POST CALENDER</h4>
+                  <div class="text-end">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download_data">
+                        Download
+                    </button>
+                </div>
                   <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
                   <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                       <form>
@@ -614,6 +684,12 @@
                                  
                                 </tr>
                             </thead>
+                            <style>
+                                img
+                                {
+                                    border-radius: none;
+                                }
+                            </style>
                         
                       {% if task_data7 %}
                         
@@ -629,7 +705,15 @@
                               <td>{{i.smm_dese}}</td>
                               <td>{{i.smm_satus}}</td>
                               {% if i.smm_file %}
-                                <td><img src="{{i.smm_file.url}}" style="width:15vh; height:14vh;"></td>
+                                <td>
+                                    {% if i.smm_file %}
+                                    <a href="{{i.smm_file.url}}"><i class="mdi mdi-arrange-send-backward"></i></a>
+                                    <img src="{{i.smm_file.url}}" style="width:30vh; height:14vh; border-radius:0px;">
+                                    {% else %}
+                                    <p>No Image</p>
+                                    {% endif %}
+                                    
+                                </td>
                               {% endif %}
                           </tr>
                         {% endif %}  
@@ -650,6 +734,52 @@
 {% endif %}
 
 
+
+<!-- data download based on date-->
+
+<div class="modal fade" id="download_data" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content modal-xl" style="background-color: #191c24;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Download By Date</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="m-3 p-2" action="{% url 'Dm_datereport_download_data' proj.id %}" method="post">
+                {% csrf_token %}
+                <label>From</label>
+                <input type="date" class="form-control m-3 p-2" name="report_from" required>
+                <label>To</label>
+                <input type="date" class="form-control m-3 p-2" name="report_to" required>
+                <label>Select The Task</label>
+                <select class="form-control m-3 p-2" name="task_name">
+                    <option class="p-2" selected>----Select----</option>
+                    <option class="p-2" value="Data Collection">Data Collection</option>
+                    <option class="p-2" value="Backlink Details">Backlink Details</option>
+                    <option class="p-2" value="Blog calender">Blog calender</option>
+                    <option class="p-2" value="SMM Post Calender">SMM Post Calender</option>
+                    <option class="p-2" value="Webpage Content creation">Webpage Content creation</option>
+                    <option class="p-2" value="On page works">On page works</option>
+                    <option class="p-2" value="Competitor analysis/Website Audit">Competitor analysis/Website Audit</option>
+                    <option class="p-2" value="Data collection - Client">Data collection - Client</option>
+                </select>
+
+
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-outline-success"></i>OK</button>
+                </div>
+                
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
   $(document).ready(function () {
@@ -664,4 +794,9 @@
 
 </script>
 
+
+
+
 {% endblock %}
+
+
