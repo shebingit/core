@@ -7203,7 +7203,7 @@ def tlprojecttasks(request,id):
             request.session['splitid']=id
             mem = user_registration.objects.filter(id=tlid)
             mem1 = test_status.objects.filter(subtask_id=id)
-            mem2 = tester_status.objects.filter(tester_id=tlid)
+            mem2 = tester_status.objects.filter(user_id=tlid)
             time=datetime.now()
             taskstatus = test_status.objects.all()
             display = project_taskassign.objects.filter(developer_id=tlid).filter(project_id=id)
@@ -7718,11 +7718,13 @@ def TSprojectdetails(request,pid):
 
         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
         var = project_taskassign.objects.filter(project=pid,tester_id=usertsid).order_by('-id')
+        print(var)
         data = tester_status.objects.filter(project_id=pid)
         data1 = test_status.objects.filter(project_id=pid)
+        deg=designation.objects.get(designation='team leader')
 
         date1= datetime.now()
-        return render(request,'TSprojectdetails.html',{'date1':date1,'mem':mem,'var':var,'data':data,'data1':data1})
+        return render(request,'TSprojectdetails.html',{'date1':date1,'mem':mem,'var':var,'data':data,'data1':data1,'deg':deg})
     else:
         return redirect('/')
 

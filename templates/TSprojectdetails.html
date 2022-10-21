@@ -27,30 +27,32 @@
               </tr>
             </thead>
             <tbody>
-              {% for i in var%}
-              <tr>
-                <td>
-                  <!-- <img src="{% static '/assets/images/faces/face1.jpg' %}" alt="image" /> -->
-                  <span class="ps-2">{{i.task}}</span>
-                </td>
-                <td> {{i.developer}} </td>
-                <td> {{i.enddate|date:"d-m-Y"}} </td>
-                <td class="text-primary"><a href="" data-toggle="modal" data-target="#taskstatus{{i.id}}"
-                    style="text-decoration: none;">
-                    <div class="badge badge-outline-info">Test Status</div>
-                  </a> </td>
-                <td class="text-primary"><a href="#" data-toggle="modal" data-target="#reportstatus{{i.id}}"
-                    style="text-decoration: none;">
-                    <div class="badge badge-outline-info">Report Status</div>
-                  </a></td>
-                <td>
-                  <div class="progress" data-toggle="modal" data-target="#exampleModalCenter3{{i.id}}"
-                    style="border-radius:5px;height:20px;background-color:#C2F0EB">
-                    <div class="progress-bar" style="height:20px;width:{{i.progress}}%;">{{i.progress}}%</div></a>
-                  </div>
-                </td>
+              {% for i in var %}
+              {% if i.developer.designation.id == deg.id %}
+                <tr>
+                  <td>
+                    <!-- <img src="{% static '/assets/images/faces/face1.jpg' %}" alt="image" /> -->
+                    <span class="ps-2">{{i.task}}</span>
+                  </td>
+                  <td> {{i.developer}} </td>
+                  <td> {{i.enddate|date:"d-m-Y"}} </td>
+                  <td class="text-primary"><a href="" data-toggle="modal" data-target="#taskstatus{{i.id}}"
+                      style="text-decoration: none;">
+                      <div class="badge badge-outline-info">Test Status</div>
+                    </a> </td>
+                  <td class="text-primary"><a href="#" data-toggle="modal" data-target="#reportstatus{{i.id}}"
+                      style="text-decoration: none;">
+                      <div class="badge badge-outline-info">Report Status</div>
+                    </a></td>
+                  <td>
+                    <div class="progress" data-toggle="modal" data-target="#exampleModalCenter3{{i.id}}"
+                      style="border-radius:5px;height:20px;background-color:#C2F0EB">
+                      <div class="progress-bar" style="height:20px;width:{{i.progress}}%;">{{i.progress}}%</div></a>
+                    </div>
+                  </td>
 
-              </tr>
+                </tr>
+              {% endif %}
               {% endfor %}
             </tbody>
           </table>
