@@ -10,17 +10,22 @@
   {% for i in pros%}
   <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
     <div class="card">
-      <a href="{% url 'TSprojectdetails' i.project_id %}" class="text-decoration-none text-white ">
+      <a href="{% url 'TSprojectdetails' i.project %}" class="text-decoration-none text-white ">
         <div class="card-body">
           <div class="row">
             <div class="col-8 col-sm-12 col-xl-8 my-auto">
               <div class="d-flex d-sm-block d-md-flex align-items-center">
                 
                 {% for j  in new  %}
- 
-                {% if i.project_id == j.id  %}
+               
+                {% if i.project == j.id  %}
 
                 <h4 class="mb-0" style="color:white;">{{j.project}}</h4>
+                  {% for k in verify_count %}
+                    {% if k.project.id == j.id %}
+                   
+                    {% endif %}
+                  {% endfor %}
                 {% endif %}
                 {% endfor %}
               </div>

@@ -692,6 +692,13 @@ class DM_projects(models.Model):
     dm_project_start=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     dm_project_status=models.CharField(max_length=50,null=True, blank=True, default="Not Started")
 
+
+class DM_project_dese(models.Model):
+    dm_task_project_id=models.ForeignKey(DM_projects,on_delete=models.CASCADE,null=True,blank=True)
+    dm_task_date = models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    dm_task_dese = models.TextField()
+
+
 class Dm_project_Task(models.Model):
     dm_project_id=models.ForeignKey(DM_projects,on_delete=models.CASCADE,null=True,blank=True)
     dm_user_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
@@ -782,3 +789,8 @@ class DM_Project_Report(models.Model):
     re_project_fromdate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     re_project_todate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     re_project_dese=models.TextField(default=" ")
+
+
+class TSproject_Task_verify(models.Model):
+    ts_project_task=models.ForeignKey(project_taskassign,on_delete=models.CASCADE,null=True,blank=True)
+    ts_task_verify_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)

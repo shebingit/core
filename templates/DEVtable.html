@@ -55,14 +55,20 @@
 
                 </div>
               </td>
-              {% if dp.status == "submitted" %}
+              {% if dp.status == "verified" %}
 
               <td>
                 <a href="{% url 'DEVtask' dp.id %}">
-                  <div class="badge badge-outline-success">submitted</div>
+                  <div class="badge badge-outline-success">verified</div>
                 </a>
               </td>
-              {% else %}
+              {% elif dp.status == "verification"  %}
+              <td>
+                <a href="{% url 'DEVtask' dp.id %}">
+                  <div class="badge badge-outline-warning">Verification</div>
+                </a>
+              </td>
+              {% else  %}
               <td>
                 <a href="{% url 'DEVtaskform' dp.id %}">
                   <div class="badge badge-outline-primary">Pending</div>
@@ -279,6 +285,7 @@
             </tr>
             {% endif %}
             {% endfor %}
+            
           </tbody>
         </table>
       </div>

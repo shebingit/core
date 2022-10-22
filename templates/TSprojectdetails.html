@@ -7,6 +7,7 @@
   <div class="col-12 mt-4  grid-margin">
     <div class="card">
       <div class="card-body">
+        <p> To Verify : &nbsp;{{verify_count}}</p>
         <!-- <h4 class="card-title">Order Status</h4> -->
         <div class="col-md-4 col-6 w-100">
           <input type="search" class="form-control rounded" id="search" onkeyup="myFunction()" placeholder="Search"
@@ -14,11 +15,14 @@
         </div>
         <div class="table-responsive">
           <table class="table" id="myTable">
+           
             <thead>
               <tr>
                 <th>Task name</th>
+                <th>Team Lead Name</th>
                 <th>AssignedTo</th>
                 <th>Date</th>
+                <th>Work Status</th>
                 <th>Test Status</th>
                 <th>Report Status</th>
                 <th>Project Details</th>
@@ -34,8 +38,32 @@
                     <!-- <img src="{% static '/assets/images/faces/face1.jpg' %}" alt="image" /> -->
                     <span class="ps-2">{{i.task}}</span>
                   </td>
+                  <td> {{i.tl.fullname}} </td>
                   <td> {{i.developer}} </td>
                   <td> {{i.enddate|date:"d-m-Y"}} </td>
+
+                  {% if i.status == "Verified" %}
+
+                  <td>
+                    <a href="#">
+                      <div class="badge badge-outline-success">Verified</div>
+                    </a>
+                  </td>
+                  {% elif  i.status == "verification"  %}
+                  <td>
+                    <a href="{% url 'TSproject_verifiy' i.id %}">
+                      <div class="badge badge-outline-warning">Verify</div>
+                    </a>
+                  </td>
+                  {% else  %}
+                  <td>
+                    <a href="#">
+                      <div class="badge badge-outline-primary">Pending</div>
+                    </a>
+                  </td>
+                  {% endif %}
+
+
                   <td class="text-primary"><a href="" data-toggle="modal" data-target="#taskstatus{{i.id}}"
                       style="text-decoration: none;">
                       <div class="badge badge-outline-info">Test Status</div>

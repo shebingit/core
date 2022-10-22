@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from fileinput import filename
 from importlib.resources import contents
 from urllib import response
@@ -7697,10 +7698,15 @@ def TSproject(request):
         else:
            return redirect('/')
         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
-        pros = project_taskassign.objects.filter(tester=usertsid).values('project_id').distinct()
+        pros = project_taskassign.objects.filter(tester=usertsid).values('project').distinct()
+        verify_count=project_taskassign.objects.filter(status='verification')
         new = project.objects.all()
+        lists=[]
+        num=0
+      
+        
  
-        return render(request,'TSproject.html',{'mem':mem,'pros':pros,'new':new})
+        return render(request,'TSproject.html',{'mem':mem,'pros':pros,'new':new,'verify_count':verify_count})
     else:
         return redirect('/')
 
@@ -7718,15 +7724,60 @@ def TSprojectdetails(request,pid):
 
         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
         var = project_taskassign.objects.filter(project=pid,tester_id=usertsid).order_by('-id')
-        print(var)
         data = tester_status.objects.filter(project_id=pid)
         data1 = test_status.objects.filter(project_id=pid)
-        deg=designation.objects.get(designation='team leader')
+        deg=designation.objects.get(designation='developer')
+        verify_count=project_taskassign.objects.filter(status='verification', project=pid).count()
+
 
         date1= datetime.now()
-        return render(request,'TSprojectdetails.html',{'date1':date1,'mem':mem,'var':var,'data':data,'data1':data1,'deg':deg})
+        return render(request,'TSprojectdetails.html',{'date1':date1,'mem':mem,'var':var,'data':data,'data1':data1,'deg':deg,'verify_count':verify_count})
     else:
         return redirect('/')
+    
+
+def TSproject_verifiy(request,ts_task_verify):
+    if 'usernametsid' in request.session:
+        if request.session.has_key('usernamets'):
+            usernamets = request.session['usernamets']
+        if request.session.has_key('usernamets1'):
+            usernamets1 = request.session['usernamets1']
+        if request.session.has_key('usernametsid'):
+            usertsid = request.session['usernametsid']
+        else:
+           return redirect('/')
+        mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
+        pts=project_taskassign.objects.get(id=ts_task_verify)
+        return render(request,'TSproject_verify.html',{'mem':mem,'pts':pts})
+    else:
+        return redirect('/')
+
+
+def TSproject_status_confirm(request,ts_prj_task_verify):
+    if 'usernametsid' in request.session:
+        if request.session.has_key('usernamets'):
+            usernamets = request.session['usernamets']
+        if request.session.has_key('usernamets1'):
+            usernamets1 = request.session['usernamets1']
+        if request.session.has_key('usernametsid'):
+            usertsid = request.session['usernametsid']
+        else:
+           return redirect('/')
+        mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
+        if request.method == 'POST':
+            task_verify=request.POST['verify_status']
+        prj_task=project_taskassign.objects.get(id=ts_prj_task_verify)
+        prj_task.status=task_verify
+        prj_task.save()
+        verify_task=TSproject_Task_verify(ts_project_task=prj_task)
+        verify_task.save()
+        pts=project_taskassign.objects.get(id=ts_prj_task_verify)
+        return render(request,'TSproject_verify.html',{'mem':mem,'pts':pts})
+    else:
+        return redirect('/')
+
+        
+
 
 def testersave(request,uid,pid):
 
@@ -8525,7 +8576,7 @@ def DEVtaskformsubmit(request, id):
         task.git_link = request.POST['gitlink']
         task.employee_files = request.FILES['scn']
         task.submitted_date = datetime.now().date()
-        task.status = 'submitted'
+        task.status = 'verification'
         var = datetime.now().date()
         x = task.enddate
         y = var
@@ -16067,7 +16118,9 @@ def DM_inhouseproject(request):
             return redirect('/')
         mem = user_registration.objects.filter(id=pm_id)
         projects=DM_projects.objects.filter(dm_project_categ='In House Project').order_by('-id')
-        return render(request, 'DigitalMarketing/DM_Inhouseproject.html', {'mem': mem,'projects':projects})
+        pr_task=DM_project_dese.objects.all()
+        prj=DM_projects.objects.all()
+        return render(request, 'DigitalMarketing/DM_Inhouseproject.html', {'mem': mem,'projects':projects,'pr_task':pr_task,'prj':prj})
     else:
         return redirect('/')
 
@@ -16080,7 +16133,9 @@ def DM_Clientproject(request):
             return redirect('/')
         mem = user_registration.objects.filter(id=pm_id)
         projects=DM_projects.objects.filter(dm_project_categ='Client Project').order_by('-id')
-        return render(request, 'DigitalMarketing/DM_clientproject.html', {'mem': mem,'projects':projects})
+        pr_task=DM_project_dese.objects.all()
+        prj=DM_projects.objects.all()
+        return render(request, 'DigitalMarketing/DM_clientproject.html', {'mem': mem,'projects':projects,'pr_task':pr_task,'prj':prj})
     else:
         return redirect('/')
 
@@ -16107,6 +16162,40 @@ def DM_project_save(request,project_save):
             return redirect('DM_Clientproject')
     else:
         return redirect('/')
+
+
+def DM_ptoject_dese_add(request,prj_dese_id):
+    if 'pm_id' in request.session:
+        if request.session.has_key('pm_id'):
+            pm_id = request.session['pm_id']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=pm_id)
+        projects=DM_projects(id=prj_dese_id)
+
+        if request.method == 'POST':
+            task_dese = request.POST['prj_taskdese']
+
+
+           
+            print()
+            prj_task_des=DM_project_dese(dm_task_dese=task_dese,dm_task_project_id=projects)
+            prj_task_des.save()
+                
+            if projects.dm_project_categ == 'In House Project':
+                return redirect('DM_inhouseproject')
+            else:
+                return redirect('DM_Clientproject')
+        else:
+            pr_task=DM_project_dese.objects.filter(dm_task_project_id=projects).order_by('-id')
+            return render(request, 'DigitalMarketing/DM_project_tash_dese.html',{'mem': mem,'projects':projects,'pr_task':pr_task})
+
+
+    else:
+        return redirect('/')
+
+
+
 
 
     
@@ -17508,26 +17597,39 @@ def Dm_project_report_download(request):
         response=HttpResponse(content_type='text/csv')
         response['Content-Disposition']='attachment ; filename=Report.csv'
       
-        data=DataCollect.objects.filter(dc_date__gte=fdate, dc_date__lte=tdate)
+      
+      
+        data=DataCollect.objects.filter(dc_date__gte=fdate, dc_date__lte=tdate,)
         writer=csv.writer(response)
+        
+        writer.writerow(['Data Collect']) 
+        writer.writerow(['']) 
         writer.writerow(['Date' ,'Name' ,'Email','Phone Number' ,'Internship', 'Location' ,'Status','Reason'])  
 
         for i in data:
             if i.Project_name.dm_project_id.id == proj.id:
-             writer.writerow([i.dc_date, i.dc_name, i.dc_email, i.dc_phone, i.dc_internship, i.dc_loc, i.dc_status, i.dc_reason])
+                writer.writerow([i.dc_date, i.dc_name, i.dc_email, i.dc_phone, i.dc_internship, i.dc_loc, i.dc_status, i.dc_reason])
     
 
-        data=Backlinks.objects.filter(bd_date__gte=fdate,bd_date__lte=tdate)
-        writer=csv.writer(response)
-        writer.writerow(['Date' ,'Url' ,'Type', 'Status']) 
+       
         
+        data=Backlinks.objects.filter(bd_date__gte=fdate,bd_date__lte=tdate)
+        
+        writer=csv.writer(response)
+        writer.writerow(['']) 
+        writer.writerow(['Backlink Data']) 
+        writer.writerow(['']) 
+        writer.writerow(['Date' ,'Url' ,'Type', 'Status']) 
+                
         for i in data:
             if i.bd_taskid.dm_project_id.id == proj.id:
                 writer.writerow([i.bd_date, i.bd_url, i.bd_type, i.bd_status])
 
 
+           
         
-        data=BlogCalander.objects.filter(blog_date__gte=fdate, blog_date__lte=tdate) 
+        data=BlogCalander.objects.filter(blog_date__gte=fdate, blog_date__lte=tdate)
+
         writer=csv.writer(response)
         writer.writerow(['']) 
         writer.writerow(['Blog Calander Data']) 
@@ -17539,8 +17641,12 @@ def Dm_project_report_download(request):
         
        
        
-        data=SmmPoster.objects.filter(smm_date__gte=fdate, smm_date__lte=tdate) 
+        data=SmmPoster.objects.filter(smm_date__gte=fdate, smm_date__lte=tdate)
+     
         writer=csv.writer(response)
+        writer.writerow(['']) 
+        writer.writerow(['SMM Poster Calander Data']) 
+        writer.writerow(['']) 
         writer.writerow(['Date' ,'Subject' ,'Type', 'Content', 'Desecription','Status']) 
 
         for i in data:
@@ -17549,17 +17655,25 @@ def Dm_project_report_download(request):
 
         
         
-        data=WebpageContent.objects.filter(web_date__gte=fdate, web_date__lte=tdate) 
+        data=WebpageContent.objects.filter(web_date__gte=fdate, web_date__lte=tdate)
+     
         writer=csv.writer(response)
+        writer.writerow(['']) 
+        writer.writerow(['Web Page Content Data']) 
+        writer.writerow(['']) 
         writer.writerow(['Date' ,'Url' ,'Desecription', 'Key']) 
         for i in data:
             if i.web_taskid.dm_project_id.id == proj.id:
-                writer.writerow([i.web_date, i.web_url, i.web_dese, i.web_key])
+                 writer.writerow([i.web_date, i.web_url, i.web_dese, i.web_key])
 
         
         
         data=OnPage.objects.filter(op_date__gte=fdate, op_date__lte=tdate)
+     
         writer=csv.writer(response)
+        writer.writerow(['']) 
+        writer.writerow(['Onpage Data']) 
+        writer.writerow(['']) 
         writer.writerow(['Date' ,'Url' ,'Work', 'Status'])  
         for i in data:
             if i.op_taskid.dm_project_id.id == proj.id:
@@ -17567,8 +17681,12 @@ def Dm_project_report_download(request):
 
 
        
-        data=CompanyAnalysis.objects.filter(analysis_date__gte=fdate, analysis_date__lte=tdate) 
+        data=CompanyAnalysis.objects.filter(analysis_date__gte=fdate, analysis_date__lte=tdate)
+       
         writer=csv.writer(response)
+        writer.writerow(['']) 
+        writer.writerow(['Company Analyis']) 
+        writer.writerow(['']) 
         writer.writerow(['Date' ,'Company Name']) 
         for i in data:
             if i.analysis_taskid.dm_project_id.id == proj.id:
@@ -17576,8 +17694,12 @@ def Dm_project_report_download(request):
 
 
         
-        data=ClientData.objects.filter(cd_date__gte=fdate, cd_date__lte=tdate) 
+        data=ClientData.objects.filter(cd_date__gte=fdate, cd_date__lte=tdate)
+       
         writer=csv.writer(response)
+        writer.writerow(['']) 
+        writer.writerow(['Client Data']) 
+        writer.writerow(['']) 
         writer.writerow(['Date' ,'Name' ,'Email', 'Phone Number', 'Bussines']) 
         for i in data:
             if i.cd_taskid.dm_project_id.id == proj.id:

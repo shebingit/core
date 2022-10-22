@@ -32,8 +32,11 @@
                                     <th scope="col" >Sl no</th>
                                     <th scope="col" >Date</th>
                                     <th scope="col" >Project Name</th>
+                                    <th scope="col">Task Add</th>
                                     <th scope="col" >Work Status</th>
+                                 
                                     <th scope="col" >Action</th>
+
                                  
                                   
                                 </tr>
@@ -46,12 +49,14 @@
                                     <td>{{forloop.counter}}</td>
                                   <td>{{d.dm_date|date:'d-m-y'}}</td>
                                   <td><span style="margin-left: 10px;">{{d.dm_project_name}}</span></td>
+                                  <td><a href="{% url 'DM_ptoject_dese_add' d.id %}"><i class="mdi mdi-folder-plus btn btn-outline-info"></i></a></td>
                                   <td>{{d.dm_project_status}}</td>
+                                  
                                   <td>
                                     {% if d.dm_project_status == 'Not Started' %}
                                         <a href="{% url 'Dm_project_start' d.id %}" class="btn btn-outline-primary">Start Work</a>
                                     {% else %}
-                                        <a href="#" class="btn btn-outline-info">Work Finished</a>
+                                        <a href="#" class="btn btn-outline-secondary">Work Finished</a>
                                     {% endif %}
                                   </td>
                                  
@@ -69,6 +74,67 @@
         </div>
     </div>
 </div>
+
+{% for dp in prj %}
+<div class="modal fade" id="tasks" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content modal-xl" style="background-color: #191c24;">
+      <div class="modal-header"style="border-bottom: 0 none;">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+     
+        <div class="modal-body">
+          <div class="table-responsive mt-3 mb-3 container">
+            <table class="table  table-bordered ">
+              <thead style="background-color: black;">
+                <tr>
+                  <th scope="col" style="color:#6C7293;">Date</th>
+                  <th scope="col" style="color:#6C7293;">Task Desecription</th>
+                 
+                  <th scope="col" style="color:#6C7293;">Add</th>
+                </tr>
+              </thead>
+              <tbody>
+    
+                {% for i in pr_task %}
+                {{i.dm_task_project_id.id}}-{{ dp.id}}<br>
+                {% if i.dm_task_project_id.id == dp.id %}
+
+                <tr>
+                  <td style="color:white;">{{i.dm_task_date|date:"d-m-Y"}}</td>
+                  <td style="color:white;">{{i.dm_task_dese}}</td>
+                  <td></td>
+                </tr>
+             
+                {% endif %}
+                {% endfor %}
+                <tr>
+                  <form action="{% url 'DM_ptoject_dese_add' dp.id %}" method="post">
+                    {% csrf_token %}
+                   
+                    <td></td>
+                    <td><textarea class="w-100 p-1" style="height:100px;" name="prj_taskdese"></textarea></td>
+                    <td class="text-center"><button type="submit" class="btn btn-success">ADD</button></td>
+                 
+                </tr>
+              </form>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+
 
 
 <script>

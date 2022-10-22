@@ -31,6 +31,7 @@
                                     <th scope="col" >Sl no</th>
                                     <th scope="col" >Date</th>
                                     <th scope="col" >Project Name</th>
+                                    <th scope="col">Task Add</th>
                                     <th scope="col" >Work Status</th>
                                     <th scope="col" >Action</th>
                                   
@@ -44,6 +45,7 @@
                                     <td>{{forloop.counter}}</td>
                                   <td>{{d.dm_date|date:'d-m-y'}}</td>
                                   <td><span style="margin-left: 10px;">{{d.dm_project_name}}</span></td>
+                                  <td><a href="{% url 'DM_ptoject_dese_add' d.id %}"><i class="mdi mdi-folder-plus btn btn-outline-info"></i></a></td>
                                   <td>{{d.dm_project_status}}</td>
                                   <td>
                                     {% if d.dm_project_status == 'Not Started' %}
@@ -68,6 +70,9 @@
         </div>
     </div>
 </div>
+
+
+
 
 
 <script>

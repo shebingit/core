@@ -1513,7 +1513,8 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('DM_inhouseproject', views.DM_inhouseproject, name='DM_inhouseproject'),
     path('DM_Clientproject', views.DM_Clientproject, name='DM_Clientproject'),
     path('DM_empolyees', views.DM_empolyees, name='DM_empolyees'),
-    path('DM_project_save/<int:project_save>',views.DM_project_save, name='DM_project_save'), 
+    path('DM_project_save/<int:project_save>',views.DM_project_save, name='DM_project_save'),
+    path('DM_ptoject_dese_add/<int:prj_dese_id>',views.DM_ptoject_dese_add, name='DM_ptoject_dese_add'), 
     path('Dm_project_start/<int:proj_start>',views.Dm_project_start, name='Dm_project_start'),
     path('DM_project_tasks/<int:proj_taskid>',views.DM_project_tasks, name='DM_project_tasks'),
     path('DM_project_task_assign/<int:proj_assign>',views.DM_project_task_assign, name='DM_project_task_assign'),
@@ -1579,6 +1580,12 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
  path('excel_file_download/<int:dwl_task>/<int:dwd_prj_id>', views.excel_file_download, name='excel_file_download'),
  path('Dm_datereport_download_data/<int:drep_task>', views.Dm_datereport_download_data, name='Dm_datereport_download_data'),
  path('Dm_project_report_download', views.Dm_project_report_download, name='Dm_project_report_download'),
+
+
+ #*********************************** Tester verify **********************
+  path('TSproject_verifiy/<int:ts_task_verify>', views.TSproject_verifiy, name='TSproject_verifiy'),
+  path('TSproject_status_confirm/<int:ts_prj_task_verify>', views.TSproject_status_confirm, name='TSproject_status_confirm'),
+  
 
 ]
 

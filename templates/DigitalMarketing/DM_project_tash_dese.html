@@ -1,0 +1,36 @@
+{% extends 'DigitalMarketing/DM_Index.html' %} 
+{% load static %} 
+{% block content %}
+<!-- <div class="content-wrapper"> -->
+<div class="row">
+    <div class="col-md-12grid-margin stretch-card">
+        <div class="card">
+           
+            <div class="card-body">
+                <h4 class="text-center p-3">Task & Disecription</h4>
+                <form action="{% url 'DM_ptoject_dese_add' projects.id %}" method="post">
+                    {% csrf_token %}
+                    <textarea class="w-100 p-2 mb-3" style="height:200px;" name="prj_taskdese" required></textarea>
+                    <button type="submit" class="btn btn-success">ADD</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-12grid-margin stretch-card">
+        <div class="card">
+           
+            <div class="card-body">
+                {% for i in pr_task %}
+                <p><b>Date</b> : &nbsp; {{i.dm_task_date|date:"d-m-Y"}} </p>
+                <p><b>Task Desecription</b> : &nbsp;  {{i.dm_task_dese}}</p>
+                <hr>
+                {% endfor %}
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
