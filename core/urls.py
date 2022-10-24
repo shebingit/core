@@ -1585,6 +1585,11 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
  #*********************************** Tester verify **********************
   path('TSproject_verifiy/<int:ts_task_verify>', views.TSproject_verifiy, name='TSproject_verifiy'),
   path('TSproject_status_confirm/<int:ts_prj_task_verify>', views.TSproject_status_confirm, name='TSproject_status_confirm'),
+
+
+  #******************************** Admin- shebin (23/10/22)*******************
+   path('BRadmin_project_tester', views.BRadmin_project_tester, name='BRadmin_project_tester'),
+   path('BRadmin_tester_project_list/<int:BRadmin_prj_list>', views.BRadmin_tester_project_list, name='BRadmin_tester_project_list'),
   
 
 ]

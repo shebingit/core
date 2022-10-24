@@ -1,6 +1,46 @@
 {%extends 'testerindex.html'%}
 {%load static%}
 {%block content%}
+<style>
+  #notification
+  {
+    position: absolute;
+  top: 10px;
+  right: 10px;
+ 
+  
+  height: .8rem;
+  }
+    .blink {
+        animation: blinker 1.5s linear infinite;
+    }
+    @keyframes blinker {
+      0% {
+        transform: rotate(35deg);
+    }
+    12.5% {
+        transform: rotate(-30deg);
+    }
+    25% {
+        transform: rotate(25deg);
+    }
+    37.5% {
+        transform: rotate(-20deg);
+    }
+    50% {
+        transform: rotate(15deg);
+    }
+    62.5% {
+        transform: rotate(-10deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+    }
+</style>
 <div class="row pt-3">
   <div class="" style="font-size: 20px;font-weight: 600;color:#6C7293;">
     PROJECTS
@@ -22,7 +62,8 @@
 
                 <h4 class="mb-0" style="color:white;">{{j.project}}</h4>
                   {% for k in verify_count %}
-                    {% if k.project.id == j.id %}
+                    {% if k.project == j.id %}
+                    <div id="notification" class="blink"><i class="mdi mdi-bell-outline text-warning"></i></div>
                    
                     {% endif %}
                   {% endfor %}

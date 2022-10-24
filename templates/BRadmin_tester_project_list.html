@@ -1,0 +1,97 @@
+{% extends 'BRadmin_index.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+  <div class=" ml-5 " style="font-size: 20px;font-weight: 600;opacity: 0.9;color: #6c7293;">Project Test List</div>
+</div>
+<br>
+
+<div class="col-12 mt-4  grid-margin">
+    <div class="card">
+      <div class="card-body">
+       <div class="row g-2 text-center">
+        <div class="col-3 text-success">Varified Count - &nbsp;{{verify_num}}</div>
+        <div class="col-4 text-warning">Pending For Verification - &nbsp;{{pending_verify_num}} </div>
+        <div class="col-3 text-info">Corrections Count - &nbsp;{{correction_num}}</div>
+        <div class="col-2 text-danger">Total Delay - &nbsp;{{tester_delay}}</div>
+       </div>
+       <br>
+        <div class="col-md-4 col-6 w-100">
+          <input type="search" class="form-control rounded" id="search" onkeyup="myFunction()" placeholder="Search"
+            aria-label="Search" aria-describedby="search-addon" />
+        </div>
+        <div class="table-responsive">
+          <table class="table" >
+            <thead>
+              <tr>
+                <th>View</th>
+                <th>Status</th>
+                <th>Project</th>
+                <th>Task</th>
+                <th>Developer</th>
+                <th>Submission Date</th>
+             
+
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              {% for i in proj_list %}
+              <tr>
+                <td><a href="#" class="btn btn-outline-warning"><i class="mdi mdi-eye"></i></a></td>
+                <td> {{i.status}} </td>
+                <td>{{i.project}}</td>
+                <td>{{i.task}}</td>
+                <td> {{i.developer}} </td>
+                <td>{{i.submitted_date|date:"d-m-Y"}}</td>
+               
+                
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script>
+  function myFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("search");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+  
+  $(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#dev_table tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+  $("#search").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+  {%endblock%}

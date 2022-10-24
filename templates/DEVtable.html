@@ -21,8 +21,9 @@
               <th scope="col" style="color:#6C7293;">Test Status</th>
               <th scope="col" style="color:#6C7293;">Extension</th>
               <th scope="col" style="color:#6C7293;">Project Details</th>
-              <th scope="col" style="color:#6C7293;">Action</th>
+            
               <th scope="col" style="color:#6C7293;">Work Acceptance Letter</th>
+              <th scope="col" style="color:#6C7293;">Action</th>
               <th scope="col" style="color:#6C7293;">Submitted Date</th>
               <th scope="col" style="color:#6C7293;">Delay</th>
             </tr>
@@ -54,27 +55,7 @@
                   <div class="progress-bar" style="height:20px;width:{{dp.progress}}%">{{dp.progress}}%</div>
 
                 </div>
-              </td>
-              {% if dp.status == "verified" %}
-
-              <td>
-                <a href="{% url 'DEVtask' dp.id %}">
-                  <div class="badge badge-outline-success">verified</div>
-                </a>
-              </td>
-              {% elif dp.status == "verification"  %}
-              <td>
-                <a href="{% url 'DEVtask' dp.id %}">
-                  <div class="badge badge-outline-warning">Verification</div>
-                </a>
-              </td>
-              {% else  %}
-              <td>
-                <a href="{% url 'DEVtaskform' dp.id %}">
-                  <div class="badge badge-outline-primary">Pending</div>
-                </a>
-              </td>
-              {% endif %}
+             
               <td>{% if dp.workaccept == "0" %}
                 <a href="" data-toggle="modal" data-target="#workacceptance{{dp.id}}"
                   style="text-decoration: none;">
@@ -86,6 +67,33 @@
             </a>
               {% endif %}
               </td>
+            </td>
+            {% if dp.status == "submitted" %}
+
+            <td>
+              <a href="{% url 'DEVtask' dp.id %}">
+                <div class="badge badge-outline-success">verified</div>
+              </a>
+            </td>
+            {% elif dp.status == "Verification"  %}
+            <td>
+              <a href="{% url 'DEVtask' dp.id %}">
+                <div class="badge badge-outline-warning">Verification</div>
+              </a>
+            </td>
+            {% elif dp.status == "correction"  %}
+            <td>
+              <a href="{% url 'DEVtaskform' dp.id %}">
+                <div class="badge badge-outline-danger">correction</div>
+              </a>
+            </td>
+            {% else  %}
+            <td>
+              <a href="{% url 'DEVtaskform' dp.id %}">
+                <div class="badge badge-outline-primary">Pending</div>
+              </a>
+            </td>
+            {% endif %}
               <td style="color: white;">{{dp.submitted_date|date:'d-m-Y'}}</td>
               <td>
                 <div class="badge badge-outline-danger">{{dp.delay}}</div>

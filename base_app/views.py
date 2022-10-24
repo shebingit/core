@@ -32,6 +32,7 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from django.db.models import Sum
 
 from cal.models import *
 
@@ -7699,13 +7700,8 @@ def TSproject(request):
            return redirect('/')
         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
         pros = project_taskassign.objects.filter(tester=usertsid).values('project').distinct()
-        verify_count=project_taskassign.objects.filter(status='verification')
-        new = project.objects.all()
-        lists=[]
-        num=0
-      
-        
- 
+        verify_count=project_taskassign.objects.filter(status='verification',tester=usertsid).values('project').distinct()
+        new = project.objects.all()  
         return render(request,'TSproject.html',{'mem':mem,'pros':pros,'new':new,'verify_count':verify_count})
     else:
         return redirect('/')
@@ -7723,11 +7719,11 @@ def TSprojectdetails(request,pid):
     
 
         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
-        var = project_taskassign.objects.filter(project=pid,tester_id=usertsid).order_by('-id')
+        var = project_taskassign.objects.filter(project=pid,tester_id=usertsid).order_by('-status')
         data = tester_status.objects.filter(project_id=pid)
         data1 = test_status.objects.filter(project_id=pid)
         deg=designation.objects.get(designation='developer')
-        verify_count=project_taskassign.objects.filter(status='verification', project=pid).count()
+        verify_count=project_taskassign.objects.filter(status='verification', project=pid, tester=usertsid).count()
 
 
         date1= datetime.now()
@@ -7748,7 +7744,13 @@ def TSproject_verifiy(request,ts_task_verify):
            return redirect('/')
         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
         pts=project_taskassign.objects.get(id=ts_task_verify)
-        return render(request,'TSproject_verify.html',{'mem':mem,'pts':pts})
+        c_date=date.today()
+       
+        if c_date == pts.submitted_date:
+            num=1
+        else:
+            num=0
+        return render(request,'TSproject_verify.html',{'mem':mem,'pts':pts,'num':num})
     else:
         return redirect('/')
 
@@ -7766,11 +7768,22 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
         if request.method == 'POST':
             task_verify=request.POST['verify_status']
+            delay_reson=request.POST['tsdelay_reson']
+    
         prj_task=project_taskassign.objects.get(id=ts_prj_task_verify)
         prj_task.status=task_verify
         prj_task.save()
-        verify_task=TSproject_Task_verify(ts_project_task=prj_task)
-        verify_task.save()
+        c_date=date.today()
+        event = Event.objects.filter(start_time__range=(prj_task.submitted_date,datetime.now().date())).count()
+        delys=c_date - prj_task.submitted_date
+        delys=delys.days - event
+        print(delys)
+        if delys > 0:
+            verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,ts_delay=delys,ts_tester=prj_task.tester)
+            verify_task.save()
+        else:
+            verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,ts_delay=0,ts_tester=prj_task.tester)
+            verify_task.save()
         pts=project_taskassign.objects.get(id=ts_prj_task_verify)
         return render(request,'TSproject_verify.html',{'mem':mem,'pts':pts})
     else:
@@ -8575,23 +8588,48 @@ def DEVtaskformsubmit(request, id):
         task.employee_description = request.POST['description']
         task.git_link = request.POST['gitlink']
         task.employee_files = request.FILES['scn']
-        task.submitted_date = datetime.now().date()
-        task.status = 'verification'
         var = datetime.now().date()
         x = task.enddate
         y = var
         event = Event.objects.filter(start_time__range=(task.enddate,datetime.now().date())).count()
        
-        delta = datetime.now().date() - task.enddate
-        delay = delta.days - event
-        if delay > 0:
-            task.delay = delay
+       
+        if task.status == 'correction':
+          
+            test=TSproject_Task_verify.objects.filter(ts_tester=task.tester, ts_project_task=task).last()
+           
+            print('verify - date:',  test.ts_task_verify_date)
+            print('submited -date previous :', task.submitted_date)
+
+            delta=test.ts_task_verify_date - task.submitted_date
+      
+            texter_delay=delta.days
+            texter_delay=texter_delay - event
+            print('tester delay :', texter_delay)
+            dely_current=datetime.now().date() - task.enddate
+            delay_current=dely_current.days
+            print('current:', delay_current)
+            delay_current=delay_current - texter_delay
+            print('text--current:', delay_current)
+            delay=delay_current - event
+            print('final delay:', delay)
+            task.status = 'Verification'
+            task.submitted_date = datetime.now().date()
             task.save()
+            msg_success = "Task submitted successfully"
+            return render(request, 'DEVtaskform.html', {'dev': dev, 'msg_success': msg_success})
         else:
-            task.delay = 0
-            task.save()
-        msg_success = "Task submitted successfully"
-        return render(request, 'DEVtaskform.html', {'dev': dev, 'msg_success': msg_success})
+            task.status = 'Verification'
+            delta = datetime.now().date() - task.enddate
+            delay = delta.days - event
+            if delay > 0:
+                task.delay = delay
+                task.save()
+            else:
+                task.delay = 0
+                task.save()
+            msg_success = "Task submitted successfully"
+            return render(request, 'DEVtaskform.html', {'dev': dev, 'msg_success': msg_success})
     return render(request, 'DEVtasksumitted.html', {'dev': dev, 'task': task})
 
 def DEVtask(request, id):
@@ -11446,6 +11484,41 @@ def BRadmin_project_table(request,id):
         newdata = project_taskassign.objects.filter(
             project_id=id, subtask__isnull=False).order_by('-id')
         return render(request, 'BRadmin_project_table.html', {'Adm': Adm, 'var': var, 'data': data, 'data1': data1, 'newdata': newdata})
+    else:
+        return redirect('/')
+
+
+def BRadmin_project_tester(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        deg=designation.objects.get(designation='tester')
+        proj_tester=user_registration.objects.filter(designation=deg)
+      
+        return render(request, 'BRadmin_project_tester.html', {'Adm': Adm,'proj_tester':proj_tester})
+    else:
+        return redirect('/')
+
+def BRadmin_tester_project_list(request,BRadmin_prj_list):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        proj_list=project_taskassign.objects.filter(tester_id=BRadmin_prj_list)
+        verify_num=project_taskassign.objects.filter(tester_id=BRadmin_prj_list, status='submitted').count()
+        pending_verify_num=project_taskassign.objects.filter(tester_id=BRadmin_prj_list, status='Verification').count()
+        correction_num=project_taskassign.objects.filter(tester_id=BRadmin_prj_list, status='correction').count()
+        tester_dely=TSproject_Task_verify.objects.filter(ts_tester_id=BRadmin_prj_list)
+        tester_delay=0
+        for i in tester_dely:
+            tester_delay=tester_delay+int(i.ts_delay)
+       
+        return render(request, 'BRadmin_tester_project_list.html', {'Adm': Adm,'proj_list':proj_list,'verify_num':verify_num,'pending_verify_num':pending_verify_num,'correction_num':correction_num,'tester_delay':tester_delay})
     else:
         return redirect('/')
 

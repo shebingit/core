@@ -42,17 +42,24 @@
                   <td> {{i.developer}} </td>
                   <td> {{i.enddate|date:"d-m-Y"}} </td>
 
-                  {% if i.status == "Verified" %}
+                  {% if i.status == "submitted" %}
 
                   <td>
                     <a href="#">
                       <div class="badge badge-outline-success">Verified</div>
                     </a>
                   </td>
-                  {% elif  i.status == "verification"  %}
+                
+                  {% elif  i.status == "Verification"  %}
                   <td>
                     <a href="{% url 'TSproject_verifiy' i.id %}">
                       <div class="badge badge-outline-warning">Verify</div>
+                    </a>
+                  </td>
+                  {% elif  i.status == "correction"  %}
+                  <td>
+                    <a href="#">
+                      <div class="badge badge-outline-danger">correction</div>
                     </a>
                   </td>
                   {% else  %}
