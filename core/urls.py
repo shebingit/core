@@ -1590,8 +1590,15 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
   #******************************** Admin- shebin (23/10/22)*******************
    path('BRadmin_project_tester', views.BRadmin_project_tester, name='BRadmin_project_tester'),
    path('BRadmin_tester_project_list/<int:BRadmin_prj_list>', views.BRadmin_tester_project_list, name='BRadmin_tester_project_list'),
-  
+   path('BRadmin_dev_project_task/<int:BRadmin_dev_prj_task>', views.BRadmin_dev_project_task, name='BRadmin_dev_project_task'),
 
+   #********************************* Admin Auidit Digital Marketing shebin Shaji 25/10/22
+    path('BRadmin_audit', views.BRadmin_audit, name='BRadmin_audit'),
+    path('BRadmin_audit_department/<int:BRadmin_aut_dep>', views.BRadmin_audit_department, name='BRadmin_audit_department'),
+    path('BRadmin_audit_Works', views.BRadmin_audit_Works, name='BRadmin_audit_Works'),
+    path('BRadmin_audit_Works_list/<int:BRadmin_aud_w_list>', views.BRadmin_audit_Works_list, name='BRadmin_audit_Works_list'),
+    path('BRadmin_audit_Works_view/<int:BRadmin_aud_w_view>', views.BRadmin_audit_Works_view, name='BRadmin_audit_Works_view'),   
+    path('BRadmin_audit_employees', views.BRadmin_audit_employees, name='BRadmin_audit_employees'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

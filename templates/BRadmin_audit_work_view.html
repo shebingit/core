@@ -1,0 +1,45 @@
+{% extends 'BRadmin_index.html' %}
+{% load static %}
+{% block content %}
+<style>
+    a{
+        text-decoration: none;
+    }
+</style>
+  
+
+<div class="row ">
+    <div class="col-12 grid-margin">
+       
+            <h4 class="p-3">Tasks</h4>
+            <div class="row g-5">
+                <div class="col-lg-4 col-sm-12">
+                   <a href="{% url 'BRadmin_audit_Works_data' 1 %}"><div class="card p-4 text-center">Data Collection</div></a></a> 
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <a href="{% url 'BRadmin_audit_Works_data' 2 %}"><div class="card  p-4 text-center">Backlink Details</div></a> 
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <a href="{% url 'BRadmin_audit_Works_data' 3 %}"><div class="card  p-4 text-center">Blog calender</div></a> 
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <a href="{% url 'BRadmin_audit_Works_data' 4 %}"><div class="card  p-4 text-center">SMM Post Calender</div></a> 
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <a href="{% url 'BRadmin_audit_Works_data' 5 %}"><div class="card  p-4 text-center">Webpage Content creation</div></a> 
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <a href="{% url 'BRadmin_audit_Works_data' 6 %}"><div class="card  p-4 text-center">On page works</div></a> 
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <a href="{% url 'BRadmin_audit_Works_data' 7 %}"><div class="card  p-4 text-center">Competitor analysis/Website Audit</div></a> 
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <a href="{% url 'BRadmin_audit_Works_data' 8 %}"><div class="card  p-4 text-center">Data collection - Client</div></a> 
+                </div>
+            </div>
+       
+    </div>
+</div>
+
+{% endblock %}

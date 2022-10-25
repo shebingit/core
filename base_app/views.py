@@ -7779,13 +7779,16 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
         delys=delys.days - event
         print(delys)
         if delys > 0:
-            verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,ts_delay=delys,ts_tester=prj_task.tester)
+            verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,
+                                                ts_delay=delys,ts_tester=prj_task.tester,ts_task_status=task_verify)
             verify_task.save()
         else:
-            verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,ts_delay=0,ts_tester=prj_task.tester)
+            verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,
+                                                ts_delay=0,ts_tester=prj_task.tester,ts_task_status=task_verify)
             verify_task.save()
         pts=project_taskassign.objects.get(id=ts_prj_task_verify)
-        return render(request,'TSproject_verify.html',{'mem':mem,'pts':pts})
+        prj_id=prj_task.project.id
+        return redirect('prj_task', prj_id)
     else:
         return redirect('/')
 
@@ -7810,6 +7813,7 @@ def testersave(request,uid,pid):
         test.subtask_id = pid
         test.workdone = request.POST.get('workdone')
         test.files = request.FILES['files']
+        test.task=pr
         test.save()
         base_url = reverse('TSprojectdetails', kwargs={'pid': test.project_id})
         query_string = urlencode({'pid': test.project_id})
@@ -8598,27 +8602,34 @@ def DEVtaskformsubmit(request, id):
           
             test=TSproject_Task_verify.objects.filter(ts_tester=task.tester, ts_project_task=task).last()
            
-            print('verify - date:',  test.ts_task_verify_date)
-            print('submited -date previous :', task.submitted_date)
+            events = Event.objects.filter(start_time__range=(test.ts_task_verify_date,datetime.now().date())).count()
 
-            delta=test.ts_task_verify_date - task.submitted_date
-      
-            texter_delay=delta.days
-            texter_delay=texter_delay - event
-            print('tester delay :', texter_delay)
-            dely_current=datetime.now().date() - task.enddate
-            delay_current=dely_current.days
-            print('current:', delay_current)
-            delay_current=delay_current - texter_delay
-            print('text--current:', delay_current)
-            delay=delay_current - event
-            print('final delay:', delay)
-            task.status = 'Verification'
-            task.submitted_date = datetime.now().date()
-            task.save()
+           
+            delta=datetime.now().date() - test.ts_task_verify_date
+           
+            delay=delta.days - events
+          
+            if delay > 0:
+                total= delay + int(task.delay)
+                task.delay = total
+                task.status = 'Verification'
+                task.submitted_date = datetime.now().date()
+                task.save()
+               
+
+            else:
+                delay=0
+                total= delay + int(task.delay)
+                task.delay = total
+                task.status = 'Verification'
+                task.submitted_date = datetime.now().date()
+                task.save()
+               
             msg_success = "Task submitted successfully"
             return render(request, 'DEVtaskform.html', {'dev': dev, 'msg_success': msg_success})
+        
         else:
+            task.submitted_date = datetime.now().date()
             task.status = 'Verification'
             delta = datetime.now().date() - task.enddate
             delay = delta.days - event
@@ -11509,18 +11520,34 @@ def BRadmin_tester_project_list(request,BRadmin_prj_list):
         else:
             return redirect('/')
         Adm = user_registration.objects.filter(id=Adm_id)
-        proj_list=project_taskassign.objects.filter(tester_id=BRadmin_prj_list)
+        proj_list=project_taskassign.objects.filter(tester_id=BRadmin_prj_list).order_by('-submitted_date')
         verify_num=project_taskassign.objects.filter(tester_id=BRadmin_prj_list, status='submitted').count()
         pending_verify_num=project_taskassign.objects.filter(tester_id=BRadmin_prj_list, status='Verification').count()
         correction_num=project_taskassign.objects.filter(tester_id=BRadmin_prj_list, status='correction').count()
-        tester_dely=TSproject_Task_verify.objects.filter(ts_tester_id=BRadmin_prj_list)
-        tester_delay=0
+        tester_dely=TSproject_Task_verify.objects.filter(ts_tester_id=BRadmin_prj_list).order_by('-id')
+        delay_num=0
         for i in tester_dely:
-            tester_delay=tester_delay+int(i.ts_delay)
+            delay_num=delay_num+int(i.ts_delay)
        
-        return render(request, 'BRadmin_tester_project_list.html', {'Adm': Adm,'proj_list':proj_list,'verify_num':verify_num,'pending_verify_num':pending_verify_num,'correction_num':correction_num,'tester_delay':tester_delay})
+        return render(request, 'BRadmin_tester_project_list.html', {'Adm': Adm,'proj_list':proj_list,'verify_num':verify_num,'pending_verify_num':pending_verify_num,'correction_num':correction_num,'tester_dely':tester_dely,'delay_num':delay_num})
     else:
         return redirect('/')
+
+def BRadmin_dev_project_task(request,BRadmin_dev_prj_task):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        print(BRadmin_dev_prj_task)
+        Adm = user_registration.objects.filter(id=Adm_id)
+        tas=project_taskassign.objects.get(id=BRadmin_dev_prj_task)
+        data1 = tester_status.objects.filter(task=tas).order_by('-id')
+        print(data1)
+        return render(request, 'BRadmin_dev_project_task.html', {'Adm': Adm,'tas':tas,'data1':data1})
+    else:
+        return redirect('/')
+
 
 # def BRadmin_salary_pending(request):
 #     if 'Adm_id' in request.session:
@@ -17780,3 +17807,99 @@ def Dm_project_report_download(request):
 
 
         return response
+
+
+
+#************************ Admin Audit section Digital Marketing shebin shaji 25/10/22
+
+def BRadmin_audit(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        depart = department.objects.all()
+        return render(request,'BRadmin_audit.html', {'Adm':Adm,'depart':depart})
+    else:
+        return redirect('/')
+    
+# admin Department Audit page   
+def BRadmin_audit_department(request,BRadmin_aut_dep):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        depart = department.objects.get(id=BRadmin_aut_dep)
+        if depart.department == 'Digital Marketing':
+            return render(request,'BRadmin_audit_department.html', {'Adm':Adm,'depart':depart})
+        else:
+            return redirect('BRadmin_audit') 
+    else:
+        return redirect('/')
+
+#admin audit work categeory page
+def BRadmin_audit_Works(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        depart = department.objects.all()
+        return render(request,'BRadmin_audit_work.html', {'Adm':Adm,'depart':depart})
+    else:
+        return redirect('/')
+
+#admin audit work list page
+def BRadmin_audit_Works_list(request,BRadmin_aud_w_list):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        if BRadmin_aud_w_list == 0:
+            works_list=DM_projects.objects.filter(dm_project_categ='In House Project')
+        else:
+            works_list=DM_projects.objects.filter(dm_project_categ='Client Project')
+        return render(request,'BRadmin_audit_work_list.html', {'Adm':Adm,'works_list':works_list})
+    else:
+        return redirect('/')
+    
+
+#admin audit work vew
+def BRadmin_audit_Works_view(request,BRadmin_aud_w_view):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        work_view=DM_projects.objects.get(id=BRadmin_aud_w_view)
+        return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view})
+    else:
+        return redirect('/')
+
+#admin audit work data
+    
+
+
+
+
+#admin audit employee page   
+def BRadmin_audit_employees(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+       
+        return render(request,'BRadmin_audit_employee.html', {'Adm':Adm})
+    else:
+        return redirect('/')
+
+
