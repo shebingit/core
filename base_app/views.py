@@ -7788,7 +7788,7 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
             verify_task.save()
         pts=project_taskassign.objects.get(id=ts_prj_task_verify)
         prj_id=prj_task.project.id
-        return redirect('prj_task', prj_id)
+        return redirect('TSprojectdetails', prj_id)
     else:
         return redirect('/')
 
@@ -17865,12 +17865,13 @@ def BRadmin_audit_Works_list(request,BRadmin_aud_w_list):
             works_list=DM_projects.objects.filter(dm_project_categ='In House Project')
         else:
             works_list=DM_projects.objects.filter(dm_project_categ='Client Project')
-        return render(request,'BRadmin_audit_work_list.html', {'Adm':Adm,'works_list':works_list})
+        works=DM_projects.objects.all()
+        return render(request,'BRadmin_audit_work_list.html', {'Adm':Adm,'works_list':works_list,'works':works})
     else:
         return redirect('/')
     
 
-#admin audit work vew
+#admin audit work view
 def BRadmin_audit_Works_view(request,BRadmin_aud_w_view):
     if 'Adm_id' in request.session:
         if request.session.has_key('Adm_id'):
@@ -17884,6 +17885,181 @@ def BRadmin_audit_Works_view(request,BRadmin_aud_w_view):
         return redirect('/')
 
 #admin audit work data
+def BRadmin_audit_Works_data(request,Bradmin_aud_w,BRadmin_aud_w_data):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        work_view=DM_projects.objects.get(id=Bradmin_aud_w)
+       
+       
+        if BRadmin_aud_w_data == 1:
+            rcount=0
+            task_data=DataCollect.objects.all()
+            for i in task_data:
+                if i.Project_name.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data':task_data,'rcount':rcount})
+        
+        elif BRadmin_aud_w_data == 2:
+            rcount=0
+            task_data1=Backlinks.objects.all()
+            for i in task_data1:
+                if i.bd_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data1':task_data1,'rcount':rcount})
+        
+        elif BRadmin_aud_w_data == 3:
+            rcount=0
+            task_data2=WebpageContent.objects.all()
+            for i in task_data2:
+                if i.web_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data2':task_data2,'rcount':rcount})
+    
+        elif BRadmin_aud_w_data == 4:
+            rcount=0
+            task_data7=SmmPoster.objects.all()
+            for i in task_data7:
+                if i.smm_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data7':task_data7,'rcount':rcount})
+        
+        elif BRadmin_aud_w_data == 5:
+            rcount=0
+            task_data6=BlogCalander.objects.all()
+            for i in task_data6:
+                if i.blog_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data6':task_data6,'rcount':rcount})
+        
+        elif BRadmin_aud_w_data == 6:
+            rcount=0
+            task_data5=OnPage.objects.all()
+            for i in task_data5:
+                if i.op_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data5':task_data5,'rcount':rcount})
+        
+        elif BRadmin_aud_w_data == 7:
+            rcount=0
+            task_data3=CompanyAnalysis.objects.all()
+            for i in task_data3:
+                if i.analysis_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data3':task_data3,'rcount':rcount})
+
+        elif BRadmin_aud_w_data == 8:
+            rcount=0
+            task_data4=ClientData.objects.all()
+            for i in task_data4:
+                if i.cd_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data4':task_data4,'rcount':rcount})
+ 
+    else:
+        return redirect('/')
+
+
+#admin audit data filter based on date
+def BRadmin_audit_search(request,BRadmin_aud_sw,BRadmin_aud_search):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        work_view=DM_projects.objects.get(id=BRadmin_aud_sw)
+        if request.method == 'POST':
+            fromdate = request.POST['report_from']
+            todate = request.POST['report_to']
+        else:
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view})
+
+
+        if BRadmin_aud_search == 1:
+            rcount=0
+            task_data=DataCollect.objects.filter(dc_date__gte=fromdate, dc_date__lte=todate)
+            for i in task_data:
+                if i.Project_name.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data':task_data,'rcount':rcount})
+        
+        elif BRadmin_aud_search == 2:
+            rcount=0
+            task_data1=Backlinks.objects.filter(bd_date__gte=fromdate, bd_date__lte=todate)
+            for i in task_data1:
+                if i.bd_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data1':task_data1,'rcount':rcount})
+        
+        elif BRadmin_aud_search == 3:
+            rcount=0
+            task_data2=WebpageContent.objects.filter(web_date__gte=fromdate, web_date__lte=todate)
+            for i in task_data2:
+                if i.web_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data2':task_data2,'rcount':rcount})
+    
+        elif BRadmin_aud_search == 4:
+            rcount=0
+            task_data7=SmmPoster.objects.filter(smm_date__gte=fromdate, smm_date__lte=todate)
+            for i in task_data7:
+                if i.smm_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data7':task_data7,'rcount':rcount})
+        
+        elif BRadmin_aud_search == 5:
+            rcount=0
+            task_data6=BlogCalander.objects.filter(blog_date__gte=fromdate, blog_date__lte=todate)
+            for i in task_data6:
+                if i.blog_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data6':task_data6,'rcount':rcount})
+        
+        elif BRadmin_aud_search == 6:
+            rcount=0
+            task_data5=OnPage.objects.filter(op_date__gte=fromdate, op_date__lte=todate)
+            for i in task_data5:
+                if i.op_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data5':task_data5,'rcount':rcount})
+        
+        elif BRadmin_aud_search == 7:
+            rcount=0
+            task_data3=CompanyAnalysis.objects.filter(analysis_date__gte=fromdate, analysis_date__lte=todate)
+            for i in task_data3:
+                if i.analysis_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+           
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data3':task_data3,'rcount':rcount})
+
+
+        elif BRadmin_aud_search == 8:
+            rcount=0
+            task_data4=ClientData.objects.filter(cd_date__gte=fromdate, cd_date__lte=todate)
+            for i in task_data4:
+                if i.cd_taskid.dm_project_id.id == work_view.id :
+                    rcount=rcount+1
+    else:
+        return redirect('/')
+
     
 
 
@@ -17901,5 +18077,79 @@ def BRadmin_audit_employees(request):
         return render(request,'BRadmin_audit_employee.html', {'Adm':Adm})
     else:
         return redirect('/')
+
+#admin audit trained employee page
+def BRadmin_audit_trained_employees(request,BRadmin_aud_emp):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        if BRadmin_aud_emp == 1:
+            deg=designation.objects.get(designation='Digital manager')
+            emp=user_registration.objects.filter(designation=deg)
+            return render(request,'BRadmin_audit_employee_list.html', {'Adm':Adm,'emp':emp})
+        else:
+            deg=designation.objects.get(designation='Digital Developer')
+            emp=user_registration.objects.filter(designation=deg)
+            return render(request,'BRadmin_audit_employee_list.html', {'Adm':Adm,'emp':emp})
+    else:
+        return redirect('/')
+
+#admin audit Emplyoee dashboard page
+def BRadmin_auditdm_emp(request,BRadmin_aud_dmemp):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        emp=user_registration.objects.filter(id=BRadmin_aud_dmemp)
+        
+        return render(request,'BRadmin_audit_employee_page.html', {'Adm':Adm,'emp':emp})
+    else:
+        return redirect('/')
+
+#admin audit employee attendance page
+def BRadmin_audit_dmem_attend(request,Bradmin_aud_dmatte):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        emp=user_registration.objects.get(id=Bradmin_aud_dmatte)
+        firstday=date.today().replace(day=1)
+        attend=attendance.objects.filter(user_id=Bradmin_aud_dmatte,date__gte=firstday,date__lte=date.today())
+        
+        return render(request,'BRadmin_audit_dmemployee_ttend.html', {'Adm':Adm,'attend':attend,'emp':emp})
+    else:
+        return redirect('/')
+
+#admin audit emloyee attendance search
+def BRadmin_audit_dm_attendsearch(request,BRadmin_aud_emp_sattend):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+
+        if request.method == 'POST':
+            fdate = request.POST['d_from']
+            tdate = request.POST['d_to']
+
+        emp=user_registration.objects.get(id=BRadmin_aud_emp_sattend)
+        attend=attendance.objects.filter(user_id=BRadmin_aud_emp_sattend,date__gte=fdate,date__lte=tdate)
+        return render(request,'BRadmin_audit_dmemployee_ttend.html', {'Adm':Adm,'attend':attend,'emp':emp})
+    else:
+        return redirect('/')
+
+
+# admin audit salary page
+
+
+
 
 

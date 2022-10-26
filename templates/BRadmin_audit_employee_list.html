@@ -1,0 +1,96 @@
+{% extends 'BRadmin_index.html' %}
+{% load static %}
+{% block content %}
+<style>
+    a{
+        text-decoration: none;
+    }
+</style>
+  
+
+<div class="row ">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="row"> 
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-start mb-4">Employees List</h4>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            
+                            <form>
+                                <div class="input-group input-group-sm mb-3">
+                                <input
+                                    type="text"
+                                    class="form-control text-white"
+                                    id="myInput"
+                                    onkeyup="myFunction()"
+                                    placeholder="Search . . ."
+                                    style="border: green"
+                                />
+                                </div>
+                            </form>
+                            </div>
+                
+                            <div class="table-responsive">
+                            <table class="table" id="myTable">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th scope="col">Full Name</th>
+                                        <th scope="col">Email Id</th>
+                                        <th scope="col">Phone No</th>
+        
+                                        </tr>
+                                    </thead>
+                                
+                            {% if emp %}
+                                
+                                <tbody>
+                                {% for i in emp %}
+                               
+                                <tr>
+                                    <td>
+                                        {% if i.photo %}
+                                            <img src="{{i.photo.url}}">
+                                        {% endif%}
+                                    </td>
+                                    <td><a href="{% url 'BRadmin_auditdm_emp' i.id %}">{{i.fullname}}</a></td>
+                                    <td>{{i.email}} </td>
+                                   
+                                    <td>{{i.mobile}}</td>
+                                   
+                                    
+                                </tr>
+                               
+                                {% endfor %}
+                            {% else%}
+                                <h5 style="text-align:center">Nothing to display!</h5>
+                            {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  
+
+</script>
+
+{% endblock %}

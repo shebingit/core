@@ -1597,8 +1597,14 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('BRadmin_audit_department/<int:BRadmin_aut_dep>', views.BRadmin_audit_department, name='BRadmin_audit_department'),
     path('BRadmin_audit_Works', views.BRadmin_audit_Works, name='BRadmin_audit_Works'),
     path('BRadmin_audit_Works_list/<int:BRadmin_aud_w_list>', views.BRadmin_audit_Works_list, name='BRadmin_audit_Works_list'),
-    path('BRadmin_audit_Works_view/<int:BRadmin_aud_w_view>', views.BRadmin_audit_Works_view, name='BRadmin_audit_Works_view'),   
+    path('BRadmin_audit_Works_view/<int:BRadmin_aud_w_view>', views.BRadmin_audit_Works_view, name='BRadmin_audit_Works_view'), 
+    path('BRadmin_audit_Works_data/<int:Bradmin_aud_w>/<int:BRadmin_aud_w_data>', views.BRadmin_audit_Works_data, name='BRadmin_audit_Works_data'),
+    path('BRadmin_audit_search/<int:BRadmin_aud_sw>/<int:BRadmin_aud_search>', views.BRadmin_audit_search, name='BRadmin_audit_search'),   
     path('BRadmin_audit_employees', views.BRadmin_audit_employees, name='BRadmin_audit_employees'),
+    path('BRadmin_audit_trained_employees/<int:BRadmin_aud_emp>', views.BRadmin_audit_trained_employees, name='BRadmin_audit_trained_employees'),
+    path('BRadmin_auditdm_emp/<int:BRadmin_aud_dmemp>', views.BRadmin_auditdm_emp, name='BRadmin_auditdm_emp'),
+    path('BRadmin_audit_dmem_attend/<int:Bradmin_aud_dmatte>', views.BRadmin_audit_dmem_attend, name='BRadmin_audit_dmem_attend'),
+    path('BRadmin_audit_dm_attendsearch/<int:BRadmin_aud_emp_sattend>', views.BRadmin_audit_dm_attendsearch, name='BRadmin_audit_dm_attendsearch'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

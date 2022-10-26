@@ -20,6 +20,7 @@
                                 <th> Start Date </th>
                                 <th> Status </th>
                                 <th> View </th>
+                                <th>Download xl File</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,7 +32,8 @@
                               <td>{{ i.dm_project_name }}</td>
                               <td>{{ i.dm_project_start|date:'d-m-Y' }}</td>
                               <td>{{ i.dm_project_status }}</td>
-                              <td><a href="{% url 'BRadmin_audit_Works_view' i.id %}"  class="btn btn-primary"style="text-decoration: none;"><span class="mdi mdi-arrow-right-bold"></span></a></td>
+                              <td><a href="{% url 'BRadmin_audit_Works_view' i.id %}"  class="btn btn-outline-primary"style="text-decoration: none;"><span class="mdi mdi-arrow-right-bold"></span></a></td>
+                              <td><a href="#" class="btn btn-outline-warning"style="text-decoration: none;"data-bs-toggle="modal" data-bs-target="#audit_download_projectdata"><span class="mdi mdi-file-excel"></span></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -63,5 +65,44 @@ function myFunction() {
   }
 }
 </script>
+
+
+<div class="modal fade" id="audit_download_projectdata" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal-content modal-xl" style="background-color: #191c24;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Download By Date</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form class="m-3 p-2" action="{% url 'Dm_project_report_download' %}" method="post">
+              {% csrf_token %}
+              <label>From</label>
+              <input type="date" class="form-control m-3 p-2" name="prj_from" required>
+              <label>To</label>
+              <input type="date" class="form-control m-3 p-2" name="prj_to" required>
+              <label>Project</label>
+              <select class="form-control m-3 p-2" name="proj_name">
+                  <option class="p-2" selected>----Select----</option>
+                  {% for i in works %}
+                    <option class="p-2" value="{{i.dm_project_name}}">{{i.dm_project_name}}</option>
+                  {% endfor %}
+                  
+              </select>
+
+
+              <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-outline-success"></i>OK</button>
+              </div>
+              
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
 
   {% endblock %}
