@@ -1600,11 +1600,17 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('BRadmin_audit_Works_view/<int:BRadmin_aud_w_view>', views.BRadmin_audit_Works_view, name='BRadmin_audit_Works_view'), 
     path('BRadmin_audit_Works_data/<int:Bradmin_aud_w>/<int:BRadmin_aud_w_data>', views.BRadmin_audit_Works_data, name='BRadmin_audit_Works_data'),
     path('BRadmin_audit_search/<int:BRadmin_aud_sw>/<int:BRadmin_aud_search>', views.BRadmin_audit_search, name='BRadmin_audit_search'),   
-    path('BRadmin_audit_employees', views.BRadmin_audit_employees, name='BRadmin_audit_employees'),
-    path('BRadmin_audit_trained_employees/<int:BRadmin_aud_emp>', views.BRadmin_audit_trained_employees, name='BRadmin_audit_trained_employees'),
+    path('BRadmin_audit_employees/<int:BRadmin_aud_dep_id>', views.BRadmin_audit_employees, name='BRadmin_audit_employees'),
+    path('BRadmin_audit_trained_employees/<int:BRadmin_aud_emp>/<int:Brasmin_aud_et>', views.BRadmin_audit_trained_employees, name='BRadmin_audit_trained_employees'),
     path('BRadmin_auditdm_emp/<int:BRadmin_aud_dmemp>', views.BRadmin_auditdm_emp, name='BRadmin_auditdm_emp'),
     path('BRadmin_audit_dmem_attend/<int:Bradmin_aud_dmatte>', views.BRadmin_audit_dmem_attend, name='BRadmin_audit_dmem_attend'),
     path('BRadmin_audit_dm_attendsearch/<int:BRadmin_aud_emp_sattend>', views.BRadmin_audit_dm_attendsearch, name='BRadmin_audit_dm_attendsearch'),
+    path('BRadmin_audit_dmemp_salary/<int:BRadmin_aud_dmemp_sal>', views.BRadmin_audit_dmemp_salary, name='BRadmin_audit_dmemp_salary'),
+    path('BRadmin_audit_dm_salarysearch/<int:BRadmin_aud_dmemp_ssalry>', views.BRadmin_audit_dm_salarysearch, name='BRadmin_audit_dm_salarysearch'),
+    path('BRadmin_audit_dmemp_works/<int:BRadmin_aud_dmemp_work>', views.BRadmin_audit_dmemp_works, name='BRadmin_audit_dmemp_works'),
+    path('BRadmin_audit_Works_tasks/<int:BRadmin_adu_dmwt>/<int:BRadmin_aud_dmw>', views.BRadmin_audit_Works_tasks, name='BRadmin_audit_Works_tasks'),   
+ path('BRadmin_audit_dm_tasksearch/<int:BRadmin_aud_stask>', views.BRadmin_audit_dm_tasksearch, name='BRadmin_audit_dm_tasksearch'),
+
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

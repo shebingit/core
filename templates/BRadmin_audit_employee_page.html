@@ -7,9 +7,10 @@
     <div class="col-md-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-
+               
                 <center>
                     <h3 class="card-title">PROFILE</h3>
+              
                     <img src="{{ i.photo.url }}" alt="image" style="border-radius: 50%;" width="130" height="130" />
 
                     <!-- <canvas id="transaction-history" class="transaction-chart"></canvas> -->
@@ -150,27 +151,74 @@
 </style>
 
     <div class="row g-3">
-        <div class="col-12 text-center">
-            <a href="#">
-            <div class="card p-5">
-                <h4>Work</h4>
+        <div class="col-12">
+            <a href="{% url 'BRadmin_audit_dmemp_works' i.id %}">
+            <div class="card">
+                <div class="card-body">
+         
+    
+                    <div class="row">
+                      <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                        <div class="d-flex d-sm-block d-md-flex align-items-center">
+                          <h4 class="mb-0" style="color:white;">Work</h4>
+                          </div>
+                      </div>
+                      <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                        <i class="icon-lg mdi mdi-book-multiple text-primary ms-auto"></i>
+                      </div>
+                    </div>
+                    
+                  </div>
+            
+              
            
             </div>
             </a>
             
         </div>
-        <div class="col-12 text-center">
+        <div class="col-12 ">
             <a href="{% url 'BRadmin_audit_dmemp_salary' i.id %}">
-            <div class="card p-5">
-            <h4>Salary</h4>
+            <div class="card">
+                <div class="card-body">
+         
+    
+                    <div class="row">
+                      <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                        <div class="d-flex d-sm-block d-md-flex align-items-center">
+                          <h4 class="mb-0" style="color:white;">Salary</h4>
+                          </div>
+                      </div>
+                      <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                        <i class="icon-lg mdi mdi-book-multiple text-primary ms-auto"></i>
+                      </div>
+                    </div>
+                    
+                  </div>
+            
           
             </div>
             </a>
         </div>
-        <div class="col-12 text-center">
+        <div class="col-12 ">
             <a href="{% url 'BRadmin_audit_dmem_attend' i.id %}">
-                <div class="card p-5">
-                    <h4>Attendence</h4>
+                <div class="card ">
+                    <div class="card-body">
+         
+    
+                        <div class="row">
+                          <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                            <div class="d-flex d-sm-block d-md-flex align-items-center">
+                              <h4 class="mb-0" style="color:white;"> Attendence</h4>
+                              </div>
+                          </div>
+                          <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                            <i class="icon-lg mdi mdi-book-multiple text-primary ms-auto"></i>
+                          </div>
+                        </div>
+                        
+                      </div>
+                    
+                   
                    
                     </div>
             </a>

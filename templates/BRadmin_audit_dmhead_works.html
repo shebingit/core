@@ -1,4 +1,4 @@
-{% extends 'BRadmin_index.html' %}
+{% extends 'BRadmin_index.html' %} 
 {% load static %}
 {% block content %}
 <style>
@@ -6,6 +6,11 @@
         text-decoration: none;
     }
 </style>
+<div class="text-end p-2 mb-3">
+    <a href="#" class="btn btn-outline-warning"style="text-decoration: none;"data-bs-toggle="modal" data-bs-target="#audit_dm_task">
+        <span class="mdi mdi-file-find"></span>
+    </a>
+</div>
   
 
 <div class="row ">
@@ -15,7 +20,7 @@
                 <div class="col-12 grid-margin">
                     <div class="card">
                     <div class="card-body">
-                        <h4 class="text-start mb-4">Employees List</h4>
+                        <h4 class="text-start mb-4">Task Assigned Employees List</h4>
                         <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                             
                             <form>
@@ -36,33 +41,28 @@
                             <table class="table" id="myTable">
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        <th>No</th>
+                                        <th>Work Name/Project Name</th>
+                                        <th>Sub Task </th>
                                         <th scope="col">Full Name</th>
-                                        <th scope="col">Degination</th>
-                                        <th scope="col">Email Id</th>
-                                        <th scope="col">Phone No</th>
+                                        <th>Assigned Date</th>
         
                                         </tr>
                                     </thead>
                                 
-                            {% if emp %}
+                            {% if task_ass %}
                                 
                                 <tbody>
-                                {% for i in emp %}
+                                {% for i in task_ass %}
                                
                                 <tr>
-                                    <td>
-                                        {% if i.photo %}
-                                            <img src="{{i.photo.url}}">
-                                        {% endif%}
-                                      
-                                    </td>
-                                    <td><a href="{% url 'BRadmin_auditdm_emp' i.id %}">{{i.fullname}}</a></td>
-                                    <td>{{i.designation.designation}}</td>
-                                    <td>{{i.email}} </td>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{i.dm_project_id.dm_project_name}}</td>
+                                    <td>{{i.dm_task_name}}</td>
+                                    <td>{{i.dm_user_name.fullname}}</a></td>
+                                    <td>{{i.dm_task_assigndate}} </td>
                                    
-                                    <td>{{i.mobile}}</td>
-                                   
+                                  
                                     
                                 </tr>
                                
@@ -95,5 +95,37 @@
   
 
 </script>
+
+<!-- Modal for attendance search -->
+
+<div class="modal fade" id="audit_dm_task" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+      <div class="modal-content modal-xl" style="background-color: #191c24;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Task</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="m-3 p-2" action="{% url 'BRadmin_audit_dm_tasksearch' emp.id %}" method="post">
+                {% csrf_token %}
+                <label>From</label>
+                <input type="date" class="form-control m-3 p-2" name="task_from" required>
+                <label>To</label>
+                <input type="date" class="form-control m-3 p-2" name="task_to" required>
+
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-outline-success"></i>OK</button>
+                </div>
+                
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 {% endblock %}

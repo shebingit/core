@@ -84,6 +84,7 @@ class user_registration(models.Model):
                              related_name='userregistrationteam', null=True, blank=True)
     course = models.ForeignKey(course, on_delete=models.SET_NULL, related_name='course_name',null=True,blank=True)
     fullname = models.CharField(max_length=240, null=True)
+    employee_type = models.CharField(max_length=20, null=True, default='0')
     fathername = models.CharField(max_length=240, null=True)
     mothername = models.CharField(max_length=240, null=True)
     dateofbirth = models.DateField(

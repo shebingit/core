@@ -8960,11 +8960,13 @@ def BRadmin_registration(request):
             u_id = request.POST.get("id")
             dept_id = request.POST.get("dept")
             desi_id = request.POST.get("des")
+            emp_ty = request.POST.get("emp_type")
             res = request.POST.get("stat")
        
             user = user_registration.objects.get(id=u_id)
             user.department_id = dept_id 
             user.status = res
+            user.employee_type=emp_ty
             user.designation_id = desi_id
             user.save()
             return redirect("BRadmin_registration")
@@ -18057,6 +18059,7 @@ def BRadmin_audit_search(request,BRadmin_aud_sw,BRadmin_aud_search):
             for i in task_data4:
                 if i.cd_taskid.dm_project_id.id == work_view.id :
                     rcount=rcount+1
+            return render(request,'BRadmin_audit_work_view.html', {'Adm':Adm,'work_view':work_view,'task_data4':task_data4,'rcount':rcount})
     else:
         return redirect('/')
 
@@ -18066,34 +18069,35 @@ def BRadmin_audit_search(request,BRadmin_aud_sw,BRadmin_aud_search):
 
 
 #admin audit employee page   
-def BRadmin_audit_employees(request):
+def BRadmin_audit_employees(request,BRadmin_aud_dep_id):
     if 'Adm_id' in request.session:
         if request.session.has_key('Adm_id'):
             Adm_id = request.session['Adm_id']
         else:
             return redirect('/')
         Adm = user_registration.objects.filter(id=Adm_id)
+        dep=department.objects.get(id=BRadmin_aud_dep_id)
        
-        return render(request,'BRadmin_audit_employee.html', {'Adm':Adm})
+        return render(request,'BRadmin_audit_employee.html', {'Adm':Adm,'dep':dep})
     else:
         return redirect('/')
 
 #admin audit trained employee page
-def BRadmin_audit_trained_employees(request,BRadmin_aud_emp):
+def BRadmin_audit_trained_employees(request,BRadmin_aud_emp,Brasmin_aud_et):
     if 'Adm_id' in request.session:
         if request.session.has_key('Adm_id'):
             Adm_id = request.session['Adm_id']
         else:
             return redirect('/')
         Adm = user_registration.objects.filter(id=Adm_id)
-        if BRadmin_aud_emp == 1:
-            deg=designation.objects.get(designation='Digital manager')
-            emp=user_registration.objects.filter(designation=deg)
-            return render(request,'BRadmin_audit_employee_list.html', {'Adm':Adm,'emp':emp})
+        if Brasmin_aud_et == 1:
+            dep=department.objects.get(id=BRadmin_aud_emp)
+            emp=user_registration.objects.filter(department=dep,employee_type='1')
         else:
-            deg=designation.objects.get(designation='Digital Developer')
-            emp=user_registration.objects.filter(designation=deg)
-            return render(request,'BRadmin_audit_employee_list.html', {'Adm':Adm,'emp':emp})
+            dep=department.objects.get(id=BRadmin_aud_emp)
+            emp=user_registration.objects.filter(department=dep,employee_type='0')
+        return render(request,'BRadmin_audit_employee_list.html', {'Adm':Adm,'emp':emp})
+        
     else:
         return redirect('/')
 
@@ -18145,9 +18149,110 @@ def BRadmin_audit_dm_attendsearch(request,BRadmin_aud_emp_sattend):
         return render(request,'BRadmin_audit_dmemployee_ttend.html', {'Adm':Adm,'attend':attend,'emp':emp})
     else:
         return redirect('/')
+    
+# admin audit Digital marketing manager task assing search
+def BRadmin_audit_dm_tasksearch(request,BRadmin_aud_stask):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+
+        if request.method == 'POST':
+            fdate = request.POST['task_from']
+            tdate = request.POST['task_to']
+        emp=user_registration.objects.get(id=BRadmin_aud_stask)
+        task_ass=Dm_project_Task.objects.filter(dm_task_assigndate__gte=fdate,dm_task_assigndate__lte=tdate)
+        return render(request,'BRadmin_audit_dmhead_works.html', {'Adm':Adm,'task_ass':task_ass,'emp':emp})
+    else:
+        return redirect('/')
+
 
 
 # admin audit salary page
+def BRadmin_audit_dmemp_salary(request,BRadmin_aud_dmemp_sal):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        emp=user_registration.objects.get(id=BRadmin_aud_dmemp_sal)
+        salary=acntspayslip.objects.filter(user_id_id=BRadmin_aud_dmemp_sal).order_by('-fromdate')
+        return render(request,'BRadmin_audit_dmemployee_salary.html', {'Adm':Adm,'emp':emp,'salary':salary})
+    else:
+        return redirect('/')
+    
+#admin audit salary search in date vice 
+def BRadmin_audit_dm_salarysearch(request,BRadmin_aud_dmemp_ssalry):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        if request.method == 'POST':
+            fdate = request.POST['sal_from']
+            tdate = request.POST['sal_to']
+
+        emp=user_registration.objects.get(id=BRadmin_aud_dmemp_ssalry)
+        salary=acntspayslip.objects.filter(user_id_id=BRadmin_aud_dmemp_ssalry,fromdate__gte=fdate,fromdate__lte=tdate).order_by('-fromdate')
+        return render(request,'BRadmin_audit_dmemployee_salary.html', {'Adm':Adm,'emp':emp,'salary':salary})
+    else:
+        return redirect('/')
+
+#admin audit emloyee works
+def BRadmin_audit_dmemp_works(request,BRadmin_aud_dmemp_work):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        if request.method == 'POST':
+            fdate = request.POST['sal_from']
+            tdate = request.POST['sal_to']
+        deg=designation.objects.get(designation='Digital manager')
+        emp=user_registration.objects.get(id=BRadmin_aud_dmemp_work)
+        if emp.designation == deg:
+           task_ass=Dm_project_Task.objects.all()
+           return render(request,'BRadmin_audit_dmhead_works.html', {'Adm':Adm,'task_ass':task_ass,'emp':emp})
+        
+        else:
+            works=DM_projects.objects.all()
+            tasks=Dm_project_Task.objects.filter(dm_user_name_id=BRadmin_aud_dmemp_work).values('dm_project_id').distinct()
+    
+            return render(request,'BRadmin_audit_dmemployee_works.html', {'Adm':Adm,'emp':emp,'tasks':tasks,'works':works})
+    else:
+        return redirect('/')
+
+#aduit admin work tasks
+def BRadmin_audit_Works_tasks(request,BRadmin_adu_dmwt,BRadmin_aud_dmw):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+      
+        work_view=DM_projects.objects.get(id=BRadmin_aud_dmw)
+        task_data=DataCollect.objects.filter(Employeeid_id=BRadmin_adu_dmwt)
+        task_data1=Backlinks.objects.filter(bd_Employeeid_id=BRadmin_adu_dmwt)
+        task_data2=WebpageContent.objects.filter(web_Employeeid_id=BRadmin_adu_dmwt)
+        task_data3=CompanyAnalysis.objects.filter(analysis_Employeeid=BRadmin_adu_dmwt)
+        task_data4=ClientData.objects.filter(cd_Employeeid=BRadmin_adu_dmwt)
+        task_data5=OnPage.objects.filter(op_Employeeid=BRadmin_adu_dmwt)
+        task_data6=BlogCalander.objects.filter(blog_Employeeid=BRadmin_adu_dmwt)
+        task_data7=SmmPoster.objects.filter(smm_Employeeid=BRadmin_adu_dmwt)
+        
+        return render(request,'BRadmin_audit_dmwork_task.html', {'Adm':Adm,'task_data':task_data,'task_data1':task_data1,'task_data2':task_data2,'task_data3':task_data3,'task_data4':task_data4,'task_data5':task_data5,'task_data6':task_data6,'task_data7':task_data7,'work_view':work_view})
+    else:
+        return redirect('/')
+
+
+
+
 
 
 

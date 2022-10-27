@@ -66,6 +66,7 @@
                                 
                                 <th>Department</th>
                                 <th> Designation </th>
+                                <th> Employee Type</th>
                                 <th> Status</th>
                                 <th> Action </th>
                                 <th> Date of Appointment </th>
@@ -111,6 +112,20 @@
                                         <option value="{{i.id}}">{{i.designation}}</option>
                                         {%endfor%}
                                     </select>
+                                </td>
+                                <td>
+                                    <select class="badge badge-outline-primary bg-dark text-light" name="emp_type" >
+                                        <option style="display: none" value="{{i.employee_type}}">
+                                            {% if i.employee_type == '0' %}
+                                                Trained Employee
+                                            {% else %}
+                                                Direct Employee
+                                            {% endif %}
+                                        </option>
+                                        
+                                        <option value="1">Direct Employee</option>
+                                    </select>
+
                                 </td>
                                  <td>
                                     <select class="badge badge-outline-primary bg-dark text-light" name="stat" >

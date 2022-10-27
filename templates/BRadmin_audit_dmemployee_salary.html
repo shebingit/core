@@ -1,0 +1,123 @@
+{%extends 'BRadmin_index.html'%}
+{%load static%}
+{%block content%}
+
+<div class="text-end p-2 mb-3">
+    <a href="#" class="btn btn-outline-warning"style="text-decoration: none;"data-bs-toggle="modal" data-bs-target="#audit_emp_salary">
+        <span class="mdi mdi-file-find"></span>
+    </a>
+</div>
+
+
+<div class="row pt-3" style="background-color: black;">
+  <div class="" style="font-size: 20px;font-weight: 600;color:#6C7293;">ACCOUNTS</div>
+</div>
+<div class="row mt-4">
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title">Salary</div>
+      <input type="text" class="form-control" id="search" placeholder="search...">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" style="color:#6C7293;"> Date</th>
+              <th scope="col" style="color:#6C7293;"> Basic Salary</th>
+              <th scope="col" style="color:#6C7293;">Leave</th>
+              <th scope="col" style="color:#6C7293;">Delay</th>
+              <th scope="col" style="color:#6C7293;">Insentive</th>
+              <th scope="col" style="color:#6C7293;">Holding</th>
+              <th scope="col" style="color:#6C7293;">Reason</th>
+              <th scope="col" style="color:#6C7293;">Total Salary</th>
+              
+            </tr>
+          </thead>
+          <tbody id="myTable">
+
+            
+            {% for dp in salary %}
+              <tr>
+              <td style="color:white;">{{dp.fromdate}}</td>
+              <td style="color:white;">{{dp.basic_salary}}</td>
+              
+             
+              <td style="color:white;">{{dp.leavesno}}</td>
+
+              <td style="color:white;">{{dp.delay}}</td>
+
+              <td style="color:white;">{{dp.incentives}}</td>
+
+              <td style="color:white;">{{dp.other_allovance}}</td>
+
+              <td style="color:white;">{{none}}</td>
+
+              <td style="color:white;">{{dp.net_salary}}</td>
+             
+
+                </div>
+              </td>
+             
+             
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+  $(document).ready(function () {
+    $("#search").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+
+<script type="text/javascript">
+  function setselected(id) {
+    $('input[name="selected"]').val(id);
+  }
+</script>
+
+<!-- Modal for salary search -->
+
+<div class="modal fade" id="audit_emp_salary" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+      <div class="modal-content modal-xl" style="background-color: #191c24;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{emp.fullname}} :&nbsp;Attendance</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="m-3 p-2" action="{% url 'BRadmin_audit_dm_salarysearch' emp.id %}" method="post">
+                {% csrf_token %}
+                <label>From</label>
+                <input type="date" class="form-control m-3 p-2" name="sal_from" required>
+                <label>To</label>
+                <input type="date" class="form-control m-3 p-2" name="sal_to" required>
+
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-outline-success"></i>OK</button>
+                </div>
+                
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

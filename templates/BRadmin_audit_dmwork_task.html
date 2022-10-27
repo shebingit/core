@@ -1,131 +1,18 @@
-{% extends 'BRadmin_index.html' %}
+{% extends 'BRadmin_index.html' %} 
 {% load static %}
-{% block content %}
-<style>
-    a{
-        text-decoration: none;
-        
-    }
-    .card-footer
-    {
-        margin:none;
-        border:none;
-        color: green;
-    }
-</style>
-  
-
-<div class="row ">
-    <div class="col-12 grid-margin">
-       
-            <h4 class="p-3">{{work_view.dm_project_name}}&nbsp;Tasks</h4>
-            <div class="row g-5">
-                <div class="col-lg-4 col-sm-12">
-                  
-                    <div class="card p-4 text-center"> <a href="{% url 'BRadmin_audit_Works_data' work_view.id 1 %}"> Data Collection</a>
-                        <div class="card-footer text-end"> 
-                           <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bradmin_data_downlad"><span class="mdi mdi-file-excel"></span></button> 
-                        </div>
-                    </div>
-                   
-                </div>
-
-                <div class="col-lg-4 col-sm-12">
-                  
-                        <div class="card  p-4 text-center">  <a href="{% url 'BRadmin_audit_Works_data' work_view.id 2 %}">Backlink Details</a>
-                            <div class="card-footer text-end"> 
-                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bradmin_data_downlad"><span class="mdi mdi-file-excel"></span></button>
-                            </div>
-                        </div>
-                   
-                </div>
-
-                <div class="col-lg-4 col-sm-12">
-                   
-                        <div class="card  p-4 text-center"> <a href="{% url 'BRadmin_audit_Works_data' work_view.id 3 %}">Webpage Content creation </a> 
-                            <div class="card-footer text-end">
-                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bradmin_data_downlad"><span class="mdi mdi-file-excel"></span></button>
-                            </div>
-                        </div>
-                   
-                </div>
-
-                <div class="col-lg-4 col-sm-12">
-                    
-                        <div class="card  p-4 text-center"><a href="{% url 'BRadmin_audit_Works_data' work_view.id 4 %}">SMM Post Calender</a>
-                            <div class="card-footer text-end">  
-                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bradmin_data_downlad"><span class="mdi mdi-file-excel"></span></button>
-                            </div>
-                        </div>
-                  
-                </div>
-
-                <div class="col-lg-4 col-sm-12">
-                  
-                        <div class="card  p-4 text-center">  <a href="{% url 'BRadmin_audit_Works_data' work_view.id 5 %}">Blog calender</a>
-                            <div class="card-footer text-end"> 
-                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bradmin_data_downlad"><span class="mdi mdi-file-excel"></span></button> 
-                            </div>
-                         </div>
-                   
-                </div>
-
-                <div class="col-lg-4 col-sm-12">
-                    
-                        <div class="card  p-4 text-center"><a href="{% url 'BRadmin_audit_Works_data' work_view.id 6 %}">On page works</a>
-                            <div class="card-footer text-end"> 
-                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bradmin_data_downlad"><span class="mdi mdi-file-excel"></span> </button>
-                            </div>
-                        </div>
-                    </a> 
-                </div>
-
-                <div class="col-lg-4 col-sm-12">
-                    
-                        <div class="card  p-4 text-center"><a href="{% url 'BRadmin_audit_Works_data' work_view.id 7 %}">Competitor analysis/Website Audit</a>
-                            <div class="card-footer text-end"> 
-                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bradmin_data_downlad"><span class="mdi mdi-file-excel"></span> </button>
-                            </div>
-                        </div>
-                    
-                </div>
-
-                <div class="col-lg-4 col-sm-12">
-                   
-                        <div class="card  p-4 text-center"> <a href="{% url 'BRadmin_audit_Works_data' work_view.id 8 %}">Data collection - Client</a>
-                            <div class="card-footer text-end"> 
-                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bradmin_data_downlad"><span class="mdi mdi-file-excel"></span> </button>
-                            </div>
-                        </div>
-                    </a> 
-                </div>
-            </div>       
-    </div>
-</div>
+ {% block content %}
 
 
-{% if task_data %}
 
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'BRadmin_audit_search'  work_view.id 1 %}" method="post">
-            {% csrf_token %}
-            <label>From</label>
-            <input type="date" class="form-control m-3 p-2" name="report_from" required>
-            <label>To</label>
-            <input type="date" class="form-control m-3 p-2" name="report_to" required>
-            <div class="text-center">
-                <button type="submit" class="btn btn-outline-success"><i class="mdi mdi-file-find"></i>Search</button>
-            </div>
-            
-        </form>
-        <br>
+       
         <div class="row"> 
             <div class="col-12 grid-margin">
             <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4"> DATA COLLECTION</h4>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                    <h6 class="p-2 mdi mdi-application ">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                   
                         <form>
                         <div class="input-group input-group-sm mb-3">
                             <input
@@ -144,8 +31,7 @@
                         <table class="table" id="myTable">
                             <thead>
                                 <tr>
-
-                               
+                                
                                 <th scope="col">Date</th>
                                 <th scope="col">Full Name</th>
                                 <th scope="col">Email Id</th>
@@ -154,7 +40,6 @@
                                 <th scope="col">Applied Internship</th>
                                 <th scope="col">Experienced/Fresher</th>
                                 <th scope="col">Status/Remarks</th>
-                                <th scope="col">Data Collected By</th>
                                 
                                 </tr>
                             </thead>
@@ -178,7 +63,6 @@
                                 {% else %}
                                 <td>{{i.dc_status}}</td>
                                 {% endif %}
-                                <td>{{i.Employeeid.fullname}}</td>
                                 
                             </tr>
                             {% endif %}
@@ -197,27 +81,16 @@
 
     </div>
 
-{% elif task_data1 %}
+    <br>
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'BRadmin_audit_search'  work_view.id 2 %}" method="post">
-            {% csrf_token %}
-            <label>From</label>
-            <input type="date" class="form-control m-3 p-2" name="report_from" required>
-            <label>To</label>
-            <input type="date" class="form-control m-3 p-2" name="report_to" required>
-            <div class="text-center">
-                <button type="submit" class="btn btn-outline-success"><i class="mdi mdi-file-find"></i>Search</button>
-            </div>
-            
-        </form>
-        <br>
+       
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4"> BACK LINK DETAILS</h4>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                        <h6 class="p-2 mdi mdi-application ">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                       
                         <form>
                             <div class="input-group input-group-sm mb-3">
                             <input
@@ -241,7 +114,6 @@
                                     <th scope="col">Url</th>
                                     <th scope="col">Types</th>
                                     <th scope="col">Remarks/Status</th>
-                                    <th scope="col">Data Collected By</th>
                                 
                                 </tr>
                                 </thead>
@@ -256,8 +128,7 @@
                                 <td>{{i.bd_date}}</td>
                                 <td>{{i.bd_url}} </td>
                                 <td>{{i.bd_type}}</td>
-                                <td>{{i.bd_status}}</td> 
-                                <td>{{i.bd_Employeeid.fullname}}</td>         
+                                <td>{{i.bd_status}}</td>          
                             </tr>
                             {% endif %}
                                 
@@ -275,27 +146,16 @@
 
     </div>
 
-{% elif task_data2 %}
+    <br>
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'BRadmin_audit_search'  work_view.id 3 %}" method="post">
-            {% csrf_token %}
-            <label>From</label>
-            <input type="date" class="form-control m-3 p-2" name="report_from" required>
-            <label>To</label>
-            <input type="date" class="form-control m-3 p-2" name="report_to" required>
-            <div class="text-center">
-                <button type="submit" class="btn btn-outline-success"><i class="mdi mdi-file-find"></i>Search</button>
-            </div>
-            
-        </form>
-        <br>
+        
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4">WEB PAGE CONTENT</h4>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                        <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                        
                         <form>
                             <div class="input-group input-group-sm mb-3">
                             <input
@@ -320,7 +180,6 @@
                                         <th scope="col">Url</th>
                                         <th scope="col">Discription Of Content</th>
                                         <th scope="col">Keywords If Any</th>
-                                        <th scope="col">Data Collected By</th>
                                         
                                         </tr>
                                 
@@ -338,7 +197,6 @@
                                 <td>{{i.web_url}} </td>
                                 <td>{{i.web_dese}}</td>
                                 <td>{{i.web_key}}</td>
-                                <td>{{i.web_Employeeid.fullname}}</td>         
                                 
                                 
                             </tr>
@@ -357,26 +215,15 @@
 
     </div>
 
-{% elif task_data7 %}
+    <br>
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'BRadmin_audit_search'  work_view.id 4 %}" method="post">
-            {% csrf_token %}
-            <label>From</label>
-            <input type="date" class="form-control m-3 p-2" name="report_from" required>
-            <label>To</label>
-            <input type="date" class="form-control m-3 p-2" name="report_to" required>
-            <div class="text-center">
-                <button type="submit" class="btn btn-outline-success"><i class="mdi mdi-file-find"></i>Search</button>
-            </div>
-            
-        </form>
-        <br>
+        
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                   <div class="card-body">
                       <h4 class="text-center mb-4">SMM POST CALENDER</h4>
-                      <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                     
                       <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                           <form>
                             <div class="input-group input-group-sm mb-3">
@@ -404,7 +251,6 @@
                                       <th scope="col">Description</th>
                                       <th scope="col">Remarks/Status</th>
                                       <th scope="col">Poster</th>
-                                      <th scope="col">Data Collected By</th>
                                      
                                     </tr>
                                 </thead>
@@ -425,7 +271,6 @@
                                   {% if i.smm_file %}
                                     <td><img src="{{i.smm_file.url}}" style="width:15vh; height:14vh;"></td>
                                   {% endif %}
-                                  <td>{{i.smm_Employeeid.fullname}}</td>
                               </tr>
                             {% endif %}  
                             {% endfor %}
@@ -442,26 +287,15 @@
     
     </div>
 
-{% elif task_data6 %}
+    <br>
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'BRadmin_audit_search'  work_view.id 5 %}" method="post">
-            {% csrf_token %}
-            <label>From</label>
-            <input type="date" class="form-control m-3 p-2" name="report_from" required>
-            <label>To</label>
-            <input type="date" class="form-control m-3 p-2" name="report_to" required>
-            <div class="text-center">
-                <button type="submit" class="btn btn-outline-success"><i class="mdi mdi-file-find"></i>Search</button>
-            </div>
-            
-        </form>
-        <br>
+       
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                   <div class="card-body">
                       <h4 class="text-center mb-4">BLOG CALENDER</h4>
-                      <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                     
                       <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                           <form>
                             <div class="input-group input-group-sm mb-3">
@@ -486,7 +320,6 @@
                                       <th scope="col">Blog Title</th>
                                       <th scope="col">Keywords</th>
                                       <th scope="col">Remarks/Status</th>
-                                      <th scope="col">Data Collected By</th>
                                      
                                     </tr>
                                 </thead>
@@ -502,7 +335,6 @@
                                   <td>{{i.blog_title}} </td>
                                   <td>{{i.blog_key}}</td>
                                  <td>{{i.blog_status}}</td>
-                                 <td>{{i.blog_Employeeid.fullname}}</td>
                               </tr>
                             {% endif %}
                             {% endfor %}
@@ -519,26 +351,15 @@
     
     </div>
 
-{% elif task_data5 %}
+    <br>
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'BRadmin_audit_search'  work_view.id 6 %}" method="post">
-            {% csrf_token %}
-            <label>From</label>
-            <input type="date" class="form-control m-3 p-2" name="report_from" required>
-            <label>To</label>
-            <input type="date" class="form-control m-3 p-2" name="report_to" required>
-            <div class="text-center">
-                <button type="submit" class="btn btn-outline-success"><i class="mdi mdi-file-find"></i>Search</button>
-            </div>
-            
-        </form>
-        <br>
+       
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4">On Page Works</h4>
-                    <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                  
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                         
                         <form>
@@ -564,7 +385,6 @@
                                     <th scope="col">Url</th>
                                     <th scope="col">Work Details</th>
                                     <th scope="col">Remarks/Status</th>
-                                    <th scope="col">Data Collected By</th>
                                     
                                     </tr>
                                 </thead>
@@ -580,7 +400,6 @@
                                 <td>{{i.op_url}} </td>
                                 <td>{{i.op_work}}</td>
                                 <td>{{i.op_status}}</td>
-                                <td>{{i.op_Employeeid.fullname}}</td>
                             </tr>
                             {% endif %}
                             {% endfor %}
@@ -595,28 +414,19 @@
             </div>
         </div>
     </div>
-    
-{% elif task_data3 %}
+
+    <br>
+
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'BRadmin_audit_search'  work_view.id 7 %}" method="post">
-            {% csrf_token %}
-            <label>From</label>
-            <input type="date" class="form-control m-3 p-2" name="report_from" required>
-            <label>To</label>
-            <input type="date" class="form-control m-3 p-2" name="report_to" required>
-            <div class="text-center">
-                <button type="submit" class="btn btn-outline-success"><i class="mdi mdi-file-find"></i>Search</button>
-            </div>
-            
-        </form>
-        <br>
+        
+      
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4"> Competitor &nbsp; analysis / &nbsp;Website Audit</h4>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                        <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                       
                         <form>
                             <div class="input-group input-group-sm mb-3">
                             <input
@@ -638,7 +448,6 @@
                                
                                 <th scope="col">Date</th>
                                 <th scope="col">Company Name</th>
-                                <th scope="col">Data Collected By</th>
                                 
                     
                                 </tr>
@@ -653,7 +462,6 @@
                                
                                 <td>{{i.analysis_date}}</td>
                                 <td>{{i.analysis_compname}} </td>
-                                <td>{{i.analysis_Employeeid.fullname}} </td>
                             </tr>
                             {% endif %}
                             {% endfor %}
@@ -669,28 +477,17 @@
         </div>
 
     </div>
-
-{% elif task_data4 %}
+    
+    <br>
     <div class="card">
-        <form class="m-3 p-2" action="{% url 'BRadmin_audit_search'  work_view.id 8 %}" method="post">
-            {% csrf_token %}
-            <label>From</label>
-            <input type="date" class="form-control m-3 p-2" name="report_from" required>
-            <label>To</label>
-            <input type="date" class="form-control m-3 p-2" name="report_to" required>
-            <div class="text-center">
-                <button type="submit" class="btn btn-outline-success"><i class="mdi mdi-file-find"></i>Search</button>
-            </div>
-            
-        </form>
-        <br>
+       
         <div class="row"> 
             <div class="col-12 grid-margin">
                 <div class="card">
                 <div class="card-body">
                     <h4 class="text-center mb-4">DATA COLLECTION CLIENT</h4>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                        <h6 class="p-2 mdi mdi-application">&nbsp; count&nbsp; - &nbsp; {{rcount}}</h6>
+                      
                         <form>
                             <div class="input-group input-group-sm mb-3">
                             <input
@@ -715,7 +512,6 @@
                                     <th scope="col">Email Id</th>
                                     <th scope="col">Phone No</th>
                                     <th scope="col">Bussines Details</th>
-                                    <th scope="col">Data Collected By</th>
                                     
                         
                                     </tr>
@@ -733,7 +529,6 @@
                                 <td>{{i.cd_email}}</td>
                                 <td>{{i.cd_phno}}</td>
                                 <td>{{i.cd_bussines}}</td>
-                                <td>{{i.cd_Employeeid.fullname}}</td>
                                 
                             </tr>
                             {% endif %}
@@ -752,67 +547,5 @@
     </div>
 
 
-{% endif %}
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-  $(document).ready(function () {
-    $("#myInput").on("keyup", function () {
-      var value = $(this).val().toLowerCase();
-      $("#myTable tr").filter(function () {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-      });
-    });
-  });
   
-
-</script>
-
-
-
-  
-  <!-- Modal -->
-  <div class="modal fade" id="bradmin_data_downlad" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-dialog-centered">
-      <div class="modal-content"style="background-color: #191c24;">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Download Data </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form class="m-3 p-2" action="{% url 'Dm_datereport_download_data' work_view.id %}" method="post">
-                {% csrf_token %}
-                <label>From</label>
-                <input type="date" class="form-control m-3 p-2" name="report_from" required>
-                <label>To</label>
-                <input type="date" class="form-control m-3 p-2" name="report_to" required>
-                <label>Select The Task</label>
-                <select class="form-control m-3 p-2" name="task_name">
-                    <option class="p-2" selected>----Select----</option>
-                    <option class="p-2" value="Data Collection">Data Collection</option>
-                    <option class="p-2" value="Backlink Details">Backlink Details</option>
-                    <option class="p-2" value="Blog calender">Blog calender</option>
-                    <option class="p-2" value="SMM Post Calender">SMM Post Calender</option>
-                    <option class="p-2" value="Webpage Content creation">Webpage Content creation</option>
-                    <option class="p-2" value="On page works">On page works</option>
-                    <option class="p-2" value="Competitor analysis/Website Audit">Competitor analysis/Website Audit</option>
-                    <option class="p-2" value="Data collection - Client">Data collection - Client</option>
-                </select>
-
-
-                <div class="text-center mt-3">
-                    <button type="submit" class="btn btn-outline-success"></i>OK</button>
-                </div>
-                
-            </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-{% endblock %}
+ {% endblock%}
