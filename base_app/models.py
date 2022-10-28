@@ -815,3 +815,17 @@ class PM_ProjectDocument(models.Model):
     doc_status=models.CharField(max_length=10,null=True, blank=True,default='0')
     doc_project_ui=models.FileField(upload_to="ProjectUI", null=True)
 
+class ProjectCorrectionUpdation(models.Model):
+    project_cu_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    pdev_name=models.CharField(max_length=50,null=True, blank=True)
+    project_cu_module=models.CharField(max_length=100,null=True, blank=True)
+    project_cu_descrip=models.TextField()
+    project_oldui=models.ImageField(upload_to="ProjectUI", null=True)
+    project_cu_olddescrip=models.TextField()
+    project_cu_newui=models.ImageField(upload_to="ProjectUI", null=True)
+    project_cu_newdescrip=models.TextField()
+    project_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    project_cu_start=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    project_cu_end=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    project_cu_wdays=models.IntegerField(null=True,blank=True,default=0)
+    project_cu_status=models.CharField(max_length=50,null=True, blank=True)

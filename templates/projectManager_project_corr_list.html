@@ -1,0 +1,125 @@
+{%extends 'promanagerindex.html'%}
+{%load static%}
+{%block content%}
+
+
+
+<div class="container">
+    <div class="card">
+        <div class="row g-2">  
+            <h4 class="text-center p-3">{{pdoc.doc_project_name}}&nbsp;&nbsp;-&nbsp; Correction&nbsp; Add</h4>
+            <div class="col-12 grid-margin">
+                <div class="card p-4">
+                <form action="{% url 'pm_doc_corre_updattion' pdoc.doc_project_id.id 0 %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+        
+                    <label>Module and Desecription</label>
+                    
+                    <div class="input-group p-3 m-2">
+                        <select  class="form-control"name="doc_pm_cumodule_name"  style="background-color:#434a54;border:none; color: #fff;">
+                            <option selected class="p-2 m-2">Select Module</option>
+                            {% for i in proj %}
+                            <option class="p-2 m-2" value="{{i.module}}">{{i.module}}</option>
+                            {% endfor %}
+                            
+                        </select>
+                    </div>
+                    <div class="input-group p-3 m-2">
+                        <textarea class="form-control" name="doc_pm_cumodule_dese"  rows="15" style=" color: #fff;">Description !</textarea>
+                    </div>
+                    <br>
+                    <label class="m-2">Team Lead</label>
+                           
+                                <div class="input-group p-3 m-2">
+                                    <select class="form-control" name="doc_pm_cuname" style=" color: #fff;">
+                                        {% for i in proj_task %}
+                                          <option value="{{i.tl.fullname}}">{{i.tl.fullname}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+        
+                  
+                    <div class="p-3 m-3 text-end">
+                        <button type="submit" class="btn btn-outline-success">SAVE</button>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<br>
+<div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+              <div class="input-group input-group-sm mb-3">
+                <input
+                  type="text"
+                  class="form-control text-white"
+                  id="myInput"
+                  onkeyup="myFunction()"
+                  placeholder="Search . . ."
+                  style="border: green"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="table-responsive">
+            <table class="table" id="myTable">
+              <thead>
+                <tr>
+                
+                  <th>Date</th>
+                  <th>Project</th>
+                  <th>TL Name</th>
+                  <th>Module</th>
+                  <th>Discreption</th>
+                </tr>
+              </thead>
+              {% if proj_doc_cu %}
+              {% for i in proj_doc_cu %}
+              <tbody>
+              
+                  <tr>
+                      <td>{{i.project_cu_start|date:'d-m-Y'}}</td>
+                      <td><span class="ps-2">{{i.project_cu_id.project}}</span></td>
+                      <td>{{i.pdev_name}}</td>
+                      <td>{{i.project_cu_module}}</td>
+                      <td>{{i.project_cu_descrip}}</td>
+                      
+                  </tr>
+              
+                {% endfor %}
+                {% else%}
+                      <h5 style="text-align:center">Nothing to display!</h5>
+                {% endif %}
+              </tbody>
+          </table>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+      
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    
+  
+  </script>
+
+{%endblock%}

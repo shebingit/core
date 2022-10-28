@@ -6067,12 +6067,12 @@ def project_manager_doc_module(request,pmdoc_md_id):
         pro = user_registration.objects.filter(id=prid).order_by("-id")
         pdoc= PM_ProjectDocument.objects.get(id=pmdoc_md_id)
         proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
-        return render(request, 'projectManager_project_module_list.html',{'pro':pro,'proj':proj})
+        return render(request, 'projectManager_project_module_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc})
     else:
         return redirect('/')
 
 # Document correction or Update mark and assign page 
-def pm_doc_md_corr_upd(request,pmdoc_md_crup_id):
+def pm_doc_md_corr_upd(request,pmdoc_md_crup_id,coup):
     if 'prid' in request.session:
         if request.session.has_key('prid'):
             prid = request.session['prid']
@@ -6081,17 +6081,217 @@ def pm_doc_md_corr_upd(request,pmdoc_md_crup_id):
         pro = user_registration.objects.filter(id=prid).order_by("-id")
         pdoc= PM_ProjectDocument.objects.get(id=pmdoc_md_crup_id)
         proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
-        return render(request, 'projectManager_project_corr_upd_list.html',{'pro':pro,'proj':proj})
+        proj_task=project_taskassign.objects.filter(project=pdoc.doc_project_id)
+       
+        
+        if coup == 0:
+            proj_doc_cu=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='correction')
+            return render(request, 'projectManager_project_corr_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc,'proj_task':proj_task,'proj_doc_cu':proj_doc_cu})
+        else:
+            proj_doc_cu=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='updation')
+            return render(request, 'projectManager_project_upd_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc,'proj_task':proj_task,'proj_doc_cu':proj_doc_cu})
     else:
         return redirect('/')
 
+# Document correction or Updation add
+def pm_doc_corre_updattion(request,pmdoc_pid,pmdoc_cu):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        
+        if request.method =="POST":
+            p1=request.POST['doc_pm_cumodule_name']
+            p2=request.POST['doc_pm_cumodule_dese']
+            p3=request.POST['doc_pm_cuname']
+            proj=project.objects.get(id=pmdoc_pid)
+            proj_doc_cu=ProjectCorrectionUpdation()
+            proj_doc_cu.project_cu_module=p1
+            proj_doc_cu.project_cu_descrip=p2
+            proj_doc_cu.pdev_name=p3
+            proj_doc_cu.project_cu_id=proj
+            proj_doc_cu.project_cu_start=date.today()
+            if pmdoc_cu == 0:
+                proj_doc_cu.project_cu_status='correction'
+            else:
+                proj_doc_cu.project_cu_status='updation'
+            proj_doc_cu.save()
+
+        return redirect('projectManager_project_document')
+    else:
+        return redirect('/')
+
+
+
+
+
+ #********************************** Project manager project Document 
+
+def pm_doc_pdf(request,fulldoc_pdf):
+    date = datetime.now()  
+    try:
+        project_datils=PM_ProjectDocument.objects.get(id=fulldoc_pdf)
+    except PM_ProjectDocument.DoesNotExist:
+        project_datils=None
+        return redirect('projectManager_project_document')
+    projects=project.objects.get(id=project_datils.doc_project_id.id)
+    project_module=project_module_assign.objects.filter(project_name=projects)
+    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='correction' )
+    project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='updation' )
+   
+    
+
+    template_path = 'pm_project_document_pdf.html'
+    context = {'projects':projects,
+    'project_module':project_module,
+    'project_correction':project_correction,
+    'project_updation':project_updation,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+# Document desecription pdf
+def pm_doc_des_pdf(request,desedoc_pdf):
+    date = datetime.now()  
+    try:
+        project_datils=PM_ProjectDocument.objects.get(id=desedoc_pdf)
+    except PM_ProjectDocument.DoesNotExist:
+        project_datils=None
+        return redirect('projectManager_project_document')
+    projects=project.objects.get(id=project_datils.doc_project_id.id)
+    project_module=project_module_assign.objects.filter(project_name=projects)
+    
+   
+    
+
+    template_path = 'pm_project_document_dese_pdf.html'
+    context = {'projects':projects,
+    'project_module':project_module,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-desecription.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+# document correction pdf  
+
+def pm_doc_corr_pdf(request,corredoc_pdf):
+    date = datetime.now()  
+    try:
+        project_datils=PM_ProjectDocument.objects.get(id=corredoc_pdf)
+    except PM_ProjectDocument.DoesNotExist:
+        project_datils=None
+        return redirect('projectManager_project_document')
+    projects=project.objects.get(id=project_datils.doc_project_id.id)
+   
+    project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='correction' )
+    
+   
+    template_path = 'pm_project_document_corre_pdf.html'
+    context = {'projects':projects,
+    'project_correction':project_correction,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-correction.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+  
+# document updation pdf 
+def pm_doc_updt_pdf(request,updedoc_pdf):
+    date = datetime.now()  
+    try:
+        project_datils=PM_ProjectDocument.objects.get(id=updedoc_pdf)
+    except PM_ProjectDocument.DoesNotExist:
+        project_datils=None
+        return redirect('projectManager_project_document')
+    projects=project.objects.get(id=project_datils.doc_project_id.id)
+   
+    project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='updation' )
+    
+   
+    template_path = 'pm_project_document_updation_pdf.html'
+    context = {'projects':projects,
+    'project_updation':project_updation,
+    'date':date,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-updation.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+
     
     
 
 
 
 
-    
+    #******************************************************************************************************************************
 
 def projectmanager_rejected_projects(request):
     if 'prid' in request.session:

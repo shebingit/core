@@ -1609,15 +1609,22 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('BRadmin_audit_dm_salarysearch/<int:BRadmin_aud_dmemp_ssalry>', views.BRadmin_audit_dm_salarysearch, name='BRadmin_audit_dm_salarysearch'),
     path('BRadmin_audit_dmemp_works/<int:BRadmin_aud_dmemp_work>', views.BRadmin_audit_dmemp_works, name='BRadmin_audit_dmemp_works'),
     path('BRadmin_audit_Works_tasks/<int:BRadmin_adu_dmwt>/<int:BRadmin_aud_dmw>', views.BRadmin_audit_Works_tasks, name='BRadmin_audit_Works_tasks'),   
- path('BRadmin_audit_dm_tasksearch/<int:BRadmin_aud_stask>', views.BRadmin_audit_dm_tasksearch, name='BRadmin_audit_dm_tasksearch'),
+   path('BRadmin_audit_dm_tasksearch/<int:BRadmin_aud_stask>', views.BRadmin_audit_dm_tasksearch, name='BRadmin_audit_dm_tasksearch'),
 
 
  #************************************* Project manager Document section
    path('projectManager_project_document', views.projectManager_project_document, name='projectManager_project_document'),
    path('project_manager_doc_start/<int:pmdoc_id>', views.project_manager_doc_start, name='project_manager_doc_start'),
    path('project_manager_doc_module/<int:pmdoc_md_id>', views.project_manager_doc_module, name='project_manager_doc_module'),
-   path('pm_doc_md_corr_upd/<int:pmdoc_md_crup_id>', views.pm_doc_md_corr_upd, name='pm_doc_md_corr_upd'),
+   path('pm_doc_md_corr_upd/<int:pmdoc_md_crup_id>/<int:coup>', views.pm_doc_md_corr_upd, name='pm_doc_md_corr_upd'),
+   path('pm_doc_corre_updattion/<int:pmdoc_pid>/<int:pmdoc_cu>', views.pm_doc_corre_updattion, name='pm_doc_corre_updattion'),
 
+   ############## document section ########################
+   path('pm_doc_pdf/<int:fulldoc_pdf>', views.pm_doc_pdf, name='pm_doc_pdf'),
+   path('pm_doc_des_pdf/<int:desedoc_pdf>', views.pm_doc_des_pdf, name='pm_doc_des_pdf'),
+   path('pm_doc_corr_pdf/<int:corredoc_pdf>', views.pm_doc_corr_pdf, name='pm_doc_corr_pdf'),
+   path('pm_doc_updt_pdf/<int:updedoc_pdf>', views.pm_doc_updt_pdf, name='pm_doc_updt_pdf'),
+   
 
 
 ]

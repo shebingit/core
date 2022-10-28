@@ -1,14 +1,38 @@
 {%extends 'promanagerindex.html'%}
 {%load static%}
 {%block content%}
-<div class="card">
-    <div class="card-body">
-        {% for i in proj %}
-            {{i.module}}
-            <p>{{i.description}}</p>
-        {% endfor %}
+
+<style>
+    .card
+    {
+        background-color:#f5f5f5;
+        color: black;
+        font-size: 1.3rem;
+        font-weight: 500;
+
+    }
+    .card p{
+        font-weight: 400;
+        font-size: 1rem;
+    }
+</style>
+
+
+<div class="container p-1">
+    <div class="card">
+        <div class="card-head">
+            <h3 class="text-primary p-3 text-center mt-2">{{pdoc.doc_project_name}}</h3>
+        </div>
+        <div class="card-body">
+            {% for i in proj %}
+                <h4 class="p-2">{{i.module}}</h4>
+                <p class="pl-3">&#9830;&nbsp;{{i.description}}</p>
+            {% endfor %}
+        </div>
     </div>
+
 </div>
+
 
 
 {%endblock%}
