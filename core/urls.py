@@ -1611,6 +1611,15 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('BRadmin_audit_Works_tasks/<int:BRadmin_adu_dmwt>/<int:BRadmin_aud_dmw>', views.BRadmin_audit_Works_tasks, name='BRadmin_audit_Works_tasks'),   
  path('BRadmin_audit_dm_tasksearch/<int:BRadmin_aud_stask>', views.BRadmin_audit_dm_tasksearch, name='BRadmin_audit_dm_tasksearch'),
 
+
+ #************************************* Project manager Document section
+   path('projectManager_project_document', views.projectManager_project_document, name='projectManager_project_document'),
+   path('project_manager_doc_start/<int:pmdoc_id>', views.project_manager_doc_start, name='project_manager_doc_start'),
+   path('project_manager_doc_module/<int:pmdoc_md_id>', views.project_manager_doc_module, name='project_manager_doc_module'),
+   path('pm_doc_md_corr_upd/<int:pmdoc_md_crup_id>', views.pm_doc_md_corr_upd, name='pm_doc_md_corr_upd'),
+
+
+
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

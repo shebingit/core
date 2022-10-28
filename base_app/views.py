@@ -5841,6 +5841,7 @@ def projectmanager_createproject(request):
             mem = user_registration.objects.filter(id=prid)
             mem2 = user_registration.objects.get(id=prid)
             var = project()
+            doc = PM_ProjectDocument()
             var.projectmanager_id = prid
             var.department_id = mem2.department_id
             var.project=request.POST.get('pname')
@@ -5851,6 +5852,14 @@ def projectmanager_createproject(request):
             var.branch_id=br_id.branch_id
             
             var.save()
+            doc.doc_project_id= var
+            doc.doc_project_name = request.POST.get('pname')
+            doc.doc_project_startdate = request.POST.get('sdate')
+            doc.doc_project_enddate = request.POST.get('edate')
+            doc.save()
+
+
+
             msg_success = "Project created successfully"
             return render(request, 'projectmanager_createproject.html',{'msg_success':msg_success})
         return render(request, 'projectmanager_createproject.html',{'pro':mem})
@@ -6011,6 +6020,78 @@ def projectManager_edit_projects_status(request):
             return render(request, 'projectManager_edit_projects_status.html',{'pro':pro,'projects':projects})
     else:
         return redirect('/')
+    
+
+#******************************** Project Documents ***********************(27/10/22)
+    
+#  project manager project Document list page   
+    
+def projectManager_project_document(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid).order_by("-id")
+        projects = project.objects.all().order_by("-id")
+        proj_doc=PM_ProjectDocument.objects.all()
+        return render(request, 'projectManager_project_documnent_list.html',{'pro':pro,'proj_doc':proj_doc})
+    else:
+        return redirect('/')
+
+# project document start
+def project_manager_doc_start(request,pmdoc_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid).order_by("-id")
+        pdoc= PM_ProjectDocument.objects.get(id=pmdoc_id)
+        pdoc.doc_project_currentdate=date.today()
+        pdoc.doc_status=1
+        pdoc.save()
+        proj_doc=PM_ProjectDocument.objects.all()
+        return render(request, 'projectManager_project_documnent_list.html',{'pro':pro,'proj_doc':proj_doc})
+    else:
+        return redirect('/')
+
+# project document module view
+    
+def project_manager_doc_module(request,pmdoc_md_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid).order_by("-id")
+        pdoc= PM_ProjectDocument.objects.get(id=pmdoc_md_id)
+        proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
+        return render(request, 'projectManager_project_module_list.html',{'pro':pro,'proj':proj})
+    else:
+        return redirect('/')
+
+# Document correction or Update mark and assign page 
+def pm_doc_md_corr_upd(request,pmdoc_md_crup_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid).order_by("-id")
+        pdoc= PM_ProjectDocument.objects.get(id=pmdoc_md_crup_id)
+        proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
+        return render(request, 'projectManager_project_corr_upd_list.html',{'pro':pro,'proj':proj})
+    else:
+        return redirect('/')
+
+    
+    
+
+
+
+
+    
 
 def projectmanager_rejected_projects(request):
     if 'prid' in request.session:

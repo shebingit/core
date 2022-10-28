@@ -799,3 +799,19 @@ class TSproject_Task_verify(models.Model):
     ts_task_status=models.CharField(max_length=200, null=True,default="")
     ts_delay=models.CharField(max_length=200, null=True,default="0")
     ts_reson_dely=models.TextField(default=" ")
+
+
+
+#******************** Project Document - shebin shaji (25-10-22) *****************
+    
+class PM_ProjectDocument(models.Model):
+    doc_project_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    doc_project_name=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_currentdate=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    doc_project_startdate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    doc_project_enddate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    doc_project_frontend=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_backend=models.CharField(max_length=100,null=True, blank=True)
+    doc_status=models.CharField(max_length=10,null=True, blank=True,default='0')
+    doc_project_ui=models.FileField(upload_to="ProjectUI", null=True)
+

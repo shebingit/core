@@ -1,0 +1,148 @@
+{%extends 'promanagerindex.html'%}
+{%load static%}
+{%block content%}
+<style>
+    @media (max-width:992px) {
+      #log {
+        max-width: 100px;
+        margin-top: 12px;
+        margin-left: 25px;
+        margin-right: 15px;
+      }
+    }
+    a{
+        text-decoration: none;
+    }
+    a:hover
+    {
+        text-decoration: none;
+       
+    }
+    table
+    {
+        text-align: center;
+    }
+    i{
+        font-size: .90rem;
+    }
+    i:hover{
+        color: #fff;
+    }
+    .icon
+    {
+      font-size: 1.3rem;
+    }
+  </style>
+  
+  
+  <div class="row">
+    <div class="mb-2 " style="font-size: 20px;font-weight: 600;color: #dfe1ed;">Projects Document List</div>
+  </div>
+
+  
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+              <div class="input-group input-group-sm mb-3">
+                <input
+                  type="text"
+                  class="form-control text-white"
+                  id="myInput"
+                  onkeyup="myFunction()"
+                  placeholder="Search . . ."
+                  style="border: green"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="table-responsive">
+            <table class="table" id="myTable">
+              <thead>
+                <tr>
+                  <th>Project View</th>
+                  <th>Project</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Start Document</th>
+                  <th>Doc.Start Date</th>
+                  <th>Project Details</th>
+                  <th>Correction/Updation</th>
+                  <th>Desecription</th>
+                  <th>Correction</th>
+                  <th>Updation</th>
+                  <th>Project Document</th>
+                  <th>Current Project UI</th>
+  
+                </tr>
+              </thead>
+              {% if proj_doc %}
+              {% for i in proj_doc %}
+              <tbody>
+                  <tr>
+                      <td>
+                        <a class="text-danger pr-2" href="" style="cursor:pointer"><i class="mdi mdi-delete ">Delete</i></a>
+                        <a class="text-primary pl-2" href="" style="cursor:pointer"><i class="mdi mdi-pen ">Edit</i></a>
+                      </td>
+                      <td><span class="ps-2">{{i.doc_project_name}}</span></td>
+                      <td>{{i.doc_project_startdate|date:'d-m-Y'}}</td>
+                      <td>{{i.doc_project_enddate|date:'d-m-Y'}}</td>
+                    
+                      <td> 
+                        {% if i.doc_status == '0' %}
+                          <a class="text-success" href="{% url 'project_manager_doc_start' i.id %}" style="cursor:pointer"><i class="mdi mdi-power icon"></i></a>start
+                        {% else %}
+                          Doc.work started
+                        {% endif%}
+                      </td>
+                     
+                      <td>{{i.doc_project_currentdate|date:'d-m-Y'}}</td>
+                      {% if i.doc_status == '1' %}
+                        <td><a class="" href="{% url 'project_manager_doc_module' i.id %}" style="cursor:pointer"><i class="mdi mdi-plus-circle-outline icon"></i></a>View</td>
+                        <td><a class="text-warning" href="{% url 'pm_doc_md_corr_upd' i.id %}" style="cursor:pointer"><i class="mdi mdi-book-multiple icon"></i></a></td>
+                        <td><a class="text-danger" href="" style="cursor:pointer"><i class="mdi mdi-file-pdf icon"></i>  </a></td>
+                        <td><a class="text-danger" href="" style="cursor:pointer"><i class="mdi mdi-file-pdf icon"></i> </a></td>
+                        <td><a  class="text-danger" href="" style="cursor:pointer"><i class="mdi mdi-file-pdf icon"></i> </a></td>
+                        <td><a  class="text-danger" href="" style="cursor:pointer"><i class="mdi mdi-file-pdf icon"></i> </a></td>
+                        <td><a  class="btn btn-outline-secondary" href="" style="cursor:pointer">Add/Show</a></td>
+                      {% else %}
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      {% endif %}
+                  </tr>
+                  {% endfor %}
+                  {% else%}
+                      <h5 style="text-align:center">Nothing to display!</h5>
+                  {% endif %}
+              </tbody>
+          </table>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+      
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    
+  
+  </script>
+
+{%endblock%}

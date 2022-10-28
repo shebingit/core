@@ -1,14 +1,30 @@
 {% extends 'BRadmin_index.html' %} 
 {% load static %}
 {% block content %}
-<div class="text-end p-2 mb-3">
-    <a href="#" class="btn btn-outline-warning"style="text-decoration: none;"data-bs-toggle="modal" data-bs-target="#audit_emp_attend">
-        <span class="mdi mdi-file-find"></span>
-    </a>
+
+
+<div class="row">
+  
 </div>
 
 <div class="row">
-    <div class="col-md-12grid-margin stretch-card">
+  <div class="col-md-4 grid-margin stretch-card ">
+    <div class="card">
+      <form class=" mt-4 p-3" action="{% url 'BRadmin_audit_dm_attendsearch' emp.id %}" method="post">
+        {% csrf_token %}
+        <label>From</label>
+        <input type="date" class="form-control mt-3 mb-2 p-2" name="d_from" required>
+        <label>To</label>
+        <input type="date" class="form-control mt-3 mb-2 p-2" name="d_to" required>
+
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-outline-success"></i>OK</button>
+        </div>
+        
+    </form>
+    </div>
+  </div>
+    <div class="col-md-8 grid-margin stretch-card">
         <div class="card">
            
             <div class="card-body">
@@ -62,6 +78,7 @@
             </div>
         </div>
     </div>
+    
 </div>
 
 
@@ -87,35 +104,6 @@ $(document).ready(function(){
 });
     </script>
 
-<!-- Modal for attendance search -->
 
-    <div class="modal fade" id="audit_emp_attend" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered">
-          <div class="modal-content modal-xl" style="background-color: #191c24;">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">{{emp.fullname}} :&nbsp;Attendance</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form class="m-3 p-2" action="{% url 'BRadmin_audit_dm_attendsearch' emp.id %}" method="post">
-                    {% csrf_token %}
-                    <label>From</label>
-                    <input type="date" class="form-control m-3 p-2" name="d_from" required>
-                    <label>To</label>
-                    <input type="date" class="form-control m-3 p-2" name="d_to" required>
-
-                    <div class="text-center mt-3">
-                        <button type="submit" class="btn btn-outline-success"></i>OK</button>
-                    </div>
-                    
-                </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              
-            </div>
-          </div>
-        </div>
-      </div>
 
 {% endblock %}

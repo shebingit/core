@@ -1,0 +1,14 @@
+{%extends 'promanagerindex.html'%}
+{%load static%}
+{%block content%}
+<div class="card">
+    <div class="card-body">
+        {% for i in proj %}
+            {{i.module}}
+            <p>{{i.description}}</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+{%endblock%}
