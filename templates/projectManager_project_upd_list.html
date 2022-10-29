@@ -33,7 +33,9 @@
                                 <div class="input-group p-3 m-2">
                                     <select class="form-control" name="doc_pm_cuname" style=" color: #fff;">
                                         {% for i in proj_task %}
-                                          <option value="{{i.tl.fullname}}">{{i.tl.fullname}}</option>
+                                        
+                                          <option value="{{i.fullname}}">{{i.fullname}}</option>
+                                        
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -89,7 +91,7 @@
                   <tr>
                       <td>{{i.project_cu_start|date:'d-m-Y'}}</td>
                       <td><span class="ps-2">{{i.project_cu_id.project}}</span></td>
-                      <td>{{i.pdev_name}}</td>
+                      <td>{{i.ptl_name}}</td>
                       <td>{{i.project_cu_module}}</td>
                       <td>{{i.project_cu_descrip}}</td>
                       

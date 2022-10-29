@@ -152,6 +152,8 @@ class user_registration(models.Model):
     @property
     def avg(self):
         return (self.attitude+self.creativity+self.workperformance)/3
+    
+
 
 
 class extracurricular(models.Model):
@@ -245,6 +247,7 @@ class project_taskassign(models.Model):
     tester = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
                                related_name='project_taskassign_tester', null=True, blank=True)
     description = models.TextField()
+  
     task = models.CharField(max_length=200, null=True, blank=True)
     subtask = models.CharField(max_length=200, null=True, blank=True)
     startdate = models.DateField(
@@ -817,7 +820,8 @@ class PM_ProjectDocument(models.Model):
 
 class ProjectCorrectionUpdation(models.Model):
     project_cu_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
-    pdev_name=models.CharField(max_length=50,null=True, blank=True)
+    ptl_name=models.CharField(max_length=50,null=True, blank=True,default='')
+    pdev_name=models.CharField(max_length=50,null=True, blank=True,default='')
     project_cu_module=models.CharField(max_length=100,null=True, blank=True)
     project_cu_descrip=models.TextField()
     project_oldui=models.ImageField(upload_to="ProjectUI", null=True)
@@ -829,3 +833,11 @@ class ProjectCorrectionUpdation(models.Model):
     project_cu_end=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     project_cu_wdays=models.IntegerField(null=True,blank=True,default=0)
     project_cu_status=models.CharField(max_length=50,null=True, blank=True)
+
+
+
+class wrdata(models.Model):
+    wrn_develp=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='wr_devp',null=True,blank=True)
+    wrn_user_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='wr_user',null=True,blank=True)
+    wrn_reason=models.CharField(max_length=200,null=True, blank=True)
+    wrn_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)

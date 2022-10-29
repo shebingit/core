@@ -29,15 +29,19 @@
          
      
       <label>Project</label>
-      <select class="form-control" name="yyy" id="" style='color:white !important'>
+      <select class="form-control" name="yyy" id="first-select" style='color:white !important'>
         <option>
           --select--
         </option>
         {% for j in pvar %}
         <option value="{{j.id}}">{{j.project}}</option>
-       print({{j.id}})
+      
         {% endfor %}
       </select>  <br>
+      <label>Select Module</label>
+      <select class="form-control" name="tname" id='second-select'  style='color:white !important'>
+    
+       </select> <br>
       <label>Task</label>
       <input type="text" class="form-control card-title col-12 md-4" name="task" autocomplete="off">
       <label>Description</label>
@@ -66,7 +70,7 @@
         javascript: history.go(-2);
     </script>
     {% endif %}
-// <script>
+ <script>
 // var today = new Date();
 // var dd = today.getDate();
 // var mm = today.getMonth() + 1; //January is 0!
@@ -85,5 +89,40 @@
 // document.getElementById("edate").setAttribute("min", today);
 // </script>
 {% endblock %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+$(document).ready(function () {
+$('#first-select').change(function() {
+
+  // send ajax request when the first select is changed:
+  console.log($(this).val())
+  $.ajax({
+    url : "{% url 'get_instances' %}",
+    type : 'POST',
+    data : {
+      instanceID : $(this).val()
+    },
+    success : function(response) {
+      console.log(response)
+    
+      // this function executes on receiving a successful response from the backend:
+      var secondSelect = $('#second-select');
+      secondSelect.empty();
+      
+     
+      // iterate over the instances in the response and add them to the second select
+      for (var instance in response.is_taken) {
+        console.log(is_taken.module)
+        secondSelect.append($('<option>', {value : is_taken.module,text : is_taken.module})
+          );
+      }
+
+    }
+  }  
+)
+});
+})
+
+</script>
 
 </html>

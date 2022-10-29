@@ -211,6 +211,7 @@
             <thead style="background-color: black;">
               <tr>
                 <th scope="col" class="text-light">Date</th>
+                <th scope="col" class="text-light">Module</th>
                 <th scope="col" class="text-light">Task</th>
                 <th scope="col" class="text-light">Sub Task</th>
                 <th scope="col" class="text-light">Work Done</th>
@@ -227,6 +228,7 @@
               <tr>
 
                 <td class="text-light">{{i.date|date:"d-m-Y"}} </td>
+                <td class="text-light"><label name="task">{{var.project.project}}</label>
                 <td class="text-light"><label name="task">{{i.subtask.task}}</label>
                 </td>
                 <td class="text-light"><label name="subtask">{{i.subtask.subtask}}</label>
@@ -242,6 +244,7 @@
               <tr>
 
                 <td class="text-light">{{date1|date:"d-m-Y"}} </td>
+                <td></td>
                 <td class="text-light"><label name="task">{{var.task}}</label></td>
                 <td class="text-light"><label name="subtask">{{var.subtask}}</label></td>
                 <td class="text-light"><textarea name="workdone" style="height: 90px;"></textarea></td>

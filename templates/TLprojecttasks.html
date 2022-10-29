@@ -19,13 +19,18 @@
   <div class="" style="font-size: 20px;font-weight: 600;color:#6C7293;">PROJECT TASKS</div>
 </div>
 <div class="row mt-4">
+  
   <div class="card">
+    <div class="text-end m-2 p-2">
+      <a href="{% url 'Tl_ptoject_doc' proj.id %}" class="btn btn-primary">Project Doc.Report</a>
+    </div>
     <div class="card-body">
       <input type="text" class="form-control" id="myInput" placeholder="search...">
       <div class="table-responsive">
         <table class="table" >
           <thead>
             <tr>
+             
               <th scope="col" style="color:#6C7293;">Task name</th>
               <th scope="col" style="color:#6C7293;">AssignedTo</th>
               <th scope="col" style="color:#6C7293;">Task Status</th>
@@ -43,6 +48,7 @@
               {% for i in tasks %}
 
               <tr>
+             
                 <td style="color:white;">{{i.task}}</td>
 
                 <td style="color:white;">{{i.developer}}</td>

@@ -1624,6 +1624,18 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    path('pm_doc_des_pdf/<int:desedoc_pdf>', views.pm_doc_des_pdf, name='pm_doc_des_pdf'),
    path('pm_doc_corr_pdf/<int:corredoc_pdf>', views.pm_doc_corr_pdf, name='pm_doc_corr_pdf'),
    path('pm_doc_updt_pdf/<int:updedoc_pdf>', views.pm_doc_updt_pdf, name='pm_doc_updt_pdf'),
+
+
+
+   #************************ Tl project document section
+   path('Tl_ptoject_doc/<int:tlproj_id>', views.Tl_ptoject_doc, name='Tl_ptoject_doc'),
+   path('get_instances', views.get_instances, name='get_instances'),
+
+
+
+
+   #***************** tl project task delay
+   path('TLproject_task_delay', views.TLproject_task_delay, name='TLproject_task_delay'),
    
 
 

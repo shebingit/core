@@ -2,9 +2,77 @@
 {%load static%}
 {%block content%}
 
+<style>
+	
+	.w3-wrapper{
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    position: relative;
+    padding: 11px 7px 15px 7px;
+    display: block;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    box-sizing: border-box;
+    height: 54px;
+    width:38px;
+  }
+  .notify-icon{
+    width: 25px;
+      height: 25px;
+      display: block;
+      position: relative;
+      background-position: center center;
+    animation:ring 1.6s linear infinite;
+  }
+  .w3-count{
+     position: absolute;
+      padding: 2px 3px;
+      background: #FF4F38;
+      color: #fff;
+      border-radius: 30px;
+      top: 7px;
+      right: 0px;
+      min-width: 12px;
+      font-size: 11px;
+      z-index: 200;
+      text-align: center;
+      animation: w3-alert-red 1.6s infinite;
+  }
+  @keyframes ring
+  {
+    0% { transform: rotate(0deg) }
+    5% { transform: rotate(0deg) }
+    15% { transform: rotate(0deg) }
+    25% { transform: rotate(20deg) }
+    35% { transform: rotate(-15deg) }
+    45% { transform: rotate(10deg) }
+    55% { transform: rotate(-5deg) }
+    60% { transform: rotate(0deg) }
+    100% { transform: rotate(0deg) }
+  }
+	
+  
+
+
+  </style>
+
 
 <div class="row pt-3" >
-    <div class="" style="font-size: 20px;font-weight: 600;color:#6C7293;">PROJECTS</div></div>
+  <div class="col-6">
+    <div class="" style="font-size: 20px;font-weight: 600;color:#6C7293;">PROJECTS</div>
+  </div>
+  <div class="col-6">
+   {% if notific > 0 %}
+      <a href="{% url 'TLproject_task_delay' %}" class="w3-wrapper sdp-glow">
+        <span class="mdi mdi-email-outline mdi-24px notify-icon"></span> 
+        <span class="w3-count">{{notific}}</span>
+      </a>
+    {% endif %}
+  </div>
+    
+    
+  </div>
    
     <div class="row mt-4">
       {% for i in display %}

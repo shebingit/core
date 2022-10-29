@@ -1,0 +1,28 @@
+{%extends 'TLindex.html'%}
+{%load static%}
+{%block content%}
+<style>
+    .container
+    {
+        background-color: #fff;
+        color: black;
+        font-weight: 400;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-8 p-2"></div>
+        <div class="col-4 p-2">
+            {% for i in pro_corr_up %}
+            <p>{{i.project_cu_module}}</p> 
+            <p>{{i.project_cu_descrip}}</p> 
+            <p>{{i.project_cu_status}}</p> 
+            <hr>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

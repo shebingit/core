@@ -7,6 +7,7 @@ import random
 import csv
 import os, json, math
 # import psycopg2
+from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from urllib.parse import urlencode
@@ -5751,6 +5752,7 @@ def projectmanager_assignproject(request):
         spa = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= d.id)
         
         pvar = project.objects.filter(Q(status="accepted")|Q(status="assigned"))
+        modules = project_module_assign.objects.all()
         
         if request.method =='POST':
             
@@ -5794,8 +5796,8 @@ def projectmanager_assignproject(request):
             #       [recepient], fail_silently=False)
             msg_success = "Project assigned successfully"
             
-            return render(request, 'projectmanager_assignproject.html',{'pro':pro,'spa':spa,'pvar':pvar,'tes':tes, 'msg_success':msg_success})
-        return render(request, 'projectmanager_assignproject.html', {'pro':pro,'spa':spa,'pvar':pvar,'tes':tes})
+            return render(request, 'projectmanager_assignproject.html',{'pro':pro,'spa':spa,'pvar':pvar,'tes':tes, 'msg_success':msg_success,'modules':modules})
+        return render(request, 'projectmanager_assignproject.html', {'pro':pro,'spa':spa,'pvar':pvar,'tes':tes,'modules':modules})
     else:
         return redirect('/')
 
@@ -6081,7 +6083,10 @@ def pm_doc_md_corr_upd(request,pmdoc_md_crup_id,coup):
         pro = user_registration.objects.filter(id=prid).order_by("-id")
         pdoc= PM_ProjectDocument.objects.get(id=pmdoc_md_crup_id)
         proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
-        proj_task=project_taskassign.objects.filter(project=pdoc.doc_project_id)
+        
+        desi_id = user_registration.objects.get(id=prid)
+        d = designation.objects.get(designation="team leader")
+        proj_task = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= d.id)
        
         
         if coup == 0:
@@ -6109,7 +6114,7 @@ def pm_doc_corre_updattion(request,pmdoc_pid,pmdoc_cu):
             proj_doc_cu=ProjectCorrectionUpdation()
             proj_doc_cu.project_cu_module=p1
             proj_doc_cu.project_cu_descrip=p2
-            proj_doc_cu.pdev_name=p3
+            proj_doc_cu.ptl_name=p3
             proj_doc_cu.project_cu_id=proj
             proj_doc_cu.project_cu_start=date.today()
             if pmdoc_cu == 0:
@@ -7440,8 +7445,10 @@ def TLprojects(request):
             return redirect('/')
         mem = user_registration.objects.filter(id=tlid)
         display1 = project.objects.all()
+        notific=project_taskassign.objects.filter(tl_id=tlid,delay__gt='4').count()
+       
         display=project_taskassign.objects.filter(developer_id=tlid).values('project_id').distinct()
-        return render(request, 'TLprojects.html',{'display':display,'mem':mem,'display1':display1})
+        return render(request, 'TLprojects.html',{'display':display,'mem':mem,'display1':display1,'notific':notific})
     else:
         return redirect('/')
 
@@ -7489,14 +7496,39 @@ def tlprojecttasks(request,id):
             mem2 = tester_status.objects.filter(user_id=tlid)
             time=datetime.now()
             taskstatus = test_status.objects.all()
+            proj=project.objects.get(id=id)
             display = project_taskassign.objects.filter(developer_id=tlid).filter(project_id=id)
             tasks = project_taskassign.objects.filter(project_id=id,developer_id = tlid)
             mem3 = user_registration.objects.get(id=tlid)
             display1=mem3.fullname
            
-            return render(request, 'TLprojecttasks.html',{'display1':display1,'time':time,'display':display,'mem':mem,'mem1':mem1,'mem2':mem2,'taskstatus':taskstatus,'tasks':tasks})
+            return render(request, 'TLprojecttasks.html',{'display1':display1,'time':time,'display':display,'mem':mem,'mem1':mem1,'mem2':mem2,'taskstatus':taskstatus,'tasks':tasks,'proj':proj})
     else:
         return redirect('/')
+
+
+#*********************************** Tl project document section shebin shaji 28-101-22
+
+    
+def Tl_ptoject_doc(request,tlproj_id):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=tlid)
+        tl = user_registration.objects.get(id=tlid)
+        pro_corr_up=ProjectCorrectionUpdation.objects.filter(project_cu_id_id=tlproj_id,ptl_name=tl.fullname)
+        return render(request, 'TLproject_doc.html',{'mem':mem,'pro_corr_up':pro_corr_up})
+    else:
+        return redirect('/')
+            
+
+
+
+
+
+#******************************************************************************************
 
 def extensionsave(request,id):
     if request.method == 'POST':
@@ -18528,6 +18560,40 @@ def BRadmin_audit_Works_tasks(request,BRadmin_adu_dmwt,BRadmin_aud_dmw):
         task_data7=SmmPoster.objects.filter(smm_Employeeid=BRadmin_adu_dmwt)
         
         return render(request,'BRadmin_audit_dmwork_task.html', {'Adm':Adm,'task_data':task_data,'task_data1':task_data1,'task_data2':task_data2,'task_data3':task_data3,'task_data4':task_data4,'task_data5':task_data5,'task_data6':task_data6,'task_data7':task_data7,'work_view':work_view})
+    else:
+        return redirect('/')
+
+    
+def get_instances(request):
+
+
+    # unpack request:
+    instance_id = request.POST.get('instanceID')
+    print(instance_id)
+   
+    # get instance:
+    instance = project.objects.get(id=instance_id)
+    print(instance)
+
+    
+    response = {
+        'is_taken':project_module_assign.objects.filter(project_name = instance)
+    }
+    return JsonResponse(response)
+  
+
+# team leader project task delay warning message 
+
+def TLproject_task_delay(request):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=tlid)
+        display1 = project.objects.all()
+        display=project_taskassign.objects.filter(tl_id=tlid,delay__gt='4')
+        return render(request, 'TLprojects_task_delay.html',{'display':display,'mem':mem,'display1':display1})
     else:
         return redirect('/')
 

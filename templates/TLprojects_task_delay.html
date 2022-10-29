@@ -1,0 +1,65 @@
+{%extends 'TLindex.html'%}
+{%load static%}
+{%block content%}
+
+<style>
+    .Search {
+      margin-top: 4%;
+      float: left;
+      margin-right: 5%;
+      padding-left: 3%;
+      padding-right: 3%;
+      line-height: 2;
+  
+      width: 95px;
+    }
+  </style>
+  
+  
+  <div class="row pt-3" style="background-color: black;">
+    <div class="" style="font-size: 20px;font-weight: 600;color:#6C7293;">MY PROJECTS</div>
+  </div>
+  <div class="row mt-4">
+    <div class="card">
+      <div class="card-body">
+        <input type="text" style="color: white;" class="form-control " id="myInput" name="search"
+          autocomplete="off" placeholder="Search...">
+        <div class="table-responsive">
+          <table class="table" >
+            <thead>
+              <tr>
+                <th scope="col" style="color:#6C7293;">Task name</th>
+                <th scope="col" style="color:#6C7293;">Sub Task</th>
+                <th scope="col" style="color:#6C7293;">AssignedTo</th>
+                <th scope="col" style="color:#6C7293;">Delay</th>
+                <th scope="col" style="color:#6C7293;">Work Acceptance Letter</th>
+                
+              </tr>
+            </thead>
+            <tbody id="myTable">
+  
+              {% for i in display %}
+
+              <tr>
+                <td style="color: white;">{{i.task}}</td>
+                <td style="color: white;">{{i.subtask}}</td>
+                <td style="color: white;">{{i.developer}}</td>
+                <td><div class="badge badge-outline-danger">{{i.delay}}</div></td>
+                <td style="color: white;"> <button class="btn btn-outline-warning" >Give Warning</button></td>
+               
+              </tr>
+           
+  
+              {% endfor %}
+  
+            </tbody>
+          </table>
+        </div>
+  
+
+  
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
