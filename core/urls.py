@@ -1634,8 +1634,23 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
 
 
-   #***************** tl project task delay
+   #***************** tl project task delay *******************
    path('TLproject_task_delay', views.TLproject_task_delay, name='TLproject_task_delay'),
+   path('TL_warning/<int:Tltask_id>', views.TL_warning, name='TL_warning'),
+
+   #project manager project Tl/developer delay
+   path('projectManager_project_delay', views.projectManager_project_delay, name='projectManager_project_delay'),
+   path('projectManager_warning/<int:pmtaskwr_id>', views.projectManager_warning, name='projectManager_warning'),
+
+   #admin project PM/TL/Developer
+   path('BRadmin_project_delay_action/<int:BRadmin_dep_dely>', views.BRadmin_project_delay_action, name='BRadmin_project_delay_action'),
+
+
+
+
+   #************************ Admin project Dcuments section **************************
+   path('BRadmin_project_document/<int:Bradmin_dep_id>', views.BRadmin_project_document, name='BRadmin_project_document'),
+   path('BRadmin_project_doc_detail/<int:BRadmin_pdocv_id>', views.BRadmin_project_doc_detail, name='BRadmin_project_doc_detail'),
    
 
 

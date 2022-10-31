@@ -5734,6 +5734,11 @@ def projectmanager_projects(request):
     else:
         return redirect('/')
 
+
+
+
+
+    
 #nirmal
 def projectmanager_assignproject(request):
     if 'prid' in request.session:
@@ -6069,7 +6074,11 @@ def project_manager_doc_module(request,pmdoc_md_id):
         pro = user_registration.objects.filter(id=prid).order_by("-id")
         pdoc= PM_ProjectDocument.objects.get(id=pmdoc_md_id)
         proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
-        return render(request, 'projectManager_project_module_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc})
+        corre=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='correction')
+        updte=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='updation')
+         
+        print(updte)
+        return render(request, 'projectManager_project_module_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc,'corre':corre,'updte':updte})
     else:
         return redirect('/')
 
@@ -6135,8 +6144,18 @@ def pm_doc_corre_updattion(request,pmdoc_pid,pmdoc_cu):
 
 def pm_doc_pdf(request,fulldoc_pdf):
     date = datetime.now()  
+    if request.method =="POST":
+        p1=request.POST.get('pdin_date')
+        p2=request.POST.get('pd_corre')
+        p3=request.POST.get('pdwdays')
+        p4=request.POST.get('pddev')
+        
+  
+    else:
+        return redirect('projectManager_project_document')
     try:
         project_datils=PM_ProjectDocument.objects.get(id=fulldoc_pdf)
+
     except PM_ProjectDocument.DoesNotExist:
         project_datils=None
         return redirect('projectManager_project_document')
@@ -6151,6 +6170,10 @@ def pm_doc_pdf(request,fulldoc_pdf):
     context = {'projects':projects,
     'project_module':project_module,
     'project_correction':project_correction,
+    'p1':p1,
+    'p2':p2,
+    'p3':p3,
+    'p4':p4,
     'project_updation':project_updation,
     'date':date,
     }
@@ -11779,6 +11802,42 @@ def BRadmin_project_dept(request):
      else:
         return redirect('/')
 
+     
+# Admin project documents view
+def BRadmin_project_document(request,Bradmin_dep_id):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        projects = project.objects.filter(department_id=Bradmin_dep_id).order_by("-id")
+        proj_doc=PM_ProjectDocument.objects.filter(doc_project_id__in=projects.values_list('id'))
+        return render(request, 'BRadmin_project_docview.html', {'Adm': Adm,'projects':projects,'proj_doc':proj_doc})
+    else:
+        return redirect('/')
+
+
+         
+# Admin project document  details view
+def BRadmin_project_doc_detail(request,BRadmin_pdocv_id):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+       
+        pdoc= PM_ProjectDocument.objects.get(id=BRadmin_pdocv_id)
+        proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
+        corre=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='correction')
+        updte=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='updation')
+
+        return render(request, 'BRadmin_project_doc_detail_view.html', {'Adm': Adm,'proj':proj,'pdoc':pdoc,'corre':corre,'updte':updte})
+    else:
+        return redirect('/')
+    
+    
 
 def BRadmin_project_list(request,id):
     if 'Adm_id' in request.session:
@@ -11789,7 +11848,8 @@ def BRadmin_project_list(request,id):
         Adm = user_registration.objects.filter(id=Adm_id)
         project_details = project.objects.filter(
             ~Q(status='Rejected'), department_id=id).order_by('-id')
-        return render(request, 'BRadmin_project_list.html', {'proj_det': project_details, 'Adm': Adm})
+        dep=department.objects.get(id=id)
+        return render(request, 'BRadmin_project_list.html', {'proj_det': project_details, 'Adm': Adm,'dep':dep})
     else:
         return redirect('/')
 
@@ -18592,8 +18652,94 @@ def TLproject_task_delay(request):
             return redirect('/')
         mem = user_registration.objects.filter(id=tlid)
         display1 = project.objects.all()
-        display=project_taskassign.objects.filter(tl_id=tlid,delay__gt='4')
-        return render(request, 'TLprojects_task_delay.html',{'display':display,'mem':mem,'display1':display1})
+        display=project_taskassign.objects.filter(tl_id=tlid,delay__gte='4')
+        war=wrdata.objects.all()
+        return render(request, 'TLprojects_task_delay.html',{'display':display,'mem':mem,'display1':display1,'war':war,'tlid':tlid})
+    else:
+        return redirect('/')
+    
+    
+def TL_warning(request,Tltask_id):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=tlid)
+        tl = user_registration.objects.get(id=tlid)
+
+        if request.method == 'POST':
+            remark = request.POST['remarks']
+        prjtask=project_taskassign.objects.get(id=Tltask_id)
+        warningdata=wrdata()
+        warningdata.wrn_develp=prjtask.developer
+        warningdata.wrn_user_name=tl
+        warningdata.wrn_task=prjtask
+        warningdata.wrn_reason=remark
+        warningdata.save()
+        war=wrdata.objects.all()
+
+        display1 = project.objects.all()
+        display=project_taskassign.objects.filter(tl_id=tlid,delay__gte='4')
+        return render(request, 'TLprojects_task_delay.html',{'display':display,'mem':mem,'display1':display1,'war':war})
+    else:
+        return redirect('/')
+
+# project manager delay section
+def projectManager_project_delay(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        pr_manager = user_registration.objects.get(id=prid)
+        print(pr_manager.department)
+        display=project_taskassign.objects.filter(delay__gte='4').order_by('-id')
+        war=wrdata.objects.all()
+        return render(request, 'projectmanager_projects_delay.html',{'pro':pro,'display':display,'war':war})
+    else:
+        return redirect('/')
+
+    
+def projectManager_warning(request,pmtaskwr_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        pr_manager = user_registration.objects.get(id=prid)
+
+        if request.method == 'POST':
+            remark = request.POST['pmremarks']
+        prjtask=project_taskassign.objects.get(id=pmtaskwr_id)
+        warningdata=wrdata()
+        warningdata.wrn_develp=prjtask.developer
+        warningdata.wrn_user_name=pr_manager
+        warningdata.wrn_task=prjtask
+        warningdata.wrn_reason=remark
+        warningdata.save()
+    
+        display=project_taskassign.objects.filter(delay__gte='4').order_by('-id')
+        war=wrdata.objects.all()
+        return render(request, 'projectmanager_projects_delay.html',{'pro':pro,'display':display,'war':war})
+    else:
+        return redirect('/')
+
+# admin project document delay action
+    
+def BRadmin_project_delay_action(request,BRadmin_dep_dely):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        projects = project.objects.filter(department_id=BRadmin_dep_dely)
+        display=project_taskassign.objects.filter(delay__gte='4',project__in=projects.values_list('id')).order_by('-id')
+        war=wrdata.objects.all()
+        return render(request, 'BRadmin_project_delay_list.html', {'Adm': Adm,'display':display,'war':war})
     else:
         return redirect('/')
 

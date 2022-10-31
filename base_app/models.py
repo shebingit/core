@@ -839,5 +839,6 @@ class ProjectCorrectionUpdation(models.Model):
 class wrdata(models.Model):
     wrn_develp=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='wr_devp',null=True,blank=True)
     wrn_user_name=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='wr_user',null=True,blank=True)
+    wrn_task=models.ForeignKey(project_taskassign,on_delete=models.CASCADE,related_name='wr_task',null=True,blank=True)
     wrn_reason=models.CharField(max_length=200,null=True, blank=True)
     wrn_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)

@@ -24,21 +24,9 @@
       position: relative;
       background-position: center center;
     animation:ring 1.6s linear infinite;
+    color: #d4857a;
   }
-  .w3-count{
-     position: absolute;
-      padding: 2px 3px;
-      background: #FF4F38;
-      color: #fff;
-      border-radius: 30px;
-      top: 7px;
-      right: 0px;
-      min-width: 12px;
-      font-size: 11px;
-      z-index: 200;
-      text-align: center;
-      animation: w3-alert-red 1.6s infinite;
-  }
+
   @keyframes ring
   {
     0% { transform: rotate(0deg) }
@@ -61,14 +49,15 @@
 <div class="row pt-3" >
   <div class="col-6">
     <div class="" style="font-size: 20px;font-weight: 600;color:#6C7293;">PROJECTS</div>
-  </div>
-  <div class="col-6">
-   {% if notific > 0 %}
+    {% if notific > 0 %}
       <a href="{% url 'TLproject_task_delay' %}" class="w3-wrapper sdp-glow">
-        <span class="mdi mdi-email-outline mdi-24px notify-icon"></span> 
-        <span class="w3-count">{{notific}}</span>
+        <span class="mdi mdi-email-outline mdi-24px notify-icon "></span> 
+       
       </a>
     {% endif %}
+  </div>
+  <div class="col-6">
+   
   </div>
     
     

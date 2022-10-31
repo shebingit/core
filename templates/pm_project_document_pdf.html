@@ -1,3 +1,4 @@
+{%load static%}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
@@ -21,13 +22,13 @@
                 font-size: 25px;
                 font-weight: 200;
                 color: #007cae;
-               padding:5px
+               padding:2px
             }
             .title b {
                 color: #007cae;
             }
             .details {
-                padding: 10px;
+                padding:1px;
                 text-align: left !important;
                 
             }
@@ -46,14 +47,33 @@
                 
 
             }
+            .images_contain
+            {
+                display: flex;
+                justify-content: center;
+                text-align: justify;
+            }
         </style>
     </head>
     <body>
-        <div class='details' style="margin-left: 14cm; top:2cm">
+        <div class="images_contain">   
             
-            <p style="color: black; width: 200px;"><b>Date:{{date|date:'d-m-Y'}}</b></p>
-
+           <div>
+            <img src="media/images/companylogo.png" height="75" width="200"> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            
+            Date:{{date|date:'d-m-Y'}}
+               
+            </div>  
         </div>
+       
+               
+
  
     
         <div class='wrapper'>
@@ -83,14 +103,22 @@
     
             </div>    
 
+          
+            {% if p2 == '1' %}
             <hr>
-
             <div class="container">
                 <div class="row">
                     <h4  class="title">Project Corrections</h4>
                    {% for i in project_correction %} 
                     <div class="col-lg-12">
-                        <p> start date: {{i.project_cu_start}} &nbsp;&nbsp;&nbsp;&nbsp; End Date: {{i.project_cu_end}}&nbsp;&nbsp; &nbsp;&nbsp;Days to Complete:&nbsp; {{i.project_cu_wdays}} </p>
+                        {% if p1 == '1' %} 
+                            <p> start date: {{i.project_cu_start}} &nbsp;&nbsp;&nbsp;&nbsp; End Date: {{i.project_cu_end}}&nbsp;&nbsp; &nbsp;&nbsp;
+                        {% endif %}
+                        {% if p3 == '1' %}
+                            Days to Complete:&nbsp; {{i.project_cu_wdays}} 
+                        {% endif %}
+                        </p>
+
                         <h2 class="">Module :&nbsp;<span style="color: #007cae;">{{i.project_cu_module}}</span></h2>
                         <p><b>Correction Desecription :</b>&nbsp; {{i.project_cu_descrip}}</p>
                         <p><b>Previous Content:</b> {{i.project_cu_olddescrip}}</p>
@@ -102,6 +130,7 @@
                 </div>
     
             </div>  
+            {% endif %}
 
             <hr>
 
@@ -110,7 +139,13 @@
                     <h4  class="title">Project Updations</h4>
                    {% for i in project_updation %} 
                     <div class="col-lg-12">
-                        <p> start date: {{i.project_cu_start}} &nbsp;&nbsp; &nbsp;&nbsp; End Date: {{i.project_cu_end}} &nbsp;&nbsp; &nbsp;&nbsp;Days to Complete:&nbsp; {{i.project_cu_wdays}} </p>
+                        {% if p1 == '1' %} 
+                        <p> start date: {{i.project_cu_start}} &nbsp;&nbsp; &nbsp;&nbsp; End Date: {{i.project_cu_end}} &nbsp;&nbsp; &nbsp;&nbsp;
+                        {% endif %}
+                        {% if p3 == '1' %} 
+                            Days to Complete:&nbsp; {{i.project_cu_wdays}}
+                        {% endif%}
+                        </p>
                         <h2 class="">Module :&nbsp;<span style="color: #007cae;">{{i.project_cu_module}}</span></h2>
                         <p><b>Updation Desecription :</b>&nbsp;  {{i.project_cu_descrip}}</p>
                         <p><b>Previous Content:</b> {{i.project_cu_olddescrip}}</p>
@@ -122,18 +157,23 @@
                 </div>
     
             </div>  
+            {% if p4 == '1' %}
 <hr>
             <div class="container">
                 <div class="row">
                     <h4  class="title">Project Other Details </h4>
                     <div class="col-lg-12">
-                        
+                      
                         <h5>Employees Worked</h5>
                         {% for i in workers %} 
                         <p>{{ forloop.counter }}. {{i.pw_wid}}</p>
                         {% endfor %}
                         <h5>Total Days To Complete :{{workdays.project_cu_wdays__sum}} Days</h5>
+                        
                     </div>
+                </div>
+            </div>
+            {% endif %}
         
  
     <script>
