@@ -15,7 +15,7 @@
             
             <h6 class="mt-3 mb-3" >Work Submited Date - &nbsp;{{pts.submitted_date}}</h6>
             <h6 class="mt-3 mb-3" >Task Status </h6>
-            <select class="form-control mb-3" name="verify_status">
+            <select class="form-control mb-3" name="verify_status" id="verify_status">
             <option value="submitted">verified </option>
             <option value="correction">correction </option>
             </select>
@@ -24,11 +24,41 @@
             {% else %}
             <textarea class="form-control mb-3 mt-3" name="tsdelay_reson" hidden>No Data</textarea>
             {% endif %}
+            <div class="resources" style=" display: none;">
+              <label>Select Module and Correction Desecription</label>
+                    
+                    <div class="input-group p-3 m-2">
+                        <select  class="form-control"name="doc_pm_cumodule_name"  style="background-color:#434a54;border:none; color: #fff;">
+                            <option selected class="p-2 m-2">Select Module</option>
+                            {% for i in proj %}
+                            <option class="p-2 m-2" value="{{i.module}}">{{i.module}}</option>
+                            {% endfor %}
+                            
+                        </select>
+                    </div>
+                    <div class="input-group p-3 m-2">
+                        <textarea class="form-control" name="doc_pm_cumodule_dese"    style=" color: #fff; height:150px;">Description !</textarea>
+                    </div>
+                    <br>
+            </div>
             <button type="submit" class="btn btn-outline-success">Update</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+
+
+
+<script>
+  $('#verify_status').on('change', function() {
+    if($(this).val() === 'correction') {
+        $('.resources').show();
+    } else {
+        $('.resources').hide();
+    }
+});
+</script>
 
 {% endblock %}

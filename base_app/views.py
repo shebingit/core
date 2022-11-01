@@ -1,3 +1,4 @@
+from argparse import Action
 from asyncio.windows_events import NULL
 from fileinput import filename
 from importlib.resources import contents
@@ -6161,6 +6162,7 @@ def pm_doc_pdf(request,fulldoc_pdf):
         return redirect('projectManager_project_document')
     projects=project.objects.get(id=project_datils.doc_project_id.id)
     project_module=project_module_assign.objects.filter(project_name=projects)
+    project_doc=PM_ProjectDocument.objects.get(doc_project_id=projects)
     project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='correction' )
     project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='updation' )
    
@@ -6176,6 +6178,7 @@ def pm_doc_pdf(request,fulldoc_pdf):
     'p4':p4,
     'project_updation':project_updation,
     'date':date,
+    'project_doc':project_doc
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -7541,8 +7544,29 @@ def Tl_ptoject_doc(request,tlproj_id):
             return redirect('/')
         mem = user_registration.objects.filter(id=tlid)
         tl = user_registration.objects.get(id=tlid)
-        pro_corr_up=ProjectCorrectionUpdation.objects.filter(project_cu_id_id=tlproj_id,ptl_name=tl.fullname)
-        return render(request, 'TLproject_doc.html',{'mem':mem,'pro_corr_up':pro_corr_up})
+        spa = user_registration.objects.filter(tl_id=tl.id, status="active")
+        pro_corr=ProjectCorrectionUpdation.objects.filter(project_cu_id_id=tlproj_id,ptl_name=tl.fullname,project_cu_status='correction')
+        pro__up=ProjectCorrectionUpdation.objects.filter(project_cu_id_id=tlproj_id,ptl_name=tl.fullname,project_cu_status='updation')
+        return render(request, 'TLproject_doc.html',{'mem':mem,'pro_corr':pro_corr,'pro__up':pro__up,'spa':spa})
+    else:
+        return redirect('/')
+    
+def TLproject_doc_emp_save(request,TLprj_docemp):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        if request.method == 'POST':
+            empname = request.POST['doc_empname']
+            docemp=user_registration.objects.get(id=int(empname))
+            doc_assdate = request.POST['doc_start_date']
+            doc=ProjectCorrectionUpdation.objects.get(id=TLprj_docemp)
+            doc.pdev_name=docemp.fullname
+            doc.project_cu_start=doc_assdate
+            prid=doc.project_cu_id.id
+            doc.save()
+        return redirect('Tl_ptoject_doc',prid)
     else:
         return redirect('/')
             
@@ -8080,13 +8104,14 @@ def TSproject_verifiy(request,ts_task_verify):
            return redirect('/')
         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
         pts=project_taskassign.objects.get(id=ts_task_verify)
+        proj=project_module_assign.objects.filter(project_name=pts.project)
         c_date=date.today()
        
         if c_date == pts.submitted_date:
             num=1
         else:
             num=0
-        return render(request,'TSproject_verify.html',{'mem':mem,'pts':pts,'num':num})
+        return render(request,'TSproject_verify.html',{'mem':mem,'pts':pts,'num':num,'proj':proj})
     else:
         return redirect('/')
 
@@ -8105,11 +8130,25 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
         if request.method == 'POST':
             task_verify=request.POST['verify_status']
             delay_reson=request.POST['tsdelay_reson']
+            p1=request.POST['doc_pm_cumodule_name']
+            p2=request.POST['doc_pm_cumodule_dese']
     
         prj_task=project_taskassign.objects.get(id=ts_prj_task_verify)
         prj_task.status=task_verify
         prj_task.save()
         c_date=date.today()
+
+        if task_verify == 'correction':
+            proj_doc_cu=ProjectCorrectionUpdation()
+            proj_doc_cu.project_cu_module=p1
+            proj_doc_cu.project_cu_descrip=p2
+            proj_doc_cu.pdev_name=prj_task.developer.fullname
+            proj_doc_cu.ptl_name=prj_task.tl.fullname
+            proj_doc_cu.project_cu_id=prj_task.project
+            proj_doc_cu.project_date=date.today()
+            proj_doc_cu.project_cu_status='correction'
+            proj_doc_cu.save()
+
         event = Event.objects.filter(start_time__range=(prj_task.submitted_date,datetime.now().date())).count()
         delys=c_date - prj_task.submitted_date
         delys=delys.days - event
@@ -8813,11 +8852,57 @@ def DEVtable(request, id):
     dev = user_registration.objects.filter(id=devid)
     devp = project_taskassign.objects.filter(project_id=id).filter(developer_id=devid).order_by("-id")
     teststatus = test_status.objects.all()
+    proj=project.objects.get(id=id)
     testerstatus = tester_status.objects.filter(project_id=id)
     time = datetime.now()
-    return render(request, 'DEVtable.html', {'dev': dev, 'devp': devp, 'time': time, 'teststatus': teststatus, 'testerstatus': testerstatus})
+    action_take=wrdata.objects.all()
+    return render(request, 'DEVtable.html', {'dev': dev, 'devp': devp, 'time': time, 'teststatus': teststatus, 'action_take':action_take,'testerstatus': testerstatus,'proj':proj})
 
 
+#******************Developer Project Document section **********************
+
+def DEV_projrect_doc(request,dev_prjdoc_id):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+    else:
+       return redirect('/')
+    dev = user_registration.objects.filter(id=devid)
+    dev1 = user_registration.objects.get(id=devid)
+    proj=project.objects.get(id=dev_prjdoc_id)
+    prj_module=project_module_assign.objects.filter(project_name=proj)
+    dev = user_registration.objects.filter(id=devid)
+    prj_doc=PM_ProjectDocument.objects.get(doc_project_id=proj)
+    prj_doc_crr_up=ProjectCorrectionUpdation.objects.filter(project_cu_id=proj,pdev_name=dev1.fullname)
+    return render(request, 'DEV_project_doc.html', {'dev': dev,'proj':proj,'prj_module':prj_module,'prj_doc':prj_doc,'prj_doc_crr_up':prj_doc_crr_up})
+
+
+def DEV_project_FB(request,dev_prj_fb):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+    else:
+       return redirect('/')
+    proj=project.objects.get(id=dev_prj_fb)
+    doc=PM_ProjectDocument.objects.get(doc_project_id=proj)
+    if request.method == 'POST':  
+        fend = request.POST.get('fend')
+        bend = request.POST.get('bend')
+        doc.doc_project_frontend=fend
+        doc.doc_project_backend=bend
+        doc.save()
+    return redirect('DEV_projrect_doc',dev_prj_fb)
+
+
+def DEV_corr_up(request,dev_prj_cu_id):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+    else:
+       return redirect('/')
+    print(dev_prj_cu_id)
+   
+
+
+
+#**********************************************************************************************
 def DEVtaskstatus(request, id):
     if request.session.has_key('devid'):
         devid = request.session['devid']

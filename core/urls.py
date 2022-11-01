@@ -1630,7 +1630,13 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    #************************ Tl project document section
    path('Tl_ptoject_doc/<int:tlproj_id>', views.Tl_ptoject_doc, name='Tl_ptoject_doc'),
    path('get_instances', views.get_instances, name='get_instances'),
+   path('TLproject_doc_emp_save/<int:TLprj_docemp>', views.TLproject_doc_emp_save, name='TLproject_doc_emp_save'),
 
+
+  #************************** Develper project document section **************
+  path('DEV_projrect_doc/<int:dev_prjdoc_id>', views.DEV_projrect_doc, name='DEV_projrect_doc'),
+  path('DEV_project_FB/<int:dev_prj_fb>', views.DEV_project_FB, name='DEV_project_FB'),
+  path('DEV_corr_up/<int:dev_prj_cu_id>', views.DEV_corr_up, name='DEV_corr_up'),
 
 
 

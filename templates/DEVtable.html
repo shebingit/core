@@ -10,7 +10,7 @@
   <div class="card">
     <div class="card">
       <div class="text-end mt-2 p-2">
-        <a href="#" class="btn btn-primary">Project Doc.Report</a>
+        <a href="{% url 'DEV_projrect_doc' proj.id %}" class="btn btn-primary">Project Doc.Report</a>
       </div>
     <div class="card-body">
       
@@ -25,11 +25,11 @@
               <th scope="col" style="color:#6C7293;">Test Status</th>
               <th scope="col" style="color:#6C7293;">Extension</th>
               <th scope="col" style="color:#6C7293;">Project Details</th>
-            
               <th scope="col" style="color:#6C7293;">Work Acceptance Letter</th>
               <th scope="col" style="color:#6C7293;">Action</th>
               <th scope="col" style="color:#6C7293;">Submitted Date</th>
               <th scope="col" style="color:#6C7293;">Delay</th>
+              <th scope="col" style="color:#6C7293;">Action</th>
             </tr>
           </thead>
           <tbody id="myTable">
@@ -101,6 +101,13 @@
               <td style="color: white;">{{dp.submitted_date|date:'d-m-Y'}}</td>
               <td>
                 <div class="badge badge-outline-danger">{{dp.delay}}</div>
+              </td>
+              <td>
+                {% for i in action_take %}
+                {% if dp.id == i.wrn_task.id %}
+                <p>{{i.wrn_reason}} by {{i.wrn_user_name.fullname}}</p>
+                {% endif %}
+                {% endfor %}
               </td>
 
             </tr>

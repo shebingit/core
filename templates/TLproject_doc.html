@@ -12,12 +12,43 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-8 p-2"></div>
-        <div class="col-4 p-2">
-            {% for i in pro_corr_up %}
-            <p>{{i.project_cu_module}}</p> 
+        <div class="col-6 p-2">
+            <h4> Updations form Project Manager </h4>
+            <hr>
+            {% for i in pro__up %}
+            <p>Project :&nbsp;{{i.project_cu_id.project}}</p> 
+            <p>Module ::&nbsp;{{i.project_cu_module}}</p> 
             <p>{{i.project_cu_descrip}}</p> 
-            <p>{{i.project_cu_status}}</p> 
+            <p>Developer:&nbsp;{{i.pdev_name}}</p> 
+            <p><span>{{i.project_cu_status}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{i.project_date}} </p> 
+            <form action="{% url 'TLproject_doc_emp_save' i.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <select id="" name="doc_empname" class="form-control ml-3 mt-2 text-light" required>
+                <option value=""></option>
+                {% for i in spa %}
+                <option value="{{i.id}}">{{i.fullname}}</option>
+                {% endfor %}
+            </select>
+            <input type="date" name="doc_start_date" id="due" class="drop form-control ml-3 mt-2 text-light" value='{{time|date:"Y-m-d"}}' required
+                style="border:1px solid #6C7293 ;color:#6C7293;">
+            <button type="submit" class="btn btn-success mt-3" >Update</button>
+            
+
+            </form>
+            <hr>
+            {% endfor %}
+           
+        </div>
+        <div class="col-6 p-2">
+            <h4>Tester Correction
+            </h4>
+            <hr>
+            {% for i in pro_corr %}
+            <p>Project :&nbsp;{{i.project_cu_id.project}}</p> 
+            <p>Module ::&nbsp;{{i.project_cu_module}}</p> 
+            <p>{{i.project_cu_descrip}}</p> 
+            <p>Developer:&nbsp;{{i.pdev_name}}</p> 
+            <p><span>{{i.project_cu_status}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{i.project_date}} </p> 
             <hr>
             {% endfor %}
         </div>
