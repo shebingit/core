@@ -1618,12 +1618,14 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    path('project_manager_doc_module/<int:pmdoc_md_id>', views.project_manager_doc_module, name='project_manager_doc_module'),
    path('pm_doc_md_corr_upd/<int:pmdoc_md_crup_id>/<int:coup>', views.pm_doc_md_corr_upd, name='pm_doc_md_corr_upd'),
    path('pm_doc_corre_updattion/<int:pmdoc_pid>/<int:pmdoc_cu>', views.pm_doc_corre_updattion, name='pm_doc_corre_updattion'),
+   path('pm_doc_complete/<int:pmdoc_complete>', views.pm_doc_complete, name='pm_doc_complete'),
 
    ############## document section ########################
    path('pm_doc_pdf/<int:fulldoc_pdf>', views.pm_doc_pdf, name='pm_doc_pdf'),
    path('pm_doc_des_pdf/<int:desedoc_pdf>', views.pm_doc_des_pdf, name='pm_doc_des_pdf'),
    path('pm_doc_corr_pdf/<int:corredoc_pdf>', views.pm_doc_corr_pdf, name='pm_doc_corr_pdf'),
    path('pm_doc_updt_pdf/<int:updedoc_pdf>', views.pm_doc_updt_pdf, name='pm_doc_updt_pdf'),
+   path('pm_docfull_pdf/<int:pmfulldocs_pdf>', views.pm_docfull_pdf, name='pm_docfull_pdf'),
 
 
 
@@ -1637,6 +1639,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
   path('DEV_projrect_doc/<int:dev_prjdoc_id>', views.DEV_projrect_doc, name='DEV_projrect_doc'),
   path('DEV_project_FB/<int:dev_prj_fb>', views.DEV_project_FB, name='DEV_project_FB'),
   path('DEV_corr_up/<int:dev_prj_cu_id>', views.DEV_corr_up, name='DEV_corr_up'),
+  path('DEV_project_doc_daily_doc_add/<int:DEV_pdocdaily>', views.DEV_project_doc_daily_doc_add, name='DEV_project_doc_daily_doc_add'),
 
 
 

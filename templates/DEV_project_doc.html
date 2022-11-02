@@ -23,119 +23,228 @@
         font-size: 1.2rem;
         font-weight: 500;
     }
+    .card_color 
+    {
+        background-color: #fff;
+    }
+    .answer1 { display:none; }
+    .answer2 { display:none; }
+    .answer3 { display:none; }
+    .answer4 { display:none; }
+    .answer5 { display:none; }
+    .answer6 { display:none; }
 </style>
 
 <div class="container p-3">
 
-<h3 class="text-center text-primary h2 mb-3">{{proj.project}}</h3>
-<div class="row">
-    <div class="col-6">
-        <h4 class="text-center">Daily Project Doc add</h4>
-        <div class="row g-2">
-            <div class="col-lg-12">
-            
-                <p class="mt-3">
-                    <span><b>Front End:</b> &nbsp;{{prj_doc.doc_project_frontend}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span><b>Back End:</b> &nbsp;{{prj_doc.doc_project_backend}}</span>
-                </p>
-                <br>
-                <form action="{% url 'DEV_project_FB' proj.id %}" method="post" class="p-3">
-                    {% csrf_token %}
-                    <input type="text" class="w-100 mb-4" name="fend" value="{{prj_doc.doc_project_frontend}}" >
-                    <input type="text" class="w-100 mb-3" name="bend" value="{{prj_doc.doc_project_backend}}">
+    <h3 class="text-center text-primary h2 mb-3">{{proj.project}}</h3>
+    <div class="row">
+        <div class="col-lg-6 col-sm-12">
+            <h4 class="text-center">Daily Project Doc add</h4>
+            <div class="row g-2">
+                <div class="col-lg-12">
+                    <div class="row g-1">
+                        <div class="col-lg-6  col-sm-12 text-center"><P><b>Front End:</b> &nbsp;{{prj_doc.doc_project_frontend}}</p></div>
+                        <div class="col-lg-6  col-sm-12 text-center"> <p><b>Back End:</b> &nbsp;{{prj_doc.doc_project_backend}}</p></div>
+                    </div>
+                    
                     <br>
-                    <button type="submit" class="btn btn-success" style="color:#fff ;">Update</button>
-                </form>
-                <br>
-            
-            </div>
-
-            <h5 class="text-primary text-center">Project Details</h5>
-            <hr>
-            <div class="col-lg-12">
-                <select id="" name="doc_module" class=" mt-3 mb-2 p-2 w-100" required>
-                    {% for i in prj_module %}
-                        <option value="{{i.id}}">{{i.module}}</option>
-                    {% endfor %}
-            
-                </select>
-            </div>
-            <div class="col-lg-12">
-                <textarea type="text" class="p-2 w-100" style="height:150px ;"></textarea>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <h5 class="text-primary text-center">Project Models</h5>
-            <hr>
-            <div class="col-12">
-                <div class="col-12">
-                    <input type="text " class="w-100 mt-2" placeholder="Created Model">
+                    <form action="{% url 'DEV_project_FB' proj.id %}" method="post" class="p-3">
+                        {% csrf_token %}
+                        <input type="text" class="w-100 mb-4" name="fend" value="{{prj_doc.doc_project_frontend}}" >
+                        <input type="text" class="w-100 mb-3" name="bend" value="{{prj_doc.doc_project_backend}}">
+                        <br>
+                        <button type="submit" class="btn btn-outline-success btn-icon-text"><i class="mdi mdi-checkbox-multiple-marked-circle btn-icon-prepend"></i>Save</button>
+                    </form>
+                    <br>
+                
                 </div>
-                <div class="col-12">
-                    <textarea type="text"  class="w-100 mt-2 " style="height:150px;">Why this model !</textarea>
+            </div>
+            
+            <form action="{% url 'DEV_project_doc_daily_doc_add' proj.id %}" method="post" enctype="multipart/form-data" >
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="check1" value="1" onchange="valueChanged()"/>
+                            <label class="form-check-label" for="check1">Project Details</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check2" name="check2" value="1" onchange="valueChanged()">
+                            <label class="form-check-label" for="check2">Project Models</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  id="check3" name="check3" value="1" onchange="valueChanged()" >
+                            <label class="form-check-label" for="check3">Project Views</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  id="check4" name="check4" value="1" onchange="valueChanged()">
+                            <label class="form-check-label" for="check4">Project Html Pages</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  id="check5" name="check5" value="1" onchange="valueChanged()">
+                            <label class="form-check-label" for="check5">Project libraryies</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  id="check6" name="check6" value="1" onchange="valueChanged()">
+                            <label class="form-check-label" for="check6">Project Other Details</label>
+                        </div>
+                    </div>
+                    
                 </div>
-
-            </div>
+            
+                <div class="card mb-2 answer1 card_color">
+                    <div class="card-head text-primary text-center mt-3">Project Details</div>
+                    <div class="card-body">
+                        <div class="col-lg-12">
+                            <select id="" name="pdname" class=" mb-2 p-2 w-100" required>
+                                {% for i in prj_module %}
+                                    <option value="{{i.module}}">{{i.module}}</option>
+                                {% endfor %}
+                        
+                            </select>
+                        </div>
+                        <div class="col-lg-12">
+                            <textarea type="text" class="p-2 w-100" name="pddese" style="height:150px ;"></textarea>
+                        </div>
+                    </div>      
+                </div>
+                <div class="card mb-2 answer2 card_color">
+                    <div class="card-head text-primary text-center mt-3">Project Models</div>
+                    <div class="card-body">
+                        <div class="col-12">
+                            <input type="text " class="w-100 mt-2" name="pmname" placeholder="Created Model">
+                        </div>
+                        <div class="col-12">
+                            <textarea type="text"  class="w-100 mt-2 "  name="pmdese" style="height:150px;">Why this model !</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2 answer3 card_color">
+                    <div class="card-head text-primary text-center mt-3">Project Views</div>
+                    <div class="card-body">
+                        <div class="col-12">
+                            <input type="text"  class="w-100 mt-2 " name="pvname" placeholder="Created view">
+                        </div>
+                        <div class="col-12">
+                            <textarea type="text"  class="w-100 mt-2 " name="pvdese" style="height:150px;">Why this viem !</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2 answer4 card_color">
+                    <div class="card-head text-primary text-center mt-3">Project Html Pages</div>
+                    <div class="card-body">
+                        <div class="col-12">
+                            <select id="" name="phpmdname" class=" mb-2 p-2 w-100" required>
+                                {% for i in prj_module %}
+                                    <option value="{{i.module}}">{{i.module}}</option>
+                                {% endfor %}
+                        
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <input type="text"  class="w-100 mt-2 "  name="phpname" placeholder="Page">
+                        </div>
+                        <div class="col-12">
+                            <textarea type="text"  class="w-100 mt-2 "  name="phpdese" style="height:150px;">Why this page !</textarea>
+            
+                        </div>
+                        <div class="col-12">
+                            <input type="file"  class="w-100 mt-2 "  name="phpimg" accept="ProjectUI/* " >
+            
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2 answer5 card_color">
+                    <div class="card-head text-primary text-center mt-3">Project libraryies</div>
+                    <div class="card-body">
+                        <div class="col-12">
+                            <input type="text"  class="w-100 mt-2" name="plbname"  placeholder="libraryies">
+                        </div>
+                        <div class="col-12">
+                            <textarea type="text"  class="w-100 mt-2 " name="plbdese" style="height:150px;">Why this libraryies !</textarea>
+            
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2 answer6 card_color">
+                    <div class="card-head text-primary text-center mt-3">Project Other Details</div>
+                    <div class="card-body">
+                        <div class="col-12">
+                            <input type="text"  class="w-100 mt-2 " name="podname" placeholder="">
+                        </div>
+                        <div class="col-12">
+                            <textarea type="text"  class="w-100 mt-2 " name="poddese" style="height:150px;"></textarea>
+            
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn btn-outline-success btn-icon-text"><i class="mdi mdi-check-all btn-icon-prepend"></i>Save</button>
+                </div>
+            </form>
+    
         </div>
 
-        <div class="row">
-            <h5 class="text-primary text-center">Project Views</h5>
+        <div class="col-lg-6 col-sm-12">
+            <h4 class="text-center">Updations and Tester Corrections on Project</h4>
+            {% for i in prj_doc_crr_up %}
+            <div class="row">
+                <p>{{i.project_cu_module}}</p>
+                <p>{{i.project_cu_descrip}}</p>
+                <p>{{i.project_cu_start}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{i.project_cu_status}}</p>
+                <a href="#" data-toggle="modal" data-target="#doc{{i.id}}"><span class="mdi mdi-plus-circle mdi-36px"></span></a>
+            </div>
             <hr>
-            <div class="col-12">
-                <input type="text"  class="w-100 mt-2 " placeholder="Created view">
-            </div>
-            <div class="col-12">
-                <textarea type="text"  class="w-100 mt-2 " style="height:150px;">Why this viem !</textarea>
-            </div>
+            {% endfor %}
         </div>
-
-        <div class="row">
-            <h5 class="text-primary text-center">Project Html Pages</h5>
-            <hr>
-            <div class="col-12">
-                <input type="text"  class="w-100 mt-2 " placeholder="Page">
-            </div>
-            <div class="col-12">
-                <textarea type="text"  class="w-100 mt-2 " style="height:150px;">Why this page !</textarea>
-
-            </div>
-        </div>
-
-        <div class="row">
-            <h5 class="text-primary text-center">Project libraryies</h5>
-            <hr>
-            <div class="col-12">
-                <input type="text"  class="w-100 mt-2" placeholder="libraryies">
-            </div>
-            <div class="col-12">
-                <textarea type="text"  class="w-100 mt-2 " style="height:150px;">Why this libraryies !</textarea>
-
-            </div>
-        </div>
-        <div class="text-center mt-5">
-            <button type="submit" class="btn btn-outline-success"> Update</button>
-        </div>
-
-
-    </div>
-    <div class="col-6 p-3">
-        <h4 class="text-center">Updations and Tester Corrections on Project</h4>
-        {% for i in prj_doc_crr_up %}
-        <div class="row">
-            <p>{{i.project_cu_module}}</p>
-            <p>{{i.project_cu_descrip}}</p>
-            <p>{{i.project_cu_start}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{i.project_cu_status}}</p>
-            <a href="#" data-toggle="modal" data-target="#doc{{i.id}}"><span class="mdi mdi-plus-circle mdi-36px"></span></a>
-        </div>
-        <hr>
-        {% endfor %}
-    </div>
+    </div> 
 </div>
 
-       
-</div>
+
+<script type="text/javascript">
+    function valueChanged()
+    {
+        if($('#check1').is(":checked"))   
+            $(".answer1").show();
+        else
+            $(".answer1").hide();
+
+        if($('#check2').is(":checked"))   
+            $(".answer2").show();
+        else
+            $(".answer2").hide();
+        if($('#check3').is(":checked"))   
+            $(".answer3").show();
+        else
+            $(".answer3").hide();
+
+        if($('#check4').is(":checked"))   
+            $(".answer4").show();
+        else
+            $(".answer4").hide();
+        if($('#check5').is(":checked"))   
+            $(".answer5").show();
+        else
+            $(".answer5").hide();
+        if($('#check6').is(":checked"))   
+            $(".answer6").show();
+        else
+            $(".answer6").hide();
+    }
+</script>
 
 
 {%for i in prj_doc_crr_up %}
@@ -160,29 +269,41 @@
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-12 col-form-label">Previous Content</label>
                                         <div class="col-sm-12 col-lg-12">
-                                          <textarea type="text" style="height:100px;" class="w-100"></textarea>
+                                          <textarea type="text" style="height:100px;" name='doc_privios'class="w-100"></textarea>
                                         </div>
                                     </div>
                                    
                                     <div class="form-group row">
                                       <label for="exampleInputUsername2" class="col-sm-12 col-lg-12 col-form-label">Previous Image</label>
                                       <div class="col-sm-12 col-lg-12">
-                                          <input type="file" class="form-control text-light" name="remarks"required>
+                                          <input type="file" class="form-control text-light" name="doc_privios_img" accept="ProjectUI/*" required>
                                        </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-12 col-lg-12 col-form-label">New Content</label>
                                         <div class="col-sm-12 col-lg-12">
-                                            <textarea type="text" style="height:100px ;" class="w-100"></textarea>
+                                            <textarea type="text" style="height:100px ;" name='doc_new' class="w-100"></textarea>
                                         </div>
                                     </div>
                                    
                                     <div class="form-group row">
                                       <label for="exampleInputUsername2" class="col-sm-12  col-lg-12 col-form-label">New Image</label>
                                       <div class="col-sm-12 col-lg-12">
-                                          <input type="file" class="form-control text-light" name="remarks"required>
+                                          <input type="file" class="form-control text-light" name="doc_new_img" accept="ProjectUI/* "required>
                                        </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <label for="exampleInputUsername2" class="col-sm-12  col-lg-12 col-form-label">Start Date</label>
+                                        <div class="col-sm-12 col-lg-12">
+                                            <input type="date" class="form-control text-light" name="doc_sdate"  required>
+                                         </div>
+                                      </div>
+                                      <div class="form-group row">
+                                        <label for="exampleInputUsername2" class="col-sm-12  col-lg-12 col-form-label">End Date</label>
+                                        <div class="col-sm-12 col-lg-12">
+                                            <input type="date" class="form-control text-light" name="doc_edate" required>
+                                         </div>
+                                      </div>
                                         
                                         <div class="row">
                                             <center>

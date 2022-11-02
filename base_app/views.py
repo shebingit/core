@@ -26,6 +26,7 @@ from django.core.files import File
 from django.conf import settings
 from django.db.models import Q
 from num2words import num2words
+from django.utils.dateparse import parse_date
 
 from django.core.mail import send_mail
 
@@ -6042,7 +6043,7 @@ def projectManager_project_document(request):
            return redirect('/')
         pro = user_registration.objects.filter(id=prid).order_by("-id")
         projects = project.objects.all().order_by("-id")
-        proj_doc=PM_ProjectDocument.objects.all()
+        proj_doc=PM_ProjectDocument.objects.filter(doc_status='0')
         return render(request, 'projectManager_project_documnent_list.html',{'pro':pro,'proj_doc':proj_doc})
     else:
         return redirect('/')
@@ -6077,9 +6078,20 @@ def project_manager_doc_module(request,pmdoc_md_id):
         proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
         corre=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='correction')
         updte=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='updation')
-         
-        print(updte)
-        return render(request, 'projectManager_project_module_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc,'corre':corre,'updte':updte})
+
+        pdocd=ProjectDocDetails.objects.filter(doc_project_d=pdoc.doc_project_id)
+        pdocm=ProjectDocModels.objects.filter(doc_project_md=pdoc.doc_project_id)
+        pdocv=ProjectDocViews.objects.filter(doc_project_v=pdoc.doc_project_id)
+        pdochp=ProjectDochtmlpages.objects.filter(doc_project_hp=pdoc.doc_project_id)
+        pdoclb=ProjectDoclibraryies.objects.filter(doc_project_lb=pdoc.doc_project_id)
+        pdocdot=ProjectDocother.objects.filter(doc_project_oth=pdoc.doc_project_id)
+        devp=project_taskassign.objects.filter(project=pdoc.doc_project_id).values('developer').distinct()
+        doc_user = user_registration.objects.all()
+        work_days= date.today() - pdoc.doc_project_startdate
+        work_days=work_days.days
+        return render(request, 'projectManager_project_module_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc,'corre':corre,
+                                'updte':updte,'pdocd':pdocd,'pdocm':pdocm,'pdocv':pdocv,'pdochp':pdochp,'pdoclb':pdoclb,'pdocdot':pdocdot,
+                                'work_days':work_days,'devp':devp,'doc_user':doc_user})
     else:
         return redirect('/')
 
@@ -6138,10 +6150,81 @@ def pm_doc_corre_updattion(request,pmdoc_pid,pmdoc_cu):
         return redirect('/')
 
 
+# Document complete
+
+def pm_doc_complete(request,pmdoc_complete):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        doc=PM_ProjectDocument.objects.get(id=pmdoc_complete)
+        doc.doc_status='completed'
+        doc.save()
+        return redirect('projectmanager_projects')
+ 
+    else:
+        return redirect('/')
+
+
+
 
 
 
  #********************************** Project manager project Document 
+
+ 
+def pm_docfull_pdf(request,pmfulldocs_pdf):
+    date = datetime.now()  
+    
+    try:
+        project_datils=PM_ProjectDocument.objects.get(id=pmfulldocs_pdf)
+
+    except PM_ProjectDocument.DoesNotExist:
+        project_datils=None
+        return redirect('projectManager_project_document')
+    pdoc= PM_ProjectDocument.objects.get(id=pmfulldocs_pdf)
+    proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
+    corre=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='correction')
+    updte=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='updation')
+
+    pdocd=ProjectDocDetails.objects.filter(doc_project_d=pdoc.doc_project_id)
+    pdocm=ProjectDocModels.objects.filter(doc_project_md=pdoc.doc_project_id)
+    pdocv=ProjectDocViews.objects.filter(doc_project_v=pdoc.doc_project_id)
+    pdochp=ProjectDochtmlpages.objects.filter(doc_project_hp=pdoc.doc_project_id)
+    pdoclb=ProjectDoclibraryies.objects.filter(doc_project_lb=pdoc.doc_project_id)
+    pdocdot=ProjectDocother.objects.filter(doc_project_oth=pdoc.doc_project_id)
+    devp=project_taskassign.objects.filter(project=pdoc.doc_project_id).values('developer').distinct()
+    doc_user = user_registration.objects.all()
+    
+    
+
+    template_path = 'pm_project_document_fullpdf.html'
+    context = {'proj':proj,'pdoc':pdoc,'corre':corre,
+                                'updte':updte,'pdocd':pdocd,'pdocm':pdocm,'pdocv':pdocv,'pdochp':pdochp,'pdoclb':pdoclb,'pdocdot':pdocdot,
+                                'devp':devp,'doc_user':doc_user,'date':date}
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+
 
 def pm_doc_pdf(request,fulldoc_pdf):
     date = datetime.now()  
@@ -8897,7 +8980,121 @@ def DEV_corr_up(request,dev_prj_cu_id):
         devid = request.session['devid']
     else:
        return redirect('/')
-    print(dev_prj_cu_id)
+    if request.method == 'POST':  
+        pre = request.POST.get('doc_privios')
+        pre_img = request.FILES.get('doc_privios_img')
+        new = request.POST.get('doc_new')
+        new_img = request.FILES.get('doc_new_img')
+        p1=request.POST.get('doc_sdate')
+        p2=request.POST['doc_edate']
+        sdate=parse_date(p1)
+        edate=parse_date(p2)
+        work_days=edate - sdate
+        work_days=work_days.days
+      
+       
+
+    corre_up=ProjectCorrectionUpdation.objects.get(id=dev_prj_cu_id)
+    corre_up.project_cu_olddescrip=pre
+    corre_up.project_oldui=pre_img
+    corre_up.project_cu_newdescrip=new
+    corre_up.project_cu_newui=new_img
+    corre_up.project_cu_start=sdate
+    corre_up.project_cu_end=edate
+    corre_up.project_cu_wdays=work_days
+    corre_up.save()
+   
+    prj=corre_up.project_cu_id.id
+    return redirect('DEV_projrect_doc',prj)
+
+
+#developer project daily data entry
+
+def DEV_project_doc_daily_doc_add(request,DEV_pdocdaily):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+    else:
+       return redirect('/')
+    dev = user_registration.objects.filter(id=devid)
+    dev1 = user_registration.objects.get(id=devid)
+    proj=project.objects.get(id=DEV_pdocdaily)
+
+    if request.method == 'POST':  
+        check1 = request.POST.get('check1')
+        check2 = request.POST.get('check2')
+        check3 = request.POST.get('check3')
+        check4 = request.POST.get('check4')
+        check5 = request.POST.get('check5')
+        check6 = request.POST.get('check6')
+       
+        if  check1 == '1':
+            p1 = request.POST['pdname']
+            p2 = request.POST['pddese']
+            doc1=ProjectDocDetails()
+            doc1.doc_project_d=proj
+            doc1.doc_duser=dev1
+            doc1.doc_project_mdname=p1
+            doc1.doc_project_mddise_d=p2
+            doc1.save()
+
+        if  check2 == '1':
+            p3 = request.POST['pmname']
+            p4 = request.POST['pmdese']
+            doc2=ProjectDocModels()
+            doc2.doc_project_md=proj
+            doc2.doc_mduser=dev1
+            doc2.doc_project_mdname=p3
+            doc2.doc_project_dise_md=p4
+            doc2.save()
+
+        if  check3 == '1':
+            p5 = request.POST['pvname']
+            p6 = request.POST['pvdese']
+            doc3=ProjectDocViews()
+            doc3.doc_project_v=proj
+            doc3.doc_vuser=dev1
+            doc3.doc_project_vname=p5
+            doc3.doc_project_vdise=p6
+            doc3.save()
+
+        if  check4 == '1':
+            p7 = request.POST['phpname']
+            p8 = request.POST['phpdese']
+            p13 = request.FILES.get('phpimg')
+            p14= request.POST['phpmdname']
+            doc4=ProjectDochtmlpages()
+            doc4.doc_project_hp=proj
+            doc4.doc_hpuser=dev1
+            doc4.doc_project_hpname=p7
+            doc4.doc_project_hpdise=p8
+            doc4.doc_project_html_page=p13
+            doc4.doc_project_hpmdname=p14
+            doc4.save()
+
+        if  check5 == '1':
+            p9 = request.POST['plbname']
+            p10 = request.POST['plbdese']
+            doc5=ProjectDoclibraryies()
+            doc5.doc_project_lb=proj
+            doc5.doc_lbuser=dev1
+            doc5.doc_project_lbname=p9
+            doc5.doc_project_lbdise=p10
+            doc5.save()
+
+        if  check6 == '1':
+            p11 = request.POST['podname']
+            p12 = request.POST['poddese']
+            doc6=ProjectDocother()
+            doc6.doc_project_oth=proj
+            doc6.doc_othuser=dev1
+            doc6.doc_project_othname=p11
+            doc6.doc_project_othdise=p12
+            doc6.save()
+   
+    return redirect ('DEV_projrect_doc',DEV_pdocdaily)
+
+
+  
    
 
 
@@ -15813,7 +16010,8 @@ def current_modules(request,id):
         pro = user_registration.objects.filter(id=prid)
         data = project_module_assign.objects.filter(project_name=id)
         tab = project_table.objects.filter(project=id)
-        return render(request,'current_modules.html',{'pro': pro,'data': data,'tab':tab})
+        devtab = ProjectDocModels.objects.filter(doc_project_md_id=id)
+        return render(request,'current_modules.html',{'pro': pro,'data': data,'tab':tab,'devtab':devtab})
     else:
         return redirect('/')
         

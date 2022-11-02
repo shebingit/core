@@ -818,6 +818,54 @@ class PM_ProjectDocument(models.Model):
     doc_status=models.CharField(max_length=10,null=True, blank=True,default='0')
     doc_project_ui=models.FileField(upload_to="ProjectUI", null=True)
 
+
+class ProjectDocDetails(models.Model):
+    doc_project_d=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    doc_project_currentdate_d=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    doc_project_mdname=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_mddise_d=models.TextField()
+    doc_duser=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+
+class ProjectDocModels(models.Model):
+    doc_project_md=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    doc_project_currentdate_md=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    doc_project_mdname=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_dise_md=models.TextField()
+    doc_mduser=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+
+class ProjectDocViews(models.Model):
+    doc_project_v=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    doc_project_currentdate_v=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    doc_project_vname=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_vdise=models.TextField()
+    doc_vuser=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+
+class ProjectDochtmlpages(models.Model):
+    doc_project_hp=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    doc_project_currentdate_hp=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    doc_project_hpmdname=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_hpname=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_hpdise=models.TextField()
+    doc_project_html_page=models.FileField(upload_to="ProjectUI", null=True)
+    doc_hpuser=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+
+class ProjectDoclibraryies(models.Model):
+    doc_project_lb=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    doc_project_currentdate_lb=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    doc_project_lbname=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_lbdise=models.TextField()
+    doc_lbuser=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+
+class ProjectDocother(models.Model):
+    doc_project_oth=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    doc_project_currentdate_oth=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    doc_project_othname=models.CharField(max_length=100,null=True, blank=True)
+    doc_project_othdise=models.TextField()
+    doc_othuser=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+
+
+
+
 class ProjectCorrectionUpdation(models.Model):
     project_cu_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
     ptl_name=models.CharField(max_length=50,null=True, blank=True,default='')
@@ -833,7 +881,6 @@ class ProjectCorrectionUpdation(models.Model):
     project_cu_end=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     project_cu_wdays=models.IntegerField(null=True,blank=True,default=0)
     project_cu_status=models.CharField(max_length=50,null=True, blank=True)
-
 
 
 class wrdata(models.Model):

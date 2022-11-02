@@ -71,6 +71,44 @@
             </div>
         </a>
     </div>
+    
+    </div>
+    <div class="col-sm-6 grid-margin">
+        <div class="card" style="height: auto">
+            <h4 class="card-title mt-3 ml-4">Developer Created Tables</h4>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+                <div class="input-group input-group-sm ">
+                    <input type="text" class="form-control text-white" id="myInputs" onkeyup="myFunction()"
+                        placeholder="Search . . ." style="border: green" />
+                </div>
+            </form>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" >
+                            <thead>
+                                <tr>
+                                    <th class="text-white ">Tables</th>
+                                    <th class="text-white ">Disecription</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="myTables">
+                                {% for i in devtab %}
+                                <tr>
+                                    
+                                    <td>{{i.doc_project_mdname}}</td>
+                                    <td>{{i.doc_project_dise_md}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </a>
+    </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

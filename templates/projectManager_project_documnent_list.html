@@ -67,7 +67,7 @@
             <table class="table" id="myTable">
               <thead>
                 <tr>
-                  <th>Project View</th>
+                  <th>Doc Remove</th>
                   <th>Project</th>
                   <th>Start Date</th>
                   <th>End Date</th>
@@ -80,9 +80,8 @@
                   <th>Desecription</th>
                   <th>Correction</th>
                   <th>Updation</th>
-            
-                  <th>Current Project UI</th>
-  
+                  <th>Full Doc</th>
+                  <th>Complete</th>
                 </tr>
               </thead>
               {% if proj_doc %}
@@ -92,7 +91,7 @@
                   <tr class="">
                       <td>
                         <a class="text-danger pr-2" href="" style="cursor:pointer"><i class="mdi mdi-delete ">Delete</i></a>
-                        <a class="text-primary pl-2" href="" style="cursor:pointer"><i class="mdi mdi-pen ">Edit</i></a>
+                        <!--<a class="text-primary pl-2" href="" style="cursor:pointer"><i class="mdi mdi-pen ">Edit</i></a>-->
                       </td>
                       <td><span class="ps-2">{{i.doc_project_name}}</span></td>
                       <td>{{i.doc_project_startdate|date:'d-m-Y'}}</td>
@@ -101,6 +100,8 @@
                       <td> 
                         {% if i.doc_status == '0' %}
                           <a class="text-success" href="{% url 'project_manager_doc_start' i.id %}" style="cursor:pointer"><i class="mdi mdi-power icon"></i></a>start
+                        {% elif i.doc_status == 'complete' %}
+                            Doc.Completed
                         {% else %}
                           Doc.work started
                         {% endif%}
@@ -118,8 +119,10 @@
                         <td><a class="text-danger" href="{% url 'pm_doc_des_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i>  </a></td>
                         <td><a class="text-danger" href="{% url 'pm_doc_corr_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                         <td><a  class="text-danger" href="{% url 'pm_doc_updt_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
+                        <td><a  class="text-danger" href="{% url 'pm_docfull_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
+                        <td><a  class="btn btn-primary" href="{% url 'pm_doc_complete' i.id %}"> Complete</a></td>
                         
-                        <td><a  class="btn btn-outline-secondary" href="" style="cursor:pointer">Add/Show</a></td>
+                       
                       {% else %}
                         <td></td>
                         <td></td>
@@ -128,6 +131,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                       
                       {% endif %}
                   </tr>
                 {% endif %}
