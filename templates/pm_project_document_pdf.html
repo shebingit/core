@@ -127,7 +127,13 @@
                         <h2 class="">Module :&nbsp;<span style="color: #007cae;">{{i.project_cu_module}}</span></h2>
                         <p><b>Correction Desecription :</b>&nbsp; {{i.project_cu_descrip}}</p>
                         <p><b>Previous Content:</b> {{i.project_cu_olddescrip}}</p>
+                        {% if i.project_oldui %}
+                            <img src="D:\django\altoscore - Copy{{i.project_oldui.url}}">
+                        {% endif %}
                         <p><b>Corrected Content:</b> {{i.project_cu_newdescrip}}</p>
+                        {% if i.project_cu_newui %}
+                            <img src="D:\django\altoscore - Copy{{i.project_cu_newui.url}}">
+                        {% endif %}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                        
                     </div>
@@ -154,7 +160,13 @@
                         <h2 class="">Module :&nbsp;<span style="color: #007cae;">{{i.project_cu_module}}</span></h2>
                         <p><b>Updation Desecription :</b>&nbsp;  {{i.project_cu_descrip}}</p>
                         <p><b>Previous Content:</b> {{i.project_cu_olddescrip}}</p>
+                        {% if i.project_oldui %}
+                            <img src="D:\django\altoscore - Copy{{i.project_oldui.url}}">
+                        {% endif %}
                         <p><b>Corrected Content:</b> {{i.project_cu_newdescrip}}</p>
+                        {% if i.project_cu_newui %}
+                            <img src="D:\django\altoscore - Copy{{i.project_cu_newui.url}}">
+                        {% endif %}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                       
                     </div>
@@ -170,10 +182,14 @@
                     <div class="col-lg-12">
                       
                         <h5>Employees Worked</h5>
-                        {% for i in workers %} 
-                        <p>{{ forloop.counter }}. {{i.pw_wid}}</p>
+                        {% for i in devp %}
+                        {% for j in doc_user %}
+                        {% if j.id == i.developer %}
+                        <p>{{ forloop.counter }}. {{j.fullname}}</p>
+                        {% endif %}
                         {% endfor %}
-                        <h5>Total Days To Complete :{{workdays.project_cu_wdays__sum}} Days</h5>
+                        {% endfor %}
+                        <h5>Total Days To Complete :{{work_days}} Days</h5>
                         
                     </div>
                 </div>

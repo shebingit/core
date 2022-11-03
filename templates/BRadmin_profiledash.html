@@ -1,5 +1,47 @@
 {% extends 'BRadmin_index.html' %} {% load static %} {% block content %}
 <!-- <div class="content-wrapper"> -->
+
+    <style>
+        .icon-button {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            color: #333333;
+            background: #dddddd;
+            border: none;
+            outline: none;
+            border-radius: 50%;
+          }
+          
+          .icon-button:hover {
+            cursor: pointer;
+          }
+          
+          .icon-button:active {
+            background: #cccccc;
+          }
+          
+          .icon-button__badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 22px;
+            height: 22px;
+            background: red;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-size: 12px;
+          }
+          
+    </style>
+
+
 {% for i in Adm %}
 <div class="row">
     <div class="col-md-4 grid-margin stretch-card">
@@ -205,7 +247,7 @@
             </a>
         </div>
     </div>
-    <div class="col-md-12 col-lg-12 col-12  grid-margin">
+    <div class="col-md-12 col-lg-8 col-12  grid-margin">
         <div class="card" style="max-height: 250px">
             <a href="{% url 'BRadmin_leavehistory' %}" style="text-decoration: none">
             <div class="card-body">
@@ -223,7 +265,31 @@
           </a>
         </div>
     </div>
+    <div class="col-md-12 col-lg-4 col-12  grid-margin">
+        <div class="card" style="max-height: 250px">
+            <a href="{% url 'BRadmin_Work_not_assign' %}" style="text-decoration: none">
+            <div class="card-body">
+                <div class="row" style="padding-top:10px;">
+                  <div class="col-8 col-sm-8 col-lg-8 col-md-8 my-auto">
+                    <div class="d-flex d-sm-block d-md-flex align-items-center">
+                      <h4 class="mb-0" style="color:white;">WORK NOT ASSIGN</h4>
+                    </div>
+                  </div>
+                  <div class="col-4 col-sm-4 col-lg-4 col-md-4 text-center text-xl-right">
+                    <button type="button" class="icon-button">
+                        <span class="mdi mdi-bell"></span>
+                        <span class="icon-button__badge">{{count}}</span>
+                    </button>
+                  </div>
+                </div>
+            </div>
+          </a>
+        </div>
+    </div>
+    
 </div>
+
+
 
 
   

@@ -3329,12 +3329,34 @@ def BRadmin_profiledash(request):
         data = []
         queryset = user_registration.objects.filter(id=Adm_id)
 
+       
+        count=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0').count()
+        
         for i in queryset:
             labels = [i.workperformance, i.attitude, i.creativity]
             data = [i.workperformance, i.attitude, i.creativity]
-        return render(request, 'BRadmin_profiledash.html', {'labels': labels, 'data': data, 'Num1': Num1, 'Man1': Man2, 'Adm': Adm, 'num': Num, 'trcount': trcount, 'le': le})
+
+        return render(request, 'BRadmin_profiledash.html', {'labels': labels, 'data': data, 'Num1': Num1, 'Man1': Man2, 'Adm': Adm, 'num': Num, 'trcount': trcount, 'le': le,'count':count})
     else:
         return redirect('/')
+
+
+# Display the count of not work assigned developers
+
+def BRadmin_Work_not_assign(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        dev=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0')
+        tl=user_registration.objects.filter(designation_id=4)
+        pman=user_registration.objects.filter(designation_id=4)
+        return render(request, 'BRadmin_Work_not_assign.html', {'Adm': Adm,'dev':dev,'tl':tl,'pman':pman})
+    else:
+        return redirect('/')
+
 
 def BRadmin_employees(request):
     if 'Adm_id' in request.session:
@@ -5762,7 +5784,7 @@ def projectmanager_assignproject(request):
         modules = project_module_assign.objects.all()
         
         if request.method =='POST':
-            
+           
             var = project_taskassign()
            
             var.user_id = prid
@@ -5771,6 +5793,7 @@ def projectmanager_assignproject(request):
             var.description=request.POST.get('desc')
             var.startdate=request.POST.get('sdate')
             var.enddate=request.POST.get('edate')
+            var.worktype=request.POST.get('individual_work')
             
             bb= datetime.strptime(var.startdate, '%Y-%m-%d').strftime('%d-%m-%Y')
             
@@ -6043,7 +6066,7 @@ def projectManager_project_document(request):
            return redirect('/')
         pro = user_registration.objects.filter(id=prid).order_by("-id")
         projects = project.objects.all().order_by("-id")
-        proj_doc=PM_ProjectDocument.objects.filter(doc_status='0')
+        proj_doc=PM_ProjectDocument.objects.filter(Q(doc_status='0') | Q(doc_status='1'))
         return render(request, 'projectManager_project_documnent_list.html',{'pro':pro,'proj_doc':proj_doc})
     else:
         return redirect('/')
@@ -6197,12 +6220,14 @@ def pm_docfull_pdf(request,pmfulldocs_pdf):
     devp=project_taskassign.objects.filter(project=pdoc.doc_project_id).values('developer').distinct()
     doc_user = user_registration.objects.all()
     
-    
+    work_days=pdoc.doc_project_enddate - pdoc.doc_project_startdate
+    work_days=work_days.days
+   
 
     template_path = 'pm_project_document_fullpdf.html'
     context = {'proj':proj,'pdoc':pdoc,'corre':corre,
                                 'updte':updte,'pdocd':pdocd,'pdocm':pdocm,'pdocv':pdocv,'pdochp':pdochp,'pdoclb':pdoclb,'pdocdot':pdocdot,
-                                'devp':devp,'doc_user':doc_user,'date':date}
+                                'devp':devp,'doc_user':doc_user,'date':date,'work_days':work_days}
         
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
@@ -6248,8 +6273,10 @@ def pm_doc_pdf(request,fulldoc_pdf):
     project_doc=PM_ProjectDocument.objects.get(doc_project_id=projects)
     project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='correction' )
     project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='updation' )
-   
-    
+    devp=project_taskassign.objects.filter(project=projects).values('developer').distinct()
+    doc_user = user_registration.objects.all()
+    work_days=project_doc.doc_project_enddate - project_doc.doc_project_startdate
+    work_days=work_days.days
 
     template_path = 'pm_project_document_pdf.html'
     context = {'projects':projects,
@@ -6261,7 +6288,10 @@ def pm_doc_pdf(request,fulldoc_pdf):
     'p4':p4,
     'project_updation':project_updation,
     'date':date,
-    'project_doc':project_doc
+    'project_doc':project_doc,
+    'devp':devp,
+    'doc_user':doc_user,
+    'work_days':work_days
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -6882,6 +6912,23 @@ def projectmanager_completetl(request,id):
         return render(request, 'projectmanager_completetl.html',{'pro':pro,'com':com,'display':display,'user':user})
     else:
         return redirect('/')
+
+
+# Project Manager complete document - project complete -- 2/11/22 -shebin shaji
+def projectmanager_completedoc(request,pm_comp_doc):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+            return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        com = project.objects.filter(status = "completed")
+        proj_doc = PM_ProjectDocument.objects.filter(doc_project_id_id=pm_comp_doc,doc_status='completed')
+
+        return render(request, 'projectmanager_completetdoc.html',{'pro':pro,'com':com,'proj_doc':proj_doc})
+    else:
+        return redirect('/')
+
 
 
 def projectMANreportedissue(request):
@@ -7740,13 +7787,19 @@ def tlsplittask(request,id):
                 tlid = request.session['tlid']
             else:
                 return redirect('/')
-            splitid = request.session['splitid']
-            sub1 = project_taskassign.objects.get(id=id)
-            test = test_status.objects.all()
-            tester = tester_status.objects.all()
-            mem = user_registration.objects.filter(id=tlid)
-            sub = project_taskassign.objects.filter(~Q(developer_id=tlid)).filter(project_id=splitid,tl_id=tlid) 
-            return render(request, 'TLsplittask.html',{'mem':mem,'sub':sub,'sub1':sub1,'test':test,'tester':tester})
+            wtype=project_taskassign.objects.get(id=id)
+            
+            if wtype.worktype == '2':
+                splitid = request.session['splitid']
+                sub1 = project_taskassign.objects.get(id=id)
+                test = test_status.objects.all()
+                tester = tester_status.objects.all()
+                mem = user_registration.objects.filter(id=tlid)
+                sub = project_taskassign.objects.filter(~Q(developer_id=tlid)).filter(project_id=splitid,tl_id=tlid) 
+                return render(request, 'TLsplittask.html',{'mem':mem,'sub':sub,'sub1':sub1,'test':test,'tester':tester})
+            else:
+                prj=wtype.project.id
+                return redirect('tlprojecttasks',prj) 
         else:
             return redirect('/') 
 
@@ -7786,9 +7839,15 @@ def tlgivetask(request):
             var.extension=0
             var.project_id = splitid
             var.description = new.description
+            var.worktype='1'
             var.save()
             v = request.POST.get('ename')
             em=user_registration.objects.get(id=v)
+
+            user=user_registration.objects.get(id=request.POST['ename']) #developer work status change
+            user.work_status='1'
+            user.save()
+
             # print(em.email)
             # subject = 'Greetings from iNFOX TECHNOLOGIES'
             # message = 'Congratulations,\n' \
@@ -8220,6 +8279,11 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
         prj_task.status=task_verify
         prj_task.save()
         c_date=date.today()
+
+        if task_verify == 'submitted':
+            user=user_registration.objects.get(id=prj_task.developer.id)
+            user.work_status='0'
+            user.save()
 
         if task_verify == 'correction':
             proj_doc_cu=ProjectCorrectionUpdation()
@@ -12145,9 +12209,8 @@ def BRadmin_project_table(request,id):
         Adm = user_registration.objects.filter(id=Adm_id)
         des = designation.objects.get(designation="team leader")
         dev = designation.objects.get(designation="developer")
-        var = project_taskassign.objects.filter(
-            project_id=id).order_by('-id')
-        data = test_status.objects.filter(project_id=id).order_by('-id')
+        var = project_taskassign.objects.filter(project_id=id,worktype='1').order_by('-id')
+        data = test_status.objects.filter(project_id=id,).order_by('-id')
         data1 = tester_status.objects.filter(project_id=id).order_by('-id')
         newdata = project_taskassign.objects.filter(
             project_id=id, subtask__isnull=False).order_by('-id')

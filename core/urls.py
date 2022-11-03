@@ -1284,6 +1284,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     re_path(r'^BRadmin_leavehistory/$',views.BRadmin_leavehistory,name="BRadmin_leavehistory"),         
     re_path(r'^BRadmin_leaveapprovedstatus/(?P<id>\d+)/$',views.BRadmin_leaveapprovedstatus,name="BRadmin_leaveapprovedstatus"),
     re_path(r'^BRadmin_rejectedstatus/(?P<id>\d+)/$',views.BRadmin_rejectedstatus,name="BRadmin_rejectedstatus"),
+    path('BRadmin_Work_not_assign', views.BRadmin_Work_not_assign, name='BRadmin_Work_not_assign'),
     
     # re_path(r'^accounts_account_salary/$',views.accounts_account_salary,name="accounts_account_salary"),
     # re_path(r'^accounts_accout_salary_slip/(?P<id>\d+)/$',views.accounts_accout_salary_slip,name="accounts_accout_salary_slip"),
@@ -1619,6 +1620,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    path('pm_doc_md_corr_upd/<int:pmdoc_md_crup_id>/<int:coup>', views.pm_doc_md_corr_upd, name='pm_doc_md_corr_upd'),
    path('pm_doc_corre_updattion/<int:pmdoc_pid>/<int:pmdoc_cu>', views.pm_doc_corre_updattion, name='pm_doc_corre_updattion'),
    path('pm_doc_complete/<int:pmdoc_complete>', views.pm_doc_complete, name='pm_doc_complete'),
+   path('projectmanager_completedoc/<int:pm_comp_doc>', views.projectmanager_completedoc, name='projectmanager_completedoc'),
 
    ############## document section ########################
    path('pm_doc_pdf/<int:fulldoc_pdf>', views.pm_doc_pdf, name='pm_doc_pdf'),

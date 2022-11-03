@@ -145,6 +145,7 @@ class user_registration(models.Model):
     hr_designation = models.CharField(max_length=120, default='',null=True, blank=True)
     reg_status =  models.CharField(max_length=10, default='0')
     trainee_delay=models.IntegerField(default=0)
+    work_status =  models.CharField(max_length=10, default='0')
  
     def __str__(self):
         return self.fullname
@@ -273,6 +274,7 @@ class project_taskassign(models.Model):
     delay = models.CharField(max_length=200, null=True,default="")
     git_link = models.TextField(null=True,default='')
     workaccept = models.FileField(upload_to='images/', null=True, blank=True,default="0")
+    worktype = models.CharField(max_length=15, null=True,default="0")
     
 
     def __str__(self):

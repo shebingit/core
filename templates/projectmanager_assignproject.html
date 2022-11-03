@@ -38,14 +38,24 @@
       
         {% endfor %}
       </select>  <br>
-      <label>Select Module</label>
-      <select class="form-control" name="tname" id='second-select'  style='color:white !important'>
-    
-       </select> <br>
+      
       <label>Task</label>
       <input type="text" class="form-control card-title col-12 md-4" name="task" autocomplete="off">
       <label>Description</label>
       <textarea type="text" name="desc" class="form-control card-title col-12 md-4" style='color:white !important;height: 100px;'></textarea>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="individual_work" value="1" id="individual_work">
+        <label class="form-check-label" for="flexRadioDefault1">
+          Individual Work
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="individual_work" value="2" id="flexRadioDefault2" checked>
+        <label class="form-check-label" for="flexRadioDefault2">
+          Group Work
+        </label>
+      </div>
+      <br>
       <label>Start date</label>
       <input type="date" name="sdate" id="sdate" class="form-control card-title col-12 md-4" style='color:white !important'>
       <label>End date</label>
