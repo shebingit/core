@@ -10,9 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='user_registration',
-            name='work_status',
-            field=models.CharField(default='0', max_length=10),
-        ),
+     
     ]

@@ -84,7 +84,7 @@ class user_registration(models.Model):
                              related_name='userregistrationteam', null=True, blank=True)
     course = models.ForeignKey(course, on_delete=models.SET_NULL, related_name='course_name',null=True,blank=True)
     fullname = models.CharField(max_length=240, null=True)
-    employee_type = models.CharField(max_length=20, null=True, default='0')
+    employee_type = models.CharField(max_length=15, null=True, default='0')
     fathername = models.CharField(max_length=240, null=True)
     mothername = models.CharField(max_length=240, null=True)
     dateofbirth = models.DateField(
@@ -105,7 +105,7 @@ class user_registration(models.Model):
     permanentstate = models.CharField(max_length=240, null=True)
     permanentcountry = models.CharField(max_length=240, null=True)
     mobile = models.CharField(max_length=240, null=True)
-    alternativeno = models.CharField(max_length=240, null=True)
+    alternativeno = models.CharField(max_length=50, null=True)
     employee_id = models.CharField(max_length=240,null=True,default='')
     email = models.EmailField(max_length=240, null=True)
     password = models.CharField(max_length=240, null=True)
@@ -145,7 +145,8 @@ class user_registration(models.Model):
     hr_designation = models.CharField(max_length=120, default='',null=True, blank=True)
     reg_status =  models.CharField(max_length=10, default='0')
     trainee_delay=models.IntegerField(default=0)
-    work_status =  models.CharField(max_length=10, default='0')
+    work_status =  models.CharField(max_length=10, default='')
+   
  
     def __str__(self):
         return self.fullname
@@ -440,7 +441,7 @@ class trainer_task(models.Model):
     task_status = models.CharField(max_length=200)
     task_progress = models.IntegerField(default=0)
     delay = models.IntegerField(default=0)
-    task_progress = models.IntegerField(default=0)
+    
     
 
     def __str__(self):

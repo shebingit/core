@@ -157,7 +157,7 @@ def login(request):
     
         design = designation.objects.get(designation="team leader")
         
-        print("hey")    
+      
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design.id,status="active").exists():
                  member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
                  request.session['tlid'] = member.id
@@ -199,6 +199,13 @@ def login(request):
                 request.session['dmdev_id'] = dmdev.id
                 
                 return redirect('dm_devdashboard')
+
+        design7 = designation.objects.get(designation="auditor")    
+        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design7.id,status="active").exists():
+                auduser=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+                request.session['aud_id'] = auduser.id
+                
+                return redirect('Auditdashboard')
             
         else:
                 context = {'msg_error': 'Invalid data'}
@@ -5742,10 +5749,28 @@ def pmanager_dash(request):
             labels = [i.workperformance, i.attitude, i.creativity]
 
             data = [i.workperformance, i.attitude, i.creativity]
-
-        return render(request, 'pmanager_dash.html', {'pro': pro, "labels": labels, "data": data, 'le': le})
+        count=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0').count()
+        return render(request, 'pmanager_dash.html', {'pro': pro, "labels": labels, "data": data, 'le': le,'count':count})
     else:
         return redirect('/')
+
+
+# work not assign tl and developer list shows
+
+def pm_Work_not_assign(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        dev=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0')
+        return render(request, 'projectmanager_work_not_assign.html',{'pro':pro,'dev':dev})
+    else:
+        return redirect('/')
+
+
+
 
 def projectmanager_projects(request):
     if 'prid' in request.session:
@@ -9644,12 +9669,14 @@ def BRadmin_registration(request):
             desi_id = request.POST.get("des")
             emp_ty = request.POST.get("emp_type")
             res = request.POST.get("stat")
-       
+
             user = user_registration.objects.get(id=u_id)
             user.department_id = dept_id 
             user.status = res
             user.employee_type=emp_ty
             user.designation_id = desi_id
+            if desi_id == '6' or desi_id == '4':
+                user.work_status='0'
             user.save()
             return redirect("BRadmin_registration")
         
@@ -19089,6 +19116,116 @@ def BRadmin_project_delay_action(request,BRadmin_dep_dely):
     else:
         return redirect('/')
 
+
+
+
+#************************* Audit Module ************************************4/11/22
+
+#Auditor logout
+def Auditlogout(request):
+    if 'aud_id' in request.session:  
+        request.session.flush()
+        return redirect('/')
+    else:
+        return redirect('/') 
+
+# auaditor Dashboard
+def Auditdashboard(request):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        return render(request, 'audit_module/audit_dasboard.html', {'Aud': Aud})
+    else:
+        return redirect('/')
+
+
+# Training Section---------auaditor Training page load
+def Audit_training(request):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        traines=user_registration.objects.filter(designation_id=9,status='active')
+        trainers=user_registration.objects.filter(designation_id=8,status='active')
+        return render(request, 'audit_module/audit_taining.html', {'Aud': Aud,'traines':traines,'trainers':trainers})
+    else:
+        return redirect('/')
+
+#Trainee Section ---->
+
+def Audit_trainee_trainer_dashboard(request,audit_traine_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+      
+        traine_tainer_db=user_registration.objects.get(id=audit_traine_id)
+        print('ha1',traine_tainer_db.id)
+        deg=traine_tainer_db.designation.id
+        if deg == 9:
+            tnr=previousTeam.objects.filter(user_id=audit_traine_id)
+            attend=attendance.objects.filter(user_id=audit_traine_id).order_by('-id')
+           
+            return render(request, 'audit_module/audit_tainee_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,'tnr':tnr,'attend':attend})
+        if deg == 8:
+            return render(request, 'audit_module/audit_tainer_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db})
+    else:
+        return redirect('/')
+
+# Traine's trainer details
+def Audit_trainee_trainer_details(request,audit_ttrainer_id,audit_tm_id,audit_trn_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+      
+        Aud = user_registration.objects.filter(id=Aud_id)
+        trainer=user_registration.objects.get(id=audit_ttrainer_id)
+       
+        topics=topic.objects.filter(trainer_id=audit_ttrainer_id,team_id=audit_tm_id)
+        tasks=trainer_task.objects.filter(team_name_id=audit_tm_id,user_id=audit_trn_id)
+      
+        return render(request, 'audit_module/audit_traine_tainer_details.html', {'Aud': Aud,'trainer':trainer,'topics':topics,'tasks':tasks})
+    else:
+        return redirect('/')
+
+
+
+
+#Employee  Section ---------------auditor Employee page load
+
+def Audit_employees(request):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        return render(request, 'audit_module/audit_employee.html', {'Aud': Aud})
+    else:
+        return redirect('/')
+
+
+#Project Section ------------------ audit Project page load
+
+def Audit_project(request):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        return render(request, 'audit_module/audit_projects.html', {'Aud': Aud})
+    else:
+        return redirect('/')
 
 
 

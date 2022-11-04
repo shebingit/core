@@ -1,0 +1,150 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+<div class="card p-3">
+    <h5>Trainer&nbsp;-&nbsp;{{trainer.fullname}}</h5>
+    <br>
+    <h6>Topic</h6>
+    <hr>
+    <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                    placeholder="Search...">
+                <br>
+                <div class="table-responsive">
+                {% if topics %}   
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Topic Name </th>
+                                <th> Start Date</th>
+                                <th> End Date </th>
+                                <th> Desecription </th>
+                                <th> File</th>
+                                <th> Review</th>
+                                <th> Topic Status</th>
+
+                            </tr>
+                        </thead>
+                       
+                        <tbody id="myTable">
+                        
+                            {% for i in topics %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                
+                                <td>{{i.topic}}</td>
+                                <td>{{i.startdate|date:"d-m-Y"}}</td>
+                                <td>{{i.enddate|date:"d-m-Y"}}</td>
+                                <td>{{i.description}}</td>
+                                <td>
+                                    {% if i.files %}
+                                    <a href="{{i.files.url}}" class="btn btn-outline-primary" Download="{{i.files.url}}"><span class="mdi mdi-download"></span>Download</a>
+                                    {% else %}
+                                    <a class="btn btn-outline-danger">No ile</a>
+                                    {% endif %}
+                                </td>
+                                <td>{{i.review}}</td>
+                                <td>
+                                {% if i.topic_status == '1' %}
+                                   <h6 class="text-success">Completed</h6>
+                                {% else%}
+                                <h6 class="text-danger">Not Completed</h6>
+                                {% endif %}
+                                </td>
+                                
+                               
+                                {% endfor %}
+ 
+                        </tbody>
+                        
+       
+                    </table>
+                {% else %}
+                    <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                {% endif %}
+                </div>
+
+    
+    <br><br>
+    <h6>Task</h6>
+    <hr>
+    <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                    placeholder="Search...">
+                <br>
+                <div class="table-responsive">
+                    {% if tasks %}   
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Task Name </th>
+                                <th> Start Date </th>
+                                <th> End Date </th>
+                                <th> Submitted Date </th>
+                                <th> Desecription </th>
+                                <th> File</th>
+                                <th> Trainee Desecription </th>
+                                <th> File</th>
+                                <th> Progress</th>
+                                <th> Delay</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                            
+                            {% for i in tasks %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td>{{i.taskname}}</td>
+                                <td>{{i.startdate|date:"d-m-Y"}}</td>
+                                <td>{{i.enddate|date:"d-m-Y"}}</td>
+                                <td>{{i.submitteddate|date:"d-m-Y"}}</td>
+                                <td>{{i.description}}</td>
+                                <td>
+                                    {% if i.files %}
+                                        <a href="{{i.files.url}}" class="btn btn-primary" download="{{i.files.url}}"><span class="mdi mdi-download"></span>Download</a>
+                                    {% else %}
+                                        <a class="btn btn-outline-danger">No ile</a>
+                                    {% endif %}
+                                </td>
+                                <td>{{i.user_description}}</td>
+                                <td>
+                                    {% if i.user_files %}
+                                        <a  href="{{i.user_files.url}}" class="btn btn-primary" download="{{i.user_files.url}}"><span class="mdi mdi-download"></span>Download</a>
+                                    {% else %}
+                                        <a class="btn btn-outline-danger">No ile</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a class="btn btn-outline-warning">{{i.delay}}</a></td>
+                               
+                                <td> 
+                                    
+                                </td>
+                               
+                                {% endfor %}
+                            </tr>
+                            
+                            
+                        </tbody>
+       
+                    </table>
+                    {% else %}
+                    <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                {% endif %}
+                </div>
+</div>
+
+
+{% endblock %}

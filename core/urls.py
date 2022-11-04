@@ -723,6 +723,8 @@ urlpatterns = [
     re_path(r'^projectmanager_projects/', views.projectmanager_projects, name="projectmanager_projects"),
     re_path(r'^completepro/(?P<id>\d+)/$', views.completepro, name='completepro'),
     re_path(r'^pr_mg/$', views.pr_mg, name="pr_mg"),
+    path('pm_Work_not_assign', views.pm_Work_not_assign, name='pm_Work_not_assign'),
+
 
     #nirmal
     re_path(r'^projectmanager_assignproject/', views.projectmanager_assignproject, name="projectmanager_assignproject"),
@@ -1656,13 +1658,25 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    #admin project PM/TL/Developer
    path('BRadmin_project_delay_action/<int:BRadmin_dep_dely>', views.BRadmin_project_delay_action, name='BRadmin_project_delay_action'),
 
-
-
-
    #************************ Admin project Dcuments section **************************
    path('BRadmin_project_document/<int:Bradmin_dep_id>', views.BRadmin_project_document, name='BRadmin_project_document'),
    path('BRadmin_project_doc_detail/<int:BRadmin_pdocv_id>', views.BRadmin_project_doc_detail, name='BRadmin_project_doc_detail'),
    
+
+   #----------------------------- Audit Module ---------------4/11/22 shebin Shaji ------------------------
+
+    path('Auditlogout>', views.Auditlogout, name='Auditlogout'),
+    path('Auditdashboard>', views.Auditdashboard, name='Auditdashboard'),
+
+    path('Audit_training>', views.Audit_training, name='Audit_training'),
+    path('Audit_trainee_trainer_dashboard/<int:audit_traine_id>', views.Audit_trainee_trainer_dashboard, name='Audit_trainee_trainer_dashboard'),
+    path('Audit_trainee_trainer_details/<int:audit_ttrainer_id>/<int:audit_tm_id>/<int:audit_trn_id>', views.Audit_trainee_trainer_details, name='Audit_trainee_trainer_details'),
+
+    path('Audit_employees>', views.Audit_employees, name='Audit_employees'),
+
+    path('Audit_project>', views.Audit_project, name='Audit_project'),
+    
+
 
 
 ]

@@ -1,0 +1,581 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+<style>
+    h4,a{
+        text-decoration: none;
+        color: #6C7293
+    }
+    a:hover
+    {
+        color: #d4d6de
+    }
+    .answer1 { display:block; }
+    .answer2 { display:none; }
+    .answer3 { display:none; }
+    .answer4 { display:none; }
+    .answer5 { display:none; }
+    .answer6 { display:none; }
+    
+</style>
+
+<div class="row">
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+
+                <center>
+                    <h3 class="card-title">PROFILE</h3>
+                    {% if traine_db.photo %}
+                    <img src="{{ traine_tainer_db.photo.url }}" alt="image" style="border-radius: 50%;" width="130" height="130" />
+                    {% endif %}
+                    <!-- <canvas id="transaction-history" class="transaction-chart"></canvas> -->
+                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
+                        <div class="text-md-center text-xl-left">
+
+                            <h6 class="mb-1">Joining Date</h6>
+                            <!-- <p class="text-muted mb-0">07 Jan 2019, 09:12AM</p> -->
+                        </div>
+                        <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
+                            <h6 class="text-muted mb-0">{{ traine_tainer_db.joiningdate|date:"d-m-Y" }}</h6>
+                        </div>
+                    </div>
+                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
+                        <div class="text-md-center text-xl-left">
+                            <h6 class="mb-1">Designation</h6>
+                            <!-- <p class="text-muted mb-0">07 Jan 2019, 09:12AM</p> -->
+                        </div>
+                        <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
+                            <h6 class="text-muted mb-0">{{ traine_tainer_db.designation }}</h6>
+                        </div>
+                    </div>
+                </center>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-row justify-content-between">
+                    <p class="text-muted mb-1">Your data status</p>
+                </div>
+                <div class="row" style="margin-top: 30px;">
+                    <div class="col-12">
+                        <div class="preview-list">
+                            <div class="preview-item border-bottom">
+                                <div class="preview-thumbnail">
+                                    <!-- <div class="preview-icon bg-primary">
+                      <i class="mdi mdi-file-document"></i>
+                    </div> -->
+                                </div>
+                                <div class="preview-item-content d-sm-flex flex-grow">
+                                    <div class="flex-grow">
+                                        <h6 class="preview-subject">NAME</h6>
+                                        <!-- <p class="text-muted mb-0">Broadcast web app mockup</p> -->
+                                    </div>
+                                    <div class="me-auto text-sm-right pt-2 pt-sm-0">
+                                        <!-- <p class="text-muted">15 minutes ago</p>
+                      <p class="text-muted mb-0">30 tasks, 5 issues </p> -->
+                                        <h6 class="preview-subject">{{ traine_tainer_db.fullname }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="preview-item border-bottom">
+                                <div class="preview-thumbnail">
+                                    <!-- <div class="preview-icon bg-success">
+                      <i class="mdi mdi-cloud-download"></i>
+                    </div> -->
+                                </div>
+                                <div class="preview-item-content d-sm-flex flex-grow">
+                                    <div class="flex-grow">
+                                        <h6 class="preview-subject">DEPARTMENT</h6>
+                                        <!-- <p class="text-muted mb-0">Upload new design</p> -->
+                                    </div>
+                                    <div class="me-auto text-sm-right pt-2 pt-sm-0">
+                                        <!-- <p class="text-muted">1 hour ago</p>
+                      <p class="text-muted mb-0">23 tasks, 5 issues </p> -->
+                                        <h6 class="preview-subject">{{ traine_tainer_db.department }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="preview-item border-bottom">
+                                <div class="preview-thumbnail">
+                                    <!-- <div class="preview-icon bg-info">
+                      <i class="mdi mdi-clock"></i>
+                    </div> -->
+                                </div>
+                                <div class="preview-item-content d-sm-flex flex-grow">
+                                    <div class="flex-grow">
+                                        <h6 class="preview-subject">EMAIL</h6>
+                                        <!-- <p class="text-muted mb-0">New project discussion</p> -->
+                                    </div>
+                                    <div class="me-auto text-sm-right pt-2 pt-sm-0">
+                                        <!-- <p class="text-muted">35 minutes ago</p>
+                      <p class="text-muted mb-0">15 tasks, 2 issues</p> -->
+                                        <h6 class="preview-subject">{{ traine_tainer_db.email }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="preview-item border-bottom">
+                                <div class="preview-thumbnail">
+                                    <!-- <div class="preview-icon bg-danger">
+                      <i class="mdi mdi-email-open"></i>
+                    </div> -->
+                                </div>
+                                <div class="preview-item-content d-sm-flex flex-grow">
+                                    <div class="flex-grow">
+                                        <h6 class="preview-subject">CONTACT NUMBER</h6>
+                                        <!-- <p class="text-muted mb-0">Sent release details to team</p> -->
+                                    </div>
+                                    <div class="me-auto text-sm-right pt-2 pt-sm-0">
+                                        <!-- <p class="text-muted">55 minutes ago</p>
+                      <p class="text-muted mb-0">35 tasks, 7 issues </p> -->
+                                        <h6 class="preview-subject">{{ traine_tainer_db.mobile }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="preview-item">
+                                <div class="preview-thumbnail">
+                                    <!-- <div class="preview-icon bg-warning">
+                      <i class="mdi mdi-chart-pie"></i>
+                    </div> -->
+                                </div>
+                                <div class="preview-item-content d-sm-flex flex-grow">
+                                    <div class="flex-grow">
+                                        <!-- <h6 class="preview-subject">JIONING DATE</h6> -->
+                                        <!-- <p class="text-muted mb-0">New application planning</p> -->
+                                    </div>
+                                    <div class="me-auto text-sm-right pt-2 pt-sm-0">
+                                        <!-- <p class="text-muted">50 minutes ago</p>
+                      <p class="text-muted mb-0">27 tasks, 4 issues </p> -->
+                                        <!-- <h6 class="preview-subject">15/02/2022</h6> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<br>
+<div class="form-check mt-3 pl-3">
+    <input class="form-check-input" type="checkbox" id="check1" name="check1" value="1" onchange="valueChanged()" checked >
+    <label class="form-check-label"><h4>Training</h4></label>
+</div>
+<hr>
+<div class="row mt-1 answer1">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Trainers &nbsp; for &nbsp; {{ traine_tainer_db.fullname }}</h4>
+                <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                    placeholder="Search...">
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Batch Name </th>
+                                <th> Team Name</th>
+                                <th> Trainer Name </th>
+                                <th> Trainer Start Date </th>
+                                <th> Trainer End Date </th>
+                                <th> Traine End Date</th>
+                                <th> Progress</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        {% if tnr %}
+                            {% for i in tnr %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td></td>
+                                <td>{{i.teamname.name}}</td>
+                                <td>
+                                    <a href="{% url 'Audit_trainee_trainer_details' i.teamname.trainer_id i.teamname.id traine_tainer_db.id %}">{{i.teamname.trainer}}</a>
+                                </td>
+                                <td>{{i.teamname.startdate|date:"d-m-Y"}}</td>
+                                <td>{{i.teamname.enddate|date:"d-m-Y"}}</td>
+                                <td>{{i.teamname.enddate|date:"d-m-Y"}}</td>
+                               
+                                <td> 
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
+                                    </div>
+                                </td>
+                               
+                                {% endfor %}
+                            </tr>
+                        {% else %}
+                        <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                        {% endif %} 
+                            
+                        </tbody>
+       
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<br>
+<div class="form-check mt-3 pl-3">
+    <input class="form-check-input" type="checkbox" id="check2" name="check2" value="1" onchange="valueChanged()">
+    <label class="form-check-label"><h4>Project</h4></label>
+</div>
+<hr>
+<div class="row mt-1 answer2">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Dummy Project &nbsp; of &nbsp; {{ traine_tainer_db.fullname }}</h4>
+                <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                    placeholder="Search...">
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Batch Name </th>
+                                <th> Team Name</th>
+                                <th> Trainer Name </th>
+                                <th> Trainer Start Date </th>
+                                <th> Trainer End Date </th>
+                                <th> Traine End Date</th>
+                                <th> Progress</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        {% if tnr %}
+                            {% for i in tnr %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td></td>
+                                <td>{{i.teamname.name}}</td>
+                                <td>
+                                    <a href="{% url 'Audit_trainee_trainer_details' i.teamname.trainer_id i.teamname.id traine_tainer_db.id %}">{{i.teamname.trainer}}</a>
+                                </td>
+                                <td>{{i.teamname.startdate|date:"d-m-Y"}}</td>
+                                <td>{{i.teamname.enddate|date:"d-m-Y"}}</td>
+                                <td>{{i.teamname.enddate|date:"d-m-Y"}}</td>
+                               
+                                <td> 
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
+                                    </div>
+                                </td>
+                               
+                                {% endfor %}
+                            </tr>
+                        {% else %}
+                        <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                        {% endif %} 
+                            
+                        </tbody>
+       
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="form-check mt-3 pl-3">
+    <input class="form-check-input" type="checkbox" id="check3" name="check3" value="1" onchange="valueChanged()">
+    <label class="form-check-label"><h4>Attendence</h4></label>
+</div>
+<hr>
+<div class="row mt-1 answer3">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Attendences &nbsp; of &nbsp; {{ traine_tainer_db.fullname }}</h4>
+                <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                    placeholder="Search...">
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Date </th>
+                                <th> Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        {% if attend %}
+                            {% for i in attend %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td>{{i.date|date:"d-m-Y"}}</td>
+                                <td>
+                                    {% if i.attendance_status == '1' %}
+                                    <p class="text-success">Present</p>
+                                    {% else %}
+                                    <p class="text-danger">Absent</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                        {% endif %} 
+                            
+                        </tbody>
+       
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="form-check mt-3 pl-3">
+    <input class="form-check-input" type="checkbox" id="check4" name="check4" value="1" onchange="valueChanged()">
+    <label class="form-check-label"><h4>Payments</h4></label>
+</div>
+<hr>
+<div class="row mt-1 answer4">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Payments &nbsp; From &nbsp; {{ traine_tainer_db.fullname }}</h4>
+                <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                    placeholder="Search...">
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Batch Name </th>
+                                <th> Team Name</th>
+                                <th> Trainer Name </th>
+                                <th> Trainer Start Date </th>
+                                <th> Trainer End Date </th>
+                                <th> Traine End Date</th>
+                                <th> Progress</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        {% if tnr %}
+                            {% for i in tnr %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td></td>
+                                <td>{{i.teamname.name}}</td>
+                                <td>
+                                    <a href="{% url 'Audit_trainee_trainer_details' i.teamname.trainer_id i.teamname.id traine_tainer_db.id %}">{{i.teamname.trainer}}</a>
+                                </td>
+                                <td>{{i.teamname.startdate|date:"d-m-Y"}}</td>
+                                <td>{{i.teamname.enddate|date:"d-m-Y"}}</td>
+                                <td>{{i.teamname.enddate|date:"d-m-Y"}}</td>
+                               
+                                <td> 
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
+                                    </div>
+                                </td>
+                               
+                                {% endfor %}
+                            </tr>
+                        {% else %}
+                        <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                        {% endif %} 
+                            
+                        </tbody>
+       
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<br>
+<div class="form-check mt-3 pl-3">
+    <input class="form-check-input" type="checkbox" id="check5" name="check5" value="1" onchange="valueChanged()">
+    <label class="form-check-label"><h4>Issues Report and Feedback</h4></label>
+</div>
+<hr>
+<div class="row mt-1 answer5">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Feedback &nbsp; by &nbsp; {{ traine_tainer_db.fullname }}</h4>
+               
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Date </th>
+                                <th> Trainer Name </th>
+                                <th> Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                            
+                            {% for i in traines %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td> {{i.joiningdate|date:"d-m-Y"}}</td>
+                                <td>{{i.fullname}}</td>
+                                <td>{{i.fullname}}</td>
+                                
+                               
+                                {% endfor %}
+                            </tr>
+                            
+                            
+                        </tbody>
+       
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Issues Reported &nbsp; by &nbsp; {{ traine_tainer_db.fullname }}</h4>
+               
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Date </th>
+                                <th> Issue</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                            
+                            {% for i in traines %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td> {{i.joiningdate|date:"d-m-Y"}}</td>
+                                <td>{{i.fullname}}</td>
+
+                                {% endfor %}
+                            </tr>
+                            
+                            
+                        </tbody>
+       
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+         
+    $(document).ready(function () {
+        $("#search_Trainers").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable_Trainers tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+
+    function myFunction_Trainers() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search_Trainers");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable_Trainers");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td)
+           {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) 
+            {
+              tr[i].style.display = "";
+            } 
+            else
+            {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+</script>
+
+<script type="text/javascript">
+    function valueChanged()
+    {
+        if($('#check1').is(":checked"))   
+            $(".answer1").show();
+        else
+            $(".answer1").hide();
+
+        if($('#check2').is(":checked"))   
+            $(".answer2").show();
+        else
+            $(".answer2").hide();
+
+        if($('#check3').is(":checked"))   
+            $(".answer3").show();
+        else
+            $(".answer3").hide();
+
+        if($('#check4').is(":checked"))   
+            $(".answer4").show();
+        else
+            $(".answer4").hide();
+
+        if($('#check5').is(":checked"))   
+            $(".answer5").show();
+        else
+            $(".answer5").hide();
+
+        
+    }
+</script>
+
+
+{% endblock %}
