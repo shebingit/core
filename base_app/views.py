@@ -2123,11 +2123,12 @@ def trainer_givetask(request, id):
             start= request.POST.get('start')
             end = request.POST.get('end')
             task_status = 0
+            tptype = request.POST.get('task_proj')
             team_name_id = d.id
-            
+         
     
             vars = trainer_task(user_id=list,taskname=name,description=desc,files=files,startdate=start,
-                    enddate=end,task_status=task_status, team_name_id=team_name_id)
+                    enddate=end,task_status=task_status, team_name_id=team_name_id,task_type=tptype)
             vars.save()
             msg_success = "Task Assigned Successfully"
             return render(request, 'trainer_givetask.html', {'z': z, 'var': var, 'msg_success':msg_success})
@@ -2560,11 +2561,11 @@ def trainee_task_details(request, id):
             dee = (akm-de).days
             if dee <= 0:
                 mem.delay=0
-                mem.task_status = 1
+                mem.task_status = 2
                 mem.save()
             else:
                 mem.delay=(akm-de).days
-                mem.task_status = 1
+                mem.task_status = 2
                 mem.save()
             return render(request, 'trainee_task_details.html', {'mem': mem, 'z': z})
         return render(request, 'trainee_task_details.html', {'mem': mem, 'z': z})
@@ -19167,15 +19168,22 @@ def Audit_trainee_trainer_dashboard(request,audit_traine_id):
         Aud = user_registration.objects.filter(id=Aud_id)
       
         traine_tainer_db=user_registration.objects.get(id=audit_traine_id)
-        print('ha1',traine_tainer_db.id)
+       
         deg=traine_tainer_db.designation.id
         if deg == 9:
             tnr=previousTeam.objects.filter(user_id=audit_traine_id)
             attend=attendance.objects.filter(user_id=audit_traine_id).order_by('-id')
-           
-            return render(request, 'audit_module/audit_tainee_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,'tnr':tnr,'attend':attend})
+            tran_proj=trainer_task.objects.filter(user_id=audit_traine_id,task_type='1')
+            t_payments=paymentlist.objects.filter(user_id_id=audit_traine_id)
+            t_leave=leave.objects.filter(user_id=audit_traine_id).order_by('-id')
+            t_prob=probation.objects.filter(user_id=audit_traine_id)
+            t_rep_issue=reported_issue.objects.filter(reporter_id=audit_traine_id)
+            return render(request, 'audit_module/audit_tainee_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,'tnr':tnr,
+                                                                                'attend':attend,'tran_proj':tran_proj,'t_payments':t_payments,
+                                                                                't_leave':t_leave,'t_prob':t_prob,'t_rep_issue':t_rep_issue})
         if deg == 8:
-            return render(request, 'audit_module/audit_tainer_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db})
+            trainer_team=create_team.objects.filter(trainer_id=str(audit_traine_id))
+            return render(request, 'audit_module/audit_tainer_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,'trainer_team':trainer_team})
     else:
         return redirect('/')
 
@@ -19191,11 +19199,45 @@ def Audit_trainee_trainer_details(request,audit_ttrainer_id,audit_tm_id,audit_tr
         trainer=user_registration.objects.get(id=audit_ttrainer_id)
        
         topics=topic.objects.filter(trainer_id=audit_ttrainer_id,team_id=audit_tm_id)
-        tasks=trainer_task.objects.filter(team_name_id=audit_tm_id,user_id=audit_trn_id)
+        tasks=trainer_task.objects.filter(team_name_id=audit_tm_id,user_id=audit_trn_id,task_type='0')
       
         return render(request, 'audit_module/audit_traine_tainer_details.html', {'Aud': Aud,'trainer':trainer,'topics':topics,'tasks':tasks})
     else:
         return redirect('/')
+
+# Trainee porobation Deatails
+def audit_probation(request,audit_tr_prob):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+      
+        Aud = user_registration.objects.filter(id=Aud_id)
+        trainees= user_registration.objects.get(id=audit_tr_prob)
+        t_prob=probation.objects.filter(user_id=audit_tr_prob)
+        return render(request, 'audit_module/audit_traine_probation.html', {'Aud': Aud,'t_prob':t_prob,'trainees':trainees})
+    else:
+        return redirect('/')
+
+
+# Trainer team view details
+def audit_trainer_teamview(request,audit_trainer_tmid):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+      
+        Aud = user_registration.objects.filter(id=Aud_id)
+        team_memb=previousTeam.objects.filter(teamname_id=audit_trainer_tmid)
+        team_topic=topic.objects.filter(team_id=audit_trainer_tmid)
+        team_task=trainer_task.objects.filter(team_name_id=audit_trainer_tmid,task_type='0',task_status='0')
+        return render(request, 'audit_module/audit_trainer_teamview.html', {'Aud': Aud,'team_memb':team_memb,
+                                                    'team_topic':team_topic,'team_task':team_task})
+    else:
+        return redirect('/')
+
 
 
 

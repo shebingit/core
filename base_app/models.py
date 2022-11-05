@@ -441,6 +441,7 @@ class trainer_task(models.Model):
     task_status = models.CharField(max_length=200)
     task_progress = models.IntegerField(default=0)
     delay = models.IntegerField(default=0)
+    task_type = models.CharField(max_length=10,default='0')
     
     
 

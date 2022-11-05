@@ -1,0 +1,303 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+<div class="card mb-4">
+    <div class="row mt-1 ">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Trainees</h4>
+                    <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                        placeholder="Search...">
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table" >
+                            
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th> Batch Name </th>
+                                    <th> Trainee Name </th>
+                                    <th> Training Start Date </th>
+                                    <th> Training End Date </th>
+                                    <th> Progress</th>
+    
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            {% if team_memb %}
+                                {% for i in team_memb %}
+                                    
+                                <tr>
+                      
+                                    <td>{{forloop.counter}}</td>
+                                    <td></td>
+                                    <td>{{i.user.fullname}}</a></td>
+                                    <td>{{i.teamname.startdate|date:"d-m-Y"}}</td>
+                                    <td>{{i.teamname.enddate|date:"d-m-Y"}}</td>
+                                    <td> 
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
+                                        </div>
+                                    </td>
+                                   
+                                    {% endfor %}
+                                </tr>
+                            {% else %}
+                            <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                            {% endif %} 
+                                
+                            </tbody>
+           
+                        </table>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+    
+    
+    <script>
+             
+        $(document).ready(function () {
+            $("#search").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    
+    
+        function myFunction() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+              td = tr[i].getElementsByTagName("td")[0];
+              if (td)
+               {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) 
+                {
+                  tr[i].style.display = "";
+                } 
+                else
+                {
+                  tr[i].style.display = "none";
+                }
+              }
+            }
+          }
+    </script>
+    
+</div>
+
+<div class="card mb-4">
+    <div class="row mt-1 ">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Topic</h4>
+                    <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                        placeholder="Search...">
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table" >
+                            
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th> Batch Name </th>
+                                    <th> Topic Name </th>
+                                    <th> Topic Start Date </th>
+                                    <th> Topic End Date </th>
+                                    <th> Desecription </th>
+                                    <th> File </th>
+                                    <th> Progress</th>
+    
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            {% if team_topic %}
+                                {% for i in team_topic %}
+                                    
+                                <tr>
+                      
+                                    <td>{{forloop.counter}}</td>
+                                    <td></td>
+                                    <td>{{i.topic}}</a></td>
+                                    <td>{{i.startdate|date:"d-m-Y"}}</td>
+                                    <td>{{i.enddate|date:"d-m-Y"}}</td>
+                                    <td>{{i.description}}</td>
+                                    <td>
+                                        {% if i.files %}
+                                        <a href="{{i.files.url}}" class="btn btn-outline-primary" download="{{i.files.url}}"><span class="mdi mdi-download"></span>Download</a>
+                                        {% else %}
+                                        <h6 class="text-danger">No File</h6>
+                                        {% endif %}
+                                    </td>
+                                    <td> 
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
+                                        </div>
+                                    </td>
+                                   
+                                    {% endfor %}
+                                </tr>
+                            {% else %}
+                            <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                            {% endif %} 
+                                
+                            </tbody>
+           
+                        </table>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+    
+    
+    <script>
+             
+        $(document).ready(function () {
+            $("#search").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    
+    
+        function myFunction() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+              td = tr[i].getElementsByTagName("td")[0];
+              if (td)
+               {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) 
+                {
+                  tr[i].style.display = "";
+                } 
+                else
+                {
+                  tr[i].style.display = "none";
+                }
+              }
+            }
+          }
+    </script>
+    
+</div>
+
+<div class="card">
+    <div class="row mt-1 ">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Task</h4>
+                    <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                        placeholder="Search...">
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table" >
+                            
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th> Batch Name </th>
+                                    <th> Trainee Name </th>
+                                    <th> Task Name</th>
+                                    <th> Task Start Date </th>
+                                    <th> Task End Date </th>
+                                    <th> Progress</th>
+    
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            {% if team_task %}
+                                {% for i in team_task %}
+                                    
+                                <tr>
+                      
+                                    <td>{{forloop.counter}}</td>
+                                    <td></td>
+                                    <td>{{i.user.fullname}}</a></td>
+                                    <td>{{i.taskname}}</td>
+                                    <td>{{i.startdate|date:"d-m-Y"}}</td>
+                                    <td>{{i..enddate|date:"d-m-Y"}}</td>
+                                    <td> 
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
+                                        </div>
+                                    </td>
+                                   
+                                    {% endfor %}
+                                </tr>
+                            {% else %}
+                            <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                            {% endif %} 
+                                
+                            </tbody>
+           
+                        </table>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+    
+    
+    <script>
+             
+        $(document).ready(function () {
+            $("#search").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    
+    
+        function myFunction() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+              td = tr[i].getElementsByTagName("td")[0];
+              if (td)
+               {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) 
+                {
+                  tr[i].style.display = "";
+                } 
+                else
+                {
+                  tr[i].style.display = "none";
+                }
+              }
+            }
+          }
+    </script>
+    
+</div>
+
+
+
+{% endblock%}

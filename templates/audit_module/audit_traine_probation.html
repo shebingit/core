@@ -1,0 +1,103 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+
+<div class="row mt-1 answer1">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Probation &nbsp; for &nbsp; {{ trainees.fullname }}</h4>
+                <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                    placeholder="Search...">
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Batch Name </th>
+                                <th> Team Name</th>
+                                <th> Trainer Name </th>
+                                <th> Start Date </th>
+                                <th>  End Date </th>
+                                <th> Reason For stop</th>
+                                <th> Training Stop Date</th>
+                                <th> Extension Days</th>
+                                <th> Renew Date</th>
+                               
+
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        {% if t_prob %}
+                            {% for i in t_prob %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td></td>
+                                <td>{{i.team.name}}</td>
+                                <td>{{i.trainer.trainer}}</td>
+                                <td>{{i.startdate|date:"d-m-Y"}}</td>
+                                <td>{{i.enddate|date:"d-m-Y"}}</td>
+                                <td>{{i.stop_reason}}</td>
+                                <td>{{i.stopdate|date:"d-m-Y"}}</td>
+                                <td>{{i.extension}}</td>
+                                <td>{{i.renewdate|date:"d-m-Y"}}</td>
+                               
+                                {% endfor %}
+                            </tr>
+                        {% else %}
+                        <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                        {% endif %} 
+                            
+                        </tbody>
+       
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+         
+    $(document).ready(function () {
+        $("#search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td)
+           {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) 
+            {
+              tr[i].style.display = "";
+            } 
+            else
+            {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+</script>
+
+
+
+{% endblock %}
