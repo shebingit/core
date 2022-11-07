@@ -224,6 +224,8 @@
         </div>
     </div>
 </div>
+
+
 <br>
 <div class="" style="max-height: 250px">
     <div class="row">
@@ -386,22 +388,22 @@
                                 <td>{{i.team_name.enddate|date:"d-m-Y"}}</td>
                                 <td>
                                     {% if i.task_status == '1' %}
-                                    <button class="btn btn-outline-success">Verified</button>
-                                    {% if i.task_status == '0' %}
-                                    <button class="btn btn-outline-primary">Pending</button>
-                                    {% if i.task_status == '2' %}
-                                    <button class="btn btn-outline-warning">Verification</button>
-                                    {% if i.task_status == '3' %}
-                                    <button class="btn btn-outline-danger">Correction</button>
+                                    <button class="btn btn-outline-success"  data-toggle="modal" data-target="#projectstatus{{i.id}}">Verified</button>
+                                    {% elif i.task_status == '0' %}
+                                    <button class="btn btn-outline-primary" >Pending</button>
+                                    {% elif i.task_status == '2' %}
+                                    <button class="btn btn-outline-warning"  data-toggle="modal" data-target="#projectstatus{{i.id}}">Verification</button>
+                                    {% elif i.task_status == '3' %}
+                                    <button class="btn btn-outline-danger"  data-toggle="modal" data-target="#projectstatus{{i.id}}">Correction</button>
                                     {% endif %}
                                 </td>
                                 <td>{{i.user_description}}</td>
                                 <td><button class="btn btn-outline-warning">{{i.delay}}</button></td>
                               
                                 <td>
-                                {% if i.files %}
-                                    <a href="{{i.files.url}}" class="btn btn-outline-primary" download="{{i.files.url}}"><span class="mdi mdi-download"></span>Download</a>
-                                {% endif %}
+                                    {% if i.files %}
+                                        <a href="{{i.files.url}}" class="btn btn-outline-primary" download="{{i.files.url}}"><span class="mdi mdi-download"></span>Download</a>
+                                    {% endif %}
                                 </td>
                                
                                 <td>
@@ -611,14 +613,55 @@
                         </thead>
                         <tbody id="myTable">
                             
-                            {% for i in traines %}
+                            {% for i in fb_from %}
                                 
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
-                                <td> {{i.joiningdate|date:"d-m-Y"}}</td>
-                                <td>{{i.fullname}}</td>
-                                <td>{{i.fullname}}</td>
+                                <td> {{i.fb_date|date:"d-m-Y"}}</td>
+                                <td>{{i.fb_to}}</td>
+                                <td>{{i.fb_desecri}}</td>
+                                
+                               
+                                {% endfor %}
+                            </tr>
+                            
+                            
+                        </tbody>
+       
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Feedback &nbsp; to &nbsp; {{ traine_tainer_db.fullname }}</h4>
+               
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Date </th>
+                                <th> Trainer Name </th>
+                                <th> Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                            
+                            {% for i in fb_to %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td> {{i.fb_date|date:"d-m-Y"}}</td>
+                                <td>{{i.fb_from}}</td>
+                                <td>{{i.fb_desecri}}</td>
                                 
                                
                                 {% endfor %}
@@ -785,5 +828,62 @@
     }
 </script>
 
+
+{% for dp in tran_proj %}
+
+<!-- pop up window for tester status -->
+<div class="modal fade" id="projectstatus{{dp.id}}">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+    <div class="modal-content modal-xl" style="background-color: #191c24;">
+      <div class="modal-header" style="border-bottom: 0 none;">
+        <h5 class="modal-title text-info">Project status</h5>
+        <button type="button" class="close text-light" data-dismiss="modal" aria-label=""
+          style="background-color: #191c24;border:none; float: right;font-size: 20px;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="table-responsive mt-3 mb-3 container">
+        <table class="table  table-bordered ">
+          <thead style="background-color: black;">
+            <tr>
+              <th scope="col" style="color:#6C7293;">Date</th>
+              <th scope="col" style="color:#6C7293;">Varified By</th>
+              <th scope="col" style="color:#6C7293;">Task</th>
+              <th scope="col" style="color:#6C7293;">Desecription</th>
+              <th scope="col" style="color:#6C7293;">Files</th>
+              <th scope="col" style="color:#6C7293;">Status</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for i in trainer_status %}
+
+            {% if i.traine_task_id == dp.id %}
+            <tr>
+              <td style="color:white;">{{i.test_date|date:"d-m-Y"}}</td>
+              <td style="color:white;">{{i.traine_task.taskname}}</td>
+              <td style="color:white;">{{i.traine_task.taskname}}</td>
+              <td style="color:white;">{{i.trainer_correction}}</td>
+              <td class="text-info">
+                {% if i.trainer_files %}
+                <a href="{{i.trainer_files.url}}" download style="text-decoration:none;">
+                  <div class="badge badge-outline-primary">Download</div>
+                </a>
+                {% endif %}
+              </td>
+              <td  style="color:white;"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
 
 {% endblock %}

@@ -2,21 +2,22 @@
 {% load static %} 
 {% block content %}
 <style>
-    h4,a{
-        text-decoration: none;
-        color: #6C7293
+    .btn{
+        color: #fff;
     }
-    a:hover
-    {
-        color: #d4d6de
-    }
-    .answer1 { display:block; }
+
+
+   
     .answer2 { display:none; }
     .answer3 { display:none; }
     .answer4 { display:none; }
     .answer5 { display:none; }
     .answer6 { display:none; }
+
+      
+    
 </style>
+
 
 
 <div class="row">
@@ -26,8 +27,8 @@
 
                 <center>
                     <h3 class="card-title">PROFILE</h3>
-                    {% if traine_db.photo %}
-                    <img src="{{ traine_tainer_db.photo.url }}" alt="image" style="border-radius: 50%;" width="130" height="130" />
+                    {% if emp.photo %}
+                    <img src="{{ emp.photo.url }}" alt="image" style="border-radius: 50%;" width="130" height="130" />
                     {% endif %}
                     <!-- <canvas id="transaction-history" class="transaction-chart"></canvas> -->
                     <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
@@ -37,7 +38,7 @@
                             <!-- <p class="text-muted mb-0">07 Jan 2019, 09:12AM</p> -->
                         </div>
                         <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                            <h6 class="text-muted mb-0">{{ traine_tainer_db.joiningdate|date:"d-m-Y" }}</h6>
+                            <h6 class="text-muted mb-0">{{ emp.joiningdate|date:"d-m-Y" }}</h6>
                         </div>
                     </div>
                     <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
@@ -46,7 +47,7 @@
                             <!-- <p class="text-muted mb-0">07 Jan 2019, 09:12AM</p> -->
                         </div>
                         <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                            <h6 class="text-muted mb-0">{{ traine_tainer_db.designation }}</h6>
+                            <h6 class="text-muted mb-0">{{ emp.designation }}</h6>
                         </div>
                     </div>
                 </center>
@@ -76,7 +77,7 @@
                                     <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                         <!-- <p class="text-muted">15 minutes ago</p>
                       <p class="text-muted mb-0">30 tasks, 5 issues </p> -->
-                                        <h6 class="preview-subject">{{ traine_tainer_db.fullname }}</h6>
+                                        <h6 class="preview-subject">{{ emp.fullname }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +95,7 @@
                                     <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                         <!-- <p class="text-muted">1 hour ago</p>
                       <p class="text-muted mb-0">23 tasks, 5 issues </p> -->
-                                        <h6 class="preview-subject">{{ traine_tainer_db.department }}</h6>
+                                        <h6 class="preview-subject">{{ emp.department }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +113,7 @@
                                     <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                         <!-- <p class="text-muted">35 minutes ago</p>
                       <p class="text-muted mb-0">15 tasks, 2 issues</p> -->
-                                        <h6 class="preview-subject">{{ traine_tainer_db.email }}</h6>
+                                        <h6 class="preview-subject">{{ emp.email }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +131,7 @@
                                     <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                         <!-- <p class="text-muted">55 minutes ago</p>
                       <p class="text-muted mb-0">35 tasks, 7 issues </p> -->
-                                        <h6 class="preview-subject">{{ traine_tainer_db.mobile }}</h6>
+                                        <h6 class="preview-subject">{{ emp.mobile }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -161,79 +162,186 @@
 </div>
 
 <br>
-<div class="form-check mt-3 pl-3">
-    <input class="form-check-input" type="checkbox" id="check1" name="check1" value="1" onchange="valueChanged()" checked >
-    <label class="form-check-label"><h4>Training</h4></label>
-</div>
 
-<hr>
-<div class="row mt-1 answer1">
-    <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Training &nbsp;Teams &nbsp;  Of &nbsp; {{ traine_tainer_db.fullname }}</h4>
-                <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
-                    placeholder="Search...">
-                <br>
-                <div class="table-responsive">
-                    <table class="table" >
-                        
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th> Batch Name </th>
-                                <th> Team Name</th>
-                                <th> Training Start Date </th>
-                                <th> Training End Date </th>
-                                <th> Progress</th>
-
-                            </tr>
-                        </thead>
-                        <tbody id="myTable">
-                        {% if trainer_team %}
-                            {% for i in trainer_team %}
-                                
-                            <tr>
-                  
-                                <td>{{forloop.counter}}</td>
-                                <td></td>
-                                <td> <a href="{% url 'audit_trainer_teamview' i.id %}">{{i.name}}</a></td>
-                                <td>{{i.startdate|date:"d-m-Y"}}</td>
-                                <td>{{i.enddate|date:"d-m-Y"}}</td>
-                                <td> 
-                                    <div class="progress" data-toggle="modal" data-target="#testerstatus{{i.id}}">
-                                        <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
-                                    </div>
-                                </td>
-                               
-                                {% endfor %}
-                            </tr>
-                        {% else %}
-                        <tr><h4 class="text-center">Nothing To Display....</h4></tr>
-                        {% endif %} 
-                            
-                        </tbody>
-       
-                    </table>
-                </div>
-            </div>
-        </div>
-
+{% if emp.employee_type == '0'%}
+<div class="row">
+    <div class="col-lg-3 col-sm-12"> 
+         <a href="{% url 'Audit_trainee_dashboard' emp.id %}" class="btn btn-primary" >Go To Training Section
+            <i class="mdi mdi-arrow-right-bold-circle mdi-24px"></i>
+         </a>
+        
     </div>
 </div>
+{% endif %}
+
 
 <br>
-<div class="form-check mt-3 pl-3">
-    <input class="form-check-input" type="checkbox" id="check2" name="check2" value="1" onchange="valueChanged()" >
-    <label class="form-check-label"><h4>Project</h4></label>
+
+
+<br>
+<div class="row">
+    <div class="col-lg-8 col-sm-12">
+        <div class="form-check mt-3 pl-3">
+            <input class="form-check-input" type="checkbox" id="check2" name="check2" value="1" onchange="valueChanged()">
+            <label class="form-check-label"><h4>Project</h4></label>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-12"><p>Delay &nbsp;Of&nbsp; This&nbsp; Month&nbsp;&nbsp;-&nbsp;&nbsp;{{count}}</p></div>
 </div>
 
 <hr>
 <div class="row mt-1 answer2">
     <div class="col-md-12 grid-margin stretch-card">
+        <div class="row mt-4">
+            {% for dp in devp %}
+            <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+                <div class="card">
+                    <a href="{% url 'Audit_DEVtable' dp.project_id emp.id %}" class="text-decoration-none text-white ">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                    <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                        
+                                        {% for p in pros %}
+                                
+                                        {% if dp.project_id == p.id %}           
+
+                                            <h4 class="mb-0" style="color:white;">{{p.project}}</h4>
+
+                                        {% endif %}
+                                        
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                    <i class="icon-lg mdi mdi-arrange-send-backward text-primary ms-auto"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="row">
+    <div class="col-lg-8 col-sm-12">
+        <div class="form-check mt-3 pl-3">
+            <input class="form-check-input" type="checkbox" id="check3" name="check3" value="1" onchange="valueChanged()">
+            <label class="form-check-label"><h4>Leaves&nbsp; and &nbsp; Attendence</h4></label>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-12"><p>Total&nbsp; Leaves &nbsp;Of&nbsp; This&nbsp; Month&nbsp;&nbsp;-&nbsp;&nbsp;{{leaves}}</p></div>
+
+
+<hr>
+<div class="row mt-1 answer3">
+    <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Projects &nbsp;given &nbsp;by &nbsp; {{ traine_tainer_db.fullname }}</h4>
+                <h4 class="card-title">Leaves </h4>
+                <input type="text" class="form-control " onkeyup="myFunction_leave()" id="leave_search" name="search" autocomplete="off"
+                    placeholder="Search...">
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>From Date </th>
+                                <th>To Date </th>
+                                <th> Reason</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable_leave">
+                        {% if t_leave %}
+                            {% for i in t_leave %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td>{{i.from_date|date:"d-m-Y"}}</td>
+                                <td>{{i.to_date|date:"d-m-Y"}}</td>
+                                <td>{{i.reason}}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                        {% endif %} 
+                            
+                        </tbody>
+       
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-1 answer3">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Attendences </h4>
+                <input type="text" class="form-control " onkeyup="myFunction_attened()" id="attend_search" name="search" autocomplete="off"
+                    placeholder="Search...">
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th> Date </th>
+                                <th> Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable_attend">
+                        {% if attend %}
+                            {% for i in attend %}
+                                
+                            <tr>
+                  
+                                <td>{{forloop.counter}}</td>
+                                <td>{{i.date|date:"d-m-Y"}}</td>
+                                <td>
+                                    {% if i.attendance_status == '1' %}
+                                    <p class="text-success">Present</p>
+                                    {% else %}
+                                    <p class="text-danger">Absent</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr><h4 class="text-center">Nothing To Display....</h4></tr>
+                        {% endif %} 
+                            
+                        </tbody>
+       
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="form-check mt-3 pl-3">
+    <input class="form-check-input" type="checkbox" id="check4" name="check4" value="1" onchange="valueChanged()">
+    <label class="form-check-label"><h4>Salary</h4></label>
+</div>
+<hr>
+<div class="row mt-1 answer4">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Salary </h4>
                 <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
                     placeholder="Search...">
                 <br>
@@ -244,40 +352,30 @@
                             <tr>
                                 <th>Id</th>
                                 <th> Batch Name </th>
-                                <th> Team Name</th>
-                                <th> Trainee Name</th>
-                                <th> Project Name</th>
-                                <th> Project Desecription</th>
-                                <th> File</th>
-                                <th> Start Date </th>
-                                <th> End Date </th>
-                                <th>Status </th>
-                                <th> Progress</th>
-
+                                <th> Date </th>
+                                <th> Paid Date</th>
+                                <th> Amount</th>
+                                <th> Pending Amount </th>
+                                <td>Payment Proof</td>
                             </tr>
                         </thead>
                         <tbody id="myTable">
-                        {% if test %}
-                            {% for i in test %}
+                        {% if t_payments %}
+                            {% for i in t_payments %}
                                 
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
                                 <td></td>
-                                <td> {{i.name}}</td>
-                                <td> {{i.name}}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>{{i.startdate|date:"d-m-Y"}}</td>
-                                <td>{{i.enddate|date:"d-m-Y"}}</td>
-                                <td>verified</td>
-                                <td> 
-                                    <div class="progress" data-toggle="modal" data-target="#testerstatus{{i.id}}">
-                                        <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
-                                    </div>
+                                <td>{{i.current_date|date:"d-m-Y"}}</td>
+                                <td>{{i.amount_date|date:"d-m-Y"}}</td>
+                                <td>{{i.amount_pay}}</td>
+                                <td>{{i.balance_amt}}</td>
+                                <td>
+                                    {% if i.amount_downlod %}
+                                    <a href="{{i.amount_downlod.url}" class="btn btn-primary" download="{i.amount_downlod.url}"><span class="mdi mdi-download"></span></a>
+                                    {% endif %}
                                 </td>
-                               
                                 {% endfor %}
                             </tr>
                         {% else %}
@@ -290,25 +388,23 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 
 <br>
 <div class="form-check mt-3 pl-3">
-    <input class="form-check-input" type="checkbox" id="check3" name="check3" value="1" onchange="valueChanged()" >
-    <label class="form-check-label"><h4>Feedback</h4></label>
+    <input class="form-check-input" type="checkbox" id="check5" name="check5" value="1" onchange="valueChanged()">
+    <label class="form-check-label"><h4>Issues Reported</h4></label>
 </div>
-
 <hr>
-<div class="row g-2 mt-1 answer3">
+<div class="row mt-1 answer5">
+   
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">from  &nbsp; trainees  &nbsp;To &nbsp; {{ traine_tainer_db.fullname }}</h4>
-                <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
-                    placeholder="Search...">
+                <h4 class="card-title">Issues Reported</h4>
+               
                 <br>
                 <div class="table-responsive">
                     <table class="table" >
@@ -316,133 +412,39 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Date </th>
-                                <th>Trainer Name</th>
-                                <th>Feedback </th>
+                                <th> Date </th>
+                                <th> Issue</th>
+                                <th> To</th>
+                                <th> Action</th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
-                        {% if test %}
-                            {% for i in test %}
+                            
+                            {% for i in t_rep_issue %}
                                 
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
+                                <td> {{i.reported_date|date:"d-m-Y"}}</td>
+                                <td>{{i.issue}}</td>
+                                <td>{{i.reported_to.fullname}}</td>
+                                <td>{{i.reply}}</td>
                                 <td></td>
-                                <td> {{i.name}}</td>
-                                <td> {{i.name}}</td>
-                                <td>{{i.startdate|date:"d-m-Y"}}</td>
-                                <td>{{i.enddate|date:"d-m-Y"}}</td>
-                                <td>verified</td>
-                                <td> 
-                                    <div class="progress" data-toggle="modal" data-target="#testerstatus{{i.id}}">
-                                        <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
-                                    </div>
-                                </td>
-                               
+
                                 {% endfor %}
                             </tr>
-                        {% else %}
-                        <tr><h4 class="text-center">Nothing To Display....</h4></tr>
-                        {% endif %} 
+                            
                             
                         </tbody>
        
                     </table>
                 </div>
+                
             </div>
         </div>
-
-    </div>
-    <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">From &nbsp; {{ traine_tainer_db.fullname }}  &nbsp;to&nbsp; trainees </h4>
-                <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
-                    placeholder="Search...">
-                <br>
-                <div class="table-responsive">
-                    <table class="table" >
-                        
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Date </th>
-                                <th>Trainer Name</th>
-                                <th>Feedback </th>
-                            </tr>
-                        </thead>
-                        <tbody id="myTable">
-                        {% if test %}
-                            {% for i in test %}
-                                
-                            <tr>
-                  
-                                <td>{{forloop.counter}}</td>
-                                <td></td>
-                                <td> {{i.name}}</td>
-                                <td> {{i.name}}</td>
-                                <td>{{i.startdate|date:"d-m-Y"}}</td>
-                                <td>{{i.enddate|date:"d-m-Y"}}</td>
-                                <td>verified</td>
-                                <td> 
-                                    <div class="progress" data-toggle="modal" data-target="#testerstatus{{i.id}}">
-                                        <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
-                                    </div>
-                                </td>
-                               
-                                {% endfor %}
-                            </tr>
-                        {% else %}
-                        <tr><h4 class="text-center">Nothing To Display....</h4></tr>
-                        {% endif %} 
-                            
-                        </tbody>
-       
-                    </table>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 
-
-<script>
-         
-    $(document).ready(function () {
-        $("#search").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#myTable tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
-
-
-    function myFunction() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("search");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0];
-          if (td)
-           {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) 
-            {
-              tr[i].style.display = "";
-            } 
-            else
-            {
-              tr[i].style.display = "none";
-            }
-          }
-        }
-      }
-</script>
 
 <script type="text/javascript">
     function valueChanged()
@@ -476,58 +478,5 @@
     }
 </script>
 
-{% for dp in trainer_team %}
 
-<!-- pop up window for tester status -->
-<div class="modal fade" id="testerstatus{{dp.id}}">
-  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-    <div class="modal-content modal-xl" style="background-color: #191c24;">
-      <div class="modal-header" style="border-bottom: 0 none;">
-        <h5 class="modal-title text-info">Trainer Task status</h5>
-        <button type="button" class="close text-light" data-dismiss="modal" aria-label=""
-          style="background-color: #191c24;border:none; float: right;font-size: 20px;">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="table-responsive mt-3 mb-3 container">
-        <table class="table  table-bordered ">
-          <thead style="background-color: black;">
-            <tr>
-              <th scope="col" style="color:#6C7293;">Date</th>
-              <th scope="col" style="color:#6C7293;">Trainer Name</th>
-              <th scope="col" style="color:#6C7293;">Task</th>
-              <th scope="col" style="color:#6C7293;">Desecription</th>
-              <th scope="col" style="color:#6C7293;">Files</th>
-              <th scope="col" style="color:#6C7293;">Status</th>
-              
-            </tr>
-          </thead>
-          <tbody>
-
-            {% for i in testerstatus %}
-
-            {% if i.subtask_id == dp.id %}
-            <tr>
-              <td style="color:white;">{{i.date|date:"d-m-Y"}}</td>
-              <td style="color:white;">{{i.subtask.task}}</td>
-              <td style="color:white;">{{i.workdone}}</td>
-              <td class="text-info">
-                <a href="{{i.files.url}}" download style="text-decoration:none;">
-                  <div class="badge badge-outline-primary">Download</div>
-                </a>
-              </td>
-              <td  style="color:white;"></td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-{% endfor %}
-
-
-{% endblock %}
+{% endblock%}

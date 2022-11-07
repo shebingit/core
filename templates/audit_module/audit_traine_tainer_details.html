@@ -110,13 +110,16 @@
                                 <td>{{i.description}}</td>
                                 <td>
                                     {% if i.task_status == '1' %}
-                                    <button class="btn btn-outline-success">Verified</button>
+                                    <button class="btn btn-outline-success" data-toggle="modal" data-target="#testerstatus{{i.id}}">Verified</button>
+
                                     {% elif i.task_status == '0' %}
                                     <button class="btn btn-outline-primary">Pending</button>
+
                                     {% elif i.task_status == '2' %}
-                                    <button class="btn btn-outline-warning">Varification</button>
+                                    <button class="btn btn-outline-warning" data-toggle="modal" data-target="#testerstatus{{i.id}}">Varification</button>
+
                                     {% elif i.task_status == '3' %}
-                                    <button class="btn btn-outline-danger">Correction</button>
+                                    <button class="btn btn-outline-danger" data-toggle="modal" data-target="#testerstatus{{i.id}}">Correction</button>
                                     {% endif %}
                                 </td>
                                 
@@ -156,6 +159,62 @@
                 {% endif %}
                 </div>
 </div>
+
+
+{% for dp in tasks %}
+
+<!-- pop up window for tester status -->
+<div class="modal fade" id="testerstatus{{dp.id}}">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+    <div class="modal-content modal-xl" style="background-color: #191c24;">
+      <div class="modal-header" style="border-bottom: 0 none;">
+        <h5 class="modal-title text-info">Trainer Task status</h5>
+        <button type="button" class="close text-light" data-dismiss="modal" aria-label=""
+          style="background-color: #191c24;border:none; float: right;font-size: 20px;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="table-responsive mt-3 mb-3 container">
+        <table class="table  table-bordered ">
+          <thead style="background-color: black;">
+            <tr>
+              <th scope="col" style="color:#6C7293;">Date</th>
+              <th scope="col" style="color:#6C7293;">Task</th>
+              <th scope="col" style="color:#6C7293;">Desecription</th>
+              <th scope="col" style="color:#6C7293;">Files</th>
+              <th scope="col" style="color:#6C7293;">Status</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for i in trainer_status %}
+
+            {% if i.traine_task_id == dp.id %}
+            <tr>
+              <td style="color:white;">{{i.test_date|date:"d-m-Y"}}</td>
+              <td style="color:white;">{{i.traine_task.taskname}}</td>
+              <td style="color:white;">{{i.trainer_correction}}</td>
+              <td class="text-info">
+                {% if i.trainer_files %}
+                <a href="{{i.trainer_files.url}}" download style="text-decoration:none;">
+                  <div class="badge badge-outline-primary">Download</div>
+                </a>
+                {% endif %}
+              </td>
+              <td  style="color:white;"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
 
 
 {% endblock %}

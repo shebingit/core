@@ -19178,12 +19178,16 @@ def Audit_trainee_trainer_dashboard(request,audit_traine_id):
             t_leave=leave.objects.filter(user_id=audit_traine_id).order_by('-id')
             t_prob=probation.objects.filter(user_id=audit_traine_id)
             t_rep_issue=reported_issue.objects.filter(reporter_id=audit_traine_id)
+            trainer_status= trainer_task_test.objects.filter(test_task_type='0')
+            fb_from=trainee_trainerfeedback.objects.filter(fb_from=audit_traine_id)
+            fb_to=trainee_trainerfeedback.objects.filter(fb_to=audit_traine_id)
             return render(request, 'audit_module/audit_tainee_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,'tnr':tnr,
                                                                                 'attend':attend,'tran_proj':tran_proj,'t_payments':t_payments,
-                                                                                't_leave':t_leave,'t_prob':t_prob,'t_rep_issue':t_rep_issue})
+                                                                                't_leave':t_leave,'t_prob':t_prob,'t_rep_issue':t_rep_issue,'trainer_status':trainer_status})
         if deg == 8:
             trainer_team=create_team.objects.filter(trainer_id=str(audit_traine_id))
-            return render(request, 'audit_module/audit_tainer_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,'trainer_team':trainer_team})
+            return render(request, 'audit_module/audit_tainer_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,
+                                                                                'trainer_team':trainer_team})
     else:
         return redirect('/')
 
@@ -19200,8 +19204,9 @@ def Audit_trainee_trainer_details(request,audit_ttrainer_id,audit_tm_id,audit_tr
        
         topics=topic.objects.filter(trainer_id=audit_ttrainer_id,team_id=audit_tm_id)
         tasks=trainer_task.objects.filter(team_name_id=audit_tm_id,user_id=audit_trn_id,task_type='0')
+        trainer_status= trainer_task_test.objects.filter(test_task_type='0')
       
-        return render(request, 'audit_module/audit_traine_tainer_details.html', {'Aud': Aud,'trainer':trainer,'topics':topics,'tasks':tasks})
+        return render(request, 'audit_module/audit_traine_tainer_details.html', {'Aud': Aud,'trainer':trainer,'topics':topics,'tasks':tasks,'trainer_status':trainer_status})
     else:
         return redirect('/')
 
@@ -19251,9 +19256,87 @@ def Audit_employees(request):
         else:
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
-        return render(request, 'audit_module/audit_employee.html', {'Aud': Aud})
+        emp= user_registration.objects.filter(~Q(designation_id=9))
+        return render(request, 'audit_module/audit_employee.html', {'Aud': Aud,'emp':emp})
     else:
         return redirect('/')
+
+# Employee dashboard
+
+def Audit_employee_dashbord(request,audit_emp_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        emp= user_registration.objects.get(id=audit_emp_id)
+        pros = project.objects.all()
+        devp = project_taskassign.objects.filter(developer_id=audit_emp_id).values('project_id').distinct()
+        firstday=date.today().replace(day=1)
+        today=date.today()
+        count=0
+        leaves=0
+        leve_count= leave.objects.filter(user_id=audit_emp_id,from_date__gte=firstday,from_date__lte=today)
+        for j in leve_count:
+            leaves=leaves+int(j.days)
+        delya_count=project_taskassign.objects.filter(developer_id=audit_emp_id,submitted_date__gte=firstday,submitted_date__lte=date.today())
+
+        for i in delya_count:
+            count=count+int(i.delay)
+        return render(request, 'audit_module/audit_employee_dasboard.html', {'Aud': Aud,'emp':emp,'pros':pros,'devp':devp,'count':count,'leaves':leaves})
+    else:
+        return redirect('/')
+
+def Audit_trainee_dashboard(request,audit_emp_tr):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+      
+        traine_tainer_db=user_registration.objects.get(id=audit_emp_tr)
+        tnr=previousTeam.objects.filter(user_id=audit_emp_tr)
+        attend=attendance.objects.filter(user_id=audit_emp_tr).order_by('-id')
+        tran_proj=trainer_task.objects.filter(user_id=audit_emp_tr,task_type='1')
+        t_payments=paymentlist.objects.filter(user_id_id=audit_emp_tr)
+        t_leave=leave.objects.filter(user_id=audit_emp_tr).order_by('-id')
+        t_prob=probation.objects.filter(user_id=audit_emp_tr)
+        t_rep_issue=reported_issue.objects.filter(reporter_id=audit_emp_tr)
+        trainer_status= trainer_task_test.objects.filter(test_task_type='0')
+        fb_from=trainee_trainerfeedback.objects.filter(fb_from=audit_emp_tr)
+        fb_to=trainee_trainerfeedback.objects.filter(fb_to=audit_emp_tr)
+        return render(request, 'audit_module/audit_tainee_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,'tnr':tnr,
+                                                                                'attend':attend,'tran_proj':tran_proj,'t_payments':t_payments,
+                                                                                't_leave':t_leave,'t_prob':t_prob,'t_rep_issue':t_rep_issue,'trainer_status':trainer_status})
+    else:
+        return redirect('/')
+
+
+
+def Audit_DEVtable(request,audit_emp_prtask,audit_empid):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        devp = project_taskassign.objects.filter(project_id=audit_emp_prtask).filter(developer_id=audit_empid).order_by("-id")
+        teststatus = test_status.objects.all()
+        proj=project.objects.get(id=audit_emp_prtask)
+        testerstatus = tester_status.objects.filter(project_id=audit_emp_prtask)
+        time = datetime.now()
+        action_take=wrdata.objects.all()
+        return render(request, 'audit_module/audit_dev_project.html', {'Aud': Aud,'devp':devp,'teststatus':teststatus,'proj':proj,
+                                                                       'testerstatus':testerstatus,'time':time,'action_take':action_take})
+
+    else:   
+        return redirect('/')
+
+    
+
+
 
 
 #Project Section ------------------ audit Project page load
@@ -19265,7 +19348,21 @@ def Audit_project(request):
         else:
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
-        return render(request, 'audit_module/audit_projects.html', {'Aud': Aud})
+        proj= project.objects.all()
+        return render(request, 'audit_module/audit_projects.html', {'Aud': Aud,'proj':proj})
+    else:
+        return redirect('/')
+
+def Audit_project_details(request,audit_pro_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        proj_doc = PM_ProjectDocument.objects.filter(doc_project_id_id=audit_pro_id)
+        proj_task = project_taskassign.objects.filter(project_id=audit_pro_id)
+        return render(request, 'audit_module/audit_project_details.html', {'Aud': Aud,'proj_doc':proj_doc,'proj_task':proj_task})
     else:
         return redirect('/')
 

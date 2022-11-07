@@ -1,0 +1,243 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+
+<style>
+    @media (max-width:992px) {
+      #log {
+        max-width: 100px;
+        margin-top: 12px;
+        margin-left: 25px;
+        margin-right: 15px;
+      }
+    }
+    a{
+        text-decoration: none;
+    }
+    a:hover
+    {
+        text-decoration: none;
+       
+    }
+    table
+    {
+        text-align: center;
+    }
+    i{
+        font-size: .90rem;
+    }
+    i:hover{
+        color: #fff;
+    }
+    .icon 
+    {
+      font-size: 1.5rem;
+    }
+    .iconpdf
+    {
+      font-size: 1.7rem;
+    }
+  </style>
+  
+  
+  <div class="row">
+    <div class="mb-2 " style="font-size: 20px;font-weight: 600;color: #dfe1ed;">Projects Document </div>
+  </div>
+
+  
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            
+          </div>
+          <div class="table-responsive">
+            <table class="table" id="">
+              <thead>
+                <tr>
+                
+                  <th>Project</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Start Document</th>
+                  <th>Doc.Start Date</th>
+                  <th>Project Document</th>
+                  <th>Desecription</th>
+                  <th>Correction</th>
+                  <th>Updation</th>
+                
+                
+                </tr>
+              </thead>
+              {% if proj_doc %}
+              {% for i in proj_doc %}
+              <tbody>
+                {% if i.doc_project_id.status == 'accepted' or i.doc_project_id.status == 'assigned'%}
+                  <tr class="">
+                     
+                      <td><span class="ps-2">{{i.doc_project_name}}</span></td>
+                      <td>{{i.doc_project_startdate|date:'d-m-Y'}}</td>
+                      <td>{{i.doc_project_enddate|date:'d-m-Y'}}</td>
+                    
+                      <td> 
+                        {% if i.doc_status == '0' %}
+                          <a class="text-success" href="{% url 'project_manager_doc_start' i.id %}" style="cursor:pointer"><i class="mdi mdi-power icon"></i></a>start
+                        {% elif i.doc_status == 'complete' %}
+                            Doc.Completed
+                        {% else %}
+                          Doc.work started
+                        {% endif%}
+                      </td>
+                     
+                      <td>{{i.doc_project_currentdate|date:'d-m-Y'}}</td>
+                      {% if i.doc_status == '1' %}
+                       
+                      <td><a  class="text-danger" href="{% url 'pm_docfull_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
+                        <td><a class="text-danger" href="{% url 'pm_doc_des_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i>  </a></td>
+                        <td><a class="text-danger" href="{% url 'pm_doc_corr_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
+                        <td><a  class="text-danger" href="{% url 'pm_doc_updt_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
+                       
+                        
+                        
+                       
+                      {% else %}
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      
+                       
+                      {% endif %}
+                  </tr>
+                {% endif %}
+                {% endfor %}
+                {% else%}
+                      <h5 style="text-align:center">Nothing to display!</h5>
+                {% endif %}
+              </tbody>
+          </table>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="mb-2 " style="font-size: 20px;font-weight: 600;color: #dfe1ed;">Developers and Task </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+              <div class="input-group input-group-sm mb-3">
+                <input
+                  type="text"
+                  class="form-control text-white"
+                  id="myInput"
+                  onkeyup="myFunction()"
+                  placeholder="Search . . ."
+                  style="border: green"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="table-responsive">
+            <table class="table" id="myTable">
+              <thead>
+                <tr>
+                
+                  <th>Name</th>
+                  <th>Task</th>
+                  <th>Sub Task</th>
+                  <th>Assign Date</th>
+                  <th>End Date</th>
+                  <th>Team Leader</th>
+                  <th>Progress</th>
+                  <th>Delay</th>
+                
+                </tr>
+              </thead>
+              {% if proj_task %}
+              {% for i in proj_task %}
+              <tbody>
+                
+                  <tr class="">
+                     
+                      <td><span class="ps-2">{{i.developer.fullname}}</span></td>
+                      <td>{{i.task}}</td>
+                      <td>{{i.subtask}}</td>
+                      <td>{{i.startdate|date:'d-m-Y'}}</td>
+                      <td>{{i.enddate|date:'d-m-Y'}}</td>
+                      <td>{{i.tl.fullname}}</td>
+                      <td>
+                        <div class="progress">
+                            <div class="progress-bar" style="width:{{i.progress}}%">{{i.progress}}%</div>
+                          </div>
+                      </td>
+                      <td><button class="btn btn-outline-warning">{{i.delay}} </button></td>
+                    
+                  </tr>
+              
+                {% endfor %}
+                {% else%}
+                      <h5 style="text-align:center">Nothing to display!</h5>
+                {% endif %}
+              </tbody>
+          </table>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script>
+             
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td)
+           {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) 
+            {
+              tr[i].style.display = "";
+            } 
+            else
+            {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+</script>
+  
+
+
+{% endblock %}

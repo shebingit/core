@@ -1677,9 +1677,15 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 #Trainer
     path('audit_trainer_teamview/<int:audit_trainer_tmid>', views.audit_trainer_teamview, name='audit_trainer_teamview'),
 
+#employee
     path('Audit_employees>', views.Audit_employees, name='Audit_employees'),
+    path('Audit_employee_dashbord/<int:audit_emp_id>', views.Audit_employee_dashbord, name='Audit_employee_dashbord'),
+    path('Audit_trainee_dashboard/<int:audit_emp_tr>', views.Audit_trainee_dashboard, name='Audit_trainee_dashboard'),
+     path('Audit_DEVtable/<int:audit_emp_prtask>/<int:audit_empid>', views.Audit_DEVtable, name='Audit_DEVtable'),
 
+#project
     path('Audit_project>', views.Audit_project, name='Audit_project'),
+    path('Audit_project_details/<int:audit_pro_id>', views.Audit_project_details, name='Audit_project_details'),
     
 
 

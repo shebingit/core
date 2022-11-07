@@ -421,6 +421,7 @@ class internship_paydata(models.Model):
                              related_name='internship_user', null=True, blank=True)
     amount = models.IntegerField()  
 
+
 class trainer_task(models.Model):
     user = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
                              related_name='trainer_task_trainee', null=True, blank=True)
@@ -447,6 +448,35 @@ class trainer_task(models.Model):
 
     def __str__(self):
         return self.trainee
+
+# Trainee Task test by Trainer
+class trainer_task_test(models.Model):
+
+    team_name = models.ForeignKey(
+        create_team, on_delete=models.SET_NULL, related_name='team_name_trainer', null=True, blank=True)
+    trainer = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
+                             related_name='trainer_task', null=True, blank=True)
+    trainee = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
+                             related_name='trainee_task', null=True, blank=True)
+    traine_task = models.ForeignKey (trainer_task, on_delete=models.SET_NULL, related_name='ttname', null=True, blank=True)
+    test_task_type=models.CharField(max_length=25,default='0')
+    trainer_correction = models.TextField()
+    trainer_files = models.FileField(upload_to='images/', null=True, blank=True)
+    t_status =models.CharField(max_length=50,default='')
+    sub_date = models.DateField(
+        auto_now_add=False, auto_now=False,  null=True, blank=True)
+    test_date = models.DateField(
+        auto_now_add=True, auto_now=False,  null=True, blank=True)
+
+
+class trainee_trainerfeedback(models.Model):
+    fb_from = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
+                             related_name='fbtrainer', null=True, blank=True)
+    fb_to = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
+                             related_name='fbtrainee', null=True, blank=True)
+    fb_desecri=  models.TextField()
+    fb_date = models.DateField(
+        auto_now_add=True, auto_now=False,  null=True, blank=True)
 
 
 class topic(models.Model):
