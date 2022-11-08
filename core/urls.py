@@ -35,9 +35,15 @@ urlpatterns = [
     re_path(r'^new_team/$', views.new_team, name='new_team'),
 
     re_path(r'^new_team1/$', views.new_team1, name='new_team1'),
+     path('new_batch',views.new_batch, name='new_batch'),
+     path('team_trainee/<int:tm_tnr>/',views.team_trainee, name='team_trainee'),
     re_path(r'^newteamcreate/$', views.newteamcreate, name='newteamcreate'),
+     path('newbatchcreate',views.newbatchcreate, name='newbatchcreate'), 
     re_path(r'^teamdelete/$', views.teamdelete, name='teamdelete'),
+      path('batchdelete',views.batchdelete, name='batchdelete'), 
     re_path(r'^teamupdate/$', views.teamupdate, name='teamupdate'),
+      path('batchudate',views.batchudate, name='batchudate'), 
+      path('traineupdate',views.traineupdate, name='traineupdate'), 
     re_path(r'^submit/$', views.submit, name='submit'),
     re_path(r'^reportedissue/$', views.reportedissue, name='reportedissue'),
     re_path(r'^reportissuetrainers/$', views.reportissuetrainers,
@@ -1679,9 +1685,13 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
 #employee
     path('Audit_employees>', views.Audit_employees, name='Audit_employees'),
+    path('Audit_department/<int:audit_dep_id>', views.Audit_department, name='Audit_department'),
+    path('Audit_emp_list/<int:audit_depart_id>/<int:audit_des_id>', views.Audit_emp_list, name='Audit_emp_list'),
     path('Audit_employee_dashbord/<int:audit_emp_id>', views.Audit_employee_dashbord, name='Audit_employee_dashbord'),
     path('Audit_trainee_dashboard/<int:audit_emp_tr>', views.Audit_trainee_dashboard, name='Audit_trainee_dashboard'),
-     path('Audit_DEVtable/<int:audit_emp_prtask>/<int:audit_empid>', views.Audit_DEVtable, name='Audit_DEVtable'),
+    path('Audit_tl/<int:Audit_tl>', views.Audit_tl, name='Audit_tl'),
+    path('Audit_tlproject_split/<int:audit_pid>/<int:audit_ptlid>', views.Audit_tlproject_split, name='Audit_tlproject_split'),
+    path('Audit_DEVtable/<int:audit_emp_prtask>/<int:audit_empid>', views.Audit_DEVtable, name='Audit_DEVtable'),
 
 #project
     path('Audit_project>', views.Audit_project, name='Audit_project'),

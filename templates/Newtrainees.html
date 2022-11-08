@@ -26,8 +26,8 @@
                 <th>Name</th>
                 <th>Start Date</th>
                 <th>End Date</th>
+                <th>Select Batch</th>
                 <th>Select Team</th>
-
                 <th>Department</th>
                 <th>Course</th>
                 <th>Allocate</th>
@@ -47,6 +47,24 @@
                   </td>
                   <td>{{memm.startdate|date:'d-m-Y'}}</td>
                   <td>{{memm.enddate|date:'d-m-Y'}}</td>
+
+                  <td>
+                    
+                    <select
+                      class="badge badge-outline-primary bg-dark text-light"
+                      name="team" required
+                    >
+                    {%for i in batc %} 
+                    <option style="display: none" value="{{i.batch_name}}">Batch</option>
+                      
+                      
+                    
+                      <option value="{{i.batch_name}}">{{i.batch_name}}</option>
+                      {%endfor%} 
+                    </select>
+                    
+                  </td>
+
                   <td>
                     
                     <select

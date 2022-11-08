@@ -8,11 +8,11 @@
 
 
    
-    .answer2 { display:none; }
-    .answer3 { display:none; }
-    .answer4 { display:none; }
-    .answer5 { display:none; }
-    .answer6 { display:none; }
+    .answer2 { display:block; }
+    .answer3 { display:block; }
+    .answer4 { display:block; }
+    .answer5 { display:block; }
+    .answer6 { display:block; }
 
       
     
@@ -163,16 +163,30 @@
 
 <br>
 
-{% if emp.employee_type == '0'%}
-<div class="row">
-    <div class="col-lg-3 col-sm-12"> 
+
+<div class="row text-center">
+    <div class="col-lg-6 col-sm-12"> 
+        {% if emp.employee_type == '0'%}
          <a href="{% url 'Audit_trainee_dashboard' emp.id %}" class="btn btn-primary" >Go To Training Section
             <i class="mdi mdi-arrow-right-bold-circle mdi-24px"></i>
          </a>
-        
+        {% endif %}
     </div>
+    <div class="col-lg-6 col-sm-12"> 
+        {% if emp.designation.designation == 'trainer' %}
+        <a href="{% url 'Audit_trainee_trainer_dashboard' emp.id %}" class="btn btn-primary mb-2" >Go To Trainer Section
+           <i class="mdi mdi-arrow-right-bold-circle mdi-24px"></i>
+        </a>
+        {% endif %}
+        {% if emp.designation.designation == 'team leader' %}
+        <a href="{% url 'Audit_tl' emp.id %}" class="btn btn-primary mt-2" >Go To Team Leader Section
+            <i class="mdi mdi-arrow-right-bold-circle mdi-24px"></i>
+         </a>
+        {% endif %}
+       
+   </div>
 </div>
-{% endif %}
+
 
 
 <br>
@@ -181,55 +195,55 @@
 <br>
 <div class="row">
     <div class="col-lg-8 col-sm-12">
-        <div class="form-check mt-3 pl-3">
+        <div class="form-check mt-3 ">
             <input class="form-check-input" type="checkbox" id="check2" name="check2" value="1" onchange="valueChanged()">
             <label class="form-check-label"><h4>Project</h4></label>
         </div>
     </div>
-    <div class="col-lg-4 col-sm-12"><p>Delay &nbsp;Of&nbsp; This&nbsp; Month&nbsp;&nbsp;-&nbsp;&nbsp;{{count}}</p></div>
+    <div class="col-lg-4 col-sm-12">
+        {% if emp.designation.designation == 'developer' or  emp.designation.designation == 'team leader' %}
+        <p>Delay &nbsp;Of&nbsp; This&nbsp; Month&nbsp;&nbsp;-&nbsp;&nbsp;{{count}}</p>
+        {% endif %}
+    </div>
 </div>
 
 <hr>
 <div class="row mt-1 answer2">
-    <div class="col-md-12 grid-margin stretch-card">
-        <div class="row mt-4">
-            {% for dp in devp %}
-            <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
-                <div class="card">
-                    <a href="{% url 'Audit_DEVtable' dp.project_id emp.id %}" class="text-decoration-none text-white ">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                                    <div class="d-flex d-sm-block d-md-flex align-items-center">
+    {% for dp in devp %}
+    <div class="col-4 col-md-12 col-sm-12 grid-margin stretch-card">
+        <div class="card">
+            <a href="{% url 'Audit_DEVtable' dp.project_id emp.id %}" class="text-decoration-none text-white ">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-8 col-sm-12  my-auto">
+                        <div class="d-flex d-sm-block d-md-flex align-items-center">
                                         
-                                        {% for p in pros %}
-                                
-                                        {% if dp.project_id == p.id %}           
+                            {% for p in pros %}   
+                            {% if dp.project_id == p.id %}           
 
-                                            <h4 class="mb-0" style="color:white;">{{p.project}}</h4>
+                            <h4 class="mb-0" style="color:white;">{{p.project}}</h4>
 
-                                        {% endif %}
-                                        
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                    <i class="icon-lg mdi mdi-arrange-send-backward text-primary ms-auto"></i>
-                                </div>
-                            </div>
+                            {% endif %}
+                                            
+                            {% endfor %}
                         </div>
-                    </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-12 text-center text-xl-right">
+                        <i class="icon-lg mdi mdi-arrange-send-backward text-primary ms-auto"></i>
+                    </div>
                 </div>
             </div>
-            {% endfor %}
+            </a>
         </div>
     </div>
+    {% endfor %}
 </div>
+   
 
 <br>
 <div class="row">
     <div class="col-lg-8 col-sm-12">
-        <div class="form-check mt-3 pl-3">
+        <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" id="check3" name="check3" value="1" onchange="valueChanged()">
             <label class="form-check-label"><h4>Leaves&nbsp; and &nbsp; Attendence</h4></label>
         </div>
@@ -259,8 +273,8 @@
                             </tr>
                         </thead>
                         <tbody id="myTable_leave">
-                        {% if t_leave %}
-                            {% for i in t_leave %}
+                        {% if lev %}
+                            {% for i in lev %}
                                 
                             <tr>
                   
@@ -332,9 +346,13 @@
 </div>
 
 <br>
-<div class="form-check mt-3 pl-3">
-    <input class="form-check-input" type="checkbox" id="check4" name="check4" value="1" onchange="valueChanged()">
-    <label class="form-check-label"><h4>Salary</h4></label>
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <div class="form-check mt-3 ">
+            <input class="form-check-input" type="checkbox" id="check4" name="check4" value="1" onchange="valueChanged()">
+            <label class="form-check-label"><h4>Salary</h4></label>
+        </div>
+    </div>
 </div>
 <hr>
 <div class="row mt-1 answer4">
@@ -351,31 +369,25 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th> Batch Name </th>
-                                <th> Date </th>
-                                <th> Paid Date</th>
-                                <th> Amount</th>
-                                <th> Pending Amount </th>
-                                <td>Payment Proof</td>
+                                <th> From Date </th>
+                                <th> To Date</th>
+                                <th> Net Salary</th>
+                                <th> Final Salary </th>
+                              
                             </tr>
                         </thead>
                         <tbody id="myTable">
-                        {% if t_payments %}
-                            {% for i in t_payments %}
+                        {% if sala %}
+                            {% for i in sala %}
                                 
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
-                                <td></td>
-                                <td>{{i.current_date|date:"d-m-Y"}}</td>
-                                <td>{{i.amount_date|date:"d-m-Y"}}</td>
-                                <td>{{i.amount_pay}}</td>
-                                <td>{{i.balance_amt}}</td>
-                                <td>
-                                    {% if i.amount_downlod %}
-                                    <a href="{{i.amount_downlod.url}" class="btn btn-primary" download="{i.amount_downlod.url}"><span class="mdi mdi-download"></span></a>
-                                    {% endif %}
-                                </td>
+                                <td>{{i.fromdate|date:"d-m-Y"}}</td>
+                                <td>{{i.todate|date:"d-m-Y"}}</td>
+                                <td>{{i.basic_salary}}</td>
+                                <td>{{i.net_salary}}</td>
+                               
                                 {% endfor %}
                             </tr>
                         {% else %}
@@ -393,9 +405,13 @@
 
 
 <br>
-<div class="form-check mt-3 pl-3">
-    <input class="form-check-input" type="checkbox" id="check5" name="check5" value="1" onchange="valueChanged()">
-    <label class="form-check-label"><h4>Issues Reported</h4></label>
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="check5" name="check5" value="1" onchange="valueChanged()">
+            <label class="form-check-label"><h4>Issues Reported</h4></label>
+        </div>
+    </div>
 </div>
 <hr>
 <div class="row mt-1 answer5">
@@ -420,7 +436,7 @@
                         </thead>
                         <tbody id="myTable">
                             
-                            {% for i in t_rep_issue %}
+                            {% for i in rep %}
                                 
                             <tr>
                   
@@ -476,6 +492,77 @@
 
         
     }
+</script>
+<script>
+         
+    $(document).ready(function () {
+        $("#attend_search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable_attend tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+
+    function myFunction_attened() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("attend_search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable_attend");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td)
+           {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) 
+            {
+              tr[i].style.display = "";
+            } 
+            else
+            {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+</script>
+
+<script>
+         
+    $(document).ready(function () {
+        $("#leave_search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable_leave tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+
+    function myFunction_leave() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("leave_search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable_leave");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td)
+           {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) 
+            {
+              tr[i].style.display = "";
+            } 
+            else
+            {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
 </script>
 
 

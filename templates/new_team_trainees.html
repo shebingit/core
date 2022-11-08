@@ -11,69 +11,13 @@
     }
 </style>
     
-<div class="row" style="padding-top: 20px">
-   
-    <div class="col-sm-4 grid-margin">
-        <a href="{% url 'new_batch' %}" style="text-decoration: none">
-            <div class="card" style="height: 180px">
-                <div class="card-body">
-                    <div class="row" style="padding-top: 0px">
-                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                            <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                <h3 class="mb-0" style="color: white">Create Batch</h3>
-                            </div>
-                        </div>
-                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                            <i class="icon-lg mdi mdi-account-multiple-plus text-success ms-auto"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-sm-4 grid-margin">
-        <a href="/new_team1" style="text-decoration: none">
-            <div class="card" style="height: 180px">
-                <div class="card-body">
-                    <div class="row" style="padding-top: 0px">
-                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                            <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                <h3 class="mb-0" style="color: white">Create Team</h3>
-                            </div>
-                        </div>
-                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                            <i class="icon-lg mdi mdi-account-multiple-plus text-success ms-auto"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-sm-4 grid-margin">
-        <a href="/completedteam" style="text-decoration: none">
-            <div class="card" style="height: 180px">
-                <div class="card-body">
-                    <div class="row" style="padding-top: 0px">
-                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                            <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                <h3 class="mb-0" style="color: white">Completed Team</h3>
-                            </div>
-                        </div>
-                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                            <i class="icon-lg mdi mdi-account-star text-info ms-auto"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-</div>
+
 
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">New Team</h4>
+                <h4 class="card-title">Trainees</h4>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                     <form>
                         <div class="input-group input-group-sm mb-3">
@@ -85,9 +29,7 @@
                     <table class="table" id="myTable">
                         <thead>
                             <tr>
-                                <th class="text-white">Batch Name</th>
-                                <th class="text-white">Team List</th>
-                                <th class="text-white">Trainer</th>
+                                <th class="text-white">Trainee Name</th>
                                 <th class="text-white">Startdate</th>
                                 <th class="text-white">Enddate</th>
                                 <th class="text-white">Action</th>
@@ -101,19 +43,14 @@
                                 <form action="/teamdelete/?tid={{i.id}}" method="post">
                                 {% csrf_token %}
                                     <td>
-                                        <a href="#" style="text-decoration: none; color: #6c7293">{{i.bt_name}}</a>
+                                        <a href="#" style="text-decoration: none; color: #6c7293">{{i.user.fullname}}</a>
+                                    </td>
+                    
+                                    <td>
+                                        <a href="#" style="text-decoration: none; color: #6c7293">{{i.tr_start_date|date:"d-m-Y"}}</a>
                                     </td>
                                     <td>
-                                        <a href="{% url 'team_trainee' i.id %}" style="text-decoration: none; color: #6c7293">{{i.name}}</a>
-                                    </td>
-                                    <td>
-                                        <a href="#" style="text-decoration: none; color: #6c7293">{{i.trainer}}</a>
-                                    </td>
-                                    <td>
-                                        <a href="#" style="text-decoration: none; color: #6c7293">{{i.startdate|date:"d-m-Y"}}</a>
-                                    </td>
-                                    <td>
-                                        <a href="#" style="text-decoration: none; color: #6c7293">{{i.enddate|date:"d-m-Y"}}</a>
+                                        <a href="#" style="text-decoration: none; color: #6c7293">{{i.tr_end_date|date:"d-m-Y"}}</a>
                                     </td>
                                     <td>
                                         <button type="button" data-toggle="modal" data-target="#myModal{{i.id}}" class="btn btn-social-icon-text btn-outline-primary"><i class="mdi mdi-tooltip-edit"></i>Update</button>
@@ -153,7 +90,7 @@
     <div class="modal-dialog">
         <div class="col-12 grid-margin stretch-card bg-dark text-light modal-content">
         <!-- Modal Header -->
-            <form action="/teamupdate/?tid={{i.id}}" method="post" enctype="multipart/form-data" autocomplete="off">
+            <form action="{% url 'traineupdate' %}" method="post" enctype="multipart/form-data" autocomplete="off">
                 {%csrf_token%}
                     <div class="modal-header">
                         <h4 class="modal-title">UPDATE</h4>
@@ -164,20 +101,13 @@
                         <div class="col-12 grid-margin stretch-card">
                             <div class="card" >
                                 <div class="card-body">
-                                    <div class="dropdown">
-                                        <label style="font: size 14px; margin-top: 50px">Select Trainer</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <select class="badge badge-outline-primary bg-dark text-light" name="trainer">
-                                            <option style="display: none" value="{{i.trainer_id}}">{{i.trainer}}</option>
-                                            {%for var in var1%}
-                                            <option value="{{var.id}}">{{var.fullname}}</option>
-                                            {%endfor%}
-                                        </select>
-                                    </div>
+                                   
                                     <br />
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Team Name</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control text-light" name="teams"required  value=" {{i.name}}"/></div>
+                                            <input type="text" class="form-control text-light" name="teams"required  value=" {{i.teamname.name}}"/></div>
+                                            
                                         </div>
                                         
                                         <div class="form-group row">
@@ -200,6 +130,9 @@
                                             </div>
                                           </center>
                                         </div>
+                                        <input type="text" class="form-control text-light" name="preid"required hidden value=" {{i.id}}"/></div>
+                                        <input type="text" class="form-control text-light" name="tmid"required hidden value=" {{i.teamname.id}}"/></div>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -210,35 +143,7 @@
         </div>
     </div>
     {%endfor%}
-    <!-- modal end -->
-    <script language="javascript">
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0');
-        var yyyy = today.getFullYear();
-      
-        today = yyyy + '-' + mm + '-' + dd;
-        $('#to').attr('min',today);
-      </script>
-    <script>
-       
-        function myFunction() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("myInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("myTable");
-            tr = table.getElementsByTagName("tr");
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-    </script>
-    {% endblock %}
+
+
+
+{% endblock %}

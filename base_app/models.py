@@ -51,7 +51,14 @@ class designation(models.Model):
     def __str__(self):
         return self.designation
 
+class Batch(models.Model):
+    batch_name=models.CharField(max_length=200,default='Batch')
+    bt_start_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    bt_end_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    bt_status=models.CharField(max_length=20,default='0')
+
 class create_team(models.Model):
+    bt_name=models.CharField(max_length=200, default='')
     name = models.CharField(max_length=200)
     trainer = models.CharField(max_length=200, default='')
     progress = models.IntegerField()
@@ -635,6 +642,8 @@ class conditions(models.Model):
 class previousTeam(models.Model):
     teamname = models.ForeignKey(create_team, on_delete=models.SET_NULL, related_name='teamname', null=True, blank=True)
     user =  models.ForeignKey(user_registration, on_delete=models.SET_NULL, related_name='user1',null=True,blank=True)
+    tr_start_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    tr_end_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     pstatus = models.CharField(max_length=200)
     progress = models.IntegerField(default='0')
     

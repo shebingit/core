@@ -1,0 +1,62 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+<div class="row mt-3">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+              <h6>Task List</h6>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+              <form>
+                <div class="input-group input-group-sm mb-3">
+                  <input type="text" class="form-control text-light" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
+              title="Type in a name" style="color:white;">
+  
+                  
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table " id="myTables">
+              <thead>
+                <tr data-href="#">
+                  <th>SlNo</th>
+                  <th>Name</th>
+                  <th>Task</th>
+                  <th>Sub Task</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in devp %}
+                <tr data-href="{% url 'Audit_employee_dashbord' i.id %}">
+                  <td>{{ forloop.counter }}</td>
+          
+                  <td>{{i.developer.fullname}}</td>
+                  <td>{{i.task}}</td>
+                  <td>{{i.subtask}}</td>
+                  
+                  <td>{{i.startdate|date:"d-m-Y"}}</td>
+                  <td>{{i.enddate|date:"d-m-Y"}}</td>
+  
+                  
+                </tr>
+                {% endfor %}
+                
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

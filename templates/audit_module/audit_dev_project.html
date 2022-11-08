@@ -22,7 +22,7 @@
                 <th scope="col" style="color:#6C7293;">Extension</th>
                 <th scope="col" style="color:#6C7293;">Project Details</th>
                 <th scope="col" style="color:#6C7293;">Work Acceptance Letter</th>
-                <th scope="col" style="color:#6C7293;">Action</th>
+                <th scope="col" style="color:#6C7293;">Status</th>
                 <th scope="col" style="color:#6C7293;">Submitted Date</th>
                 <th scope="col" style="color:#6C7293;">Delay</th>
                 <th scope="col" style="color:#6C7293;">Action</th>
@@ -57,7 +57,7 @@
                   </div>
                
                 <td>{% if dp.workaccept == "0" %}
-                  <a href="" data-toggle="modal" data-target="#workacceptance{{dp.id}}"
+                  <a href=""
                     style="text-decoration: none;">
                     <div class="badge badge-outline-primary">Pending</div>
                   </a>
@@ -162,7 +162,7 @@
   <!-- pop up window for Project details -->
   
   {% for dp in devp %}
-  <form action="{% url 'devprjsave' dp.id %}" method="post">
+  <form action="#" method="post">
     {% csrf_token %}
     <div class="rowmt-5 modal fade" id="exampleModalCenter3{{dp.id}}">
       <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
@@ -196,44 +196,21 @@
                   <div style="color:white;"> {{dp.developer}} </div>
                 </div>
                 <div class="col-md-2"></div>
+                <div class="col-md-2 mt-2" style="color:white;">Current status</div>
+                <div class="col-md-2" style="color:white;"> 
+                  <div style="color:white;">{{dp.projectstatus}}</div>
+                </div>
+              </div>
+              <div class="row mt-5">
+                <div class="col-md-1"></div>
                 <div class="col-md-2 mt-2 " style="color:white;">Progress</div>
                 <div class="col-md-2 mt-2 "> <span class="progress" data-toggle="modal" data-target=""
                     style="border-radius:5px;height:20px;max-width:150px;background-color:#C2F0EB">
-                    <span class="progress-bar" style="height:20px;width:{{dp.progress}}%">{{dp.progress}}%</span></div>
+                    <span class="progress-bar" style="height:20px;width:{{dp.progress}}%;">{{dp.progress}}%</span></div>
                 <div class="col-md-1"></div>
               </div>
   
-              <div class="row mt-5">
-                <div class="col-md-1"></div>
-                <div class="col-md-2 mt-2" style="color:white;">Status</div>
-                <div class="col-md-2 mt-2">
-                  <select name="devstat" class="drop form-control ml-3 mt-2" required>
-                    <option value=""> </option>
-                    <option value="In progress" class="text-light" style="color:white;">in progress</option>
-                    <option value="Completed" class="text-light" style="color:white;">completed</option>
-                  </select>
-                </div>
-                <div class="col-md-2"></div>
-                <div class="col-md-2" style="color:white;">Current status</div>
-                <div class="col-md-2" style="color:white;"> {{dp.projectstatus}}</div>
-                <div class="col-md-1"></div>
-              </div>
-  
-              <div class="row mt-5">
-                <div class="col-md-1"></div>
-                <div class="col-md-2 mt-1" style="color:white;">Progress</div>
-                <div class="col-md-2 mt-1">
-                  <input name="devpro" autocomplete="off" type="text" class="form-control">
-                  <br>
-                </div>
-  
-                <div class="col-md-2"></div>
-                <div class="col-md-2"></div>
-                <div class="col-md-2">
-                  <button type="submit" class="btn-primary text-light">Start work</button>
-                </div>
-                <div class="col-md-1"></div>
-              </div>
+              
   
             </div>
   
@@ -326,25 +303,10 @@
             </button>
             <div class="text-info" style="font-size: 20px;font-weight: 600;">Extension Request</div>
   
-            <form action="{% url 'DEVextension' dp.id %}" method="post">
+            <form action="#" method="post">
               {% csrf_token %}
   
-              <div class="row mt-5">
-                <div class="col-md-4">
-                  <div class=" mr-2 ml-3 mt-2 text-light" style="color:white;">Requested Days</div>
-                </div>
-                <div class="col-md-8 ">
-                  <input type="number" name="dayz" class="drop form-control ml-3 mt-2" required>
-                </div>
-              </div>
-              <div class="row pt-1">
-                <div class="col-md-4">
-                  <div class="mr-2 ml-3 mt-2 text-light" style="color:white;">Reason</div>
-                </div>
-                <div class="col-md-8 ">
-                  <textarea class="form-control ml-3 mt-2" name="reason" rows="4" cols="50"></textarea>
-                </div>
-              </div>
+              
               <div class="row pt-1">
                 <div class="col-md-4">
                   <div class=" mr-2 ml-3 mt-2" style="color:white;">Previous Status</div>
@@ -362,10 +324,7 @@
                 {% endif %}
   
               </div>
-  
-              <div class="" style="float:right;">
-                <button type="submit" class="btn btn-primary ">Submit</button>
-              </div>
+
             </form>
           </div>
         </div>

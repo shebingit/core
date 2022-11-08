@@ -11,9 +11,19 @@
     
         <div class="card" >
             <div class="card-body">
+              <div class="dropdown">
+                <label style="font-size: large; margin-top: 50px" class="col-12 col-sm-4 col-md-4 col-lg-4  ">Select Batch</label>&nbsp;&nbsp;&nbsp;&nbsp;
+        <select class="badge badge-outline-primary bg-dark text-light ml-2"name="batch_name" >
+          {%for var in batc%}
+          <option style="display: none;">Batch</option>
+          <option value="{{var.batch_name}}">{{var.batch_name}}</option>
+          {%endfor%}
+        </select>
+      </div>
+      <br>
               
                 <div class="dropdown">
-                    <label style="font-size: large; margin-top: 50px" class="col-12 col-sm-4 col-md-4 col-lg-4  ">Select Trainer</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label style="font-size: large; margin-top: 20px" class="col-12 col-sm-4 col-md-4 col-lg-4  ">Select Trainer</label>&nbsp;&nbsp;&nbsp;&nbsp;
             <select class="badge badge-outline-primary bg-dark text-light ml-2"name="trainer" >
               {%for var in var%}
               <option style="display: none;">Trainer</option>

@@ -252,8 +252,9 @@ def Newtrainees(request):
         dept = department.objects.all()
         team = create_team.objects.filter(~Q(team_status=1))
         mem1 = designation.objects.get(designation="trainee")
+        batc= Batch.objects.filter(~Q(bt_status='1'))
         memm = user_registration.objects.filter(designation_id=mem1).order_by('-id')
-        return render(request, 'Newtrainees.html', {'mem': mem, 'memm': memm, 'des': des, 'dept': dept, 'team': team})
+        return render(request, 'Newtrainees.html', {'mem': mem, 'memm': memm, 'des': des, 'dept': dept, 'team': team,'batc':batc})
     else:
         return redirect('/')
 
@@ -281,9 +282,12 @@ def newtraineeesteam(request):
             register.team =create_team.objects.get(id=int(request.POST['team']))
             register.department =department.objects.get(id=int(request.POST['dept']))
             users =  previousTeam()
+            datesteam=create_team.objects.get(id=int(request.POST['team']))
             users.teamname = create_team.objects.get(id=int(request.POST['team']))
             users.user = user_registration.objects.get(id=tid)
             users.pstatus = 0
+            users.tr_start_date=datesteam.startdate
+            users.tr_end_date=datesteam.enddate
             users.save()
             register.save()
             return redirect('Dashboard')
@@ -323,6 +327,22 @@ def new_team(request):
         return render(request, 'new_team.html', {'mem': mem, 'var': var, 'var1': var1})
     else:
         return redirect('/')
+
+def team_trainee(request,tm_tnr):
+    if 'usernametm2' in request.session:
+        if request.session.has_key('usernametm'):
+            usernametm = request.session['usernametm']
+        if request.session.has_key('usernametm1'):
+            usernametm1 = request.session['usernametm1']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(
+            designation_id=usernametm) .filter(fullname=usernametm1)
+        var = previousTeam.objects.filter(teamname_id=tm_tnr).order_by('-id')
+        return render(request, 'new_team_trainees.html', {'mem': mem, 'var': var})
+    else:
+        return redirect('/')
+
         
 def new_team1(request):
     if 'usernametm2' in request.session:
@@ -335,7 +355,22 @@ def new_team1(request):
         mem = user_registration.objects.filter(designation_id=usernametm) .filter(fullname=usernametm1)
         des = designation.objects.get(designation='trainer')
         var = user_registration.objects.filter(designation_id=des.id)
-        return render(request, 'new_team1.html', {'mem': mem, 'var': var})
+        batc = Batch.objects.all()
+        return render(request, 'new_team1.html', {'mem': mem, 'var': var,'batc':batc})
+    else:
+        return redirect('/')
+
+def new_batch(request):
+    if 'usernametm2' in request.session:
+        if request.session.has_key('usernametm'):
+            usernametm = request.session['usernametm']
+        if request.session.has_key('usernametm1'):
+            usernametm1 = request.session['usernametm1']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(designation_id=usernametm) .filter(fullname=usernametm1)
+        batc = Batch.objects.all()
+        return render(request, 'new_batch.html', {'mem': mem, 'batc': batc})
     else:
         return redirect('/')
         
@@ -374,6 +409,7 @@ def newteamcreate(request):
     else:
         return redirect('/')
     if request.method == 'POST':
+        btc= request.POST['batch_name']
         team = request.POST['team']
         startdate=request.POST['startdate']
         enddate=request.POST['enddate']
@@ -387,9 +423,34 @@ def newteamcreate(request):
                 'msg': 'Team already exists!!!....  Try another name', 'mem': mem}
             return render(request, 'new_team1.html', context)
         except:
-            user = create_team(name=team, trainer=tra.fullname, progress=0,trainer_id=trainer,startdate=startdate,enddate=enddate)
+            user = create_team(bt_name=btc,name=team, trainer=tra.fullname, progress=0,trainer_id=trainer,startdate=startdate,enddate=enddate)
             user.save()
     return redirect('new_team')
+
+
+def newbatchcreate(request):
+    if request.session.has_key('usernametm'):
+        usernametm = request.session['usernametm']
+    if request.session.has_key('usernametm1'):
+        usernametm1 = request.session['usernametm1']
+    else:
+        return redirect('/')
+    if request.method == 'POST':
+        team = request.POST['batc']
+        startdate=request.POST['startdate']
+        enddate=request.POST['enddate']
+        try:
+            user = newbatchcreate.objects.get(name=team)
+            mem = user_registration.objects.filter(
+                designation_id=usernametm) .filter(fullname=usernametm1)
+            context = {
+                'msg': 'Batch already exists!!!....  Try another name', 'mem': mem}
+            return render(request, 'new_batch.html', context)
+        except:
+            user = Batch(batch_name=team,bt_start_date=startdate,bt_end_date=enddate)
+            user.save()
+    return redirect('new_batch')
+
     
     
 
@@ -426,9 +487,24 @@ def teamdelete(request):
 
     tid = request.GET.get('tid')
     var = create_team.objects.filter(id=tid)
-    
     var.delete()
     return redirect("new_team")
+        
+def batchdelete(request):
+    if request.session.has_key('usernametm'):
+        usernametm = request.session['usernametm']
+    if request.session.has_key('usernametm1'):
+        usernametm1 = request.session['usernametm1']
+    else:
+        return redirect('/')
+
+    tid = request.POST.get('btid')
+    bts = Batch.objects.get(id=tid)
+    var = create_team.objects.filter(bt_name=bts.batch_name)
+    var.delete()
+    bts.delete()
+    return redirect("new_batch")
+
 
 def submit(request):
     if request.session.has_key('usernametm'):
@@ -489,6 +565,48 @@ def teamupdate(request):
         return redirect('new_team')
     else:
         pass
+
+def batchudate(request):
+    if request.session.has_key('usernametm'):
+        usernametm = request.session['usernametm']
+    if request.session.has_key('usernametm1'):
+        usernametm1 = request.session['usernametm1']
+    else:
+        return redirect('/')
+    if request.method == 'POST':
+        tid = request.POST.get('batc')
+    
+        abc = Batch.objects.get(id=tid)
+        abc.batch_name =abc.batch_name
+        abc.bt_start_date = request.POST.get('startdate')
+        abc.bt_end_date = request.POST.get('enddate')
+        abc.save()
+        return redirect('new_batch')
+    else:
+        pass
+
+def traineupdate(request):
+    if request.session.has_key('usernametm'):
+        usernametm = request.session['usernametm']
+    if request.session.has_key('usernametm1'):
+        usernametm1 = request.session['usernametm1']
+    else:
+        return redirect('/')
+    if request.method == 'POST':
+        tid = request.POST.get('preid')
+        tm = request.POST.get('tmid')
+        ct = create_team.objects.get(id=tm)
+       
+        abc = previousTeam.objects.get(id=tid)
+        abc.tr_start_date = request.POST.get('startdate')
+        abc.tr_end_date = request.POST.get('enddate')
+        abc.save()
+        return redirect('team_trainee',ct.id)
+    else:
+        pass
+
+
+
 
 def attendance_tm(request):
     if 'usernametm2' in request.session:
@@ -19257,9 +19375,41 @@ def Audit_employees(request):
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
         emp= user_registration.objects.filter(~Q(designation_id=9))
-        return render(request, 'audit_module/audit_employee.html', {'Aud': Aud,'emp':emp})
+        des = department.objects.all()
+        return render(request, 'audit_module/audit_employee.html', {'Aud': Aud,'emp':emp,'des':des})
     else:
         return redirect('/')
+
+def Audit_department(request,audit_dep_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        mem = department.objects.get(id=audit_dep_id)
+        des=designation.objects.filter(~Q(designation='admin'),~Q(designation='manager'),~Q(designation='account'),~Q(designation='auditor'),~Q(designation='Digital manager'),~Q(designation='Digital Developer'))
+        context = {'mem':mem,'des':des,'Aud' : Aud,}
+        return render(request, 'audit_module/audit_depart_designations.html',context)
+    else:
+        return redirect('/')
+
+
+def Audit_emp_list(request,audit_depart_id,audit_des_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        mem = department.objects.get(id=audit_depart_id)
+        mem1 = designation.objects.get(pk=audit_des_id)
+        use=user_registration.objects.filter(department_id=mem.id,designation=mem1, status="active")
+        context = {'mem':mem,'use':use,'Aud' : Aud,}
+        return render(request, 'audit_module/audit_depart_designations_emp.html',context)
+    else:
+        return redirect('/')
+
 
 # Employee dashboard
 
@@ -19272,19 +19422,34 @@ def Audit_employee_dashbord(request,audit_emp_id):
         Aud = user_registration.objects.filter(id=Aud_id)
         emp= user_registration.objects.get(id=audit_emp_id)
         pros = project.objects.all()
-        devp = project_taskassign.objects.filter(developer_id=audit_emp_id).values('project_id').distinct()
+        if emp.designation.designation == 'team leader':
+            devp = project_taskassign.objects.filter(developer_id=audit_emp_id,worktype='1').values('project_id').distinct()
+        else:
+            devp = project_taskassign.objects.filter(developer_id=audit_emp_id).values('project_id').distinct()
+
         firstday=date.today().replace(day=1)
         today=date.today()
+        print(firstday)
+        print(today)
         count=0
         leaves=0
         leve_count= leave.objects.filter(user_id=audit_emp_id,from_date__gte=firstday,from_date__lte=today)
+        lev=leave.objects.filter(user_id=audit_emp_id).order_by('-id')
+        attend=attendance.objects.filter(user_id=audit_emp_id).order_by('-id')
+        sala=acntspayslip.objects.filter(user_id_id=audit_emp_id).order_by('-id')
+        rep=reported_issue.objects.filter(reporter_id=audit_emp_id).order_by('-id')
         for j in leve_count:
             leaves=leaves+int(j.days)
-        delya_count=project_taskassign.objects.filter(developer_id=audit_emp_id,submitted_date__gte=firstday,submitted_date__lte=date.today())
-
+        if emp.designation.designation == 'team leader':
+            delya_count=project_taskassign.objects.filter(developer_id=audit_emp_id,submitted_date__gte=firstday,submitted_date__lte=date.today(),worktype='1')
+        else:
+            delya_count=project_taskassign.objects.filter(developer_id=audit_emp_id,submitted_date__gte=firstday,submitted_date__lte=date.today())
+        print(delya_count)
         for i in delya_count:
+            print(i.delay)
             count=count+int(i.delay)
-        return render(request, 'audit_module/audit_employee_dasboard.html', {'Aud': Aud,'emp':emp,'pros':pros,'devp':devp,'count':count,'leaves':leaves})
+        return render(request, 'audit_module/audit_employee_dasboard.html', {'Aud': Aud,'emp':emp,'pros':pros,'devp':devp,'count':count,
+        'leaves':leaves,'lev':lev,'attend':attend,'sala':sala,'rep':rep})
     else:
         return redirect('/')
 
@@ -19313,6 +19478,36 @@ def Audit_trainee_dashboard(request,audit_emp_tr):
     else:
         return redirect('/')
 
+def Audit_tl(request,Audit_tl):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        deg=designation.objects.get(designation='developer')
+        dev_tl=user_registration.objects.filter(tl_id=int(Audit_tl),designation=deg)
+        
+        pros = project.objects.all()
+        devp = project_taskassign.objects.filter(tl_id=Audit_tl,worktype='0').values('project_id').distinct()
+        warn= wrdata.objects.filter(wrn_user_name_id=Audit_tl)
+
+        return render(request, 'audit_module/audit_emp_tl.html', {'Aud': Aud,'dev_tl':dev_tl,'pros':pros,'devp':devp,'warn':warn,'Audit_tl':Audit_tl})
+    else:
+        return redirect('/')
+
+
+def Audit_tlproject_split(request,audit_pid,audit_ptlid):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        devp = project_taskassign.objects.filter(tl_id=audit_ptlid,project_id=audit_pid,worktype='0').order_by('-id')
+        return render(request, 'audit_module/audit_tl_project_split.html', {'Aud': Aud,'devp':devp})
+    else:
+        return redirect('/')
 
 
 def Audit_DEVtable(request,audit_emp_prtask,audit_empid):
@@ -19322,7 +19517,11 @@ def Audit_DEVtable(request,audit_emp_prtask,audit_empid):
         else:
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
-        devp = project_taskassign.objects.filter(project_id=audit_emp_prtask).filter(developer_id=audit_empid).order_by("-id")
+        emp=user_registration.objects.get(id=audit_empid)
+        if emp.designation.designation == 'team leader':
+            devp = project_taskassign.objects.filter(project_id=audit_emp_prtask,worktype='1').filter(developer_id=audit_empid).order_by("-id")
+        else:
+               devp = project_taskassign.objects.filter(project_id=audit_emp_prtask).filter(developer_id=audit_empid).order_by("-id")
         teststatus = test_status.objects.all()
         proj=project.objects.get(id=audit_emp_prtask)
         testerstatus = tester_status.objects.filter(project_id=audit_emp_prtask)
