@@ -853,6 +853,7 @@ urlpatterns = [
     re_path(r'^pdetailsave/(?P<id>\d+)/$', views.pdetailsave, name='pdetailsave'),
     re_path(r'^devtlreported/$', views.devtlreported, name='devtlreported'),
     re_path(r'^tldevview/(?P<id>\d+)/$', views.tldevview, name='tldevview'),
+    path('dev_Work_not_assign', views.dev_Work_not_assign, name='dev_Work_not_assign'),
     re_path(r'^TLtasksub/(?P<id>\d+)/$', views.TLtasksub, name='TLtasksub'),
     re_path(r'^devtasksub/(?P<id>\d+)/$', views.devtasksub, name='devtasksub'),
     re_path(r'^testasksub/(?P<id>\d+)/$', views.testasksub, name='testasksub'),

@@ -201,7 +201,7 @@
         </div>
     </div>
     <div class="col-lg-4 col-sm-12">
-        {% if emp.designation.designation == 'developer' or  emp.designation.designation == 'team leader' %}
+        {% if emp.designation.designation == 'developer' or  emp.designation.designation == 'team leader' or emp.designation.designation == 'tester' %}
         <p>Delay &nbsp;Of&nbsp; This&nbsp; Month&nbsp;&nbsp;-&nbsp;&nbsp;{{count}}</p>
         {% endif %}
     </div>
@@ -209,6 +209,30 @@
 
 <hr>
 <div class="row mt-1 answer2">
+    {% if  emp.designation.designation == 'project manager'  %}
+    {% for i in devp %}
+
+        <div class="col-lg-12 col-md-12 col-sm-12 grid-margin stretch-card">
+            <div class="card">
+                <a href="#" class="text-decoration-none text-white ">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-8 col-sm-12  my-auto">
+                            <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                <h4 class="mb-0" style="color:white;">{{i.project}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12 text-center text-xl-right">
+                            <i class="icon-lg mdi mdi-arrange-send-backward text-primary ms-auto"></i>
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+    
+    {% else %}
     {% for dp in devp %}
     <div class="col-4 col-md-12 col-sm-12 grid-margin stretch-card">
         <div class="card">
@@ -237,6 +261,7 @@
         </div>
     </div>
     {% endfor %}
+    {% endif %}
 </div>
    
 

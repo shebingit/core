@@ -300,14 +300,14 @@
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
-                                <td></td>
+                                <td>{{i.teamname.bt_name}}</td>
                                 <td>{{i.teamname.name}}</td>
                                 <td>
                                     <a href="{% url 'Audit_trainee_trainer_details' i.teamname.trainer_id i.teamname.id traine_tainer_db.id %}">{{i.teamname.trainer}}</a>
                                 </td>
                                 <td>{{i.teamname.startdate|date:"d-m-Y"}}</td>
                                 <td>{{i.teamname.enddate|date:"d-m-Y"}}</td>
-                                <td>{{i.teamname.enddate|date:"d-m-Y"}}</td>
+                                <td>{{i.tr_end_date|date:"d-m-Y"}}</td>
                                
                                 <td> 
                                     <div class="progress">

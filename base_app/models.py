@@ -842,6 +842,7 @@ class TSproject_Task_verify(models.Model):
     ts_project_task=models.ForeignKey(project_taskassign,on_delete=models.CASCADE,null=True,blank=True)
     ts_tester=models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
     ts_task_verify_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    ts_task_sub_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     ts_task_status=models.CharField(max_length=200, null=True,default="")
     ts_delay=models.CharField(max_length=200, null=True,default="0")
     ts_reson_dely=models.TextField(default=" ")

@@ -3457,7 +3457,7 @@ def BRadmin_profiledash(request):
 
        
         count=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0').count()
-        
+       
         for i in queryset:
             labels = [i.workperformance, i.attitude, i.creativity]
             data = [i.workperformance, i.attitude, i.creativity]
@@ -3477,8 +3477,10 @@ def BRadmin_Work_not_assign(request):
             return redirect('/')
         Adm = user_registration.objects.filter(id=Adm_id)
         dev=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0')
-        tl=user_registration.objects.filter(designation_id=4)
-        pman=user_registration.objects.filter(designation_id=4)
+        tlde=designation.objects.get(designation='team leader')
+        pmde=designation.objects.get(designation='project manager')
+        tl=user_registration.objects.filter(designation=tlde)
+        pman=user_registration.objects.filter(designation=pmde)
         return render(request, 'BRadmin_Work_not_assign.html', {'Adm': Adm,'dev':dev,'tl':tl,'pman':pman})
     else:
         return redirect('/')
@@ -5884,7 +5886,9 @@ def pm_Work_not_assign(request):
            return redirect('/')
         pro = user_registration.objects.filter(id=prid)
         dev=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0')
-        return render(request, 'projectmanager_work_not_assign.html',{'pro':pro,'dev':dev})
+        tlde=designation.objects.get(designation='team leader')
+        tl=user_registration.objects.filter(designation=tlde)
+        return render(request, 'projectmanager_work_not_assign.html',{'pro':pro,'dev':dev,'tl':tl})
     else:
         return redirect('/')
 
@@ -7718,7 +7722,8 @@ def TLdashboard(request):
         for i in queryset:
             labels = [i.workperformance, i.attitude, i.creativity]
             data = [i.workperformance, i.attitude, i.creativity]
-        return render(request, 'TLdashboard.html', {'labels': labels, 'data': data, 'mem': mem, 'le': le,
+        count=user_registration.objects.filter(tl_id=user_id.id,status="active",work_status='0').count()
+        return render(request, 'TLdashboard.html', {'labels': labels, 'data': data, 'mem': mem, 'le': le,'count':count,
          'previous_sal_main':previous_sal_main, 'this_month_sal_main':this_month_sal_main, 'last_day_of_prev_month':last_day_of_prev_month, 'start_day_of_prev_month':start_day_of_prev_month })
     else:
         return redirect('/')
@@ -7736,6 +7741,23 @@ def tldevview(request,id):
         return render(request, 'tldevview.html',{'mem1':mem1,'mem':mem})
     else:
         return redirect('/')
+
+
+def dev_Work_not_assign(request):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=tlid)
+        tli =user_registration.objects.get(id=tlid)
+        tl=user_registration.objects.filter(id=tli.id)
+        dev=user_registration.objects.filter(tl_id=tli.id,status="active",work_status='0')
+        return render(request, 'tl_worknot_assign.html',{'mem':mem,'tl':tl,'dev':dev})
+    else:
+        return redirect('/')
+
+
         
 def TLprojects(request):
     if 'tlid' in request.session:
@@ -7933,7 +7955,7 @@ def tlsplittask(request,id):
                 return redirect('/')
             wtype=project_taskassign.objects.get(id=id)
             
-            if wtype.worktype == '2':
+            if wtype.worktype == '0':
                 splitid = request.session['splitid']
                 sub1 = project_taskassign.objects.get(id=id)
                 test = test_status.objects.all()
@@ -8446,11 +8468,11 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
         print(delys)
         if delys > 0:
             verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,
-                                                ts_delay=delys,ts_tester=prj_task.tester,ts_task_status=task_verify)
+                                                ts_delay=delys,ts_tester=prj_task.tester,ts_task_status=task_verify,ts_task_sub_date=prj_task.submitted_date)
             verify_task.save()
         else:
             verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,
-                                                ts_delay=0,ts_tester=prj_task.tester,ts_task_status=task_verify)
+                                                ts_delay=0,ts_tester=prj_task.tester,ts_task_status=task_verify,ts_task_sub_date=prj_task.submitted_date)
             verify_task.save()
         pts=project_taskassign.objects.get(id=ts_prj_task_verify)
         prj_id=prj_task.project.id
@@ -19422,15 +19444,21 @@ def Audit_employee_dashbord(request,audit_emp_id):
         Aud = user_registration.objects.filter(id=Aud_id)
         emp= user_registration.objects.get(id=audit_emp_id)
         pros = project.objects.all()
-        if emp.designation.designation == 'team leader':
+
+        if emp.designation.designation == 'project manager':
+            devp = project.objects.filter(projectmanager_id=audit_emp_id,).order_by('-id')
+
+        elif emp.designation.designation == 'team leader':
             devp = project_taskassign.objects.filter(developer_id=audit_emp_id,worktype='1').values('project_id').distinct()
+
+        elif  emp.designation.designation == 'tester':
+            devp = project_taskassign.objects.filter(tester_id=audit_emp_id).values('project_id').distinct()
         else:
             devp = project_taskassign.objects.filter(developer_id=audit_emp_id).values('project_id').distinct()
 
         firstday=date.today().replace(day=1)
         today=date.today()
-        print(firstday)
-        print(today)
+       
         count=0
         leaves=0
         leve_count= leave.objects.filter(user_id=audit_emp_id,from_date__gte=firstday,from_date__lte=today)
@@ -19440,14 +19468,24 @@ def Audit_employee_dashbord(request,audit_emp_id):
         rep=reported_issue.objects.filter(reporter_id=audit_emp_id).order_by('-id')
         for j in leve_count:
             leaves=leaves+int(j.days)
+
         if emp.designation.designation == 'team leader':
             delya_count=project_taskassign.objects.filter(developer_id=audit_emp_id,submitted_date__gte=firstday,submitted_date__lte=date.today(),worktype='1')
+            for i in delya_count:
+                count=count+int(i.delay)
+
+        elif emp.designation.designation == 'tester':
+            delya_count=TSproject_Task_verify.objects.filter(ts_tester_id=audit_emp_id,ts_task_verify_date__gte=firstday,ts_task_verify_date__lte=date.today())
+            for i in delya_count:
+                count=count+int(i.ts_delay)
+
         else:
+
             delya_count=project_taskassign.objects.filter(developer_id=audit_emp_id,submitted_date__gte=firstday,submitted_date__lte=date.today())
-        print(delya_count)
-        for i in delya_count:
-            print(i.delay)
-            count=count+int(i.delay)
+       
+            for i in delya_count:
+                count=count+int(i.delay)
+
         return render(request, 'audit_module/audit_employee_dasboard.html', {'Aud': Aud,'emp':emp,'pros':pros,'devp':devp,'count':count,
         'leaves':leaves,'lev':lev,'attend':attend,'sala':sala,'rep':rep})
     else:
@@ -19518,7 +19556,13 @@ def Audit_DEVtable(request,audit_emp_prtask,audit_empid):
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
         emp=user_registration.objects.get(id=audit_empid)
-        if emp.designation.designation == 'team leader':
+        if emp.designation.designation == 'tester':
+            devp= TSproject_Task_verify.objects.filter(ts_tester_id=audit_empid)
+            ptask= project_taskassign.objects.filter(project_id=audit_emp_prtask,).filter(tester_id=audit_empid)
+            testerstatus = tester_status.objects.filter(project_id=audit_emp_prtask)
+            return render(request, 'audit_module/audit_tester_project.html', {'Aud': Aud,'devp':devp,'ptask':ptask,'testerstatus':testerstatus})
+
+        elif emp.designation.designation == 'team leader':
             devp = project_taskassign.objects.filter(project_id=audit_emp_prtask,worktype='1').filter(developer_id=audit_empid).order_by("-id")
         else:
                devp = project_taskassign.objects.filter(project_id=audit_emp_prtask).filter(developer_id=audit_empid).order_by("-id")

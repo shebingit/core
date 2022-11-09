@@ -73,7 +73,7 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
               <form>
                 <div class="input-group input-group-sm mb-3">
-                  <input type="text" class="form-control text-light" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
+                  <input type="text" class="form-control text-light" id="myInputp" onkeyup="myFunction_Project()" placeholder="Search for names.."
               title="Type in a name" style="color:white;">
   
                   
@@ -82,7 +82,7 @@
             </div>
           </div>
           <div class="table-responsive">
-            <table class="table " id="myTables">
+            <table class="table " id="myTablesp">
               <thead>
                 <tr data-href="#">
                 <th>Project Name</th>
@@ -122,7 +122,7 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
               <form>
                 <div class="input-group input-group-sm mb-3">
-                  <input type="text" class="form-control text-light" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
+                  <input type="text" class="form-control text-light" id="myInputw" onkeyup="myFunction_Warning()" placeholder="Search for names.."
               title="Type in a name" style="color:white;">
   
                   
@@ -131,7 +131,7 @@
             </div>
           </div>
           <div class="table-responsive">
-            <table class="table " id="myTables">
+            <table class="table " id="myTablesw">
               <thead>
                 <tr data-href="#">
                 <th>Date</th>
@@ -161,6 +161,36 @@
       </div>
     </div>
   </div>
+
+  <script>
+    $(document).ready(function () {
+      $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTables tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+
+    $(document).ready(function () {
+      $("#myInputp").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTablesp tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    $(document).ready(function () {
+      $("#myInputw").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTablesw tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+
+  </script>
+
   <script>
       function myFunction() {
           var input, filter, table, tr, td, i, txtValue;
@@ -188,6 +218,49 @@
           return false;
       });
   });
+
+  function myFunction_Project() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputp");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTablesp");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) 
+        {
+          tr[i].style.display = "";
+        }
+        else 
+        {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+  function myFunction_Warning() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputw");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTablesw");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) 
+        {
+          tr[i].style.display = "";
+        }
+        else 
+        {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
   </script>
   
 
