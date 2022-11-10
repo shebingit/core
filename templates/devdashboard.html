@@ -1,6 +1,29 @@
 {%extends 'devindex.html'%}
 {%load static%}
 {%block content%}
+
+<style>
+  .blink {
+      animation: blinker 1.5s linear infinite;
+      color: rgb(243, 11, 11);
+      font-family: sans-serif;
+      font-size: 1em;
+      font-weight: 700;
+  }
+  .blink-success
+  {
+    animation: blinker 1.5s linear infinite;
+      color: rgb(170, 182, 172);
+      font-family: sans-serif;
+      font-size: 1em;
+      font-weight: 700;
+  }
+  @keyframes blinker {
+      50% {
+          opacity: 0;
+      }
+  }
+</style>
 <div class="row">
   <div class="col-md-4 grid-margin stretch-card">
     <div class="card">
@@ -176,6 +199,7 @@
   </div> -->
 
 
+
   <div class="row mt-1">
     <div class="col-lg-6 grid-margin stretch-card">
       <div class="card">
@@ -194,6 +218,29 @@
       </div>
     </div>
   </div>
+
+  
+  {% if work_check.work_status == '0' %}
+  <div class="p-3" >
+    
+    {% if work_req.wrk_status == 'requested' %}
+      <div class="toast-container blink-success p-2" role="alert" aria-live="assertive" aria-atomic="true"style="background-color:#191C24 ;">
+        <div class="toast-body">
+          <p >You Are Requested To TL For  New Work  </p>
+        </div>
+      </div>
+    {% else %}
+    <div class="toast-container blink" role="alert" aria-live="assertive" aria-atomic="true"style="background-color:#191C24 ;">
+      <div class="toast-body">
+        <p >You Have No Work Allocated Today ! Please Inform TL</p>
+      </div>
+    </div>
+    <a href="{% url 'Dev_workrequest' work_check.id  %}"  class="btn btn-outline-primary btn-sm mt-3 p-2 ">Request Work</a>
+    {% endif %}
+  </div>
+    
+    
+  {% endif %}
 
 
   <script>

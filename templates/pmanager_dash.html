@@ -15,6 +15,7 @@
       border: none;
       outline: none;
       border-radius: 50%;
+      animation: blinker 1.5s linear infinite;
     }
     
     .icon-button:hover {
@@ -39,6 +40,11 @@
       border-radius: 50%;
       font-size: 12px;
     }
+    @keyframes blinker {
+      50% {
+          opacity: 0;
+      }
+  }
     
 </style>
 <style>
@@ -229,6 +235,7 @@
     </a>
   </div>
 </div>
+{% if count > 0 %}
 <div class="col-md-12 col-lg-4 col-12  grid-margin">
   <div class="card" style="max-height: 250px">
       <a href="{% url 'pm_Work_not_assign' %}" style="text-decoration: none">
@@ -249,6 +256,7 @@
       </div>
     </a>
   </div>
+  {% endif %}
 
 </div>
 

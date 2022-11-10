@@ -933,3 +933,15 @@ class wrdata(models.Model):
     wrn_task=models.ForeignKey(project_taskassign,on_delete=models.CASCADE,related_name='wr_task',null=True,blank=True)
     wrn_reason=models.CharField(max_length=200,null=True, blank=True)
     wrn_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+
+class WorkRequest(models.Model):
+    wrk_develp=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='wrk_devp',null=True,blank=True)
+    wrkreq_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    wrkreq_tl=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='wrk_tl',null=True,blank=True)
+    wrk_status=models.CharField(max_length=200,null=True, blank=True,default='')
+
+
+class Projectmanagerworkassign(models.Model):
+    pm_project_task=models.ForeignKey(project_taskassign,on_delete=models.CASCADE,related_name='pm_prtask',null=True,blank=True)
+    assing_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    pm_task_status=models.CharField(max_length=200,null=True, blank=True,default='')

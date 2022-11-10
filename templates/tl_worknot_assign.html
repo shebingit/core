@@ -7,6 +7,19 @@
     table tr[data-href] {
         cursor: pointer;
     }
+    .blink-success
+    {
+      animation: blinker 1.5s linear infinite;
+        color: rgb(211, 225, 214);
+        font-family: sans-serif;
+        font-size: 1em;
+        font-weight: 700;
+    }
+    @keyframes blinker {
+        50% {
+            opacity: 0;
+        }
+    }
     
     </style>
     
@@ -38,6 +51,7 @@
                       <th style="padding-left:30px;"> Developer </th>
                       <th style="padding-left:50px;"> Team Leader</th>
                       <th style="padding-left:50px;"> Project Manager</th>
+                      <th style="padding-left:50px;"> Request</th>
                       
                     </tr>
                   </thead>
@@ -63,6 +77,14 @@
                             {{k.fullname}}
                         {% endif %}
                         {% endfor %}
+                      </td>
+                      <td>
+                        {% for r in req %}
+                        {% if t.id == r.wrk_develp_id %}
+                           <p class="blink-success">Developer Work Requested</p>
+                        {% endif %}
+                        {% endfor %}
+
                       </td>
                       
                       

@@ -730,6 +730,8 @@ urlpatterns = [
     re_path(r'^completepro/(?P<id>\d+)/$', views.completepro, name='completepro'),
     re_path(r'^pr_mg/$', views.pr_mg, name="pr_mg"),
     path('pm_Work_not_assign', views.pm_Work_not_assign, name='pm_Work_not_assign'),
+    path('pmdeveloper_task_assign/<int:pmdev_id>', views.pmdeveloper_task_assign, name='pmdeveloper_task_assign'),
+    path('pmproject_task_assingdev', views.pmproject_task_assingdev, name='pmproject_task_assingdev'),
 
 
     #nirmal
@@ -885,6 +887,8 @@ urlpatterns = [
     re_path(r'^devReportedissues/$', views.devReportedissues, name='devReportedissues'),
     re_path(r'^devreportissue/$', views.devreportissue, name='devreportissue'),
     re_path(r'^devreportedissue/$', views.devreportedissue, name='devreportedissue'),
+    path('Dev_workrequest/<int:dev_wrequest>', views.Dev_workrequest, name='Dev_workrequest'),
+
     re_path(r'^devsuccess/$', views.devsuccess, name='devsuccess'),
     re_path(r'^devissues/(?P<id>\d+)/$', views.devissues, name='devissues'),
     re_path(r'^dev_leave_form/$', views.dev_leave_form, name='dev_leave_form'),

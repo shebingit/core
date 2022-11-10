@@ -39,6 +39,7 @@ from django.db.models import Sum
 
 from cal.models import *
 
+
 # Create your views here.
 def login(request):
     
@@ -3481,7 +3482,8 @@ def BRadmin_Work_not_assign(request):
         pmde=designation.objects.get(designation='project manager')
         tl=user_registration.objects.filter(designation=tlde)
         pman=user_registration.objects.filter(designation=pmde)
-        return render(request, 'BRadmin_Work_not_assign.html', {'Adm': Adm,'dev':dev,'tl':tl,'pman':pman})
+        req=WorkRequest.objects.filter(wrkreq_date=date.today())
+        return render(request, 'BRadmin_Work_not_assign.html', {'Adm': Adm,'dev':dev,'tl':tl,'pman':pman,'req':req})
     else:
         return redirect('/')
 
@@ -5888,11 +5890,72 @@ def pm_Work_not_assign(request):
         dev=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0')
         tlde=designation.objects.get(designation='team leader')
         tl=user_registration.objects.filter(designation=tlde)
-        return render(request, 'projectmanager_work_not_assign.html',{'pro':pro,'dev':dev,'tl':tl})
+        req=WorkRequest.objects.filter(wrkreq_date=date.today())
+        return render(request, 'projectmanager_work_not_assign.html',{'pro':pro,'dev':dev,'tl':tl,'req':req})
     else:
         return redirect('/')
 
 
+def pmdeveloper_task_assign(request,pmdev_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        e = designation.objects.get(designation="tester")
+        t = designation.objects.get(designation="team leader")
+        t1=t.id
+        e1 = e.id
+        dev = user_registration.objects.get(id=pmdev_id)
+        spa1 = user_registration.objects.filter(designation_id=e1, status="active")
+        tls= user_registration.objects.get(id=dev.tl_id, status="active")
+        tasks = project_taskassign.objects.filter(developer_id=dev.tl_id,worktype='0').values('project').distinct()
+        proje=project.objects.all()
+        return render(request, 'projectmanager_dev_task_assign.html',{'pro':pro,'proje':proje,'spa1':spa1,
+        'tasks':tasks,'tls':tls,'dev':dev})
+    else:
+        return redirect('/')
+
+
+def pmproject_task_assingdev(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        if request.method =='POST':
+            
+            var = project_taskassign()
+           
+            var.developer_id =  request.POST['dname']
+            var.tl_id = request.POST['tl']
+            var.tester_id = request.POST['tesname']
+            var.tl_description=request.POST.get('description')
+            var.subtask=request.POST.get('subtask')
+            var.task = request.POST.get('task')
+            var.startdate= request.POST.get('start_date')
+            var.enddate= request.POST.get('date')
+            var.files=request.FILES['files']
+            var.extension=0
+            var.project_id =  request.POST['prj']
+            var.description = request.POST.get('description')
+            var.worktype='1'
+            var.save()
+            
+            ptask = Projectmanagerworkassign()
+            ptask.pm_project_task=var
+            ptask.pm_task_status='1'
+            ptask.save()
+
+            user=user_registration.objects.get(id=request.POST['dname']) #developer work status change
+            user.work_status='1'
+            user.save()
+
+            return redirect('pm_Work_not_assign')
+    else:
+        return redirect('/')
 
 
 def projectmanager_projects(request):
@@ -5905,9 +5968,6 @@ def projectmanager_projects(request):
         return render(request, 'projectmanager_projects.html',{'pro':pro})
     else:
         return redirect('/')
-
-
-
 
 
     
@@ -7753,7 +7813,8 @@ def dev_Work_not_assign(request):
         tli =user_registration.objects.get(id=tlid)
         tl=user_registration.objects.filter(id=tli.id)
         dev=user_registration.objects.filter(tl_id=tli.id,status="active",work_status='0')
-        return render(request, 'tl_worknot_assign.html',{'mem':mem,'tl':tl,'dev':dev})
+        req=WorkRequest.objects.filter(wrkreq_tl_id=tlid,wrkreq_date=date.today())
+        return render(request, 'tl_worknot_assign.html',{'mem':mem,'tl':tl,'dev':dev,'req':req})
     else:
         return redirect('/')
 
@@ -8446,10 +8507,6 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
         prj_task.save()
         c_date=date.today()
 
-        if task_verify == 'submitted':
-            user=user_registration.objects.get(id=prj_task.developer.id)
-            user.work_status='0'
-            user.save()
 
         if task_verify == 'correction':
             proj_doc_cu=ProjectCorrectionUpdation()
@@ -8944,7 +9001,15 @@ def devdashboard(request):
     for i in queryset:
             labels=[i.workperformance,i.attitude,i.creativity]
             data=[i.workperformance,i.attitude,i.creativity]
-    return render(request, 'devdashboard.html', {'labels':labels,'data':data,'dev': dev,  'previous_sal_main':previous_sal_main, 'this_month_sal_main':this_month_sal_main, 'last_day_of_prev_month':last_day_of_prev_month, 'start_day_of_prev_month':start_day_of_prev_month})
+    work_check=user_registration.objects.get(id=devid)
+    wreq=WorkRequest.objects.filter(wrk_develp_id=devid,wrkreq_date=date.today()).exists()
+    if wreq :
+         work_req=WorkRequest.objects.get(wrk_develp_id=devid,wrkreq_date=date.today())
+    else:
+        work_req=NULL
+
+    return render(request, 'devdashboard.html', {'labels':labels,'data':data,'dev': dev,  'previous_sal_main':previous_sal_main, 'this_month_sal_main':this_month_sal_main, 'last_day_of_prev_month':last_day_of_prev_month,
+     'start_day_of_prev_month':start_day_of_prev_month,'work_check':work_check,'work_req':work_req})
 
 
 def devReportedissues(request):
@@ -8959,6 +9024,25 @@ def devReportedissues(request):
     else:
         return redirect('/')
 
+# work request by developer
+def Dev_workrequest(request,dev_wrequest):
+    if 'devid' in request.session:
+        if request.session.has_key('devid'):
+            devid = request.session['devid']
+    
+        else:
+           return redirect('/')
+        dev = user_registration.objects.get(id=dev_wrequest)
+        tl = user_registration.objects.get(id=dev.tl_id)
+        work_req=WorkRequest()
+        work_req.wrk_develp=dev
+        work_req.wrkreq_tl=tl
+        work_req.wrk_status='requested'
+        work_req.save()
+        return redirect('devdashboard')
+    else:
+        return redirect('/')
+        
 
 def devreportissue(request):
     if 'devid' in request.session:
@@ -9435,6 +9519,7 @@ def DEVtaskformsubmit(request, id):
     else:
        return redirect('/')
     dev = user_registration.objects.filter(id=devid)
+    dev1 = user_registration.objects.get(id=devid)
     if request.method == "POST":
         task = project_taskassign.objects.get(id=id)
         task.employee_description = request.POST['description']
@@ -9477,6 +9562,8 @@ def DEVtaskformsubmit(request, id):
             return render(request, 'DEVtaskform.html', {'dev': dev, 'msg_success': msg_success})
         
         else:
+            dev1.work_status='0'
+            dev1.save()
             task.submitted_date = datetime.now().date()
             task.status = 'Verification'
             delta = datetime.now().date() - task.enddate
