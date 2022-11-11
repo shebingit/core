@@ -26,7 +26,9 @@
     .card_color 
     {
         background-color: #fff;
+        border: none;
     }
+    
     .answer1 { display:none; }
     .answer2 { display:none; }
     .answer3 { display:none; }
@@ -38,8 +40,8 @@
 <div class="container p-3">
 
     <h3 class="text-center text-primary h2 mb-3">{{proj.project}}</h3>
-    <div class="row">
-        <div class="col-lg-6 col-sm-12">
+    <div class="row g-3">
+        <div class="col-lg-12 col-sm-12">
             <h4 class="text-center">Daily Project Doc add</h4>
             <div class="row g-2">
                 <div class="col-lg-12">
@@ -198,14 +200,39 @@
     
         </div>
 
-        <div class="col-lg-6 col-sm-12">
+        <div class="col-lg-12 col-sm-12">
             <h4 class="text-center">Updations and Tester Corrections on Project</h4>
             {% for i in prj_doc_crr_up %}
             <div class="row">
                 <p>{{i.project_cu_module}}</p>
                 <p>{{i.project_cu_descrip}}</p>
-                <p>{{i.project_cu_start}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{i.project_cu_status}}</p>
+                <p>{{i.project_date}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{i.project_cu_status}}</p>
+                <p>Start Date:&nbsp;{{i.project_cu_start}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;End Date:&nbsp;{{i.project_cu_end}}</p>
+                <p>Work Days:&nbsp;{{i.project_cu_wdays}}</p>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <h6>Old Data</h6>
+                        <div class="card p-2 card_color ">
+                            {% if i.project_oldui %}
+                            <img src="{{i.project_oldui.url}}">
+                            <p class="p-2"><b>Desecription:</b>&nbsp;{{i.project_cu_olddescrip}}</p>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <h6>New Data</h6>
+                        <div class="card p-2 card_color ">
+                            {% if i.project_cu_newui %}
+                            <img src="{{i.project_cu_newui.url}}">
+                            <p class="p-2"><b>Desecription:</b>&nbsp;{{i.project_cu_newdescrip}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% if i.project_cu_wdays == 0 %}
                 <a href="#" data-toggle="modal" data-target="#doc{{i.id}}"><span class="mdi mdi-plus-circle mdi-36px"></span></a>
+                {% endif %}
             </div>
             <hr>
             {% endfor %}

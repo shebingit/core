@@ -8,47 +8,77 @@
         color: black;
         font-weight: 400;
     }
+    .card_color 
+    {
+        background-color: #fff;
+        border: none;
+    }
 </style>
 
 <div class="container">
     <div class="row">
-        <div class="col-6 p-2">
-            <h4> Updations form Project Manager </h4>
-            <hr>
+        <div class="col-12 p-2">
+            <h4 class="text-center mb-4 mt-4"> Updations form Project Manager </h4>
+            
             {% for i in pro__up %}
             <p>Project :&nbsp;{{i.project_cu_id.project}}</p> 
             <p>Module ::&nbsp;{{i.project_cu_module}}</p> 
             <p>{{i.project_cu_descrip}}</p> 
+           
+            <p><span>{{i.project_cu_status}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{i.project_cu_start}} </p> 
+            {% if i.pdev_name %}
             <p>Developer:&nbsp;{{i.pdev_name}}</p> 
-            <p><span>{{i.project_cu_status}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{i.project_date}} </p> 
-            <form action="{% url 'TLproject_doc_emp_save' i.id %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <select id="" name="doc_empname" class="form-control ml-3 mt-2 text-light" required>
-                <option value=""></option>
-                {% for i in spa %}
-                <option value="{{i.id}}">{{i.fullname}}</option>
-                {% endfor %}
-            </select>
-            <input type="date" name="doc_start_date" id="due" class="drop form-control ml-3 mt-2 text-light" value='{{time|date:"Y-m-d"}}' required
-                style="border:1px solid #6C7293 ;color:#6C7293;">
-            <button type="submit" class="btn btn-success mt-3" >Update</button>
-            
+            {% else %}
+                <form action="{% url 'TLproject_doc_emp_save' i.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <select id="" name="doc_empname" class="form-control ml-3 mt-2 text-light" required>
+                    <option value=""></option>
+                    {% for i in spa %}
+                    <option value="{{i.id}}">{{i.fullname}}</option>
+                    {% endfor %}
+                </select>
+                <input type="date" name="doc_start_date" id="due" class="drop form-control ml-3 mt-2 text-light"  required
+                    style="border:1px solid #6C7293 ;color:#6C7293;">
+                <button type="submit" class="btn btn-success mt-3" >Update</button>
+                
 
-            </form>
+                </form>
+            {% endif %}
             <hr>
             {% endfor %}
            
         </div>
-        <div class="col-6 p-2">
-            <h4>Tester Correction
+        <div class="col-12 p-2">
+            <h4 class="text-center mb-3 mt-4">Tester Correction
             </h4>
-            <hr>
+           
             {% for i in pro_corr %}
             <p>Project :&nbsp;{{i.project_cu_id.project}}</p> 
             <p>Module ::&nbsp;{{i.project_cu_module}}</p> 
             <p>{{i.project_cu_descrip}}</p> 
             <p>Developer:&nbsp;{{i.pdev_name}}</p> 
             <p><span>{{i.project_cu_status}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{i.project_date}} </p> 
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                    <h6>Old Data</h6>
+                    <div class="card p-2 card_color ">
+                        {% if i.project_oldui %}
+                        <img src="{{i.project_oldui.url}}">
+                        <p class="p-2"><b>Desecription:</b>&nbsp;{{i.project_cu_olddescrip}}</p>
+                        {% endif %}
+                    </div>
+
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <h6>New Data</h6>
+                    <div class="card p-2 card_color ">
+                        {% if i.project_cu_newui %}
+                        <img src="{{i.project_cu_newui.url}}">
+                        <p class="p-2"><b>Desecription:</b>&nbsp;{{i.project_cu_newdescrip}}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
             <hr>
             {% endfor %}
         </div>

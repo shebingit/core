@@ -6,12 +6,22 @@
 <div class="row pt-3" style="background-color: black;">
   <div class="" style="font-size: 20px;font-weight: 600;color:#6C7293;">PROJECTS</div>
 </div>
+<div class="row mt-2 p-2">
+  <div class="col-lg-6 col-sm-12">
+    <a href="{% url 'docrequirements' proj.id %}" >
+      <span class="mdi mdi-book-open-page-variant btn btn-outline-primary px-2"> Requirements</span>
+    </a>
+  </div>
+  <div class="col-lg-6 col-sm-12 text-end">
+  <a href="{% url 'DEV_projrect_doc' proj.id %}" >
+    <span class="mdi mdi-tab-plus btn btn-outline-primary"> Add Report</span>
+  </a>
+  </div>
+</div>
 <div class="row mt-4">
   <div class="card">
     <div class="card">
-      <div class="text-end mt-2 p-2">
-        <a href="{% url 'DEV_projrect_doc' proj.id %}" class="btn btn-primary">Project Doc.Report</a>
-      </div>
+      
     <div class="card-body">
       
       <input type="text" class="form-control" id="search" placeholder="search...">
@@ -298,9 +308,17 @@
               <td style="color:white;">{{i.subtask.task}}</td>
               <td style="color:white;">{{i.subtask}}</td>
               <td style="color:white;">{{i.workdone}}</td>
-              <td class="text-info"><a href="{{i.files.url}}" download style="text-decoration:none;">
+              <td class="text-info">
+              {% if i.files %}
+                <a href="{{i.files.url}}" download style="text-decoration:none;">
                   <div class="badge badge-outline-primary">Download</div>
-                </a></td>
+                </a>
+                {% else %}
+                <a href="#"  style="text-decoration:none;">
+                  <div class="badge badge-outline-primary">Download</div>
+                </a>
+              {% endif %}
+              </td>
             </tr>
             {% endif %}
             {% endfor %}

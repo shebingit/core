@@ -235,8 +235,17 @@
                 </td>
                 <td class="text-light"><label name="workdone">{{i.workdone}}</label></td>
                 <td class="text-info"><a href="" style="text-decoration:none;">
-                    <div class="badge badge-outline-info"><a  style="text-decoration:none;" href ="{{i.files.url}}" download>Download</a></div>
-                  </a></td>
+                  {% if i.files %}
+                    <div class="badge badge-outline-info">
+                      <a  style="text-decoration:none;" href ="{{i.files.url}}" download>Download</a>
+                    </div>
+                  {% else %}
+                  <div class="badge badge-outline-info">
+                    <a  style="text-decoration:none;" href ="#">Download</a>
+                  </div>
+                  {% endif %}
+
+                </td>
               </tr>
 
               {%endif%}

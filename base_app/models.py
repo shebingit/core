@@ -236,6 +236,7 @@ class project(models.Model):
     enddate = models.DateField(
         auto_now_add=False, auto_now=False,  null=True, blank=True)
     files = models.FileField(upload_to='images/', null=True, blank=True)
+    uifile = models.FileField(upload_to='images/', null=True, blank=True)
     progress = models.CharField(max_length=100)
     user_reason = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(max_length=100, null=True, blank=True)
@@ -256,7 +257,7 @@ class project_taskassign(models.Model):
     tester = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
                                related_name='project_taskassign_tester', null=True, blank=True)
     description = models.TextField()
-  
+    projmodule=models.CharField(max_length=150, null=True, blank=True)
     task = models.CharField(max_length=200, null=True, blank=True)
     subtask = models.CharField(max_length=200, null=True, blank=True)
     startdate = models.DateField(
@@ -700,10 +701,15 @@ class project_module_assign(models.Model):
     project_name = models.ForeignKey(project, on_delete=models.SET_NULL,related_name='project_name', null=True, blank=True)
     module =models.CharField(max_length=255,null=True, blank=True)
     description = models.TextField()
+        
+class project_other_assign(models.Model):
+    othproject_name = models.ForeignKey(project, on_delete=models.SET_NULL,related_name='project_other_name', null=True, blank=True)
+    other_name =models.CharField(max_length=255,null=True, blank=True)
+    other_description = models.TextField()
 
 class project_table(models.Model):
     project = models.ForeignKey(project, on_delete=models.SET_NULL,related_name='project_table_name', null=True, blank=True)
-    module_name_id = models.CharField(max_length=255,null=True, blank=True)
+    module_name_id = models.IntegerField(default='0')
     description = models.TextField()        
     
     

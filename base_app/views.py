@@ -3456,8 +3456,11 @@ def BRadmin_profiledash(request):
         data = []
         queryset = user_registration.objects.filter(id=Adm_id)
 
+        tlde=designation.objects.get(designation='team leader')
+        d=designation.objects.get(designation='developer')
+        l=leave.objects.filter(to_date__gte=date.today())
        
-        count=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0').count()
+        count=user_registration.objects.filter(~Q(id__in=l.values_list('user_id', flat=True)),Q(designation_id=tlde.id) | Q(designation_id=d.id),status="active",work_status='0').count()
        
         for i in queryset:
             labels = [i.workperformance, i.attitude, i.creativity]
@@ -3477,8 +3480,12 @@ def BRadmin_Work_not_assign(request):
         else:
             return redirect('/')
         Adm = user_registration.objects.filter(id=Adm_id)
-        dev=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0')
         tlde=designation.objects.get(designation='team leader')
+        d=designation.objects.get(designation='developer')
+        l=leave.objects.filter(to_date__gte=date.today())
+       
+        dev=user_registration.objects.filter(~Q(id__in=l.values_list('user_id', flat=True)),Q(designation_id=tlde.id) | Q(designation_id=d.id),status="active",work_status='0')
+       
         pmde=designation.objects.get(designation='project manager')
         tl=user_registration.objects.filter(designation=tlde)
         pman=user_registration.objects.filter(designation=pmde)
@@ -3486,6 +3493,56 @@ def BRadmin_Work_not_assign(request):
         return render(request, 'BRadmin_Work_not_assign.html', {'Adm': Adm,'dev':dev,'tl':tl,'pman':pman,'req':req})
     else:
         return redirect('/')
+
+
+def BRadminleaveupdate(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        
+        if request.method =='POST':
+        
+            p = user_registration.objects.get(id=request.POST['pmname'])
+            t = user_registration.objects.get(id=request.POST['tlname'])
+            d = user_registration.objects.get(id=request.POST['devname'])
+            lea=leave()
+            lea.user=p
+            lea.from_date=date.today()
+            lea.to_date=date.today()
+            lea.reason='Work not Assign'
+            lea.days=1
+            lea.leave_status='full Day'
+            lea.save()
+
+            lea1=leave()
+            lea1.user=t
+            lea1.from_date=date.today()
+            lea1.to_date=date.today()
+            lea1.reason='Work not Assign'
+            lea1.days=1
+            lea1.leave_status='full Day'
+            lea1.save()
+            try:
+                req=WorkRequest.objects.get(wrk_develp=d,wrkreq_date=date.today())
+            except WorkRequest.DoesNotExist:
+                lea2=leave()
+                lea2.user=d
+                lea2.from_date=date.today()
+                lea2.to_date=date.today()
+                lea2.reason='Work not Assign'
+                lea2.days=1
+                lea2.leave_status='full Day'
+                lea2.save()
+            
+
+            return redirect('BRadmin_profiledash')
+
+    else:
+        return redirect('/')
+
 
 
 def BRadmin_employees(request):
@@ -5872,7 +5929,11 @@ def pmanager_dash(request):
             labels = [i.workperformance, i.attitude, i.creativity]
 
             data = [i.workperformance, i.attitude, i.creativity]
-        count=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0').count()
+        
+        l=leave.objects.filter(to_date__gte=date.today())
+       
+        count=user_registration.objects.filter(~Q(id__in=l.values_list('user_id', flat=True)),Q(designation_id=des.id) | Q(designation_id=des1.id),status="active",work_status='0').count()
+
         return render(request, 'pmanager_dash.html', {'pro': pro, "labels": labels, "data": data, 'le': le,'count':count})
     else:
         return redirect('/')
@@ -5887,8 +5948,12 @@ def pm_Work_not_assign(request):
         else:
            return redirect('/')
         pro = user_registration.objects.filter(id=prid)
-        dev=user_registration.objects.filter(Q(designation_id=6) | Q(designation_id=4),status="active",work_status='0')
         tlde=designation.objects.get(designation='team leader')
+        d=designation.objects.get(designation='developer')
+        l=leave.objects.filter(to_date__gte=date.today())
+       
+        dev=user_registration.objects.filter(~Q(id__in=l.values_list('user_id', flat=True)),Q(designation_id=tlde.id) | Q(designation_id=d.id),status="active",work_status='0')
+
         tl=user_registration.objects.filter(designation=tlde)
         req=WorkRequest.objects.filter(wrkreq_date=date.today())
         return render(request, 'projectmanager_work_not_assign.html',{'pro':pro,'dev':dev,'tl':tl,'req':req})
@@ -6002,6 +6067,7 @@ def projectmanager_assignproject(request):
             var.startdate=request.POST.get('sdate')
             var.enddate=request.POST.get('edate')
             var.worktype=request.POST.get('individual_work')
+            var.projmodule=''
             
             bb= datetime.strptime(var.startdate, '%Y-%m-%d').strftime('%d-%m-%Y')
             
@@ -6021,7 +6087,22 @@ def projectmanager_assignproject(request):
             new.save()
             v = request.POST.get('pname')
             em=user_registration.objects.get(id=v)
-            
+            em.projectmanager_id=prid
+            em.save()
+
+            up=request.POST.get('update')
+           
+            if up == '1':
+                updates=ProjectCorrectionUpdation()
+                updates.project_cu_module= request.POST['task']
+                updates.project_cu_descrip= request.POST.get('desc')
+                updates.project_cu_status='updation'
+                updates.project_cu_id = project.objects.get(id=request.POST.get('yyy'))
+                tlname= user_registration.objects.get(id=request.POST['pname'])
+                updates.ptl_name=tlname.fullname
+                updates.save()
+
+
             # subject = 'Greetings from iNFOX TECHNOLOGIES'
             # message = 'Congratulations,\n' \
             # 'You are assigned new project from iNFOX TECHNOLOGIES.\n' \
@@ -6038,6 +6119,26 @@ def projectmanager_assignproject(request):
         return render(request, 'projectmanager_assignproject.html', {'pro':pro,'spa':spa,'pvar':pvar,'tes':tes,'modules':modules})
     else:
         return redirect('/')
+
+
+@csrf_exempt
+def pmprojectmodule(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+       
+        else:
+            return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+
+        pid = request.GET.get('prid')
+        Desig=project_module_assign.objects.filter(project_name_id=pid)
+        return render(request,'pm_module_data.html',{'pro': pro,'Desig':Desig})
+
+    else:
+   
+        return redirect('/')
+        
 
 def projectmanager_projectstatus(request,id):
     if 'prid' in request.session:
@@ -6103,6 +6204,21 @@ def projectmanager_createproject(request):
             msg_success = "Project created successfully"
             return render(request, 'projectmanager_createproject.html',{'msg_success':msg_success})
         return render(request, 'projectmanager_createproject.html',{'pro':mem})
+    else:
+        return redirect('/')
+
+def uiupdate(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+          
+        mem = user_registration.objects.filter(id=prid)  
+        if request.method =='POST':
+            var = project.objects.get(id=request.POST.get('proj'))
+            var.uifile=request.FILES.get('uifile')
+            var.save()
+            return redirect('projectmanager_currentdetail',var.id)
+
     else:
         return redirect('/')
 
@@ -6326,30 +6442,6 @@ def project_manager_doc_module(request,pmdoc_md_id):
     else:
         return redirect('/')
 
-# Document correction or Update mark and assign page 
-def pm_doc_md_corr_upd(request,pmdoc_md_crup_id,coup):
-    if 'prid' in request.session:
-        if request.session.has_key('prid'):
-            prid = request.session['prid']
-        else:
-           return redirect('/')
-        pro = user_registration.objects.filter(id=prid).order_by("-id")
-        pdoc= PM_ProjectDocument.objects.get(id=pmdoc_md_crup_id)
-        proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
-        
-        desi_id = user_registration.objects.get(id=prid)
-        d = designation.objects.get(designation="team leader")
-        proj_task = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= d.id)
-       
-        
-        if coup == 0:
-            proj_doc_cu=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='correction')
-            return render(request, 'projectManager_project_corr_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc,'proj_task':proj_task,'proj_doc_cu':proj_doc_cu})
-        else:
-            proj_doc_cu=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='updation')
-            return render(request, 'projectManager_project_upd_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc,'proj_task':proj_task,'proj_doc_cu':proj_doc_cu})
-    else:
-        return redirect('/')
 
 # Document correction or Updation add
 def pm_doc_corre_updattion(request,pmdoc_pid,pmdoc_cu):
@@ -7782,7 +7874,11 @@ def TLdashboard(request):
         for i in queryset:
             labels = [i.workperformance, i.attitude, i.creativity]
             data = [i.workperformance, i.attitude, i.creativity]
-        count=user_registration.objects.filter(tl_id=user_id.id,status="active",work_status='0').count()
+
+        l=leave.objects.filter(to_date__gte=date.today())
+       
+        
+        count=user_registration.objects.filter(~Q(id__in=l.values_list('user_id', flat=True)),tl_id=user_id.id,status="active",work_status='0').count()
         return render(request, 'TLdashboard.html', {'labels': labels, 'data': data, 'mem': mem, 'le': le,'count':count,
          'previous_sal_main':previous_sal_main, 'this_month_sal_main':this_month_sal_main, 'last_day_of_prev_month':last_day_of_prev_month, 'start_day_of_prev_month':start_day_of_prev_month })
     else:
@@ -7812,7 +7908,10 @@ def dev_Work_not_assign(request):
         mem = user_registration.objects.filter(id=tlid)
         tli =user_registration.objects.get(id=tlid)
         tl=user_registration.objects.filter(id=tli.id)
-        dev=user_registration.objects.filter(tl_id=tli.id,status="active",work_status='0')
+      
+        l=leave.objects.filter(to_date__gte=date.today())
+       
+        dev=user_registration.objects.filter(~Q(id__in=l.values_list('user_id', flat=True)),tl_id=tli.id,status="active",work_status='0')
         req=WorkRequest.objects.filter(wrkreq_tl_id=tlid,wrkreq_date=date.today())
         return render(request, 'tl_worknot_assign.html',{'mem':mem,'tl':tl,'dev':dev,'req':req})
     else:
@@ -7902,7 +8001,7 @@ def Tl_ptoject_doc(request,tlproj_id):
         mem = user_registration.objects.filter(id=tlid)
         tl = user_registration.objects.get(id=tlid)
         spa = user_registration.objects.filter(tl_id=tl.id, status="active")
-        pro_corr=ProjectCorrectionUpdation.objects.filter(project_cu_id_id=tlproj_id,ptl_name=tl.fullname,project_cu_status='correction')
+        pro_corr=ProjectCorrectionUpdation.objects.filter(project_cu_id_id=tlproj_id,ptl_name=tl.fullname,project_cu_status='correction').order_by('-id')
         pro__up=ProjectCorrectionUpdation.objects.filter(project_cu_id_id=tlproj_id,ptl_name=tl.fullname,project_cu_status='updation')
         return render(request, 'TLproject_doc.html',{'mem':mem,'pro_corr':pro_corr,'pro__up':pro__up,'spa':spa})
     else:
@@ -8070,6 +8169,8 @@ def tlgivetask(request):
             var.save()
             v = request.POST.get('ename')
             em=user_registration.objects.get(id=v)
+            em.projectmanager_id=dept_id.projectmanager_id
+            em.save()
 
             user=user_registration.objects.get(id=request.POST['ename']) #developer work status change
             user.work_status='1'
@@ -8495,12 +8596,13 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
             usertsid = request.session['usernametsid']
         else:
            return redirect('/')
+       
         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
         if request.method == 'POST':
             task_verify=request.POST['verify_status']
             delay_reson=request.POST['tsdelay_reson']
-            p1=request.POST['doc_pm_cumodule_name']
-            p2=request.POST['doc_pm_cumodule_dese']
+           
+           
     
         prj_task=project_taskassign.objects.get(id=ts_prj_task_verify)
         prj_task.status=task_verify
@@ -8509,9 +8611,20 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
 
 
         if task_verify == 'correction':
+            t=tester_status()
+            t.tester=user_registration.objects.get(id=usertsid) 
+            t.project=prj_task.project
+            t.task=prj_task
+            t.subtask=prj_task
+            t.date=date.today()
+            t.workdone=request.POST['doc_pm_cumodule_dese']
+            t.files= request.FILES.get('files')
+            t.progress=0
+            t.save()
+
             proj_doc_cu=ProjectCorrectionUpdation()
-            proj_doc_cu.project_cu_module=p1
-            proj_doc_cu.project_cu_descrip=p2
+            proj_doc_cu.project_cu_module=prj_task.task
+            proj_doc_cu.project_cu_descrip=request.POST['doc_pm_cumodule_dese']
             proj_doc_cu.pdev_name=prj_task.developer.fullname
             proj_doc_cu.ptl_name=prj_task.tl.fullname
             proj_doc_cu.project_cu_id=prj_task.project
@@ -8519,10 +8632,11 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
             proj_doc_cu.project_cu_status='correction'
             proj_doc_cu.save()
 
+
         event = Event.objects.filter(start_time__range=(prj_task.submitted_date,datetime.now().date())).count()
         delys=c_date - prj_task.submitted_date
         delys=delys.days - event
-        print(delys)
+      
         if delys > 0:
             verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,
                                                 ts_delay=delys,ts_tester=prj_task.tester,ts_task_status=task_verify,ts_task_sub_date=prj_task.submitted_date)
@@ -9266,11 +9380,34 @@ def DEV_projrect_doc(request,dev_prjdoc_id):
     dev = user_registration.objects.filter(id=devid)
     dev1 = user_registration.objects.get(id=devid)
     proj=project.objects.get(id=dev_prjdoc_id)
-    prj_module=project_module_assign.objects.filter(project_name=proj)
+    task=project_taskassign.objects.filter(project=proj,developer=dev1).last()
+
+    if task.status == 'submitted':
+        prj_module=project_module_assign.objects.filter(project_name=proj)
+        dev = user_registration.objects.filter(id=devid)
+        try:
+            prj_doc=PM_ProjectDocument.objects.get(doc_project_id=proj)
+        except PM_ProjectDocument.DoesNotExist:
+            return redirect('DEVprojects')
+        prj_doc_crr_up=ProjectCorrectionUpdation.objects.filter(project_cu_id=proj,pdev_name=dev1.fullname).order_by('-id')
+        return render(request, 'DEV_project_doc.html', {'dev': dev,'proj':proj,'prj_module':prj_module,'prj_doc':prj_doc,'prj_doc_crr_up':prj_doc_crr_up})
+    else:
+       return redirect('DEVprojects')
+
+
+def docrequirements(request,dev_prjredoc_id):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+    else:
+       return redirect('/')
     dev = user_registration.objects.filter(id=devid)
-    prj_doc=PM_ProjectDocument.objects.get(doc_project_id=proj)
-    prj_doc_crr_up=ProjectCorrectionUpdation.objects.filter(project_cu_id=proj,pdev_name=dev1.fullname)
-    return render(request, 'DEV_project_doc.html', {'dev': dev,'proj':proj,'prj_module':prj_module,'prj_doc':prj_doc,'prj_doc_crr_up':prj_doc_crr_up})
+    prj=project.objects.get(id=dev_prjredoc_id)
+    proj_md=project_module_assign.objects.filter(project_name=prj)
+    proj_table=project_table.objects.filter(project=prj)
+    proj_other=project_other_assign.objects.filter(othproject_name=prj)
+    return render(request, 'DEV_docrequirements.html', {'dev': dev,'prj':prj,'proj_md':proj_md,'proj_table':proj_table,'proj_other':proj_other})
+    
+
 
 
 def DEV_project_FB(request,dev_prj_fb):
@@ -9305,7 +9442,8 @@ def DEV_corr_up(request,dev_prj_cu_id):
         edate=parse_date(p2)
         work_days=edate - sdate
         work_days=work_days.days
-      
+        if work_days == 0:
+            work_days=1
        
 
     corre_up=ProjectCorrectionUpdation.objects.get(id=dev_prj_cu_id)
@@ -15784,6 +15922,29 @@ def pm_createmodule(request):
         return redirect('/')
 
 
+def pm_createother(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        project_data = project.objects.filter(projectmanager_id=prid)
+       
+        
+        if request.method =='POST':
+            var = project_other_assign()
+            var.othproject_name = project.objects.get(id=int(request.POST['project_id']))
+            var.other_name = request.POST['other']
+            var.other_description = request.POST['otherdescription']
+            var.save()
+            msg_success = "Other Details created"
+            return render(request, 'pm_createother.html',{'pro':pro,'project_data':project_data,'msg_success':msg_success})
+        return render(request, 'pm_createother.html',{'pro':pro,'project_data':project_data})
+    else:
+        return redirect('/')
+
+
 def pm_createtable(request):
     if 'prid' in request.session:
         if request.session.has_key('prid'):
@@ -16328,8 +16489,14 @@ def current_modules(request,id):
         pro = user_registration.objects.filter(id=prid)
         data = project_module_assign.objects.filter(project_name=id)
         tab = project_table.objects.filter(project=id)
+        other = project_other_assign.objects.filter(othproject_name=id)
         devtab = ProjectDocModels.objects.filter(doc_project_md_id=id)
-        return render(request,'current_modules.html',{'pro': pro,'data': data,'tab':tab,'devtab':devtab})
+        devview = ProjectDocViews.objects.filter(doc_project_v=id)
+        devlb = ProjectDoclibraryies.objects.filter(doc_project_lb=id)
+        devoth = ProjectDocother.objects.filter(doc_project_oth=id)
+        devpage = ProjectDochtmlpages.objects.filter(doc_project_hp=id)
+        return render(request,'current_modules.html',{'pro': pro,'data': data,'tab':tab,'other':other,
+        'devtab':devtab,'devview':devview,'devlb':devlb,'devoth':devoth,'devpage':devpage})
     else:
         return redirect('/')
         

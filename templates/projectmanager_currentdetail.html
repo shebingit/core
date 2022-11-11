@@ -96,7 +96,14 @@
             </div>
           </div>
         </div>
-
+       <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal{{display.id}}">UI Design Upload</button>
+       {% if display.uifile %}
+       <div class="card p-3 m-2">
+        <h5 class="text-center"> Project UI Design</h5>
+        <br>
+        <img src="{{display.uifile.url}}">
+       </div>
+       {% endif %}
       </div>
     </div>
   </div>
@@ -181,6 +188,53 @@
 
 <!-- page-body-wrapper ends -->
 </div>
+
+
+
+
+<!-- Modal -->
+<div class="modal" id="myModal{{display.id}}">
+    <div class="modal-dialog">
+        <div class="col-12 grid-margin stretch-card bg-dark text-light modal-content">
+        <!-- Modal Header -->
+            <form action="{% url 'uiupdate' %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                {%csrf_token%}
+                    <div class="modal-header">
+                        <h4 class="modal-title">Upload UI</h4>
+                        <button type="submit" style="color: white" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="row">
+                        <div class="col-12 grid-margin stretch-card">
+                            <div class="card" >
+                                <div class="card-body">
+                                    
+                                    <div class="form-group row">
+                                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">UI Design</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control text-light" name="proj" required  value="{{display.id}}" hidden/>
+                                            <input type="file" name="uifile" class="form-control text-light" required>
+                                        </div>
+                                    </div>
+                                        
+                                        <div class="row">
+                                            <center>
+                                            <div class="col-sm-5"></div>
+                                            <div class="col-sm-7" class="pull-right">
+                                                <button type="submit" class="btn btn-outline-primary btn-icon-text"><i class="mdi mdi-refresh btn-icon-prepend"></i>Update</button>
+                                            </div>
+                                          </center>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
 
 <!-- container-scroller -->
 <!-- plugins:js -->

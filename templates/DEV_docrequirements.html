@@ -1,0 +1,117 @@
+{%extends 'devindex.html'%}
+{%load static%}
+{%block content%}
+<style>
+    .container
+    {
+        background-color: #fff;
+        color: #000;
+    }
+</style>
+
+<div class="container p-3 ">
+    <h3 class="text-center text-primary">{{prj.project}}</h3>
+    <div class="row text-center mt-4">
+        <div class="col-lg-4 col-sm-12"><p>Start Date :&nbsp;{{prj.startdate}}</p></div>
+        <div class="col-lg-4 col-sm-12"><p>End Date :&nbsp;{{prj.enddate}}</p></div>
+        <div class="col-lg-4 col-sm-12">
+            {% if prj.uifile %}
+            <p>UI Design:&nbsp;<a href="{{prj.uifile.url}}" class="btn btn-outline-warning" download="{{prj.uifile.url}}"><span class="mdi mdi-folder-outline"></span></a></p>
+            {% endif%}
+            </div>
+    </div>
+    <h5 class="mt-5 mb-5">{{prj.description}}</h5>
+    
+    <hr>
+
+    <h5 class="text-center mb-3"> Requirement</h5>
+    <div class="table-responsive">
+     
+
+        <table class="table table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Head</th>
+                <th scope="col">Desecription</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+                {% for i in proj_md %}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{i.module}}</td>
+                <td>{{i.description}}</td>
+               
+              </tr>
+              {% endfor %}
+              
+            </tbody>
+        </table>
+
+    </div>
+    <h5 class="text-center mt-5 mb-3"> Tables</h5>
+    <div class="table-responsive">
+  
+
+    <table class="table table-bordered ">
+        <thead class="table-dark overflow-auto">
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Table</th>
+            <th scope="col">Desecription</th>
+            
+          </tr>
+        </thead>
+        <tbody class="overflow-auto">
+            {% for i in proj_table %}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td> {% for j in proj_md %}
+                {% if j.id == i.module_name_id %}
+                {{j.module}}
+                {% endif %}
+                {% endfor %}
+            </td>
+            <td>{{i.description}}</td>
+           
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+    </table>
+    </div>
+    <h5 class="text-center mt-5 mb-3"> Other Details</h5>
+    <div class="table-responsive">
+     
+
+      <table class="table table-bordered">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Head</th>
+              <th scope="col">Desecription</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+              {% for i in proj_other %}
+            <tr>
+              <th scope="row">{{forloop.counter}}</th>
+              <td>{{i.other_name}} </td>
+              <td>{{i.other_description}}</td>
+             
+            </tr>
+            {% endfor %}
+            
+          </tbody>
+        </table>
+    </div>
+  
+
+
+</div>
+
+
+{% endblock %}

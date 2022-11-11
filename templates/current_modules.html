@@ -75,6 +75,44 @@
     </div>
     <div class="col-sm-6 grid-margin">
         <div class="card" style="height: auto">
+            <h4 class="card-title mt-3 ml-4">Other</h4>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+                <div class="input-group input-group-sm ">
+                    <input type="text" class="form-control text-white" id="myInputs" onkeyup="myFunction()"
+                        placeholder="Search . . ." style="border: green" />
+                </div>
+            </form>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" >
+                            <thead>
+                                <tr>
+                                    <th class="text-white ">Head </th>
+                                    <th class="text-white "> Description</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="myTables">
+                                {% for i in other %}
+                                <tr>
+                                    <td>{{i.other_name}}</td>
+                                    <td>{{i.other_description}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </a>
+    </div>
+    
+    </div>
+    <hr>
+    <div class="col-sm-6 grid-margin">
+        <div class="card" style="height: auto">
             <h4 class="card-title mt-3 ml-4">Developer Created Tables</h4>
             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
             <form>
@@ -88,7 +126,8 @@
                         <table class="table" >
                             <thead>
                                 <tr>
-                                    <th class="text-white ">Tables</th>
+                                    <th class="text-white ">Developer Name</th>
+                                    <th class="text-white ">Table Name</th>
                                     <th class="text-white ">Disecription</th>
                                     
                                 </tr>
@@ -96,9 +135,10 @@
                             <tbody id="myTables">
                                 {% for i in devtab %}
                                 <tr>
-                                    
+                                    <td>{{i.doc_mduser}}</td>
                                     <td>{{i.doc_project_mdname}}</td>
                                     <td>{{i.doc_project_dise_md}}</td>
+                                   
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -109,6 +149,166 @@
             </div>
         </a>
     </div>
+   
+    </div>
+    <div class="col-sm-6 grid-margin">       
+        <div class="card" style="height: auto">
+            <h4 class="card-title mt-3 ml-4">Developer Created functions</h4>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+                <div class="input-group input-group-sm ">
+                    <input type="text" class="form-control text-white" id="myInputs" onkeyup="myFunction()"
+                        placeholder="Search . . ." style="border: green" />
+                </div>
+            </form>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" >
+                            <thead>
+                                <tr>
+                                    <th class="text-white ">Developer Name</th>
+                                    <th class="text-white ">Fuction Name</th>
+                                    <th class="text-white ">Disecription</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="myTables">
+                                {% for i in devview %}
+                                <tr>
+                                    <td>{{i.doc_vuser}}</td>
+                                    <td>{{i.doc_project_vname}}</td>
+                                    <td>{{i.doc_project_vdise}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </a>
+    </div>
+    </div>
+    <div class="col-sm-6 grid-margin">       
+        <div class="card" style="height: auto">
+            <h4 class="card-title mt-3 ml-4">Developer Created Libraries</h4>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+                <div class="input-group input-group-sm ">
+                    <input type="text" class="form-control text-white" id="myInputs" onkeyup="myFunction()"
+                        placeholder="Search . . ." style="border: green" />
+                </div>
+            </form>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" >
+                            <thead>
+                                <tr>
+                                    <th class="text-white ">Librarie Name</th>
+                                    <th class="text-white ">Disecription</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="myTables">
+                                {% for i in devlb %}
+                                <tr>
+                                    <td>{{i.doc_lbuser}}</td>
+                                    <td>{{i.doc_project_lbname}}</td>
+                                    <td>{{i.doc_project_lbdise}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 grid-margin">       
+        <div class="card" style="height: auto">
+            <h4 class="card-title mt-3 ml-4">Developer Created Other</h4>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+                <div class="input-group input-group-sm ">
+                    <input type="text" class="form-control text-white" id="myInputs" onkeyup="myFunction()"
+                        placeholder="Search . . ." style="border: green" />
+                </div>
+            </form>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" >
+                            <thead>
+                                <tr>
+                                    <th class="text-white ">Developer Name</th>
+                                    <th class="text-white ">Other</th>
+                                    <th class="text-white ">Disecription</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="myTables">
+                                {% for i in devoth %}
+                                <tr>
+                                    <td>{{i.doc_othuser}}</td>
+                                    <td>{{i.doc_project_othname}}</td>
+                                    <td>{{i.doc_project_othdise}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 grid-margin">       
+        <div class="card" style="height: auto">
+            <h4 class="card-title mt-3 ml-4">Developer Created Pages</h4>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form>
+                <div class="input-group input-group-sm ">
+                    <input type="text" class="form-control text-white" id="myInputs" onkeyup="myFunction()"
+                        placeholder="Search . . ." style="border: green" />
+                </div>
+            </form>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" >
+                            <thead>
+                                <tr>
+                                    <th class="text-white ">Developer Name</th>
+                                    <th class="text-white ">Page</th>
+                                    <th class="text-white ">Disecription</th>
+                                    <th class="text-white ">Image</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="myTables">
+                                {% for i in devpage %}
+                                <tr>
+                                    <td>{{i.doc_hpuser}}</td>
+                                    <td>{{i.doc_project_hpname}}</td>
+                                    <td>{{i.doc_project_hpdise}}</td>
+                                    <td>
+                                        {% if i.doc_project_html_page %}
+                                        <div class="card">
+                                           <a href="{{i.doc_project_html_page.url}}"><img src="{{i.doc_project_html_page.url}}"></a> 
+                                        </div>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+   
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

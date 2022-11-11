@@ -736,7 +736,9 @@ urlpatterns = [
 
     #nirmal
     re_path(r'^projectmanager_assignproject/', views.projectmanager_assignproject, name="projectmanager_assignproject"),
-
+    path('pmprojectmodule', views.pmprojectmodule, name='pmprojectmodule'),
+    path('uiupdate', views.uiupdate, name='uiupdate'),
+    
     #jensin
     re_path(r'^projectmanager_createproject/', views.projectmanager_createproject, name="projectmanager_createproject"),
 
@@ -1298,6 +1300,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     re_path(r'^BRadmin_leaveapprovedstatus/(?P<id>\d+)/$',views.BRadmin_leaveapprovedstatus,name="BRadmin_leaveapprovedstatus"),
     re_path(r'^BRadmin_rejectedstatus/(?P<id>\d+)/$',views.BRadmin_rejectedstatus,name="BRadmin_rejectedstatus"),
     path('BRadmin_Work_not_assign', views.BRadmin_Work_not_assign, name='BRadmin_Work_not_assign'),
+    path('BRadminleaveupdate', views.BRadminleaveupdate, name='BRadminleaveupdate'),
     
     # re_path(r'^accounts_account_salary/$',views.accounts_account_salary,name="accounts_account_salary"),
     # re_path(r'^accounts_accout_salary_slip/(?P<id>\d+)/$',views.accounts_accout_salary_slip,name="accounts_accout_salary_slip"),
@@ -1407,6 +1410,8 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     re_path(r'^BRadmin_leave_details/$', views.BRadmin_leave_details, name='BRadmin_leave_details'),
     re_path(r'^pm_projectcards/$', views.pm_projectcards, name='pm_projectcards'),
     re_path(r'^pm_createmodule/$', views.pm_createmodule, name='pm_createmodule'),
+    path('pm_createother', views.pm_createother, name='pm_createother'),
+
     re_path(r'^pm_createtable/$', views.pm_createtable, name='pm_createtable'),
     re_path(r'^pm_module_data/$', views.pm_module_data, name='pm_module_data'),
     re_path(r'^pm_projectview/$', views.pm_projectview, name='pm_projectview'),
@@ -1630,7 +1635,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    path('projectManager_project_document', views.projectManager_project_document, name='projectManager_project_document'),
    path('project_manager_doc_start/<int:pmdoc_id>', views.project_manager_doc_start, name='project_manager_doc_start'),
    path('project_manager_doc_module/<int:pmdoc_md_id>', views.project_manager_doc_module, name='project_manager_doc_module'),
-   path('pm_doc_md_corr_upd/<int:pmdoc_md_crup_id>/<int:coup>', views.pm_doc_md_corr_upd, name='pm_doc_md_corr_upd'),
+   
    path('pm_doc_corre_updattion/<int:pmdoc_pid>/<int:pmdoc_cu>', views.pm_doc_corre_updattion, name='pm_doc_corre_updattion'),
    path('pm_doc_complete/<int:pmdoc_complete>', views.pm_doc_complete, name='pm_doc_complete'),
    path('projectmanager_completedoc/<int:pm_comp_doc>', views.projectmanager_completedoc, name='projectmanager_completedoc'),
@@ -1652,6 +1657,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
   #************************** Develper project document section **************
   path('DEV_projrect_doc/<int:dev_prjdoc_id>', views.DEV_projrect_doc, name='DEV_projrect_doc'),
+  path('docrequirements/<int:dev_prjredoc_id>', views.docrequirements, name='docrequirements'),
   path('DEV_project_FB/<int:dev_prj_fb>', views.DEV_project_FB, name='DEV_project_FB'),
   path('DEV_corr_up/<int:dev_prj_cu_id>', views.DEV_corr_up, name='DEV_corr_up'),
   path('DEV_project_doc_daily_doc_add/<int:DEV_pdocdaily>', views.DEV_project_doc_daily_doc_add, name='DEV_project_doc_daily_doc_add'),

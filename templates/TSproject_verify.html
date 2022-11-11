@@ -7,7 +7,7 @@
   <div class="col-12 mt-4  grid-margin">
     <div class="card">
       <div class="card-body">
-        <form action="{% url 'TSproject_status_confirm' pts.id %}" method="post">
+        <form action="{% url 'TSproject_status_confirm' pts.id %}" enctype="multipart/form-data" method="post">
             {% csrf_token %}
             <h5 class="text-center mb-3">Task Name - &nbsp;{{pts.task}}</h5>
             <h6 class="mb-3">Team Leader -  &nbsp;{{pts.tl.fullname}} </h6>
@@ -24,21 +24,16 @@
             {% else %}
             <textarea class="form-control mb-3 mt-3" name="tsdelay_reson" hidden>No Data</textarea>
             {% endif %}
-            <div class="resources" style=" display: none;">
-              <label>Select Module and Correction Desecription</label>
+            <div class="resources mb-4" style=" display: none;">
+              <label> Correction Desecription</label>
                     
-                    <div class="input-group p-3 m-2">
-                        <select  class="form-control"name="doc_pm_cumodule_name"  style="background-color:#434a54;border:none; color: #fff;">
-                            <option selected class="p-2 m-2">Select Module</option>
-                            {% for i in proj %}
-                            <option class="p-2 m-2" value="{{i.module}}">{{i.module}}</option>
-                            {% endfor %}
-                            
-                        </select>
-                    </div>
+                   
                     <div class="input-group p-3 m-2">
                         <textarea class="form-control" name="doc_pm_cumodule_dese"    style=" color: #fff; height:150px;">Description !</textarea>
                     </div>
+                    <div class="input-group p-3 m-2">
+                      <input type="file" class="form-control" name="files">
+                  </div>
                     <br>
             </div>
             <button type="submit" class="btn btn-outline-success">Update</button>

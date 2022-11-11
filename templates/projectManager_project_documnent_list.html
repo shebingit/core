@@ -75,7 +75,7 @@
                   <th>Doc.Start Date</th>
                   <th>Project Details</th>
                  
-                  <th>Updation</th>
+        
                   <th>Project Document</th>
                   <th>Desecription</th>
                   <th>Correction</th>
@@ -110,8 +110,8 @@
                       <td>{{i.doc_project_currentdate|date:'d-m-Y'}}</td>
                       {% if i.doc_status == '1' %}
                         <td><a class="" href="{% url 'project_manager_doc_module' i.id %}" style="cursor:pointer"><i class="mdi mdi-book-multiple icon"></i></a>View</td>
-                        <!--<td><a class="text-danger " href="{% url 'pm_doc_md_corr_upd' i.id 0 %}" style="cursor:pointer"><i class="mdi mdi-plus-circle-outline icon "></i></a></td>-->
-                        <td><a class="text-success" href="{% url 'pm_doc_md_corr_upd' i.id 1 %}" style="cursor:pointer"><i class="mdi mdi-plus-circle-outline icon"></i></a></td>
+                        
+                       
                         <td>
                          
                           <a data-toggle="modal" data-target="#myModal{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i></a>
