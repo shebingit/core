@@ -33,6 +33,8 @@
     {
         font-size: 15px;
     }
+   
+    
     .answer1 { display:none; }
     .answer2 { display:none; }
     .answer3 { display:none; }
@@ -74,6 +76,65 @@
             </div>
             <br>
             <div class="card p-2">
+                <h3 class="text-center text-primary mt-2">Client Requirements</h3>
+                <div class="card-body">
+                    {% for i in proj %}
+                    <h4 class="p-2">{{i.module}}</h4>
+                    <p class="pl-3">&#9830;&nbsp;{{i.description}}</p>
+                   {% endfor %}
+                   
+                </div>
+                <h5 class="text-center text-primary mt-2">Tables</h5>
+                <table class="table table-responsive">
+                    <thead class="table-dark">
+                        
+                      <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Table</th>
+                        <th scope="col">Desecription</th>
+                       
+                      </tr>
+                     
+                    </thead>
+                    <tbody>
+                        {% for i in pro_table %}
+                      <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{i.}}</td>
+                        <td>{{i.description}}</td>
+                       
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  <br>
+
+                  <h5 class="text-center text-primary mt-2">Other Details</h5>
+                <table class="table table-responsive">
+                    <thead class="table-dark">
+                        
+                      <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Table</th>
+                        <th scope="col">Desecription</th>
+                       
+                      </tr>
+                     
+                    </thead>
+                    <tbody>
+                        {% for i in poj_other %}
+                      <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{i.other_name}}</td>
+                        <td>{{i.other_description}}</td>
+                       
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+            </div>
+            <br>
+            <div class="card p-2">
                 <h3 class="text-center text-primary mt-2">Developers and Team leaders Worked in &nbsp;&nbsp;{{pdoc.doc_project_name}}</h3>
                 <div class="card-body">
                     {% for i in devp %}
@@ -87,12 +148,6 @@
             </div>
             <hr>
          
-            <h3 class="text-center text-primary mt-4">Module and Disecriptions </h3>
-            {% for i in proj %}
-                <h4 class="p-2">{{i.module}}</h4>
-                <p class="pl-3">&#9830;&nbsp;{{i.description}}</p>
-            {% endfor %}
-           <hr>
 
            <div class="row">
             <h3 class="text-center text-primary mb-4">Project Details </h3>

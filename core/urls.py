@@ -37,6 +37,7 @@ urlpatterns = [
     re_path(r'^new_team1/$', views.new_team1, name='new_team1'),
      path('new_batch',views.new_batch, name='new_batch'),
      path('team_trainee/<int:tm_tnr>/',views.team_trainee, name='team_trainee'),
+     path('trainee_delete/<int:tm_trainee>/',views.trainee_delete, name='trainee_delete'),
     re_path(r'^newteamcreate/$', views.newteamcreate, name='newteamcreate'),
      path('newbatchcreate',views.newbatchcreate, name='newbatchcreate'), 
     re_path(r'^teamdelete/$', views.teamdelete, name='teamdelete'),
@@ -45,6 +46,7 @@ urlpatterns = [
       path('batchudate',views.batchudate, name='batchudate'), 
       path('traineupdate',views.traineupdate, name='traineupdate'), 
     re_path(r'^submit/$', views.submit, name='submit'),
+        path('trainee_submit/<int:tr_sub_id>/',views.trainee_submit, name='trainee_submit'),
     re_path(r'^reportedissue/$', views.reportedissue, name='reportedissue'),
     re_path(r'^reportissuetrainers/$', views.reportissuetrainers,
             name='reportissuetrainers'),
@@ -273,10 +275,13 @@ urlpatterns = [
 
     re_path(r'^trainee_reported_issue/$', views.trainee_reported_issue,
             name='trainee_reported_issue'),
+         path('trainee_given_feedback', views.trainee_given_feedback, name='trainee_given_feedback'),      
     re_path(r'^trainee_report_reported/$', views.trainee_report_reported,
             name='trainee_report_reported'),
+     path('trainee_feedbacks', views.trainee_feedbacks, name='trainee_feedbacks'),        
     re_path(r'^trainee_report_issue/$', views.trainee_report_issue,
             name='trainee_report_issue'),
+       path('trainee_give_feedback', views.trainee_give_feedback, name='trainee_give_feedback'),         
     re_path(r'^trainee_applyleave_form/$', views.trainee_applyleave_form,
             name='trainee_applyleave_form'),
 
@@ -1707,6 +1712,9 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 #project
     path('Audit_project>', views.Audit_project, name='Audit_project'),
     path('Audit_project_details/<int:audit_pro_id>', views.Audit_project_details, name='Audit_project_details'),
+
+# Action Taken
+ path('Audit_action_taken>', views.Audit_action_taken, name='Audit_action_taken'),
     
 
 

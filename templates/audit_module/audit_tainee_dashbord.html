@@ -227,20 +227,9 @@
 
 
 <br>
-<div class="" style="max-height: 250px">
+<div class="mb-5" style="max-height: 250px">
     <div class="row">
-        <div class="col-lg-6 col-sn-12">
-            <div class="card p-3">
-               <div class="card-head" ><h5 class="text-center"> Training Period</h5></div>
-               <div class="card body p-2 mt-2" style="border:none ; outline:none;">
-               <p>Training Starting Date:</p>
-               <p>Training Ending Date:</p>
-               <p>Extension Date:</p>
-               <p>Extension Days:</p>
-            </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-sn-12">
+        <div class="col-lg-12 col-sn-12">
             <a href="{% url 'audit_probation' traine_tainer_db.id %}" style="text-decoration: none">
                 <h6 class="mb-4" style="color:white;">Probation</h6>
                 <hr>
@@ -257,14 +246,27 @@
             </a>
 
         </div>
-    </div>
-   
-   
+        <div class="card-head" ><h5 class="text-center"> Training Period</h5></div>
+        {% for i in tm %}
+        <div class="col-lg-4 col-sn-12">
+            <div class="card p-3">
+               <div class="card body p-2 mt-2" style="border:none ; outline:none;">
+                    <p>Training Starting Date:&nbsp;{{i.tr_start_date}}</p>
+                    <p>Training Ending Date:&nbsp;{{i.tr_end_date}}</p>
+                    <p>Extension Date:</p>
+                    <p>Extension Days:</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    
+        
+    </div>  
 </div>
 
 
-<br>
-<div class="form-check mt-3 pl-3">
+<br><br><br>
+<div class="form-check mt-5 pl-3">
     <input class="form-check-input" type="checkbox" id="check1" name="check1" value="1" onchange="valueChanged()" checked >
     <label class="form-check-label"><h4>Training</h4></label>
 </div>
@@ -613,14 +615,14 @@
                         </thead>
                         <tbody id="myTable">
                             
-                            {% for i in fb_from %}
+                            {% for i in fbfrom %}
                                 
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
                                 <td> {{i.fb_date|date:"d-m-Y"}}</td>
                                 <td>{{i.fb_to}}</td>
-                                <td>{{i.fb_desecri}}</td>
+                                <td>{{i.fb}}</td>
                                 
                                
                                 {% endfor %}
@@ -654,14 +656,14 @@
                         </thead>
                         <tbody id="myTable">
                             
-                            {% for i in fb_to %}
+                            {% for i in fbto %}
                                 
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
                                 <td> {{i.fb_date|date:"d-m-Y"}}</td>
                                 <td>{{i.fb_from}}</td>
-                                <td>{{i.fb_desecri}}</td>
+                                <td>{{i.fb}}</td>
                                 
                                
                                 {% endfor %}

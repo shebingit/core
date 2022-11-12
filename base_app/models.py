@@ -477,14 +477,7 @@ class trainer_task_test(models.Model):
         auto_now_add=True, auto_now=False,  null=True, blank=True)
 
 
-class trainee_trainerfeedback(models.Model):
-    fb_from = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
-                             related_name='fbtrainer', null=True, blank=True)
-    fb_to = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
-                             related_name='fbtrainee', null=True, blank=True)
-    fb_desecri=  models.TextField()
-    fb_date = models.DateField(
-        auto_now_add=True, auto_now=False,  null=True, blank=True)
+
 
 
 class topic(models.Model):
@@ -951,3 +944,18 @@ class Projectmanagerworkassign(models.Model):
     pm_project_task=models.ForeignKey(project_taskassign,on_delete=models.CASCADE,related_name='pm_prtask',null=True,blank=True)
     assing_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
     pm_task_status=models.CharField(max_length=200,null=True, blank=True,default='')
+
+class Feedbacks(models.Model):
+    fb_from=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='fb_tri',null=True,blank=True)
+    fb_to=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='fb_tra',null=True,blank=True)
+    fb_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    fb=models.CharField(max_length=200,null=True, blank=True,default='')
+
+class Action_Taken(models.Model):
+    atdep=models.ForeignKey(department,on_delete=models.CASCADE,related_name='depat',null=True,blank=True)
+    atdesig=models.ForeignKey(designation,on_delete=models.CASCADE,related_name='desigat',null=True,blank=True)
+    atemp=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='empat',null=True,blank=True)
+    at_remark=models.TextField()
+    at_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    at_status=models.CharField(max_length=200,null=True, blank=True,default='')
+    

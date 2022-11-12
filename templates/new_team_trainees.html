@@ -40,7 +40,7 @@
                         <tbody>
                             {% if var %} {%for i in var%}
                             <tr>
-                                <form action="/teamdelete/?tid={{i.id}}" method="post">
+                                <form action="{% url 'trainee_delete' i.id %}" method="post">
                                 {% csrf_token %}
                                     <td>
                                         <a href="#" style="text-decoration: none; color: #6c7293">{{i.user.fullname}}</a>
@@ -53,9 +53,10 @@
                                         <a href="#" style="text-decoration: none; color: #6c7293">{{i.tr_end_date|date:"d-m-Y"}}</a>
                                     </td>
                                     <td>
+                                        {% if i.pstatus == '0' %}
                                         <button type="button" data-toggle="modal" data-target="#myModal{{i.id}}" class="btn btn-social-icon-text btn-outline-primary"><i class="mdi mdi-tooltip-edit"></i>Update</button>
                                         <button type="submit" class="btn btn-social-icon-text btn-outline-danger" onclick="confirmation()"><i class="mdi mdi-delete-forever"></i>Delete</button>
-
+                                        {% endif %}
                                     </td>
                                 </form>
                                     <td>
@@ -63,15 +64,18 @@
                                             <div class="progress-bar" style="height:20px;width:{{i.progress}}%">{{i.progress}}%</div>
                                         </div>
                                     </td>
-                                    <form action="/submit/?tid={{i.id}}" method="post">
-                                        {%csrf_token%}
-
+                                   
+                                      
                                         <td>
-                                            <button type="submit" onclick="return confirm('Are you sure ?');" class="btn btn-social-icon-text btn-outline-primary"><i class="mdi mdi-tooltip-edit"></i>Complete</button>
+                                            {% if i.pstatus == '0' %}
+                                           
+                                            <a href="{% url 'trainee_submit' i.id %}" class="btn btn-social-icon-text btn-outline-primary"><i class="mdi mdi-tooltip-edit"></i>Complete</a>
+                                            {% else %}
+                                            <a href="#" class="btn btn-social-icon-text btn-outline-success"><i class="mdi mdi-tooltip-edit"></i>Completed</a>
+                                            {% endif %}
                                         </td>
 
 
-                                    </form>
                             </tr>
                             {% endfor %}{% else %}
                             <h5 style="text-align:center">Nothing to display...</h5>
@@ -144,6 +148,26 @@
     </div>
     {%endfor%}
 
-
+    <script>
+       
+        function myFunction() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 
 {% endblock %}

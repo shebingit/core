@@ -10,10 +10,11 @@
     <div class="card">
       <div class="card-body">
        <div class="row g-2 text-center">
-        <div class="col-lg-3  col-sm-12 text-success">Varified Count - &nbsp;{{verify_num}}</div>
-        <div class="col-lg-4 col-sm-12 text-warning">Pending For Verification - &nbsp;{{pending_verify_num}} </div>
-        <div class="col-lg-3 col-sm-12 text-danger">Corrections Count - &nbsp;{{correction_num}}</div>
-        <div class="col-lg-2 col-sm-12 text-info">Total Delay - &nbsp;{{delay_num}} &nbsp;<a href="" class="btn btn-outline-info"  data-toggle="modal" data-target="#reportstatus"><i class="mdi mdi-arrow-right-bold"></i></a> </div>
+        <div class="col-lg-3  col-sm-12 text-success"><i class="mdi mdi-account-check"></i> &nbsp;verified - &nbsp;{{verify_num}}</div>
+        <div class="col-lg-3 col-sm-12 text-warning"><i class="mdi mdi-account-alert"></i>&nbsp;verify - &nbsp;{{pending_verify_num}} </div>
+        <div class="col-lg-3 col-sm-12 text-danger"><i class="mdi mdi-account-remove"></i>&nbsp;Correction - &nbsp;{{correction_num}}</div>
+        <div class="col-lg-3 col-sm-12 text-info"><i class="mdi mdi-account"></i>&nbsp;Tester Delay - &nbsp;{{delay_num}} &nbsp;
+          <a href="" class="btn btn-outline-info mt-3"  data-toggle="modal" data-target="#reportstatus"><i class="mdi mdi-clock"></i></a> </div>
        </div>
        <br>
         <div class="col-md-4 col-6 w-100">
@@ -37,8 +38,16 @@
             <tbody id="myTable">
               {% for i in proj_list %}
               <tr>
-                <td><a href="{% url 'BRadmin_dev_project_task' i.id %}" class="btn btn-outline-warning"><i class="mdi mdi-eye"></i></a></td>
-                <td> {{i.status}} </td>
+                <td><a href="{% url 'BRadmin_dev_project_task' i.id %}" class="btn"><i class="mdi mdi-eye"></i></a></td>
+                <td>
+                  {% if i.status == 'Verification' %}
+                   <button type="button" class="btn btn-outline-warning">{{i.status}} </button>
+                   {% elif i.status == 'correction' %}
+                   <button type="button" class="btn btn-outline-danger">{{i.status}} </button>
+                   {% elif i.status == 'submitted' %}
+                   <button type="button" class="btn btn-outline-success">{{i.status}} </button>
+                   {% endif %}
+                </td>
                 <td>{{i.project}}</td>
                 <td>{{i.task}}</td>
                 <td> {{i.developer}} </td>

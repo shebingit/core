@@ -196,7 +196,7 @@
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
-                                <td></td>
+                                <td>{{i.bt_name}}</td>
                                 <td> <a href="{% url 'audit_trainer_teamview' i.id %}">{{i.name}}</a></td>
                                 <td>{{i.startdate|date:"d-m-Y"}}</td>
                                 <td>{{i.enddate|date:"d-m-Y"}}</td>
@@ -263,7 +263,7 @@
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
-                                <td></td>
+                                <td>{{i.bt_name}}</td>
                                 <td> {{i.name}}</td>
                                 <td> {{i.name}}</td>
                                 <td></td>
@@ -317,29 +317,23 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Date </th>
-                                <th>Trainer Name</th>
+                                <th>Trainee Name</th>
                                 <th>Feedback </th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
-                        {% if test %}
-                            {% for i in test %}
+                        {% if fbfrom %}
+                            {% for i in fbfrom %}
                                 
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
-                                <td></td>
-                                <td> {{i.name}}</td>
-                                <td> {{i.name}}</td>
-                                <td>{{i.startdate|date:"d-m-Y"}}</td>
-                                <td>{{i.enddate|date:"d-m-Y"}}</td>
-                                <td>verified</td>
-                                <td> 
-                                    <div class="progress" data-toggle="modal" data-target="#testerstatus{{i.id}}">
-                                        <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
-                                    </div>
-                                </td>
+                                <td>{{i.fb_date|date:"d-m-Y"}}</td>
+                                <td> {{i.fb_from.fullname}}</td>
+                                <td> {{i.fb}}</td>
                                
+                               
+
                                 {% endfor %}
                             </tr>
                         {% else %}
@@ -368,28 +362,22 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Date </th>
-                                <th>Trainer Name</th>
+                                <th>Trainee Name</th>
                                 <th>Feedback </th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
-                        {% if test %}
-                            {% for i in test %}
+                        {% if fbto %}
+                            {% for i in fbto %}
                                 
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
-                                <td></td>
-                                <td> {{i.name}}</td>
-                                <td> {{i.name}}</td>
-                                <td>{{i.startdate|date:"d-m-Y"}}</td>
-                                <td>{{i.enddate|date:"d-m-Y"}}</td>
-                                <td>verified</td>
-                                <td> 
-                                    <div class="progress" data-toggle="modal" data-target="#testerstatus{{i.id}}">
-                                        <div class="progress-bar" role="progressbar" style="width:{{i.progress}}%;" aria-valuenow="{{i.progress}}" aria-valuemin="0" aria-valuemax="100">{{i.progress}}%</div>
-                                    </div>
-                                </td>
+                                <td>{{i.fb_date|date:"d-m-Y"}}</td>
+                                <td> {{i.fb_to}}</td>
+                                <td> {{i.fb}}</td>
+                               
+                               
                                
                                 {% endfor %}
                             </tr>

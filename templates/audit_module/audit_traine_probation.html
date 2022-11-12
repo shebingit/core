@@ -21,6 +21,7 @@
                                 <th> Trainer Name </th>
                                 <th> Start Date </th>
                                 <th>  End Date </th>
+                                <th>Reason</th>
                                 <th> Reason For stop</th>
                                 <th> Training Stop Date</th>
                                 <th> Extension Days</th>
@@ -36,11 +37,12 @@
                             <tr>
                   
                                 <td>{{forloop.counter}}</td>
-                                <td></td>
+                                <td>{{i.team.bt_name}}</td>
                                 <td>{{i.team.name}}</td>
-                                <td>{{i.trainer.trainer}}</td>
+                                <td>{{i.trainer.fullname}}</td>
                                 <td>{{i.startdate|date:"d-m-Y"}}</td>
                                 <td>{{i.enddate|date:"d-m-Y"}}</td>
+                                <td>{{i.reason}}</td>
                                 <td>{{i.stop_reason}}</td>
                                 <td>{{i.stopdate|date:"d-m-Y"}}</td>
                                 <td>{{i.extension}}</td>

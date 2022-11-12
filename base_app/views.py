@@ -282,6 +282,9 @@ def newtraineeesteam(request):
             register.course =course.objects.get(id=int(request.POST['cou']))
             register.team =create_team.objects.get(id=int(request.POST['team']))
             register.department =department.objects.get(id=int(request.POST['dept']))
+            bt=Batch.objects.get(batch_name=request.POST['batch'])
+            register.startdate=bt.bt_start_date
+            register.enddate=bt.bt_end_date
             users =  previousTeam()
             datesteam=create_team.objects.get(id=int(request.POST['team']))
             users.teamname = create_team.objects.get(id=int(request.POST['team']))
@@ -340,6 +343,24 @@ def team_trainee(request,tm_tnr):
         mem = user_registration.objects.filter(
             designation_id=usernametm) .filter(fullname=usernametm1)
         var = previousTeam.objects.filter(teamname_id=tm_tnr).order_by('-id')
+        return render(request, 'new_team_trainees.html', {'mem': mem, 'var': var})
+    else:
+        return redirect('/')
+
+def trainee_delete(request,tm_trainee):
+    if 'usernametm2' in request.session:
+        if request.session.has_key('usernametm'):
+            usernametm = request.session['usernametm']
+        if request.session.has_key('usernametm1'):
+            usernametm1 = request.session['usernametm1']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(
+            designation_id=usernametm) .filter(fullname=usernametm1)
+        t= previousTeam.objects.get(id=tm_trainee)
+        tm=t.teamname_id
+        t.delete()
+        var = previousTeam.objects.filter(teamname_id=tm).order_by('-id')
         return render(request, 'new_team_trainees.html', {'mem': mem, 'var': var})
     else:
         return redirect('/')
@@ -521,6 +542,19 @@ def submit(request):
         
         var1.save()
     return redirect("new_team")
+
+def trainee_submit(request,tr_sub_id):
+    if request.session.has_key('usernametm'):
+        usernametm = request.session['usernametm']
+    if request.session.has_key('usernametm1'):
+        usernametm1 = request.session['usernametm1']
+    else:
+        return redirect('/')
+    print(tr_sub_id)
+    var1 = previousTeam.objects.get(id=tr_sub_id)
+    var1.pstatus = 1
+    var1.save()
+    return redirect("team_trainee",var1.teamname.id)
 
 # def teamupdate(request):
 #     if request.session.has_key('usernametm'):
@@ -2715,6 +2749,19 @@ def trainee_reported_issue(request):
     else:
         return redirect('/')
 
+def trainee_given_feedback(request):
+    if 'usernametrns2' in request.session:
+        
+        if request.session.has_key('usernametrns2'):
+            usernametrns2 = request.session['usernametrns2']
+        
+        z = user_registration.objects.filter(id=usernametrns2)
+        n = Feedbacks.objects.filter(fb_from=usernametrns2).order_by('-id')
+        return render(request, 'trainee_given_feedback.html', {'n': n, 'z': z})
+    else:
+        return redirect('/')
+
+
 def trainee_report_reported(request):
     if 'usernametrns2' in request.session:
         if request.session.has_key('usernametrns'):
@@ -2746,6 +2793,35 @@ def trainee_report_reported(request):
     else:
         return redirect('/')
 
+def trainee_feedbacks(request):
+    if 'usernametrns2' in request.session:
+        if request.session.has_key('usernametrns'):
+            usernametrns = request.session['usernametrns']
+        
+        if request.session.has_key('usernametrns2'):
+            usernametrns2 = request.session['usernametrns2']
+        
+    
+        
+    
+        z=user_registration.objects.filter(designation_id=usernametrns).filter(id=usernametrns2)
+       
+        if request.method == 'POST':
+         
+            var = Feedbacks()
+            
+            # ree= user_registration.objects.get(designation_id=mem1)
+            var.fb_from=user_registration.objects.get(id=usernametrns2)
+            var.fb_to = user_registration.objects.get(id=int(request.POST['fbname']))
+            var.fb = request.POST['fb']
+            var.save()
+            
+            
+        return render(request, 'trainee_feedback.html', {'z':z})
+    else:
+        return redirect('/')
+
+
 def trainee_report_issue(request):
     if 'usernametrns2' in request.session:
         
@@ -2770,6 +2846,28 @@ def trainee_report_issue(request):
         return render(request, 'trainee_report_issue.html', {'list': mem3, 'memteam': use, 'z': z})
     else:
         return redirect('/')
+
+
+def trainee_give_feedback(request):
+    if 'usernametrns2' in request.session:
+        
+        if request.session.has_key('usernametrns2'):
+            usernametrns2 = request.session['usernametrns2']
+        
+        z = user_registration.objects.filter(id=usernametrns2)
+    
+        
+        team = create_team.objects.all()
+        
+        tre = designation.objects.get(designation='trainer')
+        use = user_registration.objects.filter(designation_id=tre.id)
+        
+
+        
+        return render(request, 'trainee_givefeedback.html', { 'memteam': use, 'z': z})
+    else:
+        return redirect('/')
+
 
 def trainee_applyleave_form(request):
     if 'usernametrns2' in request.session:
@@ -3508,23 +3606,28 @@ def BRadminleaveupdate(request):
             p = user_registration.objects.get(id=request.POST['pmname'])
             t = user_registration.objects.get(id=request.POST['tlname'])
             d = user_registration.objects.get(id=request.POST['devname'])
-            lea=leave()
-            lea.user=p
-            lea.from_date=date.today()
-            lea.to_date=date.today()
-            lea.reason='Work not Assign'
-            lea.days=1
-            lea.leave_status='full Day'
-            lea.save()
-
-            lea1=leave()
-            lea1.user=t
-            lea1.from_date=date.today()
-            lea1.to_date=date.today()
-            lea1.reason='Work not Assign'
-            lea1.days=1
-            lea1.leave_status='full Day'
-            lea1.save()
+            try:
+                ls=leave.objects.get(user=p,to_date__gte=date.today())
+            except leave.DoesNotExist:
+                lea=leave()
+                lea.user=p
+                lea.from_date=date.today()
+                lea.to_date=date.today()
+                lea.reason='Work not Assign'
+                lea.days=1
+                lea.leave_status='full Day'
+                lea.save()
+            try:
+                ls=leave.objects.get(user=t,to_date__gte=date.today())
+            except leave.DoesNotExist:
+                lea1=leave()
+                lea1.user=t
+                lea1.from_date=date.today()
+                lea1.to_date=date.today()
+                lea1.reason='Work not Assign'
+                lea1.days=1
+                lea1.leave_status='full Day'
+                lea1.save()
             try:
                 req=WorkRequest.objects.get(wrk_develp=d,wrkreq_date=date.today())
             except WorkRequest.DoesNotExist:
@@ -5948,6 +6051,7 @@ def pm_Work_not_assign(request):
         else:
            return redirect('/')
         pro = user_registration.objects.filter(id=prid)
+        pman = user_registration.objects.filter(id=prid)
         tlde=designation.objects.get(designation='team leader')
         d=designation.objects.get(designation='developer')
         l=leave.objects.filter(to_date__gte=date.today())
@@ -5956,7 +6060,7 @@ def pm_Work_not_assign(request):
 
         tl=user_registration.objects.filter(designation=tlde)
         req=WorkRequest.objects.filter(wrkreq_date=date.today())
-        return render(request, 'projectmanager_work_not_assign.html',{'pro':pro,'dev':dev,'tl':tl,'req':req})
+        return render(request, 'projectmanager_work_not_assign.html',{'pro':pro,'dev':dev,'tl':tl,'req':req,'pman':pman})
     else:
         return redirect('/')
 
@@ -6017,6 +6121,21 @@ def pmproject_task_assingdev(request):
             user=user_registration.objects.get(id=request.POST['dname']) #developer work status change
             user.work_status='1'
             user.save()
+
+            # Team Leader  leave mark
+            t = user_registration.objects.get(id=int(request.POST['tl']))
+            try:
+                ls=leave.objects.get(user=t,to_date__gte=date.today())
+            except leave.DoesNotExist:
+                lea1=leave()
+                lea1.user=t
+                lea1.from_date=date.today()
+                lea1.to_date=date.today()
+                lea1.reason='Work not Assign'
+                lea1.days=1
+                lea1.leave_status='full Day'
+                lea1.save()
+
 
             return redirect('pm_Work_not_assign')
     else:
@@ -6422,7 +6541,7 @@ def project_manager_doc_module(request,pmdoc_md_id):
            return redirect('/')
         pro = user_registration.objects.filter(id=prid).order_by("-id")
         pdoc= PM_ProjectDocument.objects.get(id=pmdoc_md_id)
-        proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
+       
         corre=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='correction')
         updte=ProjectCorrectionUpdation.objects.filter(project_cu_id=pdoc.doc_project_id,project_cu_status='updation')
 
@@ -6436,9 +6555,15 @@ def project_manager_doc_module(request,pmdoc_md_id):
         doc_user = user_registration.objects.all()
         work_days= date.today() - pdoc.doc_project_startdate
         work_days=work_days.days
+
+        # client requriments
+        proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
+        pro_table=project_table.objects.filter(project=pdoc.doc_project_id)
+        poj_other= project_other_assign.objects.filter(othproject_name=pdoc.doc_project_id)
+
         return render(request, 'projectManager_project_module_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc,'corre':corre,
                                 'updte':updte,'pdocd':pdocd,'pdocm':pdocm,'pdocv':pdocv,'pdochp':pdochp,'pdoclb':pdoclb,'pdocdot':pdocdot,
-                                'work_days':work_days,'devp':devp,'doc_user':doc_user})
+                                'work_days':work_days,'devp':devp,'doc_user':doc_user,'pro_table':pro_table,'poj_other':poj_other})
     else:
         return redirect('/')
 
@@ -6621,6 +6746,7 @@ def pm_doc_des_pdf(request,desedoc_pdf):
         project_datils=None
         return redirect('projectManager_project_document')
     projects=project.objects.get(id=project_datils.doc_project_id.id)
+    prodoc=PM_ProjectDocument.objects.get(doc_project_id=projects)
     project_module=project_module_assign.objects.filter(project_name=projects)
     
    
@@ -6630,6 +6756,7 @@ def pm_doc_des_pdf(request,desedoc_pdf):
     context = {'projects':projects,
     'project_module':project_module,
     'date':date,
+    'prodoc':prodoc,
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -6660,6 +6787,7 @@ def pm_doc_corr_pdf(request,corredoc_pdf):
         project_datils=None
         return redirect('projectManager_project_document')
     projects=project.objects.get(id=project_datils.doc_project_id.id)
+    prodoc=PM_ProjectDocument.objects.get(doc_project_id=projects)
    
     project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='correction' )
     
@@ -6668,6 +6796,7 @@ def pm_doc_corr_pdf(request,corredoc_pdf):
     context = {'projects':projects,
     'project_correction':project_correction,
     'date':date,
+    'prodoc':prodoc,
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -6698,7 +6827,7 @@ def pm_doc_updt_pdf(request,updedoc_pdf):
         project_datils=None
         return redirect('projectManager_project_document')
     projects=project.objects.get(id=project_datils.doc_project_id.id)
-   
+    prodoc=PM_ProjectDocument.objects.get(doc_project_id=projects)
     project_updation=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='updation' )
     
    
@@ -6706,6 +6835,7 @@ def pm_doc_updt_pdf(request,updedoc_pdf):
     context = {'projects':projects,
     'project_updation':project_updation,
     'date':date,
+    'prodoc':prodoc,
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -19573,15 +19703,18 @@ def Audit_trainee_trainer_dashboard(request,audit_traine_id):
             t_prob=probation.objects.filter(user_id=audit_traine_id)
             t_rep_issue=reported_issue.objects.filter(reporter_id=audit_traine_id)
             trainer_status= trainer_task_test.objects.filter(test_task_type='0')
-            fb_from=trainee_trainerfeedback.objects.filter(fb_from=audit_traine_id)
-            fb_to=trainee_trainerfeedback.objects.filter(fb_to=audit_traine_id)
-            return render(request, 'audit_module/audit_tainee_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,'tnr':tnr,
+            fbfrom=Feedbacks.objects.filter(fb_from=audit_traine_id)
+            fbto=Feedbacks.objects.filter(fb_to=audit_traine_id)
+            tm=previousTeam.objects.filter(user_id=audit_traine_id)
+            return render(request, 'audit_module/audit_tainee_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,'tnr':tnr,'tm':tm,
                                                                                 'attend':attend,'tran_proj':tran_proj,'t_payments':t_payments,
-                                                                                't_leave':t_leave,'t_prob':t_prob,'t_rep_issue':t_rep_issue,'trainer_status':trainer_status})
+                                                                                't_leave':t_leave,'t_prob':t_prob,'t_rep_issue':t_rep_issue,'trainer_status':trainer_status,'fbfrom':fbfrom,'fbto':fbto})
         if deg == 8:
             trainer_team=create_team.objects.filter(trainer_id=str(audit_traine_id))
+            fbfrom=Feedbacks.objects.filter(fb_to=audit_traine_id)
+            fbto=Feedbacks.objects.filter(fb_from=audit_traine_id)
             return render(request, 'audit_module/audit_tainer_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,
-                                                                                'trainer_team':trainer_team})
+                                                                                'trainer_team':trainer_team,'fbto':fbto,'fbfrom':fbfrom})
     else:
         return redirect('/')
 
@@ -19664,7 +19797,7 @@ def Audit_department(request,audit_dep_id):
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
         mem = department.objects.get(id=audit_dep_id)
-        des=designation.objects.filter(~Q(designation='admin'),~Q(designation='manager'),~Q(designation='account'),~Q(designation='auditor'),~Q(designation='Digital manager'),~Q(designation='Digital Developer'))
+        des=designation.objects.filter(~Q(designation='admin'),~Q(designation='manager'),~Q(designation='account'),~Q(designation='auditor'),~Q(designation='Digital manager'),~Q(designation='Digital Developer'),~Q(designation='trainee'))
         context = {'mem':mem,'des':des,'Aud' : Aud,}
         return render(request, 'audit_module/audit_depart_designations.html',context)
     else:
@@ -19762,8 +19895,8 @@ def Audit_trainee_dashboard(request,audit_emp_tr):
         t_prob=probation.objects.filter(user_id=audit_emp_tr)
         t_rep_issue=reported_issue.objects.filter(reporter_id=audit_emp_tr)
         trainer_status= trainer_task_test.objects.filter(test_task_type='0')
-        fb_from=trainee_trainerfeedback.objects.filter(fb_from=audit_emp_tr)
-        fb_to=trainee_trainerfeedback.objects.filter(fb_to=audit_emp_tr)
+        fbfrom=Feedbacks.objects.filter(fb_from=audit_emp_tr)
+        fbto=Feedbacks.objects.filter(fb_to=audit_emp_tr)
         return render(request, 'audit_module/audit_tainee_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,'tnr':tnr,
                                                                                 'attend':attend,'tran_proj':tran_proj,'t_payments':t_payments,
                                                                                 't_leave':t_leave,'t_prob':t_prob,'t_rep_issue':t_rep_issue,'trainer_status':trainer_status})
@@ -19845,7 +19978,7 @@ def Audit_project(request):
         else:
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
-        proj= project.objects.all()
+        proj= project.objects.all().order_by('-id')
         return render(request, 'audit_module/audit_projects.html', {'Aud': Aud,'proj':proj})
     else:
         return redirect('/')
@@ -19863,6 +19996,34 @@ def Audit_project_details(request,audit_pro_id):
     else:
         return redirect('/')
 
+# Audit Action Taken 
+def Audit_action_taken(request):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        cous = course.objects.all()
+        dep = department.objects.all()
+        des = designation.objects.all()
+        emp = user_registration.objects.all()
+       
+
+        if request.method == 'POST':
+            
+            var=Action_Taken()
+            var.atdep=department.objects.get(id=int(request.POST['Department']))
+            var.atdesig=designation.objects.get(id=int(request.POST['designation']))
+            var.atemp=user_registration.objects.get(id=int(request.POST['emp']))
+            var.at_remark=request.POST['reason']
+            var.at_status='1'
+            var.save()
+
+        act=Action_Taken.objects.all().order_by('-id')
+        return render(request, 'audit_module/audit_action_taken.html', {'Aud': Aud,'cous':cous,'dep':dep,'des':des,'emp':emp,'act':act})
+    else:
+        return redirect('/')
 
 
 

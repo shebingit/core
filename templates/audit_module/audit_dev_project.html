@@ -25,7 +25,7 @@
                 <th scope="col" style="color:#6C7293;">Status</th>
                 <th scope="col" style="color:#6C7293;">Submitted Date</th>
                 <th scope="col" style="color:#6C7293;">Delay</th>
-                <th scope="col" style="color:#6C7293;">Action</th>
+                <th scope="col" style="color:#6C7293;">Action Taken</th>
               </tr>
             </thead>
             <tbody id="myTable">
@@ -45,7 +45,8 @@
                     style="text-decoration: none;">
                     <div class="badge badge-outline-info">Tester Status</div>
                   </a></td>
-                <td class="text-primary"><a href="" data-toggle="modal" data-target="#exampleModalCenter2{{dp.id}}"
+                <td class="text-primary">
+                  <a href="" data-toggle="modal" data-target="#exampleModalCenter2{{dp.id}}"
                     style="text-decoration: none;">
                     <div class="badge badge-outline-info">Extension Status</div>
                   </a></td>
@@ -99,11 +100,11 @@
                   <div class="badge badge-outline-danger">{{dp.delay}}</div>
                 </td>
                 <td>
-                  {% for i in action_take %}
-                  {% if dp.id == i.wrn_task.id %}
-                  <p>{{i.wrn_reason}} by {{i.wrn_user_name.fullname}}</p>
-                  {% endif %}
-                  {% endfor %}
+                  <a href="" data-toggle="modal" data-target="#Action{{dp.id}}"
+                  style="text-decoration: none;">
+                  <div class="badge badge-outline-info">Action</div>
+                </a>
+                 
                 </td>
   
               </tr>
@@ -224,8 +225,10 @@
   
           <div class="container mt-3" style="border-top:1px solid grey;border-bottom:1px solid grey;">
             <div class="text-info pt-4 pb-2" style="font-size: 20px;font-weight: 600;">Attach files</div>
+            {% if dp.files %}
             <a href="{{dp.files.url}}" download class="text-info "
               style="text-decoration:none;margin-left:20px;">Download</a>
+              {% endif %}
           </div>
           <br><br>
         </div>
@@ -271,9 +274,12 @@
                 <td style="color:white;">{{i.subtask.task}}</td>
                 <td style="color:white;">{{i.subtask}}</td>
                 <td style="color:white;">{{i.workdone}}</td>
-                <td class="text-info"><a href="{{i.files.url}}" download style="text-decoration:none;">
+                <td class="text-info">
+                  {% if i.files %}
+                  <a href="{{i.files.url}}" download style="text-decoration:none;">
                     <div class="badge badge-outline-primary">Download</div>
-                  </a></td>
+                  </a>
+                {% endif %}</td>
               </tr>
               {% endif %}
               {% endfor %}
@@ -408,6 +414,55 @@
       </div>
     </div>
   </form>
+
+
+  {% for dp in devp %}
+  
+  <!-- pop up window for tester status -->
+  <div class="modal fade" id="Action{{dp.id}}">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div class="modal-content modal-xl" style="background-color: #191c24;">
+        <div class="modal-header" style="border-bottom: 0 none;">
+          <h5 class="modal-title text-info">Actions</h5>
+          <button type="button" class="close text-light" data-dismiss="modal" aria-label=""
+            style="background-color: #191c24;border:none; float: right;font-size: 20px;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="table-responsive mt-3 mb-3 container">
+          <table class="table  table-bordered ">
+            <thead style="background-color: black;">
+              <tr>
+                <th scope="col" style="color:#6C7293;">Date</th>
+                <th scope="col" style="color:#6C7293;">Action Taken By</th>
+                <th scope="col" style="color:#6C7293;">To</th>
+                <th scope="col" style="color:#6C7293;">Action</th>
+               
+              </tr>
+            </thead>
+            <tbody>
+  
+              {% for i in action_take %}
+                  {% if dp.id == i.wrn_task.id %}
+              <tr>
+                <td style="color:white;">{{i.wrn_date|date:"d-m-Y"}}</td>
+                <td style="color:white;">{{i.wrn_user_name.fullname}}&nbsp;(&nbsp;{{i.wrn_user_name.designation.designation}}&nbsp;)</td>
+                <td style="color:white;">{{i.wrn_develp.fullname}}</td>
+                <td style="color:white;">{{i.wrn_reason}} </td>
+            
+              {% endif %}
+              {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% endfor %}
+
+
   
   {% endfor %}
   <script>
