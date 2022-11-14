@@ -1,0 +1,26 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+<style>
+    .card-head
+    {
+        border: none;
+    }
+</style>
+
+
+<h5>User Requirement</h5>
+
+<div class="row g-2 mt-3 mb-5">
+    {% for i in prjmodule %}
+    <div class="col-lg-4">
+        <div class="card p-1">
+            <div class="card-head"><h5 class="text-center p-2 mt-3">{{i.module}}</h5></div>
+            <div class="card-body">{{i.description}}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

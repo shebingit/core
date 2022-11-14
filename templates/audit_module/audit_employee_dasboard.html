@@ -214,7 +214,7 @@
 
         <div class="col-lg-12 col-md-12 col-sm-12 grid-margin stretch-card">
             <div class="card">
-                <a href="#" class="text-decoration-none text-white ">
+                <a href="{% url 'Audit_project_tl' i.id  %}" class="text-decoration-none text-white ">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-8 col-sm-12  my-auto">
@@ -397,7 +397,21 @@
                                 <th> From Date </th>
                                 <th> To Date</th>
                                 <th> Net Salary</th>
+                                <th>Hra</th>
+                                <th> Conveyns</th>
+                                <th> Tax</th>
+                                <th> Incentives</th>
+                                <th> DA</th>
+                                <th>Other_allovance</th>
+                                <th> Leaves</th>
+                                <th> Delay</th>
                                 <th> Final Salary </th>
+                                <th> Pending Status </th>
+                                <th>Date</th>
+                                <th> Reason</th>
+                                <th> Deduction</th>
+
+                                <th> Action </th>
                               
                             </tr>
                         </thead>
@@ -411,7 +425,39 @@
                                 <td>{{i.fromdate|date:"d-m-Y"}}</td>
                                 <td>{{i.todate|date:"d-m-Y"}}</td>
                                 <td>{{i.basic_salary}}</td>
+                                <td>{{i.hra}}</td>
+                                <td>{{i.conveyns}}</td>
+                                <td>{{i.tax}}</td>
+                                <td>{{i.incentives}}</td>
+                                <td>{{i.da}}</td>
+                                <td>{{i.other_allovance}}</td>
+                                <td>{{i.leavesno}}</td>
+                                <td>{{i.delay}}</td>
                                 <td>{{i.net_salary}}</td>
+                                {% for j in hld %}
+                                <td>
+                                    {% if j.sal_id.id == i.id %}
+                                    <p>{{j.sal_status}}</p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                {% if j.sal_id.id == i.id %}
+                                    <p>{{j.hddate|date:"d-m-Y"}}</p>
+                                {% endif %}
+                               </td>
+                                <td>
+                                    {% if j.sal_id.id == i.id %}
+                                        <p>{{j.sal_reason}}</p>
+                                    {% endif %}
+                                </td>
+                                    <td>
+                                        {% if j.sal_id.id == i.id %}
+                                        <p>{{j.sal_amount}}</p>
+                                        {% endif %}
+                                    </td>
+                               
+                                {% endfor %}
+                                <td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#testerstatus{{i.id}}">Hold</button></td>
                                
                                 {% endfor %}
                             </tr>
@@ -485,6 +531,104 @@
         </div>
     </div>
 </div>
+
+<div class="row mt-3">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+              <h5>Remark / Action Taken </h5>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+              <form>
+                <div class="input-group input-group-sm mb-3">
+                  <input type="text" class="form-control text-light" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
+              title="Type in a name" style="color:white;">
+  
+                  
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table " id="myTables">
+              <thead>
+                <tr data-href="#">
+                  <th>SlNo</th>
+                  <th>Date</th>
+                  <th>Given By</th>
+                  <th>Designation</th>
+                  <th>Name</th>
+                  <th>Remark/Action</th>
+                  <th>Designation</th>
+                  <th>Department</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in act %}
+                <tr data-href="{% url 'Audit_employee_dashbord' i.id %}">
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{i.at_date|date:"d-m-Y"}}</td>
+                  <td>{{i.atby.fullname}}</td>
+                  <td>{{i.atby.designation}}</td>
+                  <td>{{i.atemp.fullname}}</td>
+                  <td>{{i.at_remark}}</td>
+                  <td>{{i.atdesig.designation}}</td>
+                  <td>{{i.atdep.department}}</td>
+  
+                  
+                </tr>
+                {% endfor %}
+                
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  
+  
+{% for dp in sala %}
+  
+<!-- pop up window for tester status -->
+<div class="modal fade" id="testerstatus{{dp.id}}">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <form action="{% url 'Audit_salary_hold' dp.id %}" method="post">
+        {% csrf_token %}
+    <div class="modal-content modal-sm" style="background-color: #191c24;">
+      <div class="modal-header" style="border-bottom: 0 none;">
+        <h5 class="modal-title text-info">Hold</h5>
+        <button type="button" class="close text-light" data-dismiss="modal" aria-label=""
+          style="background-color: #191c24;border:none; float: right;font-size: 20px;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+        <div class="card p-3">
+            <label class="form-lable mb-3">Hold Reason</label>
+            <textarea class="form-class mb-3" style="height:100px ;" name="rea_hold" required></textarea>
+            <label class="form-lable mb-3">Amount</label>
+            <input type="text" class="form-class mb-3" name="amount_hold">
+            <button type="submit" class="btn btn-outline-warning">Update</button>
+
+        </div>
+       
+    </div>
+</form>
+  </div>
+</div>
+
+{% endfor %}
+
+
+
 
 
 <script type="text/javascript">

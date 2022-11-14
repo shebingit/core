@@ -32,7 +32,8 @@
             </thead>
             <tbody>
               {% for i in var %}
-              {% if i.developer.designation.id == deg.id %}
+              {% for j in deg %}
+              {% if i.developer.designation.id == j.id %}
                 <tr>
                   <td>
                     <!-- <img src="{% static '/assets/images/faces/face1.jpg' %}" alt="image" /> -->
@@ -88,6 +89,7 @@
 
                 </tr>
               {% endif %}
+              {% endfor %}
               {% endfor %}
             </tbody>
           </table>

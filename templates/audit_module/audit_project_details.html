@@ -38,96 +38,178 @@
       font-size: 1.7rem;
     }
   </style>
-  
-  
-  <div class="row">
-    <div class="mb-2 " style="font-size: 20px;font-weight: 600;color: #dfe1ed;">Projects Document </div>
-  </div>
 
-  
   <div class="row">
-    <div class="col-12 grid-margin">
-      <div class="card">
-        <div class="card-body">
-          
-          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-            
+    <div class="col-sm-4 grid-margin">
+      <a href="{% url 'Audit_project_user_requirement' proj_doc.doc_project_id.id  %}" style="text-decoration: none;">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                  <h4 class="mb-0" style="color: white;">User Requirement</h4>
+                </div>
+              </div>
+              <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                <i class="icon-lg mdi mdi-cloud-download text-warning ms-auto"></i>
+              </div>
+            </div>
           </div>
-          <div class="table-responsive">
-            <table class="table" id="">
-              <thead>
-                <tr>
-                
-                  <th>Project</th>
-                  <th>Start Date</th>
-                  <th>End Date</th>
-                  <th>Start Document</th>
-                  <th>Doc.Start Date</th>
-                  <th>Project Document</th>
-                  <th>Desecription</th>
-                  <th>Correction</th>
-                  <th>Updation</th>
-                
-                
-                </tr>
-              </thead>
-              {% if proj_doc %}
-              {% for i in proj_doc %}
-              <tbody>
-                {% if i.doc_project_id.status == 'accepted' or i.doc_project_id.status == 'assigned'%}
-                  <tr class="">
-                     
-                      <td><span class="ps-2">{{i.doc_project_name}}</span></td>
-                      <td>{{i.doc_project_startdate|date:'d-m-Y'}}</td>
-                      <td>{{i.doc_project_enddate|date:'d-m-Y'}}</td>
-                    
-                      <td> 
-                        {% if i.doc_status == '0' %}
-                          <a class="text-success" href="{% url 'project_manager_doc_start' i.id %}" style="cursor:pointer"><i class="mdi mdi-power icon"></i></a>start
-                        {% elif i.doc_status == 'complete' %}
-                            Doc.Completed
-                        {% else %}
-                          Doc.work started
-                        {% endif%}
-                      </td>
-                     
-                      <td>{{i.doc_project_currentdate|date:'d-m-Y'}}</td>
-                      {% if i.doc_status == '1' %}
-                       
-                      <td><a  class="text-danger" href="{% url 'pm_docfull_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
-                        <td><a class="text-danger" href="{% url 'pm_doc_des_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i>  </a></td>
-                        <td><a class="text-danger" href="{% url 'pm_doc_corr_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
-                        <td><a  class="text-danger" href="{% url 'pm_doc_updt_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
-                       
-                        
-                        
-                       
-                      {% else %}
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      
-                       
-                      {% endif %}
-                  </tr>
-                {% endif %}
-                {% endfor %}
-                {% else%}
-                      <h5 style="text-align:center">Nothing to display!</h5>
-                {% endif %}
-              </tbody>
-          </table>
-      </div>
         </div>
-      </div>
+      </a>
     </div>
+    <div class="col-sm-4 grid-margin">
+      <a href="{% url 'projectmanager_currentproject'%}" style="text-decoration: none;">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                  <h4 class="mb-0" style="color: white;">Budget Of Project</h4>
+                </div>
+              </div>
+              <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                <i class="icon-lg mdi mdi-arrow-right-drop-circle text-info ms-auto"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-4 grid-margin">
+      <a href="{% url 'Audit_detail_project' proj_doc.doc_project_id.id  %}" style="text-decoration: none;">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                  <h4 class="mb-0" style="color: white;">Project</h4>
+                </div>
+              </div>
+              <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                <i class="icon-lg mdi mdi-cloud-check text-success ms-auto"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-4 grid-margin">
+      <a href="{% url 'Audit_project_doc' proj_doc.id %}" style="text-decoration: none;">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                  <h4 class="mb-0" style="color: white;">Project Documents</h4>
+                </div>
+              </div>
+              <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                <i class="icon-lg mdi mdi-file-plus text-primary ms-auto"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+   <!-- <div class="col-sm-4 grid-margin">
+      <a href="{% url 'projectmanager_assignproject'%}" style="text-decoration: none;">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                  <h4 class="mb-0" style="color: white;">Assign project</h4>
+                </div>
+              </div>
+              <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                <i class="icon-lg mdi mdi-codepen text-danger ms-auto"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-4 grid-margin">
+      <a href="{% url 'projectmanager_edit_assigned_projects'%}" style="text-decoration: none;">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                  <h4 class="mb-0" style="color: white;">Change Assign project</h4>
+                </div>
+              </div>
+              <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                <i class="icon-lg mdi mdi-codepen text-danger ms-auto"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-4 grid-margin">
+      <a href="{% url 'projectManager_edit_projects_status' %}" style="text-decoration: none;">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                  <h4 class="mb-0" style="color: white;">Change project status</h4>
+                </div>
+              </div>
+              <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                <i class="icon-lg mdi mdi-cloud-check text-success ms-auto"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-4 grid-margin">
+      <a href="{% url 'projectManager_project_document' %}" style="text-decoration: none;">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                  <h4 class="mb-0" style="color: white;">Project Documents</h4>
+                </div>
+              </div>
+              <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                <i class="icon-lg mdi mdi-checkbox-multiple-blank-outline"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-4 grid-margin">
+      <a href="{% url 'projectManager_project_delay' %}" style="text-decoration: none;">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                  <h4 class="mb-0" style="color: white;">Project Delay Action</h4>
+                </div>
+              </div>
+              <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                <i class="icon-lg mdi mdi-clock"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>-->
   </div>
+  
+  
+  
 
 
-  <div class="row">
+
+ <!-- <div class="row">
     <div class="mb-2 " style="font-size: 20px;font-weight: 600;color: #dfe1ed;">Developers and Task </div>
   </div>
   
@@ -197,7 +279,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>-->
 
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

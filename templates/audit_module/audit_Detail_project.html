@@ -1,0 +1,184 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+
+<style>
+    .div1
+    {
+        display:none;
+    }
+</style>
+
+
+
+<h4 class="text-center mt-2 mb-4">Project &nbsp;{{prj.project}}</h4>
+<p>Start Date :  &nbsp;{{prj.startdate}}</p>
+<p>End Date :  &nbsp;{{prj.enddate}}</p>
+<hr>
+<div class="row">
+    <div class="col-lg-3 col-sm-12">
+        <div class="card p-3 text-center" onclick="Div1()">Tables</div>
+    </div>
+    <div class="col-lg-3 col-sm-12">
+        <div class="card p-3 text-center" onclick="Div2()">Other Details</div>
+    </div>
+    <div class="col-lg-3 col-sm-12">
+        <div class="card p-3  text-center"onclick="Div3()">Tester &nbsp;TL  &nbsp; Developers</div>
+    </div>
+</div>
+
+
+<div class="table-responsive div1" id="div1">
+    <h4 class="mt-4">Tables</h4>
+    <table class="table align-middle">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Head</th>
+            <th scope="col">Desecription</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+            {% for i in  prjtable %}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>
+                {% for j in prjmodule %}
+                {% if i.module_name_id == j.id %}
+                {{j.module}}
+                {% endif  %}
+                {% endfor %}
+            </td>
+            <td>{{i.description}}</td>
+          
+          </tr>
+          {% endfor %}
+         
+        </tbody>
+      </table>
+
+</div>
+
+<br>
+
+
+<div class="table-responsive div1" id="div2">
+    <h4 class="mt-4">Other Details </h4>
+    <table class="table align-middle">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Head</th>
+            <th scope="col">Desecription</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+            {% for i in  prj_other %}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{i.other_name}}</td>
+            <td>{{i.other_description}}</td>
+          
+          </tr>
+          {% endfor %}
+         
+        </tbody>
+      </table>
+
+</div>
+
+
+<div class="table-responsive div1" id="div3">
+    <h4 class="mt-4">Tester &nbsp;TL  &nbsp; Developers</h4>
+    <table class="table align-middle">
+        <thead>
+          <tr>
+          
+            <th scope="col">Emp Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Designation</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+            <tr><td class="text-center" colspan="3"><h4>Tester</h4></td></tr>
+            {% for i in  proj_task_ts %}
+            {% for j in user %}
+            {% if i.tester == j.id %}
+          <tr>
+            <th scope="row">{{j.employee_id}}</th>
+            <td>{{j.fullname}}</td>
+            <td>{{j.designation.designation}}</td>
+        
+          </tr>
+          {% endif %}
+          {% endfor %}
+          {% endfor %}
+          <tr><td class="text-center" colspan="3"><h4>TL</h4></td></tr>
+          {% for i in  proj_task_tl %}
+          {% for j in user %}
+          {% if i.tl == j.id %}
+         
+        <tr>
+          <th scope="row">{{j.employee_id}}</th>
+          <td>{{j.fullname}}</td>
+          <td>{{j.designation.designation}}</td>
+         
+        </tr>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        <tr><td class="text-center" colspan="3"><h4>Developers</h4></td></tr>
+        {% for i in  proj_task_dev %}
+        {% for j in user %}
+        {% if i.developer == j.id %}
+      <tr>
+        <th scope="row">{{j.employee_id}}</th>
+        <td>{{j.fullname}}</td>
+        <td>{{j.designation.designation}}</td>
+       
+      
+      </tr>
+      {% endif %}
+      {% endfor %}
+      {% endfor %}
+         
+        </tbody>
+      </table>
+
+</div>
+
+
+
+<script>
+    function Div1() {
+        var x = document.getElementById("div1");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+
+    function Div2() {
+      var x = document.getElementById("div2");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+    function Div3() {
+        var x = document.getElementById("div3");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+</script>
+
+
+{% endblock %}

@@ -6748,15 +6748,15 @@ def pm_doc_des_pdf(request,desedoc_pdf):
     projects=project.objects.get(id=project_datils.doc_project_id.id)
     prodoc=PM_ProjectDocument.objects.get(doc_project_id=projects)
     project_module=project_module_assign.objects.filter(project_name=projects)
+    proj_table=project_table.objects.filter(project=projects)
     
    
-    
-
     template_path = 'pm_project_document_dese_pdf.html'
     context = {'projects':projects,
     'project_module':project_module,
     'date':date,
     'prodoc':prodoc,
+    'proj_table':proj_table,
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -7231,6 +7231,7 @@ def projectmanager_currentdetail(request,id):
         return render(request, 'projectmanager_currentdetail.html',{'pro':pro,'display':display})
     else:
         return redirect('/')
+
 def projectmanager_currentteam(request,id):
     if 'prid' in request.session:
         if request.session.has_key('prid'):
@@ -7246,6 +7247,7 @@ def projectmanager_currentteam(request,id):
         return render(request, 'projectmanager_currentteam.html',{'pro':pro,'display':display, 'uniq':uniq})
     else:
         return redirect('/')
+
 def projectmanager_completeteam(request,id):
     if 'prid' in request.session:
         if request.session.has_key('prid'):
@@ -8487,7 +8489,7 @@ def TLtaskformsubmit(request,id):
             task.git_link = request.POST['gitlink']
             task.employee_files = request.FILES['scn']
             task.submitted_date = var
-            task.status = 'submitted'
+            task.status = 'Verification'
             x = task.enddate
             y = var
             event = Event.objects.filter(start_time__range=(task.enddate,datetime.now().date())).count()
@@ -8679,11 +8681,12 @@ def TSprojectdetails(request,pid):
     
 
         mem=user_registration.objects.filter(designation_id=usernamets) .filter(fullname=usernamets1)
-        var = project_taskassign.objects.filter(project=pid,tester_id=usertsid).order_by('-status')
+        var = project_taskassign.objects.filter(project=pid,tester_id=usertsid,worktype='1').order_by('-status')
         data = tester_status.objects.filter(project_id=pid)
         data1 = test_status.objects.filter(project_id=pid)
-        deg=designation.objects.get(designation='developer')
-        verify_count=project_taskassign.objects.filter(status='verification', project=pid, tester=usertsid).count()
+        deg=designation.objects.filter(Q(designation='developer')| Q(designation='team leader'))
+        
+        verify_count=project_taskassign.objects.filter(status='verification', project=pid, tester=usertsid,worktype='1').count()
 
 
         date1= datetime.now()
@@ -19831,7 +19834,7 @@ def Audit_employee_dashbord(request,audit_emp_id):
         Aud = user_registration.objects.filter(id=Aud_id)
         emp= user_registration.objects.get(id=audit_emp_id)
         pros = project.objects.all()
-
+       
         if emp.designation.designation == 'project manager':
             devp = project.objects.filter(projectmanager_id=audit_emp_id,).order_by('-id')
 
@@ -19853,13 +19856,17 @@ def Audit_employee_dashbord(request,audit_emp_id):
         attend=attendance.objects.filter(user_id=audit_emp_id).order_by('-id')
         sala=acntspayslip.objects.filter(user_id_id=audit_emp_id).order_by('-id')
         rep=reported_issue.objects.filter(reporter_id=audit_emp_id).order_by('-id')
+        hld= Salary_hold.objects.filter(sal_id__in=sala.values_list('id', flat=True))
+        act= Action_Taken.objects.filter(atemp_id=audit_emp_id)
         for j in leve_count:
             leaves=leaves+int(j.days)
 
         if emp.designation.designation == 'team leader':
             delya_count=project_taskassign.objects.filter(developer_id=audit_emp_id,submitted_date__gte=firstday,submitted_date__lte=date.today(),worktype='1')
+            count=0
             for i in delya_count:
-                count=count+int(i.delay)
+               
+                count= count + int(i.delay)
 
         elif emp.designation.designation == 'tester':
             delya_count=TSproject_Task_verify.objects.filter(ts_tester_id=audit_emp_id,ts_task_verify_date__gte=firstday,ts_task_verify_date__lte=date.today())
@@ -19874,9 +19881,70 @@ def Audit_employee_dashbord(request,audit_emp_id):
                 count=count+int(i.delay)
 
         return render(request, 'audit_module/audit_employee_dasboard.html', {'Aud': Aud,'emp':emp,'pros':pros,'devp':devp,'count':count,
-        'leaves':leaves,'lev':lev,'attend':attend,'sala':sala,'rep':rep})
+        'leaves':leaves,'lev':lev,'attend':attend,'sala':sala,'rep':rep,'hld':hld,'act':act})
     else:
         return redirect('/')
+
+def Audit_salary_hold(request,holdid):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+                Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        display2 = user_registration.objects.all()
+        sal=acntspayslip.objects.get(id=holdid)
+        if request.method == 'POST':
+            hld = request.POST['rea_hold']
+            amount = request.POST['amount_hold']
+            hd=Salary_hold()
+            hd.sal_id=sal
+            hd.sal_reason=hld
+            if amount:
+                hd.sal_amount=amount
+            else:
+                hd.sal_amount=0
+            hd.sal_status='Hold'
+            hd.save()
+            return redirect('Audit_employee_dashbord',sal.user_id.id)
+    else:
+        return redirect('/')
+
+
+def Audit_project_tl(request,audit_protls):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        display2 = user_registration.objects.all()
+        display = project_taskassign.objects.filter(project_id=audit_protls).values('project_id','tl_id').distinct()
+        return render(request, 'audit_module/audit_project_tl.html', {'Aud': Aud,'display2':display2,'display':display})
+
+    else:
+        return redirect('/')
+
+        
+
+def Audit_project_tlteam(request,audit_protlsdev,adev_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+       
+        display = project_taskassign.objects.filter(project_id=audit_protlsdev).values('tl_id').distinct()
+        display2 = project_taskassign.objects.filter(project_id=audit_protlsdev,developer_id=adev_id)
+        uniq = user_registration.objects.all()
+        return render(request, 'audit_module/audit_project_tlteam.html', {'Aud': Aud,'display2':display2,'display':display,'uniq':uniq})
+
+    else:
+        return redirect('/')
+
+
+
 
 def Audit_trainee_dashboard(request,audit_emp_tr):
     if 'aud_id' in request.session:
@@ -19990,11 +20058,62 @@ def Audit_project_details(request,audit_pro_id):
         else:
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
-        proj_doc = PM_ProjectDocument.objects.filter(doc_project_id_id=audit_pro_id)
+        try:
+            proj_doc = PM_ProjectDocument.objects.get(doc_project_id_id=audit_pro_id)
+        except PM_ProjectDocument.DoesNotExist:
+           return redirect('Audit_project')
         proj_task = project_taskassign.objects.filter(project_id=audit_pro_id)
         return render(request, 'audit_module/audit_project_details.html', {'Aud': Aud,'proj_doc':proj_doc,'proj_task':proj_task})
     else:
         return redirect('/')
+
+def Audit_project_doc(request,prdoc_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        proj_doc = PM_ProjectDocument.objects.filter(id=prdoc_id)
+        return render(request, 'audit_module/audit_project_doc_details.html', {'Aud': Aud,'proj_doc':proj_doc})
+    else:
+        return redirect('/')
+
+def Audit_project_user_requirement(request,ur_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        prj=project.objects.get(id=ur_id)
+        prjmodule=project_module_assign.objects.filter(project_name=prj)
+        return render(request, 'audit_module/audit_project_user_requirement.html', {'Aud': Aud,'prj':prj,'prjmodule':prjmodule})
+    else:
+        return redirect('/')
+
+def Audit_detail_project(request,pd_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        prj=project.objects.get(id=pd_id)
+        prjmodule=project_module_assign.objects.filter(project_name=prj)
+        prjtable=project_table.objects.filter(project=prj)
+        prj_other= project_other_assign.objects.filter(othproject_name=prj)
+        proj_task_ts= project_taskassign.objects.filter(project_id=pd_id).values('tester').distinct()
+        proj_task_tl= project_taskassign.objects.filter(project_id=pd_id).values('tl').distinct()
+        proj_task_dev= project_taskassign.objects.filter(project_id=pd_id).values('developer').distinct()
+        user= user_registration.objects.all()
+        print(proj_task_dev)
+        return render(request, 'audit_module/audit_Detail_project.html', {'Aud': Aud,'prj':prj,'prjmodule':prjmodule,'prjtable':prjtable,
+        'prj_other':prj_other,'proj_task_ts':proj_task_ts,'proj_task_tl':proj_task_tl,'proj_task_dev':proj_task_dev,'user':user})
+    else:
+        return redirect('/')
+
+
 
 # Audit Action Taken 
 def Audit_action_taken(request):
@@ -20013,6 +20132,7 @@ def Audit_action_taken(request):
         if request.method == 'POST':
             
             var=Action_Taken()
+            var.atby=user_registration.objects.get(id=Aud_id)
             var.atdep=department.objects.get(id=int(request.POST['Department']))
             var.atdesig=designation.objects.get(id=int(request.POST['designation']))
             var.atemp=user_registration.objects.get(id=int(request.POST['emp']))
@@ -20020,8 +20140,73 @@ def Audit_action_taken(request):
             var.at_status='1'
             var.save()
 
-        act=Action_Taken.objects.all().order_by('-id')
+        act=Action_Taken.objects.filter(atby_id=Aud_id).order_by('-id')
         return render(request, 'audit_module/audit_action_taken.html', {'Aud': Aud,'cous':cous,'dep':dep,'des':des,'emp':emp,'act':act})
+    else:
+        return redirect('/')
+
+
+
+# Tl Action Taken 
+def TL_action_taken(request):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+
+        mem = user_registration.objects.filter(id=tlid)
+        cous = course.objects.all()
+        dep = department.objects.all()
+        des = designation.objects.all()
+        emp = user_registration.objects.all()
+       
+
+        if request.method == 'POST':
+            
+            var=Action_Taken()
+            var.atby=user_registration.objects.get(id=tlid)
+            var.atdep=department.objects.get(id=int(request.POST['Department']))
+            var.atdesig=designation.objects.get(id=int(request.POST['designation']))
+            var.atemp=user_registration.objects.get(id=int(request.POST['emp']))
+            var.at_remark=request.POST['reason']
+            var.at_status='1'
+            var.save()
+
+        act=Action_Taken.objects.filter(atby_id=tlid).order_by('-id')
+        return render(request, 'TLactions_taken.html', {'mem': mem,'cous':cous,'dep':dep,'des':des,'emp':emp,'act':act})
+    else:
+        return redirect('/')
+
+
+
+# Tl Action Taken 
+def Projectmanager_action_taken(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+            return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        cous = course.objects.all()
+        dep = department.objects.all()
+        des = designation.objects.all()
+        emp = user_registration.objects.all()
+       
+
+        if request.method == 'POST':
+            
+            var=Action_Taken()
+            var.atby=user_registration.objects.get(id=prid)
+            var.atdep=department.objects.get(id=int(request.POST['Department']))
+            var.atdesig=designation.objects.get(id=int(request.POST['designation']))
+            var.atemp=user_registration.objects.get(id=int(request.POST['emp']))
+            var.at_remark=request.POST['reason']
+            var.at_status='1'
+            var.save()
+
+        act=Action_Taken.objects.filter(atby_id=prid).order_by('-id')
+        return render(request, 'Projectmanageractions_taken.html', {'pro': pro,'cous':cous,'dep':dep,'des':des,'emp':emp,'act':act})
     else:
         return redirect('/')
 

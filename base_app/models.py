@@ -604,7 +604,15 @@ class acntspayslip(models.Model):
     ifsc =  models.CharField(max_length=200, null=True, default='')
     bank_name = models.CharField(max_length=240, null=True,blank=True, default='')
     bank_branch = models.CharField(max_length=240, null=True, default='')
-    
+
+
+class Salary_hold(models.Model):
+    sal_id = models.ForeignKey(acntspayslip, on_delete=models.SET_NULL, related_name='salarys',null=True,blank=True)
+    hddate = models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    sal_reason= models.TextField()
+    sal_amount = models.IntegerField(null=True, default=0)
+    sal_status = models.CharField(max_length=50,default='')
+
 class acntexpensest (models.Model):
     payee =models.CharField(max_length=100)
     payacnt=models.CharField(max_length=200)
@@ -955,6 +963,7 @@ class Action_Taken(models.Model):
     atdep=models.ForeignKey(department,on_delete=models.CASCADE,related_name='depat',null=True,blank=True)
     atdesig=models.ForeignKey(designation,on_delete=models.CASCADE,related_name='desigat',null=True,blank=True)
     atemp=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='empat',null=True,blank=True)
+    atby=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='ationby',null=True,blank=True)
     at_remark=models.TextField()
     at_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
     at_status=models.CharField(max_length=200,null=True, blank=True,default='')

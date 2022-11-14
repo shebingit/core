@@ -1705,6 +1705,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('Audit_emp_list/<int:audit_depart_id>/<int:audit_des_id>', views.Audit_emp_list, name='Audit_emp_list'),
     path('Audit_employee_dashbord/<int:audit_emp_id>', views.Audit_employee_dashbord, name='Audit_employee_dashbord'),
     path('Audit_trainee_dashboard/<int:audit_emp_tr>', views.Audit_trainee_dashboard, name='Audit_trainee_dashboard'),
+    path('Audit_salary_hold/<int:holdid>', views.Audit_salary_hold, name='Audit_salary_hold'),
     path('Audit_tl/<int:Audit_tl>', views.Audit_tl, name='Audit_tl'),
     path('Audit_tlproject_split/<int:audit_pid>/<int:audit_ptlid>', views.Audit_tlproject_split, name='Audit_tlproject_split'),
     path('Audit_DEVtable/<int:audit_emp_prtask>/<int:audit_empid>', views.Audit_DEVtable, name='Audit_DEVtable'),
@@ -1712,9 +1713,16 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 #project
     path('Audit_project>', views.Audit_project, name='Audit_project'),
     path('Audit_project_details/<int:audit_pro_id>', views.Audit_project_details, name='Audit_project_details'),
+    path('Audit_project_user_requirement/<int:ur_id>', views.Audit_project_user_requirement, name='Audit_project_user_requirement'),
+    path('Audit_detail_project/<int:pd_id>', views.Audit_detail_project, name='Audit_detail_project'),
+    path('Audit_project_doc/<int:prdoc_id>', views.Audit_project_doc, name='Audit_project_doc'),
+    path('Audit_project_tl/<int:audit_protls>', views.Audit_project_tl, name='Audit_project_tl'),
+    path('Audit_project_tlteam/<int:audit_protlsdev>/<int:adev_id>', views.Audit_project_tlteam, name='Audit_project_tlteam'),
 
 # Action Taken
  path('Audit_action_taken>', views.Audit_action_taken, name='Audit_action_taken'),
+ path('Projectmanager_action_taken>', views.Projectmanager_action_taken, name='Projectmanager_action_taken'),
+ path('TL_action_taken>', views.TL_action_taken, name='TL_action_taken'),
     
 
 

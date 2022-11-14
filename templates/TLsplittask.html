@@ -341,9 +341,12 @@
               <td style="color: white;"> {{i.task}}</td>
               <td style="color: white;"> {{i.subtask}} </td>
               <td style="color: white;"> {{test.workdone}} </td>
-              <td class="text-info"><a href="{{test.files.url}}" download style="text-decoration:none;">
+              <td class="text-info">
+                {% if test.files %}
+                <a href="{{test.files.url}}" download style="text-decoration:none;">
                   <div class="badge badge-outline-info">Download</div>
-                </a></td>
+                </a>
+              {% endif %}</td>
             </tr>
             {% endif %}
             {% endfor %}
