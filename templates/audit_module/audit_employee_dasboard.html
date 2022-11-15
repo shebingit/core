@@ -437,22 +437,22 @@
                                 {% for j in hld %}
                                 <td>
                                     {% if j.sal_id.id == i.id %}
-                                    <p>{{j.sal_status}}</p>
+                                    {{j.sal_status}}
                                     {% endif %}
                                 </td>
                                 <td>
                                 {% if j.sal_id.id == i.id %}
-                                    <p>{{j.hddate|date:"d-m-Y"}}</p>
+                                   {{j.hddate|date:"d-m-Y"}}
                                 {% endif %}
                                </td>
                                 <td>
                                     {% if j.sal_id.id == i.id %}
-                                        <p>{{j.sal_reason}}</p>
+                                       {{j.sal_reason}}
                                     {% endif %}
                                 </td>
                                     <td>
                                         {% if j.sal_id.id == i.id %}
-                                        <p>{{j.sal_amount}}</p>
+                                        {{j.sal_amount}}
                                         {% endif %}
                                     </td>
                                

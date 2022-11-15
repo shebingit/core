@@ -8040,12 +8040,14 @@ def dev_Work_not_assign(request):
         mem = user_registration.objects.filter(id=tlid)
         tli =user_registration.objects.get(id=tlid)
         tl=user_registration.objects.filter(id=tli.id)
+        pm=tli.projectmanager_id
+        pman = user_registration.objects.filter(id=pm)
       
         l=leave.objects.filter(to_date__gte=date.today())
        
         dev=user_registration.objects.filter(~Q(id__in=l.values_list('user_id', flat=True)),tl_id=tli.id,status="active",work_status='0')
         req=WorkRequest.objects.filter(wrkreq_tl_id=tlid,wrkreq_date=date.today())
-        return render(request, 'tl_worknot_assign.html',{'mem':mem,'tl':tl,'dev':dev,'req':req})
+        return render(request, 'tl_worknot_assign.html',{'mem':mem,'tl':tl,'dev':dev,'req':req,'pman':pman})
     else:
         return redirect('/')
 
@@ -8482,6 +8484,7 @@ def TLtaskformsubmit(request,id):
         else:
            return redirect('/')
         mem = user_registration.objects.filter(id=tlid)
+        dev1 = user_registration.objects.get(id=tlid)
         if request.method == "POST":
             var = datetime.now().date()
             task = project_taskassign.objects.get(id=id)
@@ -8489,24 +8492,64 @@ def TLtaskformsubmit(request,id):
             task.git_link = request.POST['gitlink']
             task.employee_files = request.FILES['scn']
             task.submitted_date = var
-            task.status = 'Verification'
+          
             x = task.enddate
             y = var
             event = Event.objects.filter(start_time__range=(task.enddate,datetime.now().date())).count()
+
+
+          
+            if task.status == 'correction':
             
-            delta = datetime.now().date() - task.enddate
-            delay = delta.days - event
-            if delay > 0:
-                task.delay = delay
-                task.save()
+                test=TSproject_Task_verify.objects.filter(ts_tester=task.tester, ts_project_task=task).last()
+            
+                events = Event.objects.filter(start_time__range=(test.ts_task_verify_date,datetime.now().date())).count()
+
+            
+                delta=datetime.now().date() - test.ts_task_verify_date
+            
+                delay=delta.days - events
+            
+                if delay > 0:
+                    total= delay + int(task.delay)
+                    task.delay = total
+                    task.status = 'Verification'
+                    task.submitted_date = datetime.now().date()
+                    task.save()
+                
+
+                else:
+                    delay=0
+                    total= delay + int(task.delay)
+                    task.delay = total
+                    task.status = 'Verification'
+                    task.submitted_date = datetime.now().date()
+                    task.save()
+                
+                msg_success = "Task submitted successfully"
+                return render(request, 'TLgivetasks.html', {'mem': mem, 'msg_success': msg_success})
+            
             else:
-                task.delay = 0
-                task.save()
-            msg_success = "Task submitted successfully"
-            return render(request, 'TLgivetasks.html', {'mem': mem, 'msg_success': msg_success})
+                dev1.work_status='0'
+                dev1.save()
+                task.submitted_date = datetime.now().date()
+                task.status = 'Verification'
+                delta = datetime.now().date() - task.enddate
+                delay = delta.days - event
+                if delay > 0:
+                    task.delay = delay
+                    task.save()
+                else:
+                    task.delay = 0
+                    task.save()
+                msg_success = "Task submitted successfully"
+                return render(request, 'TLgivetasks.html', {'mem': mem, 'msg_success': msg_success})
+
         return render(request, 'TLsuccess.html', {'mem': mem, 'task': task})
     else:
         return redirect('/')
+
+           
 
 def TLleavereq(request):
     if 'tlid' in request.session:
@@ -19857,7 +19900,7 @@ def Audit_employee_dashbord(request,audit_emp_id):
         sala=acntspayslip.objects.filter(user_id_id=audit_emp_id).order_by('-id')
         rep=reported_issue.objects.filter(reporter_id=audit_emp_id).order_by('-id')
         hld= Salary_hold.objects.filter(sal_id__in=sala.values_list('id', flat=True))
-        act= Action_Taken.objects.filter(atemp_id=audit_emp_id)
+        act= Action_Taken.objects.filter(Q(atemp_id=audit_emp_id) | Q(atby_id=audit_emp_id))
         for j in leve_count:
             leaves=leaves+int(j.days)
 
@@ -20107,9 +20150,12 @@ def Audit_detail_project(request,pd_id):
         proj_task_tl= project_taskassign.objects.filter(project_id=pd_id).values('tl').distinct()
         proj_task_dev= project_taskassign.objects.filter(project_id=pd_id).values('developer').distinct()
         user= user_registration.objects.all()
-        print(proj_task_dev)
+        proj_task=project_taskassign.objects.filter(project_id=pd_id)
+        ts=tester_status.objects.filter(project_id=pd_id)
+        ts_verify=TSproject_Task_verify.objects.all()
+      
         return render(request, 'audit_module/audit_Detail_project.html', {'Aud': Aud,'prj':prj,'prjmodule':prjmodule,'prjtable':prjtable,
-        'prj_other':prj_other,'proj_task_ts':proj_task_ts,'proj_task_tl':proj_task_tl,'proj_task_dev':proj_task_dev,'user':user})
+        'prj_other':prj_other,'proj_task_ts':proj_task_ts,'proj_task_tl':proj_task_tl,'proj_task_dev':proj_task_dev,'user':user,'proj_task':proj_task,'ts':ts,'ts_verify':ts_verify})
     else:
         return redirect('/')
 
@@ -20140,7 +20186,7 @@ def Audit_action_taken(request):
             var.at_status='1'
             var.save()
 
-        act=Action_Taken.objects.filter(atby_id=Aud_id).order_by('-id')
+        act=Action_Taken.objects.all().order_by('-id')
         return render(request, 'audit_module/audit_action_taken.html', {'Aud': Aud,'cous':cous,'dep':dep,'des':des,'emp':emp,'act':act})
     else:
         return redirect('/')
@@ -20180,7 +20226,7 @@ def TL_action_taken(request):
 
 
 
-# Tl Action Taken 
+# Project Manager Action Taken 
 def Projectmanager_action_taken(request):
     if 'prid' in request.session:
         if request.session.has_key('prid'):
@@ -20209,6 +20255,38 @@ def Projectmanager_action_taken(request):
         return render(request, 'Projectmanageractions_taken.html', {'pro': pro,'cous':cous,'dep':dep,'des':des,'emp':emp,'act':act})
     else:
         return redirect('/')
+
+# Admin Action Taken
+def BRadmin_action_taken(request):
+    if 'Adm_id' in request.session:
+
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+
+        Adm = user_registration.objects.filter(id=Adm_id)
+        cous = course.objects.all()
+        dep = department.objects.all()
+        des = designation.objects.all()
+        emp = user_registration.objects.all()
+       
+
+        if request.method == 'POST':
+            
+            var=Action_Taken()
+            var.atby=user_registration.objects.get(id=Adm_id)
+            var.atdep=department.objects.get(id=int(request.POST['Department']))
+            var.atdesig=designation.objects.get(id=int(request.POST['designation']))
+            var.atemp=user_registration.objects.get(id=int(request.POST['emp']))
+            var.at_remark=request.POST['reason']
+            var.at_status='1'
+            var.save()
+
+        act=Action_Taken.objects.all().order_by('-id')
+        return render(request, 'BRadminactions_taken.html', {'Adm': Adm,'cous':cous,'dep':dep,'des':des,'emp':emp,'act':act})
+    else:
+        return redirect('/')
+
+
 
 
 

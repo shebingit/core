@@ -15,7 +15,7 @@
 <p>Start Date :  &nbsp;{{prj.startdate}}</p>
 <p>End Date :  &nbsp;{{prj.enddate}}</p>
 <hr>
-<div class="row">
+<div class="row g-3">
     <div class="col-lg-3 col-sm-12">
         <div class="card p-3 text-center" onclick="Div1()">Tables</div>
     </div>
@@ -25,12 +25,17 @@
     <div class="col-lg-3 col-sm-12">
         <div class="card p-3  text-center"onclick="Div3()">Tester &nbsp;TL  &nbsp; Developers</div>
     </div>
+    <div class="col-lg-3 col-sm-12">
+      <div class="card p-3  text-center"onclick="Div4()">Task</div>
+  </div>
+ 
 </div>
 
 
 <div class="table-responsive div1" id="div1">
     <h4 class="mt-4">Tables</h4>
-    <table class="table align-middle">
+    <div class="card">
+      <table class="table align-middle">
         <thead>
           <tr>
             <th scope="col">No</th>
@@ -58,6 +63,9 @@
         </tbody>
       </table>
 
+
+    </div>
+    
 </div>
 
 <br>
@@ -65,7 +73,8 @@
 
 <div class="table-responsive div1" id="div2">
     <h4 class="mt-4">Other Details </h4>
-    <table class="table align-middle">
+    <div class="card">
+      <table class="table align-middle">
         <thead>
           <tr>
             <th scope="col">No</th>
@@ -87,12 +96,16 @@
         </tbody>
       </table>
 
+    </div>
+   
+
 </div>
 
 
 <div class="table-responsive div1" id="div3">
     <h4 class="mt-4">Tester &nbsp;TL  &nbsp; Developers</h4>
-    <table class="table align-middle">
+    <div class="card">
+      <table class="table align-middle">
         <thead>
           <tr>
           
@@ -148,6 +161,94 @@
         </tbody>
       </table>
 
+    </div>
+    
+
+</div>
+
+
+<div class="table-responsive div1" id="div4">
+  <h4 class="mt-4">Task</h4>
+  <div class="card">
+    <table class="table align-middle">
+      <thead  class="table-dark">
+        <tr>
+        
+          <th scope="col">Emp Id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Task</th>
+          <th scope="col">Subtask</th>
+          <th scope="col">Start Date</th>
+          <th scope="col">End Date</th>
+          <th scope="col">Status</th>
+          <th scope="col">Delay</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+       {% for j in proj_task %}
+        <tr>
+          <th scope="row">{{j.developer.employee_id}}</th>
+          <td>{{j.developer.fullname}}</td>
+          <td>{{j.task}}</td>
+          <td>{{j.subtask}}</td>
+          <td>{{j.startdate}}</td>
+          <td>{{j.enddate}}</td>
+          <td>{{j.status}}</td>
+          <td>{{j.delay}}</td>
+         
+
+        </tr>
+        {% endfor %}
+        
+
+      </tbody>
+    </table>
+
+  </div>
+ 
+
+</div>
+
+<div class="table-responsive div1" id="div5">
+  <h4 class="mt-4">Tester Status</h4>
+  <div class="card">
+    <table class="table align-middle">
+      <thead  class="table-dark">
+        <tr>
+        
+          <th scope="col">Emp Id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Task</th>
+          <th scope="col">Subtask</th>
+          <th scope="col">Date</th>
+          <th scope="col">Status</th>
+         
+          
+        </tr>
+      </thead>
+      <tbody>
+       {% for j in ts_verify %}
+        <tr>
+          <th scope="row">{{j.user.employee_id}}</th>
+          <td>{{j.user.fullname}}</td>
+          <td>{{j.task.task}}</td>
+          <td>{{j.subtask.subtask}}</td>
+          <td>{{j.date}}</td>
+          <td>{{j.status}}</td>
+         
+         
+
+        </tr>
+        {% endfor %}
+        
+
+      </tbody>
+    </table>
+
+  </div>
+ 
+
 </div>
 
 
@@ -172,6 +273,22 @@
     }
     function Div3() {
         var x = document.getElementById("div3");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+      function Div4() {
+        var x = document.getElementById("div4");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+      function Div5() {
+        var x = document.getElementById("div5");
         if (x.style.display === "none") {
           x.style.display = "block";
         } else {
