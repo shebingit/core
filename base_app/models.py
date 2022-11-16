@@ -968,3 +968,17 @@ class Action_Taken(models.Model):
     at_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
     at_status=models.CharField(max_length=200,null=True, blank=True,default='')
     
+
+class UserManuvel(models.Model):
+    user_project=models.ForeignKey(project,on_delete=models.CASCADE,related_name='usermanuvel',null=True,blank=True)
+    um_head=models.CharField(max_length=255,null=True, blank=True,default='')
+    um_subhead=models.CharField(max_length=255,null=True, blank=True,default='')
+    um_dese=models.TextField()
+    um_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    um_files = models.FileField(upload_to='images/', null=True, blank=True)
+
+class UserManuvelPoints(models.Model):
+    userp_project=models.ForeignKey(project,on_delete=models.CASCADE,related_name='umproj',null=True,blank=True)
+    user_manuvelid=models.ForeignKey(UserManuvel,on_delete=models.CASCADE,related_name='usermanuvelid',null=True,blank=True)
+    um_pfiles = models.FileField(upload_to='images/', null=True, blank=True)
+    um_points=models.TextField()

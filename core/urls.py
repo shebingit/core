@@ -1640,6 +1640,9 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    path('projectManager_project_document', views.projectManager_project_document, name='projectManager_project_document'),
    path('project_manager_doc_start/<int:pmdoc_id>', views.project_manager_doc_start, name='project_manager_doc_start'),
    path('project_manager_doc_module/<int:pmdoc_md_id>', views.project_manager_doc_module, name='project_manager_doc_module'),
+   path('project_manager_usermanuvel/<int:pm_usermanuvel_id>', views.project_manager_usermanuvel, name='project_manager_usermanuvel'),
+   path('pm_usermanuvel_add/<int:pm_usermanuveladd>', views.pm_usermanuvel_add, name='pm_usermanuvel_add'),
+    path('pm_userpoints_add', views.pm_userpoints_add, name='pm_userpoints_add'),
    
    path('pm_doc_corre_updattion/<int:pmdoc_pid>/<int:pmdoc_cu>', views.pm_doc_corre_updattion, name='pm_doc_corre_updattion'),
    path('pm_doc_complete/<int:pmdoc_complete>', views.pm_doc_complete, name='pm_doc_complete'),
@@ -1718,6 +1721,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('Audit_project_doc/<int:prdoc_id>', views.Audit_project_doc, name='Audit_project_doc'),
     path('Audit_project_tl/<int:audit_protls>', views.Audit_project_tl, name='Audit_project_tl'),
     path('Audit_project_tlteam/<int:audit_protlsdev>/<int:adev_id>', views.Audit_project_tlteam, name='Audit_project_tlteam'),
+    path('usermauvel_pdf/<int:um_pdf>', views.usermauvel_pdf, name='usermauvel_pdf'),
 
 # Action Taken
  path('Audit_action_taken>', views.Audit_action_taken, name='Audit_action_taken'),

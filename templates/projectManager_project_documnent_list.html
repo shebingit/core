@@ -73,9 +73,8 @@
                   <th>End Date</th>
                   <th>Start Document</th>
                   <th>Doc.Start Date</th>
+                  <th>User Manuvel</th>
                   <th>Project Details</th>
-                 
-        
                   <th>Project Document</th>
                   <th>Desecription</th>
                   <th>Correction</th>
@@ -108,6 +107,7 @@
                       </td>
                      
                       <td>{{i.doc_project_currentdate|date:'d-m-Y'}}</td>
+                      <td><a class="" href="{% url 'project_manager_usermanuvel' i.id %}" style="cursor:pointer"><i class="mdi mdi-book-multiple icon"></i></a></td>
                       {% if i.doc_status == '1' %}
                         <td><a class="" href="{% url 'project_manager_doc_module' i.id %}" style="cursor:pointer"><i class="mdi mdi-book-multiple icon"></i></a>View</td>
                         

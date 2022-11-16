@@ -1,0 +1,116 @@
+{%extends 'promanagerindex.html'%}
+{%load static%}
+{%block content%}
+
+<style>
+    .container
+    {
+        background-color: aliceblue;
+    }
+</style>
+
+
+
+<div class="container-fluid">
+    <div class="card mb-3">
+        
+        <div class="card-head">
+            <h2 class="text-primary p-3 text-center mt-2">{{pdoc.doc_project_name}}</h2>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'pm_usermanuvel_add' pdoc.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Head</label>
+                  <input type="type" class="form-control" id="exampleInputEmail1" name="um_head" aria-describedby="emailHelp">
+                
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Sub Head</label>
+                  <input type="type" class="form-control" id="exampleInputPassword1"  name="um_subhead">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Desecription</label>
+                    <textarea type="type" class="form-control" id="exampleInputPassword1"  name="um_dese" style="height: 200px; "></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">File</label>
+                    <input type="file" class="form-control" id="exampleInputPassword1"  name="um_file"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+
+
+
+        </div>
+       
+    </div>
+    <div class="card mt-2">
+    
+        <div class="card-body">
+            <form action="{% url 'pm_userpoints_add' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label>Head</label>
+                    <select class="badge badge-outline-primary bg-dark text-light col-12 md-4" name="umhead_id" required>
+                        <option style="display: none" value="">---- Select Project ----</option>
+                        {% for i in um %}
+                        {% if i.um_head %}
+                        <option value="{{i.id}}">{{i.um_head}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                
+                </div>
+               
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Desecription</label>
+                    <textarea type="type" class="form-control" id="exampleInputPassword1"  name="um_points" style="height: 200px; "></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">File</label>
+                    <input type="file" class="form-control" id="exampleInputPassword1"  name="ump_file"></textarea>
+                </div>
+                
+                
+                <button type="submit" class="btn btn-primary">Add Points</button>
+              </form>
+              
+
+
+        </div>
+       
+    </div>
+
+    <div class="container mt-5 p-4">
+        {% for i in um %}
+        {% if i.um_head %}
+        <h4 class="text-primary mt-5 mb-3">{{forloop.counter}}.&nbsp;{{i.um_head}}</h4>
+        {% endif %}
+        <h6 class="text-primary mb-3 mt-3">{{i.um_subhead}}</h6>
+        <p style="color:#000 ;">{{i.um_dese}}</p>
+        {% if i.um_files %}
+        <div class="card" style="border: none;" >
+            <img src="{{i.um_files.url}}" style="height:450px ;">
+        </div>
+        {% endif %}
+            {% for j in ump %}
+                {% if j.user_manuvelid_id == i.id %}
+                <p style="color:#000 ;" class="mt-3 mb-4">{{j.um_points}}</p>
+                    {% if j.um_pfiles %}
+                    <div class="card" style="border: none;" >
+                        <img src="{{j.um_pfiles.url}}" style="height:450px ;">
+                    </div>
+                    {% endif %}
+
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+
+    </div>
+</div>
+
+
+
+{% endblock %}

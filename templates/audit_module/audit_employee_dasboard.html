@@ -8,11 +8,11 @@
 
 
    
-    .answer2 { display:block; }
-    .answer3 { display:block; }
-    .answer4 { display:block; }
-    .answer5 { display:block; }
-    .answer6 { display:block; }
+    .answer2 { display:none; }
+    .answer3 { display:none; }
+    .answer4 { display:none; }
+    .answer5 { display:none; }
+    .answer6 { display:none; }
 
       
     
@@ -208,28 +208,33 @@
 </div>
 
 <hr>
-<div class="row mt-1 answer2">
+<div class="row answer2">
     {% if  emp.designation.designation == 'project manager'  %}
     {% for i in devp %}
 
-        <div class="col-lg-12 col-md-12 col-sm-12 grid-margin stretch-card">
-            <div class="card">
-                <a href="{% url 'Audit_project_tl' i.id  %}" class="text-decoration-none text-white ">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-8 col-sm-12  my-auto">
-                            <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                <h4 class="mb-0" style="color:white;">{{i.project}}</h4>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-12 text-center text-xl-right">
-                            <i class="icon-lg mdi mdi-arrange-send-backward text-primary ms-auto"></i>
-                        </div>
-                    </div>
+    <div class="col-lg-12  grid-margin">
+        <a href="{% url 'Audit_project_tl' i.id  %}" style="text-decoration: none;">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                  <div class="d-flex d-sm-block d-md-flex align-items-center">
+                    <h4 class="mb-0" style="color: white;">{{i.project}}</h4>
+                  </div>
                 </div>
-                </a>
+                <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                  <i class="icon-lg mdi mdi-arrange-send-backward text-primary ms-auto"></i>
+                </div>
+              </div>
             </div>
-        </div>
+          </div>
+        </a>
+      </div>
+
+
+
+
+        
     {% endfor %}
     
     {% else %}
@@ -406,11 +411,7 @@
                                 <th> Leaves</th>
                                 <th> Delay</th>
                                 <th> Final Salary </th>
-                                <th> Pending Status </th>
-                                <th>Date</th>
-                                <th> Reason</th>
-                                <th> Deduction</th>
-
+                               
                                 <th> Action </th>
                               
                             </tr>
@@ -434,29 +435,7 @@
                                 <td>{{i.leavesno}}</td>
                                 <td>{{i.delay}}</td>
                                 <td>{{i.net_salary}}</td>
-                                {% for j in hld %}
-                                <td>
-                                    {% if j.sal_id.id == i.id %}
-                                    {{j.sal_status}}
-                                    {% endif %}
-                                </td>
-                                <td>
-                                {% if j.sal_id.id == i.id %}
-                                   {{j.hddate|date:"d-m-Y"}}
-                                {% endif %}
-                               </td>
-                                <td>
-                                    {% if j.sal_id.id == i.id %}
-                                       {{j.sal_reason}}
-                                    {% endif %}
-                                </td>
-                                    <td>
-                                        {% if j.sal_id.id == i.id %}
-                                        {{j.sal_amount}}
-                                        {% endif %}
-                                    </td>
                                
-                                {% endfor %}
                                 <td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#testerstatus{{i.id}}">Hold</button></td>
                                
                                 {% endfor %}
@@ -599,10 +578,11 @@
   
 <!-- pop up window for tester status -->
 <div class="modal fade" id="testerstatus{{dp.id}}">
-  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
     <form action="{% url 'Audit_salary_hold' dp.id %}" method="post">
         {% csrf_token %}
-    <div class="modal-content modal-sm" style="background-color: #191c24;">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+    
+    <div class="modal-content modal-xl" style="background-color: #191c24;">
       <div class="modal-header" style="border-bottom: 0 none;">
         <h5 class="modal-title text-info">Hold</h5>
         <button type="button" class="close text-light" data-dismiss="modal" aria-label=""
@@ -610,19 +590,49 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      
-        <div class="card p-3">
-            <label class="form-lable mb-3">Hold Reason</label>
-            <textarea class="form-class mb-3" style="height:100px ;" name="rea_hold" required></textarea>
-            <label class="form-lable mb-3">Amount</label>
-            <input type="text" class="form-class mb-3" name="amount_hold">
-            <button type="submit" class="btn btn-outline-warning">Update</button>
 
-        </div>
+      <div class="table-responsive mt-3 mb-3 container">
+
+        <table class="table   table-bordered ">
+          <thead style="background-color: black;">
+            <tr>
+              <th scope="col" style="color:#6C7293;">Date</th>
+              <th scope="col" style="color:#6C7293;">Reason</th>
+              <th scope="col" style="color:#6C7293;">Amount</th>
+              <th scope="col" style="color:#6C7293;">Action</th>
+          </thead>
+
+          <tbody>
+
+            {% for i in hld %}
+
+            <tr>
+              <td style="color:white;">{{i.hddate|date:"d-m-Y"}}</td>
+              <td style="color:white;">{{i.sal_reason}}</td>
+              <td style="color:white;">{{i.sal_amount}}</td>
+              
+            </tr>
+            {% endfor %}
+
+            <tr>
+              <td style="color:white;">{{time|date:"d-m-Y"}}</td>
+              <td style="color:white;"><textarea name="rea_hold" class="form-control-sm bg-transparent text-light"
+                  cols="25" rows="7" placeholder="Hold Reason" required></textarea></td>
+              <td style="color:white;"><textarea name="amount_hold" class="form-control-sm bg-transparent text-light"
+                  cols="25" rows="7" placeholder="Amount"></textarea></td>
+              <td class="text-info"><button type="submit" class="btn badge-outline-primary">submit</button></td>
+
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      
        
     </div>
-</form>
+
   </div>
+</form>
 </div>
 
 {% endfor %}

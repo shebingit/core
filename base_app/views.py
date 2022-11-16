@@ -6514,6 +6514,8 @@ def projectManager_project_document(request):
     else:
         return redirect('/')
 
+    
+
 # project document start
 def project_manager_doc_start(request,pmdoc_id):
     if 'prid' in request.session:
@@ -6564,6 +6566,63 @@ def project_manager_doc_module(request,pmdoc_md_id):
         return render(request, 'projectManager_project_module_list.html',{'pro':pro,'proj':proj,'pdoc':pdoc,'corre':corre,
                                 'updte':updte,'pdocd':pdocd,'pdocm':pdocm,'pdocv':pdocv,'pdochp':pdochp,'pdoclb':pdoclb,'pdocdot':pdocdot,
                                 'work_days':work_days,'devp':devp,'doc_user':doc_user,'pro_table':pro_table,'poj_other':poj_other})
+    else:
+        return redirect('/')
+
+
+def project_manager_usermanuvel(request,pm_usermanuvel_id):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid).order_by("-id")
+        pdoc= PM_ProjectDocument.objects.get(id=pm_usermanuvel_id)
+        um=UserManuvel.objects.filter(user_project=pdoc.doc_project_id)
+        ump=UserManuvelPoints.objects.filter(userp_project=pdoc.doc_project_id)
+        return render(request, 'projectManager_project_usermanuvel.html',{'pro':pro,'pdoc':pdoc,'um':um,'ump':ump})
+    else:
+        return redirect('/')
+    
+
+def pm_usermanuvel_add(request,pm_usermanuveladd):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+           return redirect('/')
+        pro = user_registration.objects.filter(id=prid).order_by("-id")
+        pdoc= PM_ProjectDocument.objects.get(id=pm_usermanuveladd)
+        um=UserManuvel.objects.filter(user_project=pdoc.doc_project_id)
+        ump=UserManuvelPoints.objects.filter(userp_project=pdoc.doc_project_id)
+
+        if request.method=="POST":
+            um1= UserManuvel()
+            um1.user_project=pdoc.doc_project_id
+            um1.um_head = request.POST.get('um_head')
+            um1.um_subhead = request.POST.get('um_subhead')
+            um1.um_dese = request.POST.get('um_dese')
+            um1.um_files = request.FILES.get('um_file')
+            um1.save()
+            msg_success = "Update successfully"
+
+        return render(request, 'projectManager_project_usermanuvel.html',{'pro':pro,'pdoc':pdoc,'um':um,'ump':ump})
+    else:
+        return redirect('/')
+
+def pm_userpoints_add(request):
+    if request.method=="POST":
+        um= UserManuvel.objects.get(id=request.POST.get('umhead_id'))
+        ump=UserManuvelPoints()
+        ump.userp_project=um.user_project
+        ump.user_manuvelid =um
+        ump.um_points = request.POST.get('um_points')
+        ump.um_pfiles = request.FILES.get('ump_file')
+        ump.save()
+        msg_success = "Update successfully"
+        pdoc= PM_ProjectDocument.objects.get(doc_project_id=um.user_project)
+        return redirect('project_manager_usermanuvel',pdoc.id)
+
     else:
         return redirect('/')
 
@@ -6652,7 +6711,7 @@ def pm_docfull_pdf(request,pmfulldocs_pdf):
     template_path = 'pm_project_document_fullpdf.html'
     context = {'proj':proj,'pdoc':pdoc,'corre':corre,
                                 'updte':updte,'pdocd':pdocd,'pdocm':pdocm,'pdocv':pdocv,'pdochp':pdochp,'pdoclb':pdoclb,'pdocdot':pdocdot,
-                                'devp':devp,'doc_user':doc_user,'date':date,'work_days':work_days}
+                                'devp':devp,'doc_user':doc_user,'date':date,'work_days':work_days,'settings.NEWPATH':settings.NEWPATH,}
         
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
@@ -6716,7 +6775,8 @@ def pm_doc_pdf(request,fulldoc_pdf):
     'project_doc':project_doc,
     'devp':devp,
     'doc_user':doc_user,
-    'work_days':work_days
+    'work_days':work_days,
+    'settings.NEWPATH':settings.NEWPATH,
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -6757,6 +6817,8 @@ def pm_doc_des_pdf(request,desedoc_pdf):
     'date':date,
     'prodoc':prodoc,
     'proj_table':proj_table,
+    'settings.NEWPATH':settings.NEWPATH,
+
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -6797,6 +6859,7 @@ def pm_doc_corr_pdf(request,corredoc_pdf):
     'project_correction':project_correction,
     'date':date,
     'prodoc':prodoc,
+    'settings.NEWPATH':settings.NEWPATH,
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -6836,6 +6899,7 @@ def pm_doc_updt_pdf(request,updedoc_pdf):
     'project_updation':project_updation,
     'date':date,
     'prodoc':prodoc,
+    'settings.NEWPATH':settings.NEWPATH,
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -6860,8 +6924,6 @@ def pm_doc_updt_pdf(request,updedoc_pdf):
 
 
     
-    
-
 
 
 
@@ -19945,6 +20007,8 @@ def Audit_salary_hold(request,holdid):
             hd.sal_reason=hld
             if amount:
                 hd.sal_amount=amount
+                sal.net_salary=sal.net_salary - int(amount)
+                sal.save()
             else:
                 hd.sal_amount=0
             hd.sal_status='Hold'
@@ -20131,9 +20195,54 @@ def Audit_project_user_requirement(request,ur_id):
         Aud = user_registration.objects.filter(id=Aud_id)
         prj=project.objects.get(id=ur_id)
         prjmodule=project_module_assign.objects.filter(project_name=prj)
-        return render(request, 'audit_module/audit_project_user_requirement.html', {'Aud': Aud,'prj':prj,'prjmodule':prjmodule})
+        um=UserManuvel.objects.filter(user_project=prj)
+        ump=UserManuvelPoints.objects.filter(userp_project=prj)
+        return render(request, 'audit_module/audit_project_user_requirement.html', {'Aud': Aud,'prj':prj,'prjmodule':prjmodule,'um':um,'ump':ump})
     else:
         return redirect('/')
+
+
+#User manuvel pdf
+    
+def usermauvel_pdf(request,um_pdf):
+    date = datetime.now()  
+    
+    projects=project.objects.get(id=um_pdf)
+    um=UserManuvel.objects.filter(user_project=projects)
+    ump=UserManuvelPoints.objects.filter(userp_project=projects)
+    
+    
+   
+    template_path = 'usermanuvel_pdf.html'
+    context = {'projects':projects,
+    'date':date,
+    'um':um,
+    'ump':ump,
+    'settings.NEWPATH':settings.NEWPATH,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="User_Manuvel.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+
+    
 
 def Audit_detail_project(request,pd_id):
     if 'aud_id' in request.session:

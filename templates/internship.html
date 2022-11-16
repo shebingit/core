@@ -299,23 +299,7 @@ input[type=number] {
     </script>
   {%endif%}
   <script>
-  function dates() {
-    var checkin_date = $("#startDate").datepicker('getDate');
-    var checkout_date = $("#endDate").datepicker('getDate');
-    var name = $("#name")
-    if (checkout_date <= checkin_date ) {
-      alert("This Dates booking is not valid");
-      window.location.reload();
-    }
-
-    else {
-      return true;
-
-    }
-
-
-  }
-
+   
   function showPreview(event) {
     if (event.target.files.length > 0) {
       var src = URL.createObjectURL(event.target.files[0]);
@@ -340,9 +324,7 @@ input[type=number] {
     //     $("#startDate").datepicker("option" , "maxDate", startDate);
     //   }
     // });
-
-
-  $("#startDate").datepicker({
+    $("#startDate").datepicker({
       dateFormat: 'yy-mm-dd',
       numberOfMonths: 1,
       minDate: 1,
@@ -354,6 +336,9 @@ input[type=number] {
       }
     });
     
+
+
+ 
     $("#endDate").datepicker({
         dateFormat: 'yy-mm-dd',
         numberOfMonths: 1,
