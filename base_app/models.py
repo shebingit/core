@@ -284,6 +284,7 @@ class project_taskassign(models.Model):
     git_link = models.TextField(null=True,default='')
     workaccept = models.FileField(upload_to='images/', null=True, blank=True,default="0")
     worktype = models.CharField(max_length=15, null=True,default="0")
+    tsakworkdays= models.IntegerField(default='0', null=True) 
     
 
     def __str__(self):
@@ -982,3 +983,13 @@ class UserManuvelPoints(models.Model):
     user_manuvelid=models.ForeignKey(UserManuvel,on_delete=models.CASCADE,related_name='usermanuvelid',null=True,blank=True)
     um_pfiles = models.FileField(upload_to='images/', null=True, blank=True)
     um_points=models.TextField()
+
+class ProjectBudgect(models.Model):
+    pb=models.ForeignKey(project,on_delete=models.CASCADE,related_name='pbug',null=True,blank=True)
+    pb_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    pb_compdate=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    pb_title=models.CharField(max_length=255,null=True, blank=True,default='')
+    pb_status=models.CharField(max_length=200,null=True, blank=True,default='')
+    pb_amount=models.IntegerField(null=True,blank=True,default=0)
+    pbtotal_amount=models.IntegerField(null=True,blank=True,default=0)
+    

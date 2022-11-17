@@ -394,8 +394,16 @@
                 </td>
                 <td class="text-light">{{i.workdone}}</td>
                 <td class="text-info"><a href="" style="text-decoration:none;">
-                    <div class="badge badge-outline-info"><a  style="text-decoration:none;" href ="{{i.files.url}}" download>Download</a></div>
-                  </a></td>
+
+                    <div class="badge badge-outline-info">
+                      {% if i.files %}
+                      <a  style="text-decoration:none;" href ="{{i.files.url}}" download>Download</a>
+                      {% else %}
+                      <a  style="text-decoration:none;" >No File</a>
+                      {% endif %}
+                    </div>
+                  </a>
+                </td>
               </tr>
                       
               {% endif %}

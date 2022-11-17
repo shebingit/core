@@ -9905,8 +9905,14 @@ def DEVtaskformsubmit(request, id):
         x = task.enddate
         y = var
         event = Event.objects.filter(start_time__range=(task.enddate,datetime.now().date())).count()
-       
-       
+        event1 = Event.objects.filter(start_time__range=(task.startdate,datetime.now().date())).count()
+        
+        d1=datetime.now().date() - task.startdate
+        w=d1.days - event1
+        if w <= 0:
+            task.tsakworkdays=1
+        else:
+            task.tsakworkdays=w 
         if task.status == 'correction':
           
             test=TSproject_Task_verify.objects.filter(ts_tester=task.tester, ts_project_task=task).last()
@@ -19749,6 +19755,70 @@ def BRadmin_project_delay_action(request,BRadmin_dep_dely):
     else:
         return redirect('/')
 
+    
+def BRadmin_project_budgect(request,BRadmin_bud):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        projects = project.objects.filter(department_id=BRadmin_bud).order_by('-id')
+        prjbug = ProjectBudgect.objects.all()
+        l= {}
+        
+       
+        for i in projects:
+            sum=0
+            for j in prjbug:
+                if j.pb.id == i.id:
+                 
+                  sum = sum + j.pb_amount
+            
+            l[i.id] = sum
+      
+        return render(request, 'BRadmin_project_budgect_list.html', {'Adm': Adm,'projects':projects,'prjbug':prjbug,'l':l.items()})
+    else:
+        return redirect('/')
+
+
+def BRadmin_budgect_add(request,BRadmin_pb):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        projects = project.objects.get(id=BRadmin_pb)
+
+        if request.method == 'POST':
+            bud=ProjectBudgect()
+            bud.pb=projects
+            bud.pb_date=date.today()
+            bud.pb_title=request.POST['pb_title']
+            bud.pb_amount= request.POST['pb_amt']
+            bud.pb_status='0'
+            bud.save()
+
+            return redirect('BRadmin_project_budgect',bud.pb.department.id)
+    else:
+        return redirect('/')
+
+def BRAdmin_section_complete(request,BRadmin_sect_id):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        pbug = ProjectBudgect.objects.get(id=BRadmin_sect_id)
+        pbug.pb_status='1'
+        pbug.pb_compdate=date.today()
+        pbug.save()
+        return redirect('BRadmin_project_budgect',pbug.pb.department.id)
+    else:
+        return redirect('/')
+
 
 
 
@@ -20201,6 +20271,26 @@ def Audit_project_user_requirement(request,ur_id):
     else:
         return redirect('/')
 
+def Audit_project_Budgect(request,budgect_id):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        counts=0
+        pr=project.objects.get(id=budgect_id)
+        event1 = Event.objects.filter(start_time__range=(pr.startdate,datetime.now().date())).count()
+        ptask= project_taskassign.objects.filter(project=pr)
+        for i in ptask:
+            counts=counts + int(i.tsakworkdays)
+        print( counts)
+        pdays=date.today() - pr.startdate
+        pdays=pdays.days - event1
+       
+        return render(request, 'audit_module/audit_project_budgect.html', {'Aud': Aud})
+    else:
+        return redirect('/')
 
 #User manuvel pdf
     

@@ -1682,6 +1682,11 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
    #admin project PM/TL/Developer
    path('BRadmin_project_delay_action/<int:BRadmin_dep_dely>', views.BRadmin_project_delay_action, name='BRadmin_project_delay_action'),
+   path('BRadmin_project_budgect/<int:BRadmin_bud>', views.BRadmin_project_budgect, name='BRadmin_project_budgect'),
+   path('BRadmin_budgect_add/<int:BRadmin_pb>', views.BRadmin_budgect_add, name='BRadmin_budgect_add'),
+    path('BRAdmin_section_complete/<int:BRadmin_sect_id>', views.BRAdmin_section_complete, name='BRAdmin_section_complete'),
+
+
 
    #************************ Admin project Dcuments section **************************
    path('BRadmin_project_document/<int:Bradmin_dep_id>', views.BRadmin_project_document, name='BRadmin_project_document'),
@@ -1717,6 +1722,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('Audit_project>', views.Audit_project, name='Audit_project'),
     path('Audit_project_details/<int:audit_pro_id>', views.Audit_project_details, name='Audit_project_details'),
     path('Audit_project_user_requirement/<int:ur_id>', views.Audit_project_user_requirement, name='Audit_project_user_requirement'),
+    path('Audit_project_Budgect/<int:budgect_id>', views.Audit_project_Budgect, name='Audit_project_Budgect'),
     path('Audit_detail_project/<int:pd_id>', views.Audit_detail_project, name='Audit_detail_project'),
     path('Audit_project_doc/<int:prdoc_id>', views.Audit_project_doc, name='Audit_project_doc'),
     path('Audit_project_tl/<int:audit_protls>', views.Audit_project_tl, name='Audit_project_tl'),
