@@ -3,4 +3,212 @@
 {% block content %}
 
 
+<div class="row">
+    <div class=" ml-5 " style="font-size: 20px;font-weight: 600;opacity: 0.9;color: #6c7293;">Project Budgect</div>
+</div>
+  <br>
+  
+  <div class="col-12 mt-4  grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="card-title">Order Status</h4> -->
+          <div class="col-md-4 col-6 w-100">
+            <input type="search" class="form-control rounded" id="search" onkeyup="myFunction()" placeholder="Search"
+              aria-label="Search" aria-describedby="search-addon" />
+          </div>
+          <div class="table-responsive">
+            <table class="table" >
+              <thead>
+                <tr>
+  
+                  <th>Project</th>
+                 
+                  <th>Project Phase and Amount</th>
+                 
+                </tr>
+              </thead>
+              <tbody id="myTable">
+             
+                <tr>
+                  <td colspan="1">{{pr.project}}</td>
+                  
+                  <td>
+                    <div class="table-responsive">
+                        <table class="table" >
+                          <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Title</th>
+                              <th>Amount</th>
+                              <th>Status</th>
+                              <th>Complete Date</th>
+                            
+                            </tr>
+                          </thead>
+                          <tbody id="innermyTable">
+                           {% for j in prjbug %}
+                           {% if j.pb.id == pr.id %}
+                            <tr>
+                               <td>{{j.pb_date}}</td>
+                              <td>{{j.pb_title}}</td>
+                              <td class="price">{{j.pb_amount}}</td>
+                              {% if j.pb_status == '0' %}
+                              <td><a href="#" class="btn btn-outline-warning">Pending</a></td>
+                              <td></td>
+                              
+                              {% else %}
+                              <td><a href="#" class="btn btn-outline-success">Completed</a></td>
+                              <td>{{j.pb_date}}</td>
+                             
+                              {% endif %}
+                            </tr>
+                            {% endif %}
+                            
+                            {% endfor %}
+                            <tr>
+                                <td colspan="2"> Total</td>
+                                <td colspan="">{{tsum}}</td>
+                               
+                            </tr>
+                            
+                          </tbody>
+                        </table>
+                      </div>
+                  </td>
+                </tr>
+                
+              
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card p-3">
+        <h5 class="text-center"> Total Work Days </h5>
+        <h5 class="mt-4 mb-3">Project Days &nbsp; :&nbsp; {{project_days}}</h5>
+        <h6>Project Manager &nbsp; :&nbsp;{{pr.projectmanager.fullname}}</h6>
+        
+        {% for i in tls %}
+        {% for j in users %}
+        {% if i.tl == j.id %}
+        <h6 class="mt-4">Team Leader&nbsp; :&nbsp;{{j.fullname}}</h6>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        <hr>
+        <h5 class="mb-4 text-center">Developers</h5>
+        {% for i in dl %}
+        {% for j in users %}
+        {% if i.developer == j.id %}
+            <p>{{j.fullname}}</p>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        <p>Total Amount to developers :&nbsp;{{devamount}}</p>
+        
+        <hr>
+        <p class="mt-4 mb-3">Developers Work Days</p>
+        <div class="card">
+            <div class="card-body">
+              <!-- <h4 class="card-title">Order Status</h4> -->
+              <div class="col-md-4 col-6 w-100">
+                <input type="search" class="form-control rounded" id="myInput" onkeyup="myFunctiondev()" placeholder="Search"
+                  aria-label="Search" aria-describedby="search-addon" />
+              </div>
+              <div class="table-responsive">
+                <table class="table" >
+                  <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Work Days</th>
+                      
+                      </tr>
+                  </thead>
+                  <tbody id="dev_table">
+                    {% for i in ptask %}
+                    <tr>
+                      <th scope="row">{{forloop.counter}}</th>
+                      <td>{{i.developer.fullname}}</td>
+                      <td>{{i.tsakworkdays}}</td>
+                    </tr>
+                     {% endfor %}
+                     <tr>
+                        <td colspan="2">Total work days</td>
+                        <td colspan="2">{{counts}}</td>
+                      </tr>
+                  
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        
+       
+    </div>
+  </div>
+
+  
+  <script>
+    function myFunction() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("search");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+
+    
+    function myFunctiondev() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dev_table");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[1];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+    
+    $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#dev_table tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+    $("#search").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  </script>
+
+
+  
+  
+
+
 {% endblock %}

@@ -1654,7 +1654,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
    path('pm_doc_corr_pdf/<int:corredoc_pdf>', views.pm_doc_corr_pdf, name='pm_doc_corr_pdf'),
    path('pm_doc_updt_pdf/<int:updedoc_pdf>', views.pm_doc_updt_pdf, name='pm_doc_updt_pdf'),
    path('pm_docfull_pdf/<int:pmfulldocs_pdf>', views.pm_docfull_pdf, name='pm_docfull_pdf'),
-
+   path('pm_doccode_pdf/<int:pm_code_pdf>', views.pm_doccode_pdf, name='pm_doccode_pdf'),
 
 
    #************************ Tl project document section

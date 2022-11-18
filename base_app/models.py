@@ -920,6 +920,7 @@ class ProjectDocother(models.Model):
 
 class ProjectCorrectionUpdation(models.Model):
     project_cu_id=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)
+    project_tsak_id=models.ForeignKey(project_taskassign,on_delete=models.CASCADE,null=True,blank=True)
     ptl_name=models.CharField(max_length=50,null=True, blank=True,default='')
     pdev_name=models.CharField(max_length=50,null=True, blank=True,default='')
     project_cu_module=models.CharField(max_length=100,null=True, blank=True)
@@ -991,5 +992,5 @@ class ProjectBudgect(models.Model):
     pb_title=models.CharField(max_length=255,null=True, blank=True,default='')
     pb_status=models.CharField(max_length=200,null=True, blank=True,default='')
     pb_amount=models.IntegerField(null=True,blank=True,default=0)
-    pbtotal_amount=models.IntegerField(null=True,blank=True,default=0)
+   
     

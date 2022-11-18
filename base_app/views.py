@@ -6732,7 +6732,57 @@ def pm_docfull_pdf(request,pmfulldocs_pdf):
     return response
 
 
+def pm_doccode_pdf(request,pm_code_pdf):
+    date = datetime.now()  
+    
+    try:
+        project_datils=PM_ProjectDocument.objects.get(id=pm_code_pdf)
 
+    except PM_ProjectDocument.DoesNotExist:
+        project_datils=None
+        return redirect('projectManager_project_document')
+    pdoc= PM_ProjectDocument.objects.get(id=pm_code_pdf)
+    proj=project_module_assign.objects.filter(project_name=pdoc.doc_project_id)
+    
+    pdocd=ProjectDocDetails.objects.filter(doc_project_d=pdoc.doc_project_id)
+    pdocm=ProjectDocModels.objects.filter(doc_project_md=pdoc.doc_project_id)
+    pdocv=ProjectDocViews.objects.filter(doc_project_v=pdoc.doc_project_id)
+    pdochp=ProjectDochtmlpages.objects.filter(doc_project_hp=pdoc.doc_project_id)
+    pdoclb=ProjectDoclibraryies.objects.filter(doc_project_lb=pdoc.doc_project_id)
+    pdocdot=ProjectDocother.objects.filter(doc_project_oth=pdoc.doc_project_id)
+    devp=project_taskassign.objects.filter(project=pdoc.doc_project_id).values('developer').distinct()
+    doc_user = user_registration.objects.all()
+   
+   
+
+    template_path = 'pm_project_document_codepdf.html'
+    context = {'proj':proj,'pdoc':pdoc,
+                               'pdocd':pdocd,'pdocm':pdocm,'pdocv':pdocv,'pdochp':pdochp,'pdoclb':pdoclb,'pdocdot':pdocdot,
+                                'devp':devp,'doc_user':doc_user,'date':date,'settings.NEWPATH':settings.NEWPATH,}
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Code-Document.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+
+
+    
 
 
 def pm_doc_pdf(request,fulldoc_pdf):
@@ -8861,6 +8911,7 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
             t.save()
 
             proj_doc_cu=ProjectCorrectionUpdation()
+            proj_doc_cu.project_tsak_id=prj_task
             proj_doc_cu.project_cu_module=prj_task.task
             proj_doc_cu.project_cu_descrip=request.POST['doc_pm_cumodule_dese']
             proj_doc_cu.pdev_name=prj_task.developer.fullname
@@ -20279,16 +20330,35 @@ def Audit_project_Budgect(request,budgect_id):
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
         counts=0
+        tsum=0
         pr=project.objects.get(id=budgect_id)
         event1 = Event.objects.filter(start_time__range=(pr.startdate,datetime.now().date())).count()
-        ptask= project_taskassign.objects.filter(project=pr)
+        prjbug = ProjectBudgect.objects.filter(pb=pr)
+        ptask= project_taskassign.objects.filter(project=pr,worktype='1')
+        dl= project_taskassign.objects.filter(project=pr).values('developer').distinct()
+        tls=project_taskassign.objects.filter(project=pr,worktype='2').values('tl').distinct()
+       
+        users=user_registration.objects.all()
+        for i in prjbug:
+            tsum= tsum + i.pb_amount
         for i in ptask:
             counts=counts + int(i.tsakworkdays)
-        print( counts)
+        devamount=counts * 400
         pdays=date.today() - pr.startdate
         pdays=pdays.days - event1
+        project_days=date.today() - pr.startdate
+        project_days = project_days.days - event1
+
+        tlsal=0
+        tltask= project_taskassign.objects.filter(project=pr,worktype='2')
        
-        return render(request, 'audit_module/audit_project_budgect.html', {'Aud': Aud})
+        for i in tls:
+            for j in tltask:
+                if j.tl.id == i:
+                    tlsal=tlsal + (j.tsakworkdays * 370)
+
+        return render(request, 'audit_module/audit_project_budgect.html', {'Aud': Aud,'prjbug':prjbug,'pr':pr,'tsum':tsum,'project_days':project_days,
+            'ptask':ptask,'counts':counts,'dl':dl,'tls':tls,'users':users,'tlsal':tlsal,'devamount':devamount})
     else:
         return redirect('/')
 
