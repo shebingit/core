@@ -66,6 +66,7 @@
                   <th>Desecription</th>
                   <th>Correction</th>
                   <th>Updation</th>
+                  <th>Code Doc</th>
                   <th>Full Doc</th>
   
                 </tr>
@@ -100,6 +101,7 @@
                         <td><a class="text-danger" href="{% url 'pm_doc_des_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i>  </a></td>
                         <td><a class="text-danger" href="{% url 'pm_doc_corr_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                         <td><a  class="text-danger" href="{% url 'pm_doc_updt_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
+                        <td><a  class="text-danger" href="{% url 'pm_doccode_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                         <td><a  class="text-danger" href="{% url 'pm_docfull_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
 
                       {% else %}

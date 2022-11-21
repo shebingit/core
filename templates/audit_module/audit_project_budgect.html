@@ -86,13 +86,19 @@
     </div>
     <div class="card p-3">
         <h5 class="text-center"> Total Work Days </h5>
-        <h5 class="mt-4 mb-3">Project Days &nbsp; :&nbsp; {{project_days}}</h5>
+        <div class="row">
+          <div class="col-lg-6">  <h5 class="mt-4 mb-3">Project Days &nbsp; :&nbsp; {{project_days}}</h5></div>
+          <div class="col-lg-6 text-center">  <h5 class="mt-4 mb-3">Project Total &nbsp; :&nbsp; {{total_ex}}</h5></div>
+        </div>
+      
         <h6>Project Manager &nbsp; :&nbsp;{{pr.projectmanager.fullname}}</h6>
+        <p class="mt-3">Salary Amount&nbsp; :&nbsp;{{pm_salary}}</p>
         
         {% for i in tls %}
         {% for j in users %}
         {% if i.tl == j.id %}
         <h6 class="mt-4">Team Leader&nbsp; :&nbsp;{{j.fullname}}</h6>
+        <p class="mt-3">Salary Amount&nbsp; :&nbsp;{{tlsal}}</p>
         {% endif %}
         {% endfor %}
         {% endfor %}

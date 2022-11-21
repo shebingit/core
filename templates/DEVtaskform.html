@@ -43,6 +43,27 @@
               </select>
             </div>
           </div>
+
+          
+          {% if  ta.status == 'correction' %}
+          <hr>
+         
+          <h3 class="mt-4 text-center">Correction Section </h3>
+          <div class="card mt-3 p-3">
+            <input type="text" value="{{corr.id}}" hidden name="ptid">
+            <label>Image - Before correction</label>
+            <input type="file" class="form-control mt-2 mb-3" name="doc_privios_img">
+            <label>Content - Before correction</label>
+            <textarea  class="form-control mt-2 mb-3" style="height:200px ;" name="doc_privios"></textarea>
+            <label>Image - After correction</label>
+            <input type="file" class="form-control mt-2 mb-3" name="doc_new_img">
+            <label>Content - After correction</label>
+            <textarea  class="form-control mt-2 mb-3" style="height:200px ;" name="doc_new"></textarea>
+          </div>
+         
+          <hr>
+          {% endif %}
+
                         
           {% endfor %}
 
@@ -75,10 +96,6 @@
               <input type="text"class="form-control" style="color:#ffffff; width: 100%;" name="gitlink" placeholder="Paste your Git link here"
                 required></input>
             </div>
-          </div>
-
-          <div class="card">
-            
           </div>
 
           <div class=" row  mt-3 ">

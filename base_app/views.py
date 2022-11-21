@@ -6711,7 +6711,7 @@ def pm_docfull_pdf(request,pmfulldocs_pdf):
     template_path = 'pm_project_document_fullpdf.html'
     context = {'proj':proj,'pdoc':pdoc,'corre':corre,
                                 'updte':updte,'pdocd':pdocd,'pdocm':pdocm,'pdocv':pdocv,'pdochp':pdochp,'pdoclb':pdoclb,'pdocdot':pdocdot,
-                                'devp':devp,'doc_user':doc_user,'date':date,'work_days':work_days,'settings.NEWPATH':settings.NEWPATH,}
+                                'devp':devp,'doc_user':doc_user,'date':date,'work_days':work_days,'path':settings.NEWPATH,}
         
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
@@ -6758,7 +6758,7 @@ def pm_doccode_pdf(request,pm_code_pdf):
     template_path = 'pm_project_document_codepdf.html'
     context = {'proj':proj,'pdoc':pdoc,
                                'pdocd':pdocd,'pdocm':pdocm,'pdocv':pdocv,'pdochp':pdochp,'pdoclb':pdoclb,'pdocdot':pdocdot,
-                                'devp':devp,'doc_user':doc_user,'date':date,'settings.NEWPATH':settings.NEWPATH,}
+                                'devp':devp,'doc_user':doc_user,'date':date,'path':settings.NEWPATH,}
         
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
@@ -6779,10 +6779,6 @@ def pm_doccode_pdf(request,pm_code_pdf):
     return response
 
 
-
-
-
-    
 
 
 def pm_doc_pdf(request,fulldoc_pdf):
@@ -6900,6 +6896,7 @@ def pm_doc_corr_pdf(request,corredoc_pdf):
         return redirect('projectManager_project_document')
     projects=project.objects.get(id=project_datils.doc_project_id.id)
     prodoc=PM_ProjectDocument.objects.get(doc_project_id=projects)
+    
    
     project_correction=ProjectCorrectionUpdation.objects.filter(project_cu_id=projects , project_cu_status='correction' )
     
@@ -6909,7 +6906,7 @@ def pm_doc_corr_pdf(request,corredoc_pdf):
     'project_correction':project_correction,
     'date':date,
     'prodoc':prodoc,
-    'settings.NEWPATH':settings.NEWPATH,
+    'path':settings.NEWPATH,
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -6949,7 +6946,7 @@ def pm_doc_updt_pdf(request,updedoc_pdf):
     'project_updation':project_updation,
     'date':date,
     'prodoc':prodoc,
-    'settings.NEWPATH':settings.NEWPATH,
+    'path':settings.NEWPATH,
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -8645,7 +8642,10 @@ def TLtaskformsubmit(request,id):
                 dev1.work_status='0'
                 dev1.save()
                 task.submitted_date = datetime.now().date()
-                task.status = 'Verification'
+                if task.worktype == '0':
+                     task.status = 'submitted'
+                else:
+                    task.status = 'Verification'
                 delta = datetime.now().date() - task.enddate
                 delay = delta.days - event
                 if delay > 0:
@@ -8909,13 +8909,14 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
             t.files= request.FILES.get('files')
             t.progress=0
             t.save()
-
+            
             proj_doc_cu=ProjectCorrectionUpdation()
             proj_doc_cu.project_tsak_id=prj_task
             proj_doc_cu.project_cu_module=prj_task.task
             proj_doc_cu.project_cu_descrip=request.POST['doc_pm_cumodule_dese']
             proj_doc_cu.pdev_name=prj_task.developer.fullname
             proj_doc_cu.ptl_name=prj_task.tl.fullname
+          
             proj_doc_cu.project_cu_id=prj_task.project
             proj_doc_cu.project_date=date.today()
             proj_doc_cu.project_cu_status='correction'
@@ -9938,7 +9939,8 @@ def DEVtaskform(request, id):
     time = datetime.now()
     dev = user_registration.objects.filter(id=devid)
     task = project_taskassign.objects.filter(developer_id=devid).filter(id=id)
-    return render(request, 'DEVtaskform.html', {'dev': dev, 'task': task, 'time': time})
+    corr = ProjectCorrectionUpdation.objects.filter(project_tsak_id_id=id).last()
+    return render(request, 'DEVtaskform.html', {'dev': dev, 'task': task, 'time': time,'corr':corr})
 
 def DEVtaskformsubmit(request, id):
     if request.session.has_key('devid'):
@@ -9974,6 +9976,7 @@ def DEVtaskformsubmit(request, id):
             delta=datetime.now().date() - test.ts_task_verify_date
            
             delay=delta.days - events
+            wrk=delay
           
             if delay > 0:
                 total= delay + int(task.delay)
@@ -9984,13 +9987,27 @@ def DEVtaskformsubmit(request, id):
                
 
             else:
-                delay=0
-                total= delay + int(task.delay)
+                delay = 0
+                total = delay + int(task.delay)
                 task.delay = total
                 task.status = 'Verification'
                 task.submitted_date = datetime.now().date()
                 task.save()
-               
+
+            if request.method == 'POST':  
+                
+                corre_up=ProjectCorrectionUpdation.objects.get(id=request.POST.get('ptid'))
+                corre_up.project_cu_olddescrip=request.POST.get('doc_privios')
+                corre_up.project_oldui= request.FILES.get('doc_privios_img')
+                corre_up.project_cu_newdescrip=request.POST.get('doc_new')
+                corre_up.project_cu_newui= request.FILES.get('doc_new_img')
+                corre_up.project_cu_start=test.ts_task_verify_date
+                corre_up.project_cu_end=datetime.now().date()
+                if wrk == 0:
+                    wrk=1
+                corre_up.project_cu_wdays=int(wrk)
+                corre_up.save()
+
             msg_success = "Task submitted successfully"
             return render(request, 'DEVtaskform.html', {'dev': dev, 'msg_success': msg_success})
         
@@ -20348,6 +20365,7 @@ def Audit_project_Budgect(request,budgect_id):
         pdays=pdays.days - event1
         project_days=date.today() - pr.startdate
         project_days = project_days.days - event1
+        pm_salary = (project_days * 250)
 
         tlsal=0
         tltask= project_taskassign.objects.filter(project=pr,worktype='2')
@@ -20357,8 +20375,9 @@ def Audit_project_Budgect(request,budgect_id):
                 if j.tl.id == i:
                     tlsal=tlsal + (j.tsakworkdays * 370)
 
+        total_ex=pm_salary+tlsal+devamount
         return render(request, 'audit_module/audit_project_budgect.html', {'Aud': Aud,'prjbug':prjbug,'pr':pr,'tsum':tsum,'project_days':project_days,
-            'ptask':ptask,'counts':counts,'dl':dl,'tls':tls,'users':users,'tlsal':tlsal,'devamount':devamount})
+            'ptask':ptask,'counts':counts,'dl':dl,'tls':tls,'users':users,'tlsal':tlsal,'devamount':devamount,'pm_salary':pm_salary,'total_ex':total_ex})
     else:
         return redirect('/')
 

@@ -53,8 +53,10 @@
                     <br>
                     <form action="{% url 'DEV_project_FB' proj.id %}" method="post" class="p-3">
                         {% csrf_token %}
-                        <input type="text" class="w-100 mb-4" name="fend" value="{{prj_doc.doc_project_frontend}}" >
-                        <input type="text" class="w-100 mb-3" name="bend" value="{{prj_doc.doc_project_backend}}">
+                        <label>Front End</label>
+                        <input type="text" class="w-100 mt-2 mb-4" name="fend" value="{{prj_doc.doc_project_frontend}}" >
+                        <label>Back End</label>
+                        <input type="text" class="w-100 mt-2 mb-3" name="bend" value="{{prj_doc.doc_project_backend}}">
                         <br>
                         <button type="submit" class="btn btn-outline-success btn-icon-text"><i class="mdi mdi-checkbox-multiple-marked-circle btn-icon-prepend"></i>Save</button>
                     </form>
@@ -200,8 +202,8 @@
     
         </div>
 
-        <div class="col-lg-12 col-sm-12">
-            <h4 class="text-center">Updations and Tester Corrections on Project</h4>
+        <!--<div class="col-lg-12 col-sm-12">
+            <h4 class="text-center">  Tester Corrections on Project</h4>
             {% for i in prj_doc_crr_up %}
             <div class="row">
                 <p>{{i.project_cu_module}}</p>
@@ -230,13 +232,13 @@
                         </div>
                     </div>
                 </div>
-                {% if i.project_cu_wdays == 0 %}
+               {% if i.project_cu_wdays == 0 %}
                 <a href="#" data-toggle="modal" data-target="#doc{{i.id}}"><span class="mdi mdi-plus-circle mdi-36px"></span></a>
                 {% endif %}
             </div>
             <hr>
             {% endfor %}
-        </div>
+        </div>--> 
     </div> 
 </div>
 
@@ -275,18 +277,18 @@
 
 
 {%for i in prj_doc_crr_up %}
-<!-- Modal -->
+<!-- Modal 
 <div class="modal" id="doc{{i.id}}">
     <div class="modal-dialog">
         <div class="col-12 grid-margin stretch-card bg-dark text-light modal-content">
-        <!-- Modal Header -->
+       Modal Header 
             <form action="{% url 'DEV_corr_up' i.id %}" method="post" enctype="multipart/form-data" autocomplete="off">
                 {%csrf_token%}
                     <div class="modal-header">
                         <h4 class="modal-title">Corrections and Updation Form</h4>
                         <button type="submit"  class="close btn " data-dismiss="modal">&times;</button>
                     </div>
-                    <!-- Modal body -->
+                    Modal body
                     <div class="row">
                         <div class="col-12 grid-margin stretch-card">
                             <div class="card" >
@@ -349,7 +351,7 @@
             </div>
         </div>
     </div>
-    {%endfor%}
+    {%endfor%}-->
 
 
 

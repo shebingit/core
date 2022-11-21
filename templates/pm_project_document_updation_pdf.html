@@ -91,13 +91,13 @@
                         <p><b>Previous Content:</b> {{i.project_cu_olddescrip}}</p>
                         {% if i.project_oldui %}
                             <div class="card" style="border: none;" >
-                                <img src="settings.NEWPATH{{i.project_oldui.url}}" style="height:450px ;">
+                                <img src="{{path}}{{i.project_oldui.url}}" style="height:450px ;">
                             </div>
                         {% endif %}
                         <p><b>Corrected Content:</b> {{i.project_cu_newdescrip}}</p>
                         {% if i.project_cu_newui %}
                             <div class="card" style="border: none;" >
-                                <img src="settings.NEWPATH{{i.project_cu_newui.url}}" style="height:450px ;">
+                                <img src="{{path}}{{i.project_cu_newui.url}}" style="height:450px ;">
                             </div>
                         {% endif %}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;

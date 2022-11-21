@@ -63,8 +63,6 @@
                   <th>Start Document</th>
                   <th>Doc.Start Date</th>
                   <th>User Requirement</th>
-                  <th>Desecription</th>
-                  <th>Project Code</th>
                   <th>Correction</th>
                   <th>Updation</th>
                   <th>Code Document</th>
@@ -86,7 +84,7 @@
                     
                       <td> 
                         {% if i.doc_status == '0' %}
-                          <a class="text-success" href="{% url 'project_manager_doc_start' i.id %}" style="cursor:pointer"><i class="mdi mdi-power icon"></i></a>start
+                          Doc.work Pending
                         {% elif i.doc_status == 'complete' %}
                             Doc.Completed
                         {% else %}
@@ -97,8 +95,7 @@
                       <td>{{i.doc_project_currentdate|date:'d-m-Y'}}</td>
                       {% if i.doc_status == '1' %}
                       <td><a  class="text-danger" href="{% url 'pm_doc_des_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
-                        <td><a class="text-danger" href="#" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i>  </a></td>
-                        <td><a  class="text-danger" href="#" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
+                        
                         <td><a class="text-danger" href="{% url 'pm_doc_corr_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                         <td><a  class="text-danger" href="{% url 'pm_doc_updt_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                         <td><a  class="text-danger" href="{% url 'pm_doccode_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>

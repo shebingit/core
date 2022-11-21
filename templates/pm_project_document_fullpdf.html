@@ -230,8 +230,9 @@
                                     <h6>{{i.doc_project_hpname}}</h6>
                                     <p>{{i.doc_project_hpdise}}</p>
                                     {% if i.doc_project_html_page %}
-                                    <div class="card card_size">
-                                        <img src="settings.NEWPATH{{i.doc_project_html_page.url}}">
+                                    <div class="card ">
+
+                                        <img src="{{path}}{{i.doc_project_html_page.url}}" style="height:400px ; ">
                                     </div>
                                     {% endif %}
                                     <p>Developer :&nbsp;{{i.doc_hpuser.fullname}}</p>
@@ -297,13 +298,14 @@
                       <p class="mb-4"><b>Privious Content And Image:</b>
                         <br>
                         <br>
+                        
                         <span>Start Date:{{i.project_cu_start}}</span>&nbsp; &nbsp;&nbsp;
                         <span>End Date:{{i.project_cu_end}}</span>&nbsp; &nbsp;&nbsp;
                         <span>Work days:{{i.project_cu_wdays}}</span>
                         <br><br>{{i.project_cu_newdescrip}}<br>
                         {% if i.project_oldui %}
-                        <div class="card card_size" >
-                            <img src="D:\django\altoscore - Copy{{i.project_oldui.url}}" class="p-1">
+                        <div class="card" >
+                            <img src="{{path}}{{i.project_oldui.url}}" class="p-1" style="height:400px ;">
                           
                         </div>
                        
@@ -314,8 +316,8 @@
                         <br><br>{{i.project_cu_newdescrip}}<br>
                         {% if i.project_cu_newui %}
                        
-                        <div class="card card_size">
-                            <img src="D:\django\altoscore - Copy{{i.project_cu_newui.url}}" class="p-1">
+                        <div class="card ">
+                            <img src="{{path}}{{i.project_cu_newui.url}}" class="p-1" style="height:400px ;">
                         </div>
                        
                         {% endif %}
@@ -347,8 +349,8 @@
                        
                         <br><br>{{j.project_cu_newdescrip}}<br>
                         {% if j.project_oldui %}
-                        <div class="card card_size">
-                            <img src="D:\django\altoscore - Copy{{j.project_oldui.url}}" class="p-1">
+                        <div class="card ">
+                            <img src="{{path}}{{j.project_oldui.url}}" class="p-1" style="height:400px ;">
                         </div>
                         
                         {% endif %}
@@ -360,8 +362,8 @@
                         
                         <br><br>{{j.project_cu_newdescrip}}<br>
                         {% if j.project_cu_newui %}
-                        <div class="card card_size">
-                            <img src="D:\django\altoscore - Copy{{j.project_cu_newui.url}}" class="p-1">
+                        <div class="card ">
+                            <img src="{{path}}{{j.project_cu_newui.url}}" class="p-1" style="height:400px ;">
                         </div>
                     
                        
