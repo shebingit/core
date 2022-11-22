@@ -8605,6 +8605,14 @@ def TLtaskformsubmit(request,id):
             x = task.enddate
             y = var
             event = Event.objects.filter(start_time__range=(task.enddate,datetime.now().date())).count()
+            event1 = Event.objects.filter(start_time__range=(task.startdate,datetime.now().date())).count()
+            
+            d1=datetime.now().date() - task.startdate
+            w=d1.days - event1
+            if w <= 0:
+                task.tsakworkdays=1
+            else:
+                task.tsakworkdays=w 
 
 
           
@@ -8618,7 +8626,7 @@ def TLtaskformsubmit(request,id):
                 delta=datetime.now().date() - test.ts_task_verify_date
             
                 delay=delta.days - events
-            
+                wrk=delay
                 if delay > 0:
                     total= delay + int(task.delay)
                     task.delay = total
@@ -8634,6 +8642,21 @@ def TLtaskformsubmit(request,id):
                     task.status = 'Verification'
                     task.submitted_date = datetime.now().date()
                     task.save()
+                
+                
+                if request.method == 'POST':  
+                
+                    corre_up=ProjectCorrectionUpdation.objects.get(id=int(request.POST.get('ptid')))
+                    corre_up.project_cu_olddescrip=request.POST.get('doc_privios')
+                    corre_up.project_oldui= request.FILES.get('doc_privios_img')
+                    corre_up.project_cu_newdescrip=request.POST.get('doc_new')
+                    corre_up.project_cu_newui= request.FILES.get('doc_new_img')
+                    corre_up.project_cu_start=test.ts_task_verify_date
+                    corre_up.project_cu_end=datetime.now().date()
+                    if wrk == 0:
+                        wrk=1
+                    corre_up.project_cu_wdays=int(wrk)
+                    corre_up.save()
                 
                 msg_success = "Task submitted successfully"
                 return render(request, 'TLgivetasks.html', {'mem': mem, 'msg_success': msg_success})
@@ -8734,7 +8757,8 @@ def TLgivetasks(request,id):
         mem = user_registration.objects.filter(id=tlid)
         time = datetime.now()
         task = project_taskassign.objects.filter(developer_id=tlid).filter(id=id)
-        return render(request, 'TLgivetasks.html', {'mem': mem, 'task': task, 'time': time})
+        corr = ProjectCorrectionUpdation.objects.filter(project_tsak_id_id=id).last()
+        return render(request, 'TLgivetasks.html', {'mem': mem, 'task': task, 'time': time,'corr':corr})
     else:
         return redirect('/')
 
@@ -9996,7 +10020,7 @@ def DEVtaskformsubmit(request, id):
 
             if request.method == 'POST':  
                 
-                corre_up=ProjectCorrectionUpdation.objects.get(id=request.POST.get('ptid'))
+                corre_up=ProjectCorrectionUpdation.objects.get(id=int(request.POST.get('prtid')))
                 corre_up.project_cu_olddescrip=request.POST.get('doc_privios')
                 corre_up.project_oldui= request.FILES.get('doc_privios_img')
                 corre_up.project_cu_newdescrip=request.POST.get('doc_new')
@@ -20065,6 +20089,63 @@ def Audit_emp_list(request,audit_depart_id,audit_des_id):
     else:
         return redirect('/')
 
+
+#Employee Report Pdf
+
+def Audit_emp_reportpdf(request,audit_rep_id):
+    date = datetime.now()  
+    if request.method =="POST":
+        p1=request.POST.get('emp_training')
+        p2=request.POST.get('emp_proj')
+        p3=request.POST.get('emp_proj_corr')
+        p4=request.POST.get('emp_proj_up')
+        p5=request.POST.get('emp_salary')
+        p6=request.POST.get('emp_leatd')
+        p7=request.POST.get('emp_issue')
+        formdate=request.POST.get('emp_form')
+        todate=request.POST.get('emp_to')
+        pros = project.objects.all()
+        devp = project_taskassign.objects.filter(developer_id=audit_rep_id,startdate__gte=formdate, enddate__lte=todate).values('project_id').distinct()
+        task = project_taskassign.objects.filter(developer_id=audit_rep_id,startdate__gte=formdate, enddate__lte=todate)
+
+
+
+
+    template_path = 'audit_module/audit_emp_report_pdf.html'
+    context = {
+    'p1':p1,
+    'p2':p2,
+    'pros':pros,
+    'devp':devp,
+    'task':task,
+    'p3':p3,
+    'p4':p4,
+    'p5':p5,
+    'p6':p6,
+    'p7':p7,
+    'date':date,
+    'settings.NEWPATH':settings.NEWPATH,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+        
+    
 
 # Employee dashboard
 

@@ -58,6 +58,27 @@
                 <label for="exampleInputUsername2" class="col-sm-3 col-form-label">{{ta.enddate|date:"d-m-Y"}}</label>
             </div>
           </div>
+
+          {% if  ta.status == 'correction' %}
+          <hr>
+         
+          <h3 class="mt-4 text-center">Correction Section </h3>
+          <div class="card mt-3 p-3">
+            <input type="text" value="{{corr.id}}" hidden name="ptid">
+            <label>Image - Before correction</label>
+            <input type="file" class="form-control mt-2 mb-3" name="doc_privios_img">
+            <label>Content - Before correction</label>
+            <textarea  class="form-control mt-2 mb-3" style="height:200px ;" name="doc_privios"></textarea>
+            <label>Image - After correction</label>
+            <input type="file" class="form-control mt-2 mb-3" name="doc_new_img">
+            <label>Content - After correction</label>
+            <textarea  class="form-control mt-2 mb-3" style="height:200px ;" name="doc_new"></textarea>
+          </div>
+         
+          <hr>
+          {% endif %}
+
+
           <div class="form-group row">
             <label for="exampleInputMobile" class="col-sm-3 col-form-label">SCREENSHOT</label>
             <div class="col-sm-5">
