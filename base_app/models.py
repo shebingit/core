@@ -153,6 +153,8 @@ class user_registration(models.Model):
     reg_status =  models.CharField(max_length=10, default='0')
     trainee_delay=models.IntegerField(default=0)
     work_status =  models.CharField(max_length=10, default='')
+    desig_input = models.CharField(max_length=100, default='',null=True, blank=True)
+   
    
  
     def __str__(self):
@@ -457,6 +459,17 @@ class trainer_task(models.Model):
 
     def __str__(self):
         return self.trainee
+    
+class Trainer_Task_Correction(models.Model):
+    task_id = models.ForeignKey(trainer_task, on_delete=models.SET_NULL,
+                             related_name='trainer_task', null=True, blank=True)
+    correctiondate = models.DateField(
+        auto_now_add=True, auto_now=False,  null=True, blank=True)
+    correction_description = models.TextField(max_length=240)
+    correctionfiles = models.FileField(upload_to='images/', null=True, blank=True)
+
+
+    
 
 # Trainee Task test by Trainer
 class trainer_task_test(models.Model):

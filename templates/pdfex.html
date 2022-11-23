@@ -77,7 +77,7 @@
                 <div class="content">
 
                     This is to certify that <b>Mr./Ms </b><b>{{ mem.fullname }}</b> has worked
-                    with us as ‘{{mem.department}} {{mem.designation}}’ from {{mem.joiningdate|date:"d-m-Y"}} to {{mem.enddate|date:"d-m-Y"}}. During
+                    with us as ‘{{mem.department}} {% if mem.desig_input %}{{mem.desig_input}}{% else%}{{mem.designation}}{% endif %}’ from {{mem.joiningdate|date:"d-m-Y"}} to {{mem.enddate|date:"d-m-Y"}}. During
                     his/her tenure with us, he/she ably handled major responsibilities in all
                     his/her endeavors here. We have found his/her to be a self-started who
                     is motivated, duty-bound, and a highly committed team player with
@@ -96,7 +96,8 @@
     {% else %}
     {{br_admin.branch_admin}}
     {% endif %}<br>
-HR Manager         
+HR Manager    
+
 <div style="margin-left: 13.5cm;"><img src="{{ mem.expqr }}" alt="..." height="150px"></div>                 
                     
 

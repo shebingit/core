@@ -215,6 +215,7 @@ urlpatterns = [
             views.trainer_givetask, name="traineer_givetask"),
     re_path(r'^trainer_taskgiven/(?P<id>\d+)$',
             views.trainer_taskgivenpage, name="traineer_taskgivenpage"),
+    path('trainer_task_statuschange/<int:tr_tm_id>', views.trainer_task_statuschange, name='trainer_task_statuschange'),
 
     re_path(r'^attendance/$', views.Attendance, name='attendance'),
     re_path(r'^trainees_attendance_viewattendance/$',

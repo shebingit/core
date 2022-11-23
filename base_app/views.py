@@ -2290,20 +2290,21 @@ def trainer_givetask(request, id):
 
     else:
         return redirect('/')
+    
 def trainer_taskgivenpage(request, id):
     if 'usernametrnr2' in request.session:
        
         if request.session.has_key('usernametrnr2'):
             usernametrnr2 = request.session['usernametrnr2']
             
-            
+        correction=Trainer_Task_Correction.objects.all()    
         if request.method == 'POST':
             id = request.POST['uid']
             abc = trainer_task.objects.get(id=id)
             abc.task_progress = request.POST['sele']
             abc.save()
             msg_success = "progress added"
-            return render(request,'trainer_taskgiven.html',{'msg_success':msg_success})
+            return render(request,'trainer_taskgiven.html',{'msg_success':msg_success,'correction':correction})
         else:
             
             z = user_registration.objects.filter(id=usernametrnr2)
@@ -2316,9 +2317,45 @@ def trainer_taskgivenpage(request, id):
             mem = user_registration.objects.filter(designation_id=des.id).filter(team_id=d).values_list('id')
             tsk = trainer_task.objects.filter(team_name_id=d.id).filter(user_id__in=mem).order_by('-id')
             
-            return render(request, 'trainer_taskgiven.html', {'mem': mem,'mem1': mem1, 'tsk': tsk, 'z': z})
+            return render(request, 'trainer_taskgiven.html', {'mem': mem,'mem1': mem1, 'tsk': tsk, 'z': z,'correction':correction})
     else:
         return redirect('/')
+    
+
+def trainer_task_statuschange(request,tr_tm_id):
+    if 'usernametrnr2' in request.session:
+       
+        if request.session.has_key('usernametrnr2'):
+            usernametrnr2 = request.session['usernametrnr2']
+            
+            
+        if request.method == 'POST':
+            id = request.POST['tskid']
+            abc = trainer_task.objects.get(id=id)
+            abc.task_status = '3'
+            abc.save()
+            msg_success = "Status Changed"
+            task_coorection = Trainer_Task_Correction()
+            task_coorection.task_id = abc
+            task_coorection.correction_description = request.POST['c_dis']
+            task_coorection.correctionfiles = request.FILES.get('c_file')
+            task_coorection.save()
+            correction=Trainer_Task_Correction.objects.all()
+
+            z = user_registration.objects.filter(id=usernametrnr2)
+            
+            d = create_team.objects.get(id=tr_tm_id)
+            c = trainer_task.objects.filter(team_name_id=d.id)
+            des = designation.objects.get(designation='trainee')
+            mem1 = user_registration.objects.filter(designation_id=des.id).filter(team_id=d).order_by('-id')
+            mem = user_registration.objects.filter(designation_id=des.id).filter(team_id=d).values_list('id')
+            tsk = trainer_task.objects.filter(team_name_id=d.id).filter(user_id__in=mem).order_by('-id')
+            
+            return render(request, 'trainer_taskgiven.html', {'mem': mem,'mem1': mem1, 'tsk': tsk, 'z': z,'msg_success':msg_success,'correction':correction})
+    else:
+        return redirect('/')
+
+    
 
 def trainer_taska(request):
     if 'usernametrnr2' in request.session:
@@ -2669,9 +2706,11 @@ def trainee_task_list(request):
         if request.session.has_key('usernametrns2'):
             usernametrns2 = request.session['usernametrns2']
         
+
+        correction=Trainer_Task_Correction.objects.all()
         z = user_registration.objects.filter(id=usernametrns2)
-        mem = trainer_task.objects.filter(user_id=usernametrns2).filter(task_status=0).order_by('-id')
-        return render(request, 'trainee_task_list.html', {'mem': mem, 'z': z})
+        mem = trainer_task.objects.filter(Q(user_id=usernametrns2)).filter( Q(task_status=0) | Q(task_status=3)).order_by('-id')
+        return render(request, 'trainee_task_list.html', {'mem': mem, 'z': z,'correction':correction})
     else:
         return redirect('/')
 
@@ -2732,7 +2771,7 @@ def trainee_completed_taskList(request):
             usernametrns2 = request.session['usernametrns2']
         
         z = user_registration.objects.filter(id=usernametrns2)
-        mem = trainer_task.objects.filter(user_id=usernametrns2).filter(task_status='1').order_by('-id')
+        mem = trainer_task.objects.filter(user_id=usernametrns2).filter(task_status=1).order_by('-id')
         return render(request, 'trainee_completed_taskList.html', {'mem': mem, 'z': z})
     else:
         return redirect('/')
@@ -10453,6 +10492,7 @@ def registrationupdatesave(request, id):
         a.permanentdistrict = request.POST['permanentdistrict']
         a.permanentstate = request.POST['permanentstate']
         a.designation_id = request.POST['designation']
+        a.desig_input = request.POST['desg']
         a.mobile = request.POST['mobile']
         a.alternativeno = request.POST['altmobile1']
         a.email = request.POST['email']
@@ -13586,8 +13626,9 @@ def projectmanager_projects_details(request):
             
             a=a+int(i)
 
-
-        return render(request,'projectmanager_projects_details.html', {'names':names,'mm':mm,'a':a ,})
+        teststatus = test_status.objects.all()
+        print(teststatus)
+        return render(request,'projectmanager_projects_details.html', {'names':names,'mm':mm,'a':a ,'teststatus':teststatus})
     else:
         return redirect('/')
 

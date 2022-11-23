@@ -65,17 +65,24 @@
 
                                     {% if i.task_status == '0' %}
 
-                                    <div class="badge badge-outline-danger" style="width: 135px;">
+                                    <div class="badge badge-outline-warning" style="width: 135px;">
                                         <i class="mdi mdi-playlist-remove"></i>&nbsp;
                                         Not Submitted
+                                    </div>
+                                    
+                                    {% elif i.task_status == '3' %}
+
+                                    <div class="badge badge-outline-danger" style="width: 135px;">
+                                        <i class="mdi mdi-playlist-plus" data-toggle="modal" data-target="#correctiontask{{i.id}}"> &nbsp;Correction</i>&nbsp;
+                                        
                                     </div>
 
 
                                     {%else %}
 
                                     <div class="badge badge-outline-success" style="width: 135px;">
-                                        <i class="mdi mdi-playlist-check"></i>&nbsp;
-                                        Submitted
+                                        <i class="mdi mdi-playlist-check"  data-toggle="modal" data-target="#correction{{i.id}}">  Submitted</i>&nbsp;
+                                       
                                     </div>
                                     {% endif %}
                                 </td>
@@ -188,6 +195,114 @@
     </div>
 </div>
 {% endfor %}
+
+{% for i in tsk %}
+<div class="modal" id="correction{{i.id}}">
+    <div class="modal-dialog">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 grid-margin stretch-card bg-dark text-light modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Correction And Status Change</h4>
+                <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <form method="post" action="{% url 'trainer_task_statuschange' i.team_name.id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="tskid" value="{{i.id}}">
+                
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <div class="card" style="height:auto;">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 mt-1">
+                                    <label class="form-label mb-3" style="font-size:13px ;">Correction :</label>
+                                    <textarea class="form-control mb-4" style="height:100px ;" name="c_dis"></textarea>
+                                    <label class="form-label mb-3" style="font-size:13px ;">File :</label>
+                                    <input type="file" class="form-label mb-3" name="c_file">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-outline-primary btn-icon-text">
+                <i class="mdi mdi-file-check text-info" style="font-size:18px; "></i>Submit</button>
+            </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% for i in tsk %}
+<div class="modal" id="correctiontask{{i.id}}">
+    <div class="modal-dialog modal-xl">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 grid-margin stretch-card bg-dark text-light modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Task Corrections</h4>
+                <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+          
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <div class="card" style="height:auto;">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 mt-1">
+                                    <table class="table">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Task</th>
+                                            <th scope="col">Correction</th>
+                                            <th scope="col">File</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for j in correction %}
+                                        {% if j.task_id.id == i.id %}
+                                          <tr>
+                                            <td>{{j.correctiondate|date:"y-m-d"}}</td>
+                                            <td>{{i.taskname}}</td>
+                                            <td>{{j.correction_description}}</td>
+                                            <td>
+                                                {% if j.correctionfiles %}
+                                                <a href="{{j.correctionfiles.url}}" class="btn btn-primary" download="{{j.correctionfiles.url}}">Download</a></td>
+                                                {% endif %}
+                                          </tr>
+                                          {% endif %}
+                                          {% endfor %}
+                                         
+                                            
+                                        </tbody>
+                                      </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+
+
 <!-- modal end -->
 {% if msg_success %}
     <script>

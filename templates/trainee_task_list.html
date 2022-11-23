@@ -37,12 +37,18 @@
                                 <th class="text-white">
                                     End Date
                                 </th>
+                                <th class="text-white">
+                                    Status
+                                </th>
+                                <th class="text-white">
+                                    Action
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             {% if mem %}
                             <br> {% for i in mem %}
-                            <tr data-href="{% url 'trainee_task_details' i.id %}">
+                            <tr >
 
 
                                 <td style="padding-left:40px;">
@@ -58,6 +64,37 @@
                                 <td>
                                     {{i.enddate|date:"d-m-Y"}}
                                 </td>
+                                <td>
+                                    {% if i.task_status == '0' %}
+
+                                    <div class="badge badge-outline-warning" style="width: 135px;">
+                                        <i class="mdi mdi-playlist-remove"></i>&nbsp;
+                                        Not Submitted
+                                    </div>
+                                    
+                                    {% elif i.task_status == '3' %}
+
+                                    <div class="badge badge-outline-danger" style="width: 135px;">
+                                        <i class="mdi mdi-playlist-plus" data-toggle="modal" data-target="#correctiontask{{i.id}}"> &nbsp;Correction</i>&nbsp;
+                                        
+                                    </div>
+
+
+                                    {%else %}
+
+                                    <div class="badge badge-outline-success" style="width: 135px;">
+                                        <i class="mdi mdi-playlist-check"  data-toggle="modal" data-target="#correction{{i.id}}">  Submitted</i>&nbsp;
+                                       
+                                    </div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="badge badge-outline-success" style="width: 135px;">
+                                        <i class="mdi mdi-playlist-check"  > <a href="{% url 'trainee_task_details' i.id %}" class="text-success" style="text-decoration:none ;">Submitt</a></i>&nbsp;
+                                       
+                                    </div>
+                                    
+                                </td>
                             </tr>
                             {% endfor %}{% else %}
                             <h5>Nothing to display...</h5>
@@ -70,6 +107,65 @@
     </div>
 </div>
 </div>
+
+
+{% for i in mem %}
+<div class="modal" id="correctiontask{{i.id}}">
+    <div class="modal-dialog modal-xl">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 grid-margin stretch-card bg-dark text-light modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Task Corrections</h4>
+                <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+          
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <div class="card" style="height:auto;">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 mt-1">
+                                    <table class="table">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Task</th>
+                                            <th scope="col">Correction</th>
+                                            <th scope="col">File</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for j in correction %}
+                                        {% if j.task_id.id == i.id %}
+                                          <tr>
+                                            <td>{{j.correctiondate|date:"y-m-d"}}</td>
+                                            <td>{{i.taskname}}</td>
+                                            <td>{{j.correction_description}}</td>
+                                            <td>
+                                                {% if j.correctionfiles %}
+                                                <a href="{{j.correctionfiles.url}}" class="btn btn-outline-primary" download="{{j.correctionfiles.url}}">Download</a></td>
+                                                {% endif %}
+                                          </tr>
+                                          {% endif %}
+                                          {% endfor %}
+                                         
+                                            
+                                        </tbody>
+                                      </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>
+{% endfor %}
 
 <script>
     function myFunction() {
@@ -90,12 +186,7 @@
             }
         }
     }
-    $(document).ready(function() {
-        $('table tr').click(function() {
-            window.location = $(this).data('href');
-            return false;
-        });
-    });
+    
 </script>
 
 

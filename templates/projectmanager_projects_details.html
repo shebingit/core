@@ -23,6 +23,7 @@
                   <th>Start Date</th>
                   <th>End Date</th>
                   <th>Submition Date</th>
+                  <th>Daily Report</th>
                   <th>Progress</th>
                   <th>Extension Status</th>
                   <th>Extension Date</th>
@@ -38,6 +39,12 @@
                   <td>{{i.startdate|date:'d-m-Y'}}</td>
                   <td>{{i.enddate|date:'d-m-Y'}}</td>
                   <td>{{i.submitted_date|date:'d-m-Y'}}</td>
+                  <td class="text-primary"><a href="" data-toggle="modal" data-target="#taskstatus{{i.id}}"
+                    style="text-decoration: none;">
+                    <div class="badge badge-outline-info">Report</div>
+                  </a></td>
+                  
+                  
                   <td>
                     <div class="progress" style="height:20px;">
                         <div class="progress-bar" style="height:20px;width:{{i.progress}}%">{{i.progress}}%</div>
@@ -53,7 +60,7 @@
                 </tr>
                 {% endfor %}
                 <tr>
-                  <td colspan="8">Total Delay</td>
+                  <td colspan="9">Total Delay</td>
                   <td><div class="badge badge-outline-danger" id="total">{{i.delay}}</div></td>
                 </tr>
               {% else %}
@@ -66,6 +73,84 @@
       </div>
     </div>
   </div>
+
+
+  {% for dp in names %}
+  <div class="modal fade" id="taskstatus{{dp.id}}">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div class="modal-content modal-xl" style="background-color: #191c24;">
+        <div class="modal-header">
+          <h5 class="modal-title text-info">Daily Work Report</h5>
+          <button type="button" class="close text-light" data-dismiss="modal" aria-label=""
+            style="font-size: 20px;;background-color: #191c24;border:none;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="table-responsive mt-3 mb-3 container">
+
+          <table class="table   table-bordered ">
+            <thead style="background-color: black;">
+              <tr>
+                <th scope="col" style="color:#6C7293;">Date</th>
+                <th scope="col" style="color:#6C7293;">Task</th>
+                <th scope="col" style="color:#6C7293;">Sub Task</th>
+                <th scope="col" style="color:#6C7293;">Work Done</th>
+
+                <th scope="col" style="color:#6C7293;">Files</th>
+               
+                <th scope="col" style="color:#6C7293;">Git Link</th>
+             
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {% for i in teststatus %}
+
+              {% if i.subtask_id == dp.id %}
+
+              <tr>
+                <td style="color:white;">{{i.date|date:"d-m-Y"}}</td>
+
+                <td style="color:white;">{{dp.task}}
+                </td>
+                <td style="color:white;">{{dp.subtask}}
+                </td>
+                <td style="color:white;">{{i.workdone}}
+                </td>
+
+                <td style="color:white;">{% for ss in i.json_testerscreenshot %}
+                  <div class="badge badge-outline-primary"><a style="text-decoration: none;" href="{{ ss }}" download>
+                      Download</a></div>
+                  {% endfor %}
+                </td>
+               
+                <td>
+                  <div class="badge badge-outline-primary"><a href="{{i.git_link}}" style="text-decoration: none;"
+                      target="_blank">View</a>
+                    </div>
+                </td>
+              </tr>
+
+              {% endif %}
+              {% endfor %}
+
+              
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+
+
+
+
+
   <script>
      $(document).ready(function(){
   $("#myInput").on("keyup", function() {
