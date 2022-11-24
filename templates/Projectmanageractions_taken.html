@@ -85,7 +85,8 @@
                 <tr data-href="#">
                   <th>SlNo</th>
                   <th>Date</th>
-                  <th>Name</th>
+                  <th>From</th>
+                  <th>To</th>
                   <th>Remark/Action</th>
                   <th>Designation</th>
                   <th>Department</th>
@@ -96,6 +97,7 @@
                 <tr data-href="{% url 'Audit_employee_dashbord' i.id %}">
                   <td>{{ forloop.counter }}</td>
                   <td>{{i.at_date|date:"d-m-Y"}}</td>
+                  <td>{{i.atby.fullname}}</td>
                   <td>{{i.atemp.fullname}}</td>
                   <td>{{i.at_remark}}</td>
                   <td>{{i.atdesig.designation}}</td>

@@ -294,7 +294,7 @@ def newtraineeesteam(request):
             users.tr_end_date=datesteam.enddate
             users.save()
             register.save()
-            return redirect('Dashboard')
+            return redirect('Newtrainees')
         return render(request, 'Newtrainees.html', {'memm': memm, 'des': des, 'dept': dept, 'team': team, })
     else:
         return redirect('/')
@@ -1748,6 +1748,59 @@ def trainer_traineesleave_table(request):
     else:
         return redirect('/')
 
+
+def trainer_feedbacks(request):
+    if 'usernametrnr2' in request.session:
+        
+        if request.session.has_key('usernametrnr2'):
+            usernametrnr2 = request.session['usernametrnr2']
+        
+        z = user_registration.objects.filter(id=usernametrnr2)
+
+        if request.method == 'POST':
+         
+            var = Feedbacks()
+            
+            # ree= user_registration.objects.get(designation_id=mem1)
+            var.fb_from=user_registration.objects.get(id=usernametrnr2)
+            var.fb_to = user_registration.objects.get(id=int(request.POST['fbname']))
+            var.fb = request.POST['fb']
+            var.save()
+    
+        return render(request, 'trainer_feedback.html', {'z': z})
+    else:
+        return redirect('/')
+
+def trainer_give_feedback(request):
+    if 'usernametrnr2' in request.session:
+        
+        if request.session.has_key('usernametrnr2'):
+            usernametrnr2 = request.session['usernametrnr2']
+        
+        z = user_registration.objects.filter(id=usernametrnr2)
+        
+        tre = designation.objects.get(designation='trainee')
+        use = user_registration.objects.filter(designation_id=tre.id)
+    
+        return render(request, 'trainer_givefeedback.html', {'z': z,'memteam':use})
+    else:
+        return redirect('/')
+
+def trainer_given_feedback(request):
+    if 'usernametrnr2' in request.session:
+        
+        if request.session.has_key('usernametrnr2'):
+            usernametrnr2 = request.session['usernametrnr2']
+        
+        z = user_registration.objects.filter(id=usernametrnr2)
+        n = Feedbacks.objects.filter(fb_from=usernametrnr2).order_by('-id')
+    
+        return render(request, 'trainer_givenfeedback.html', {'z': z,'n':n})
+    else:
+        return redirect('/')
+
+
+
 def trainer_reportissue(request):
     if 'usernametrnr2' in request.session:
         
@@ -2839,9 +2892,6 @@ def trainee_feedbacks(request):
         
         if request.session.has_key('usernametrns2'):
             usernametrns2 = request.session['usernametrns2']
-        
-    
-        
     
         z=user_registration.objects.filter(designation_id=usernametrns).filter(id=usernametrns2)
        
@@ -8472,7 +8522,7 @@ def tlgivetask(request):
             msg_success = "Task split successfully"
             return render(request, 'TLgivetask.html',{'msg_success':msg_success})
         else:
-            return render(request, 'TLgivetask.html',{'mem':mem,'spa':spa,'spa1':spa1,'time':time,'tasks':tasks})
+            return render(request, 'TLgivetask.html',{'mem':mem,'spa':spa,'spa1':spa1,'time':time,'tasks':tasks,'dept_id':dept_id})
     else:
         return redirect('/')
 
@@ -20376,8 +20426,11 @@ def Audit_DEVtable(request,audit_emp_prtask,audit_empid):
             Aud_id = request.session['aud_id']
         else:
             return redirect('/')
+        
         Aud = user_registration.objects.filter(id=Aud_id)
         emp=user_registration.objects.get(id=audit_empid)
+        task_verify = TSproject_Task_verify.objects.all()
+
         if emp.designation.designation == 'tester':
             devp= TSproject_Task_verify.objects.filter(ts_tester_id=audit_empid)
             ptask= project_taskassign.objects.filter(project_id=audit_emp_prtask,).filter(tester_id=audit_empid)
@@ -20391,10 +20444,11 @@ def Audit_DEVtable(request,audit_emp_prtask,audit_empid):
         teststatus = test_status.objects.all()
         proj=project.objects.get(id=audit_emp_prtask)
         testerstatus = tester_status.objects.filter(project_id=audit_emp_prtask)
+        
         time = datetime.now()
         action_take=wrdata.objects.all()
         return render(request, 'audit_module/audit_dev_project.html', {'Aud': Aud,'devp':devp,'teststatus':teststatus,'proj':proj,
-                                                                       'testerstatus':testerstatus,'time':time,'action_take':action_take})
+                                                                       'testerstatus':testerstatus,'time':time,'action_take':action_take,'task_verify':task_verify})
 
     else:   
         return redirect('/')
@@ -20661,7 +20715,7 @@ def Projectmanager_action_taken(request):
             var.at_status='1'
             var.save()
 
-        act=Action_Taken.objects.filter(atby_id=prid).order_by('-id')
+        act=Action_Taken.objects.filter(Q(atby_id=prid) | Q(atemp_id=prid)).order_by('-id')
         return render(request, 'Projectmanageractions_taken.html', {'pro': pro,'cous':cous,'dep':dep,'des':des,'emp':emp,'act':act})
     else:
         return redirect('/')

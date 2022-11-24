@@ -1,0 +1,87 @@
+{%extends 'trainer_index.html' %} {% load static %} {% block content %}
+
+<div class="row mb-5" style="padding-top: 20px;">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <div class="row" style="margin-top: -20px">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <br>
+                        <h4>Given Feedbacks </h4><br>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name" style="color:white;">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div class="table-responsive">
+                    <table class="table" id="myTable">
+                        <thead>
+                            <tr>
+
+                                <th> Name </th>
+                                <th> To </th>
+                                <th style="padding-left:160px"> FeedBack</th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody> {% if n %} 
+                            {% for t in n %}
+                            <tr>
+
+                                <td>
+
+                                    <span>{{t.fb_from.fullname}}</span>
+                                </td>
+                                <td>{{t.fb_to.fullname}}</td>
+                                <td >{{t.fb}}</td>
+
+                               
+                            </tr>
+
+                            {% endfor %}{% else %}
+                            <h5>Nothing to display...</h5>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+<!-- modal end -->
+
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+
+
+{% endblock %}

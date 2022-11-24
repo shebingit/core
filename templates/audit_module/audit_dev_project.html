@@ -261,11 +261,12 @@
                 <th scope="col" style="color:#6C7293;">Sub Task</th>
                 <th scope="col" style="color:#6C7293;">Work Done</th>
                 <th scope="col" style="color:#6C7293;">Files</th>
+               
               </tr>
             </thead>
             <tbody>
   
-              {% for i in testerstatus %}
+              {% for i in testerstatus  %}
   
               {% if i.subtask_id == dp.id %}
               <tr>
@@ -280,6 +281,45 @@
                     <div class="badge badge-outline-primary">Download</div>
                   </a>
                 {% endif %}</td>
+                
+              </tr>
+              {% endif %}
+              {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-responsive mt-3 mb-3 container">
+          <table class="table  table-bordered ">
+            <thead style="background-color: black;">
+              <tr>
+                <th scope="col" style="color:#6C7293;">Submitted Date</th>
+                <th scope="col" style="color:#6C7293;"> Verify Date</th>
+              
+                <th scope="col" style="color:#6C7293;">ReportBy</th>
+                <th scope="col" style="color:#6C7293;">Task</th>
+               
+                <th scope="col" style="color:#6C7293;">Delay</th>
+                <th scope="col" style="color:#6C7293;">Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+  
+              {% for i in task_verify  %}
+  
+              {% if i.ts_project_task_id == dp.id %}
+              <tr>
+                <td style="color:white;">{{i.ts_task_sub_date|date:"d-m-Y"}}</td>
+                <td style="color:white;">{{i.ts_task_verify_date|date:"d-m-Y"}}</td>
+               
+                <td style="color:white;">{{i.ts_tester.fullname}}</td>
+                <td style="color:white;">{{i.ts_project_task.task}}</td>
+               
+                <td style="color:white;"><button type="button" class="btn btn-outline-danger">{{i.ts_delay}}</button></td>
+                <td style="color:white;">{{i.ts_reson_dely}}</td>
+               
+                 
               </tr>
               {% endif %}
               {% endfor %}

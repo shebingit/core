@@ -138,6 +138,9 @@ urlpatterns = [
 
     re_path(r'^trainer_reportissue/$', views.trainer_reportissue,
             name='trainer_reportissue'),
+    path('trainer_feedbacks', views.trainer_feedbacks, name='trainer_feedbacks'),  
+     path('trainer_give_feedback', views.trainer_give_feedback, name='trainer_give_feedback'),  
+     path('trainer_given_feedback', views.trainer_given_feedback, name='trainer_given_feedback'),       
     re_path(r'^trainer_reportissue_form/$',
             views.trainer_reportissue_form, name='trainer_reportissue_form'),
     re_path(r'^trainer_reportedissue_table/$',

@@ -34,6 +34,7 @@
               <select id="" name="ename" class="drop form-control ml-3 mt-2 text-light" required
                 style="border:1px solid #6C7293 ;">
                 <option value=""></option>
+                <option value="{{dept_id.id}}">{{dept_id.fullname}}</option>
                 {% for i in spa %}
 
                 <option value="{{i.id}}">{{i.fullname}}</option>

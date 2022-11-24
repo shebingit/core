@@ -74,6 +74,7 @@
                     style="border-radius:5px;height:20px;background-color:#C2F0EB">
                     <div class="progress-bar" style="height:20px;width:{{i.progress}}%">{{i.progress}}%</div>
                 </td>
+                {% if i.worktype == "1" %}
                     {% if i.status == "submitted" %}
                   
                         <td>  
@@ -113,7 +114,7 @@
                     </td>
                        <td style="color: white;">{{i.submitted_date|date:'d-m-Y'}}</td>
               <td><div class="badge badge-outline-danger">{{i.delay}}</div></td>
-                
+                {% endif %}
               </tr>
 
               {% endfor %}
