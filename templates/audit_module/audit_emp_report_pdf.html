@@ -21,6 +21,13 @@
                 text-align: center;
 
             }
+            .container  h2{
+                color: #007cae;
+                margin-top: 10px;
+                text-align: center;
+               font-size: 1.75em;
+
+            }
             .container h3{
                 margin-top:3em;
             }
@@ -98,14 +105,200 @@
         </div>
        
         <div class="container">
-            <h1> Employee Report</h1>
+            <h2> Employee Report</h2>
 
             {% if p1 == '1' %}
-                <h3>Trainig Details</h3>
+                <h1>Trainig Details</h1>
+                {% for j in tm %}
+                {% if forloop.counter == 1 %}
+                <h5>Batch : &nbsp; {{teamname.bt_name}}</h5>
+                {% endif %}
+                {% endfor %}
+
+
+                {% if tm %}
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Team Name</th>
+                        <th scope="col">Trainer Name</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Status</th>
+                       
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        {% for j in tm %}
+                      <tr>
+                        <td> {{j.teamname.name}}</td>
+                        <td> {{j.teamname.trainer}}</td>
+                        <td>{{j.tr_start_date|date:"d-m-y"}}</td>
+                        <td>{{j.tr_end_date|date:"d-m-y"}}</td>
+                        <td>
+                            {% if j.pstatus == '1' %}
+                                Completed
+                            {% else %}
+                             Not Completed
+                            {% endif %}
+                        </td>
+                        
+                      </tr>
+                     
+                    {% endfor %}
+                      
+                    </tbody>
+                  </table>
+                  <hr>
+                {% endif %}
+                 
+                  {% if pr %}
+                  <br>
+                 
+                  <h5>Probation</h5>
+
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Team Name</th>
+                        <th scope="col">Trainer Name</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Reason</th>
+                        <th scope="col">Stop Date</th>
+                        <th scope="col">Renew Date</th>
+                        <th scope="col">Extension</th>
+                        <th scope="col">Status</th>
+                       
+                      </tr>
+                    </thead>
+                    <tbody>
+                       
+                        {% for j in pr %}
+                      <tr>
+                        <td> {{j.team.name}}</td>
+                        <td> {{j.team.trainer}}</td>
+                        <td>{{j.startdate|date:"d-m-y"}}</td>
+                        <td>{{j.enddate|date:"d-m-y"}}</td>
+                        <td> {{j.stop_reason}}</td>
+                        <td>{{j.stopdate|date:"d-m-y"}}</td>
+                        <td>{{j.renewdate|date:"d-m-y"}}</td>
+                        <td> {{j.extension}}</td>
+                        <td> {{j.status}}</td>
+                        
+                      </tr>
+                     
+                    {% endfor %}
+                      
+                    </tbody>
+                  </table>
+                  <hr>
+                  {% endif %}
+
+
+                  
+                  {% if top %}
+                  <br>
+                 
+                  <h5>Topics</h5>
+
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Team Name</th>
+                        <th scope="col">Trainer Name</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Topic</th>
+                        
+                        <th scope="col">Topic Status</th>
+                       
+                      </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for j in top %}
+                      <tr>
+                        <td> {{j.team.name}}</td>
+                        <td> {{j.trainer.fullname}}</td>
+                        <td>{{j.startdate|date:"d-m-y"}}</td>
+                        <td>{{j.enddate|date:"d-m-y"}}</td>
+                        <td> {{j.topic}}</td>
+                       
+                        <td> {% if j.topic_status == '1' %}
+                             Completed
+                            {% else %}
+                            Not Completed
+                            {% endif %}
+                        </td>
+                        
+                      </tr>
+                     
+                    {% endfor %}
+                      
+                    </tbody>
+                  </table>
+                  <hr>
+                  {% endif %}
+
+                 
+                  {% if tsk %}
+                  <br>
+                 
+                  <h5>Task And Project </h5>
+
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Team Name</th>
+                        <th scope="col">Trainer Name</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Submitt Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Delay</th>
+                        <th scope="col">Type of Work </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                       
+                        {% for j in tsk %}
+                      <tr>
+                        <td> {{j.team_name.name}}</td>
+                        <td> {{j.team_name.trainer}}</td>
+                        <td>{{j.startdate|date:"d-m-y"}}</td>
+                        <td>{{j.enddate|date:"d-m-y"}}</td>
+                        <td>{{j.submitteddate|date:"d-m-y"}}</td>
+                        <td> {% if j.task_status == '1' %}
+                                Completed
+                             {% else %}
+                             Not Completed
+                             {% endif %}
+                        </td>
+                        <td> {{j.delay}}</td>
+                        <td> 
+                            {% if j.task_type == '0' %}
+                            Task
+                            {% else %}
+                            Project
+                            {% endif %}
+
+                        </td>
+                       
+                        
+                      </tr>
+                     
+                    {% endfor %}
+                      
+                    </tbody>
+                  </table>
+                  {% endif %}
+
             {% endif %}
 
             {% if p2 == '1' %}
-                <h3>Project Details</h3>
+                <h1>Project Details</h1>
                 {% for dp in devp %}
                 {% for p in pros %}
           
@@ -142,17 +335,119 @@
                       </table>
                     
                    <hr>
+                  
                   {% endif %}
                   
                 {% endfor %}
                 {% endfor %}
-  
+                <br>
             {% endif %}
+
+            {% if p3 == '1' %}
+            <br>
+            {% if corre %}
+            <h1 class="mb-0">Project Corrections</h1>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Project</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Work Days</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                    {% for j in corre %}
+                  <tr>
+                    <td> {{j.project_cu_id.project}}</td>
+                    <td>{{j.project_cu_start|date:"d-m-y"}}</td>
+                    <td>{{j.project_cu_end|date:"d-m-y"}}</td>
+                    <td>{{j.project_cu_status}}</td>
+                    <td>{{j.project_cu_wdays}}</td>
+                  </tr>
+                 
+                {% endfor %}
+                  
+                </tbody>
+              </table>
+            {% endif %}
+            {% endif %}
+
+
             {% if p5 == '1' %}
             <h3>Salary Details</h3>
             {% endif %}
             {% if p6 == '1' %}
-            <h3>Leave And Attendence Details</h3>
+            <hr>
+            <br>
+            <h1>Leave And Attendence Details</h1>
+              {% if lev %}
+            <table class="table">
+                <thead>
+                  <tr>
+                
+                    <th scope="col">From Date</th>
+                    <th scope="col">To Date</th>
+                    <th scope="col">Days</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                    {% for j in lev %}
+                  <tr>
+                   
+                    <td>{{j.from_date|date:"d-m-y"}}</td>
+                    <td>{{j.to_date|date:"d-m-y"}}</td>
+                    <td>{{j.days}}</td>
+                    <td>{{j.reason}}</td>
+                    <td>{{j.leave_status}}</td>
+                  </tr>
+                 
+                {% endfor %}
+              
+                
+                  
+                </tbody>
+                
+              </table>
+              <div>
+                <h5>Total Leaves :&nbsp;{{tlev}}</h5>
+              </div>
+              {% endif %}
+              <br><br>
+
+              {% if att %}
+              <table class="table">
+                  <thead>
+                    <tr>
+                  
+                      <th scope="col">Date</th>
+                      <th scope="col">Attendence Status</th>
+                      
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                      {% for j in att %}
+                    <tr>
+                     
+                      <td>{{j.date|date:"d-m-y"}}</td>
+                     
+                      <td><span style="color:rgb(15, 169, 15) ;">Present</span></td>
+                    </tr>
+                   
+                  {% endfor %}
+                    
+                  </tbody>
+                </table>
+                {% endif %}
+
+
             {% endif %}
             {% if p7 == '1' %}
             <h3>Issues Reported And Other Details</h3>

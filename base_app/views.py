@@ -20195,9 +20195,21 @@ def Audit_emp_reportpdf(request,audit_rep_id):
         p7=request.POST.get('emp_issue')
         formdate=request.POST.get('emp_form')
         todate=request.POST.get('emp_to')
+        user= user_registration.objects.get(id=audit_rep_id)
         pros = project.objects.all()
         devp = project_taskassign.objects.filter(developer_id=audit_rep_id,startdate__gte=formdate, enddate__lte=todate).values('project_id').distinct()
         task = project_taskassign.objects.filter(developer_id=audit_rep_id,startdate__gte=formdate, enddate__lte=todate)
+        corre = ProjectCorrectionUpdation.objects.filter(pdev_name=user.fullname,project_date__gte=formdate,project_date__lte=todate)
+        tm = previousTeam.objects.filter(user_id=audit_rep_id,tr_start_date__gte=formdate,tr_start_date__lte=todate)
+        tm1 = previousTeam.objects.filter(user_id=audit_rep_id,tr_start_date__gte=formdate,tr_start_date__lte=todate).values('teamname').distinct()
+        pr = probation.objects.filter(user_id=audit_rep_id)
+        tsk = trainer_task.objects.filter(user_id=audit_rep_id,startdate__gte=formdate ,startdate__lte=todate)
+        top = topic.objects.filter(startdate__gte=formdate,startdate__lte=todate,team_id__in=tm1.values_list('teamname'))
+        att =attendance.objects.filter(user_id=audit_rep_id,date__gte=formdate,date__lte=todate,attendance_status='1')
+        lev = leave.objects.filter(user_id=audit_rep_id,from_date__gte=formdate,from_date__lte=todate)
+        tlev=0
+        for i in lev:
+            tlev=tlev + int(i.days)
 
 
 
@@ -20215,7 +20227,15 @@ def Audit_emp_reportpdf(request,audit_rep_id):
     'p6':p6,
     'p7':p7,
     'date':date,
-    'settings.NEWPATH':settings.NEWPATH,
+    'corre':corre,
+    'tm':tm,
+    'pr':pr,
+    'tsk':tsk,
+    'top':top,
+    'lev':lev,
+    'att':att,
+    'tlev':tlev,
+    'path':settings.NEWPATH,
     }
         
     # Create a Django response object, and specify content_type as pdf
