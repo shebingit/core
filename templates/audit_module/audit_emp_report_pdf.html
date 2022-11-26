@@ -377,7 +377,38 @@
 
 
             {% if p5 == '1' %}
+            {% if sal %}
             <h3>Salary Details</h3>
+            <div class="table-responsive">
+        
+              <table class="table">
+                  <tr>
+                      <th>Slno</th>
+                      <th>Particulars</th>
+                      <th>Basic Salary</th>
+                      <th>Leave</th>
+                      <th>Delay</th>
+                      <th>Salary Given</th>
+                      <th>Net Salary</th>
+ 
+                  </tr>
+                  <tbody>
+                      {% for i in sal %}
+                      <tr>
+                          <td>{{forloop.counter}}</td>
+                          <td>{{i.user_id.fullname}}</td>
+                          <td>{{i.basic_salary}}</td>
+                          <td>{{i.leavesno}}</td>
+                          <td>{{i.delay}}</td>
+                          <td>{{i.fromdate|date:'d-m-Y'}}</td>
+                          <td>{{i.net_salary}}</td>
+                         
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+            {% endif %}
             {% endif %}
             {% if p6 == '1' %}
             <hr>
@@ -450,7 +481,40 @@
 
             {% endif %}
             {% if p7 == '1' %}
-            <h3>Issues Reported And Other Details</h3>
+            {% if act %}
+            <h3>Actions Taken</h3>
+
+            <table class="table">
+              <thead>
+                <tr>
+              
+                  <th scope="col">Date</th>
+                  <th scope="col">From</th>
+                  <th scope="col">Designation</th>
+
+                  <th scope="col">Reason</th>
+                  
+                  
+                </tr>
+              </thead>
+              <tbody>
+                
+                  {% for j in act %}
+                <tr>
+                 
+                  <td>{{j.at_date|date:"d-m-y"}}</td>
+                  <td>{{j.atby.fullname}}</td>
+                  <td>{{j.atby.designation.designation}}</td>
+                  <td>{{j.at_remark}}</td>
+                 
+                </tr>
+               
+              {% endfor %}
+                
+              </tbody>
+            </table>
+
+            {% endif %}
             {% endif %}
         </div>
        

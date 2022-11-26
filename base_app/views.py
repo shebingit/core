@@ -20205,8 +20205,13 @@ def Audit_emp_reportpdf(request,audit_rep_id):
         pr = probation.objects.filter(user_id=audit_rep_id)
         tsk = trainer_task.objects.filter(user_id=audit_rep_id,startdate__gte=formdate ,startdate__lte=todate)
         top = topic.objects.filter(startdate__gte=formdate,startdate__lte=todate,team_id__in=tm1.values_list('teamname'))
-        att =attendance.objects.filter(user_id=audit_rep_id,date__gte=formdate,date__lte=todate,attendance_status='1')
+        att = attendance.objects.filter(user_id=audit_rep_id,date__gte=formdate,date__lte=todate,attendance_status='1')
         lev = leave.objects.filter(user_id=audit_rep_id,from_date__gte=formdate,from_date__lte=todate)
+        act = Action_Taken.objects.filter(atemp_id=audit_rep_id,at_date__gte=formdate,at_date__lte=todate)
+        sal = acntspayslip.objects.filter(user_id_id=audit_rep_id,fromdate__gte=formdate,fromdate__lte=todate)
+        
+
+
         tlev=0
         for i in lev:
             tlev=tlev + int(i.days)
@@ -20235,6 +20240,8 @@ def Audit_emp_reportpdf(request,audit_rep_id):
     'lev':lev,
     'att':att,
     'tlev':tlev,
+    'act':act,
+    'sal':sal,
     'path':settings.NEWPATH,
     }
         
