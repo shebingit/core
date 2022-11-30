@@ -1,0 +1,531 @@
+
+        if request.method == 'POST':
+         
+            var = Feedbacks()
+            
+            # ree= user_registration.objects.get(designation_id=mem1)
+            var.fb_from=user_registration.objects.get(id=usernametrns2)
+            var.fb_to = user_registration.objects.get(id=int(request.POST['fbname']))
+            var.fb = request.POST['fb']
+            var.save()
+            
+            
+        return render(request, 'trainee_feedback.html', {'z':z})
+
+
+        tre = designation.objects.get(designation='trainer') 
+        use = user_registration.objects.filter(designation_id=tre.id)
+
+
+
+
+def trainee_given_feedback(request):
+    if 'usernametrns2' in request.session:
+        
+        if request.session.has_key('usernametrns2'):
+            usernametrns2 = request.session['usernametrns2']
+        
+        z = user_registration.objects.filter(id=usernametrns2)
+        n = Feedbacks.objects.filter(fb_from=usernametrns2).order_by('-id')
+        return render(request, 'trainee_given_feedback.html', {'n': n, 'z': z})
+    else:
+        return redirect('/')
+
+
+
+
+
+ <!--  <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/python.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>PYTHON</b></h5>
+            <p style="text-align: left;" class="card-text">The best Python development company in Kerala can provide you
+              with certification courses that can enable you to get employed in a good organization that pays you well.
+              Upon completion of the course, you will be able to create and manage a website by yourself without
+              assistance from outside sources.</p>
+
+       
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/angular.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>ANGULAR</b></h5>
+            <p style="text-align: left;" class="card-text">Are you ready to experience the opportunity to build a
+              website faster, easier, and better while helping companies maximize customer benefit and satisfaction.
+              Acquire a spot in ALTOS to become an Angular developer, with live working experience.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/node.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>NODE JS</b></h5>
+            <p style="text-align: left;" class="card-text">The NODE JS comprises theory and practical training in all
+              aspect of programming. Develop Web servers and networking tools using JavaScript and a collection of
+              modules that handle various core functions.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/flutter.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>FLUTTER</b></h5>
+            <p style="text-align: left;" class="card-text">The NODE JS comprises theory and practical training in all
+              aspect of programming. Develop Web servers and networking tools using JavaScript and a collection of
+              modules that handle various core functions. </p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/ios.jpg" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>IOS DEVELOPMENT</b></h5>
+            <p style="text-align: left;" class="card-text">We all like an application that Fast, Responsive, Easy
+              accessible and Attractive, right? Ever wondered how to create one? Here is the best chance to learn while
+              working on real projects. Utilize the persistence of IOS Development. </p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/xamarin.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>XAMARIN DEVELOPMENT</b></h5>
+            <p style="text-align: left;" class="card-text">Update your career with a touch of Xamarin in mobile
+              development and .Net to reach a peak. As the digital revolution spreads across the globe, Xamarin is
+              predicted to continue growing in popularity. </p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div style="float:right ;" class="col-md-4">
+          <img src="static/images/Data-Science.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>DATA SCIENCE</b></h5>
+            <p style="text-align: left;" class="card-text">Using modern tools and techniques to find unseen patterns,
+              derive meaningful information, and make business decisions, data science is the study of vast amounts of
+              data. </p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/react.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>REACT</b></h5>
+            <p style="text-align: left;" class="card-text">All set to create an interactive UI for any website? Then
+              React JS is your best buddy. Very diverse and many high-paying jobs wait before you to grab.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/net.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>.NET</b></h5>
+            <p style="text-align: left;;" class="card-text">Join specialized .NET training programs and learn the skills
+              that employers need. Learn under the guidance of expert MNC software engineers and be prepared for the job
+              market.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/ml_n6AAbkI.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>MACHINE LEARNING</b></h5>
+            <p style="text-align: left;" class="card-text">An in-demand, fast-growing technology career area today, to conquer the analytical data world. Gain professional experience by handling real-time projects and resolving issues in the shortest amount of time possible.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/vr.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>AUGMENTED REALITY</b></h5>
+            <p style="text-align: left;" class="card-text">Unique learning environment that enables you to explore, experiment, and experience AR/VR technology in its many forms. We offer training programs that help ensure your future is secure and hopeful.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/cyber.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>CYBER SECURITY</b></h5>
+            <p style="text-align: left;" class="card-text">An expert-led program with a well-designed curriculum. The course helps you learn all the skills and master the concepts you need to become a well-rounded Cyber Security professional.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/digital.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>DIGITAL MARKETING</b></h5>
+            <p style="text-align: left;" class="card-text">Obtain the most demanding digital marketing skills for an advanced career with comprehensive on-the-job training.  SEO, SMM, SEM, Content Marketing etc.  A handful of careers to choose from.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/php.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>PHP</b></h5>
+            <p style="text-align: left;" class="card-text">This is your greatest opportunity to study your opted PHP course with live projects and hands-on experience. As you acquire learning and practicing experience, you will gain exposure that will assist you in your future career endeavours.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/dl.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>DEEP LEARNING</b></h5>
+            <p style="text-align: left;" class="card-text">Machine learning (ML) is one of the branches of artificial intelligence that has a great deal of potential and possesses a wide range of applications in healthcare, education, transportation, government etc.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/project2.jpg" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>ACCOUNTING</b></h5>
+            <p style="text-align: left;" class="card-text">Accounting has been established to deliver education and training in Finance and operation. We are one of the leading companies providing on-the-job training in Accounting for candidates.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/3d.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>3D MODELING</b></h5>
+            <p style="text-align: left;" class="card-text">Investing in specific skills that will enable you to replace a sketch or a theme with 3D modeling is never a silly decision. Instead, it can be an excellent choice for those who hold degrees. After completion of an OJT course in 3D modeling, you will be able to earn a great deal of money to live your dream, life.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="static/images/game.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>UNITY GAME DEVELOPMENT</b></h5>
+            <p style="text-align: left;" class="card-text">Game development stands for the creative and unique ideas to hold the world in your palm. Let your imagination flow through the right way to create the best version of a game using Unity platform.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;
+              " class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="box-shadow: 0 5px 2px -2px grey  ;" class="card mb-3" style="width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="{% static 'images/android.png' %}" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 style="text-align: left;" class="card-title"><b>ANDROID DEVELOPMENT</b></h5>
+            <p style="text-align: left;" class="card-text">It is an ideal course for beginners. As part of our Android
+              training, candidates learn basic Java programming concepts and work their way up to developing
+              full-fledged Android applications.</p>
+            <button style="float:right ;width: 30%;background-color: #1E4D69 ;height: 43px;
+              width: 147px;
+              border: 2px solid #029D97;
+              border-radius: 3px;" class="btn" data-bs-toggle="modal" data-bs-target="#registermodal"><span style="font-family: Poppins;
+font-size: 14px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;color: #FFFFFF;
+
+"><b>APPLY</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>-->

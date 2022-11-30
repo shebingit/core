@@ -2802,15 +2802,16 @@ def trainee_task_details(request, id):
             mem.user_description = request.POST['description']
             mem.user_files = request.FILES['files']
             mem.submitteddate = datetime.now()
-            
+           
+
             dee = (akm-de).days
             if dee <= 0:
                 mem.delay=0
-                mem.task_status = 2
+                mem.task_status = 1
                 mem.save()
             else:
                 mem.delay=(akm-de).days
-                mem.task_status = 2
+                mem.task_status = 1
                 mem.save()
             return render(request, 'trainee_task_details.html', {'mem': mem, 'z': z})
         return render(request, 'trainee_task_details.html', {'mem': mem, 'z': z})
@@ -5283,6 +5284,7 @@ def BRadmin_givetask(request):
             sc7 = request.POST['discrip']
             sc5 = request.POST['start']
             sc6 = request.POST['end']
+         
             ogo = request.FILES['img[]']
             
             catry = tasks(tasks=sc4,files=ogo,description=sc7,startdate=sc5, enddate=sc6,department_id = sc1,designation_id = sc2,user_id = sc3)
@@ -19404,9 +19406,12 @@ def BRadmin_audit_department(request,BRadmin_aut_dep):
         Adm = user_registration.objects.filter(id=Adm_id)
         depart = department.objects.get(id=BRadmin_aut_dep)
         if depart.department == 'Digital Marketing':
-            return render(request,'BRadmin_audit_department.html', {'Adm':Adm,'depart':depart})
+            use = user_registration.objects.filter(department_id=BRadmin_aut_dep)
+            return render(request,'BRadmin_audit_department.html', {'Adm':Adm,'depart':depart,'use':use})
         else:
-            return redirect('BRadmin_audit') 
+            use = user_registration.objects.filter(department_id=BRadmin_aut_dep)
+            return render(request,'BRadmin_audit_department.html', {'Adm':Adm,'depart':depart,'use':use})
+           
     else:
         return redirect('/')
 
@@ -20074,6 +20079,7 @@ def Audit_trainee_trainer_dashboard(request,audit_traine_id):
             trainer_team=create_team.objects.filter(trainer_id=str(audit_traine_id))
             fbfrom=Feedbacks.objects.filter(fb_to=audit_traine_id)
             fbto=Feedbacks.objects.filter(fb_from=audit_traine_id)
+           
             return render(request, 'audit_module/audit_tainer_dashbord.html', {'Aud': Aud,'traine_tainer_db':traine_tainer_db,
                                                                                 'trainer_team':trainer_team,'fbto':fbto,'fbfrom':fbfrom})
     else:
@@ -20125,7 +20131,7 @@ def audit_trainer_teamview(request,audit_trainer_tmid):
         Aud = user_registration.objects.filter(id=Aud_id)
         team_memb=previousTeam.objects.filter(teamname_id=audit_trainer_tmid)
         team_topic=topic.objects.filter(team_id=audit_trainer_tmid)
-        team_task=trainer_task.objects.filter(team_name_id=audit_trainer_tmid,task_type='0',task_status='0')
+        team_task=trainer_task.objects.filter(team_name_id=audit_trainer_tmid,task_status='0')
         return render(request, 'audit_module/audit_trainer_teamview.html', {'Aud': Aud,'team_memb':team_memb,
                                                     'team_topic':team_topic,'team_task':team_task})
     else:
@@ -20209,6 +20215,7 @@ def Audit_emp_reportpdf(request,audit_rep_id):
         lev = leave.objects.filter(user_id=audit_rep_id,from_date__gte=formdate,from_date__lte=todate)
         act = Action_Taken.objects.filter(atemp_id=audit_rep_id,at_date__gte=formdate,at_date__lte=todate)
         sal = acntspayslip.objects.filter(user_id_id=audit_rep_id,fromdate__gte=formdate,fromdate__lte=todate)
+        proj = project.objects.filter(projectmanager_id=audit_rep_id,startdate__gte=formdate,startdate__lte=todate)
         
 
 
@@ -20242,6 +20249,10 @@ def Audit_emp_reportpdf(request,audit_rep_id):
     'tlev':tlev,
     'act':act,
     'sal':sal,
+    'user':user,
+    'formdate':formdate,
+    'todate':todate,
+    'proj':proj,
     'path':settings.NEWPATH,
     }
         

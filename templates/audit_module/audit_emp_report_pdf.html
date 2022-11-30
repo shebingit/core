@@ -106,7 +106,13 @@
        
         <div class="container">
             <h2> Employee Report</h2>
-
+            <br>
+            
+            <h5>Name : &nbsp;&nbsp;{{user.fullname}}</h5>
+            <h5>Contact Number : &nbsp;&nbsp;{{user.mobile}}</h5>
+            <h5>Email : &nbsp;&nbsp;{{user.email}}</h5>
+            <h5>Report&nbsp;&nbsp; From&nbsp;&nbsp;{{formdate}}&nbsp;&nbsp;To&nbsp;&nbsp; {{todate}} </h5>
+            <br><br>
             {% if p1 == '1' %}
                 <h1>Trainig Details</h1>
                 {% for j in tm %}
@@ -299,6 +305,40 @@
 
             {% if p2 == '1' %}
                 <h1>Project Details</h1>
+                {% if proj %}
+               
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Project Name</th>
+                      <th scope="col">Start Date</th>
+                      <th scope="col">End Date</th>
+                      
+                      <th scope="col">Progress</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for j in proj %}
+                      
+                    <tr>
+                      <td> {{j.project}}</td>
+                      <td>{{j.startdate}}</td>
+                      <td>{{j.enddate}}</td>
+                     
+                      <td>
+                        {% if j.progress %}{{j.progress}} %{% else %}0 %{% endif %}</td>
+                      <td>{{j.status}}</td>
+                    </tr>
+                   
+                  {% endfor %}
+                    
+                  </tbody>
+                </table>
+
+                {% endif %}
+
+
                 {% for dp in devp %}
                 {% for p in pros %}
           
