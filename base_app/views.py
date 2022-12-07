@@ -50,7 +50,7 @@ def login(request):
         
         email  = request.POST['email']
         password = request.POST['password']
-        user = authenticate(username=email, password=password)
+        user =authenticate(username=email, password=password)
         if user is not None:
                 request.session['SAdm_id'] = user.id
                 Num1 = project.objects.count()
@@ -5872,7 +5872,7 @@ def man_registration_form(request):
             x = user_registration.objects.get(id=a.id)
             today = date.today()
             tim = today.strftime("%m%y")
-            x.employee_id = "INF"+str(tim)+''+"B"+str(x.id)
+            x.employee_id = "ALT"+str(tim)+''+"B"+str(x.id)
             passw=x.password
             email_id=x.email
             x.save()
@@ -5919,10 +5919,10 @@ def man_registration_form(request):
             c.user_id = a.id
             c.internshipdetails = request.POST['details']
             c.internshipduration = request.POST['duration']
-            c.internshipcertificate = request.POST['certificate']
+            c.internshipcertificate = request.FILES.get('certificate')
             c.onlinetrainingdetails = request.POST['details1']
             c.onlinetrainingduration = request.POST['duration1']
-            c.onlinetrainingcertificate= request.POST['certificate1']
+            c.onlinetrainingcertificate= request.FILES.get('certificate1')
             c.projecttitle = request.POST['title']
             c.projectduration = request.POST['duration2']
             c.projectdescription = request.POST['description']
@@ -6417,6 +6417,36 @@ def projectmanager_createproject(request):
     else:
         return redirect('/')
 
+def pmstart_new_document(request):
+     if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+      
+        mem = user_registration.objects.filter(id=prid) 
+        if request.method == 'POST':
+            docid=request.POST['docid']
+            var = project.objects.get(id=docid)
+            doc = PM_ProjectDocument() 
+            doc.doc_project_id= var
+            doc.doc_project_name =var.project
+            doc.doc_project_startdate =  var.startdate
+            doc.doc_project_enddate = var.enddate
+            doc.save()
+            return  redirect('projectManager_project_document')
+
+def pm_doc_upload(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+            if request.method == 'POST':
+                
+                if request.FILES.get('upload_file'):
+                    docid=request.POST['docid']
+                    doc = PM_ProjectDocument.objects.get(id=docid) 
+                    doc.doc_project_ui=request.FILES.get('upload_file')
+                    doc.save()
+                    return  redirect('projectManager_project_document')
+
 def uiupdate(request):
     if 'prid' in request.session:
         if request.session.has_key('prid'):
@@ -6601,7 +6631,7 @@ def projectManager_project_document(request):
         pro = user_registration.objects.filter(id=prid).order_by("-id")
         projects = project.objects.all().order_by("-id")
         proj_doc=PM_ProjectDocument.objects.filter(Q(doc_status='0') | Q(doc_status='1'))
-        return render(request, 'projectManager_project_documnent_list.html',{'pro':pro,'proj_doc':proj_doc})
+        return render(request, 'projectManager_project_documnent_list.html',{'pro':pro,'proj_doc':proj_doc,'projects':projects})
     else:
         return redirect('/')
 

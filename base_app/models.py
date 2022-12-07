@@ -153,8 +153,7 @@ class user_registration(models.Model):
     reg_status =  models.CharField(max_length=10, default='0')
     trainee_delay=models.IntegerField(default=0)
     work_status =  models.CharField(max_length=10, default='')
-    desig_input = models.CharField(max_length=100, default='',null=True, blank=True)
-   
+  
    
  
     def __str__(self):
@@ -882,7 +881,7 @@ class PM_ProjectDocument(models.Model):
     doc_project_backend=models.CharField(max_length=100,null=True, blank=True)
     doc_status=models.CharField(max_length=10,null=True, blank=True,default='0')
     doc_project_ui=models.FileField(upload_to="ProjectUI", null=True)
-
+    
 
 class ProjectDocDetails(models.Model):
     doc_project_d=models.ForeignKey(project,on_delete=models.CASCADE,null=True,blank=True)

@@ -38,6 +38,35 @@
     }
   </style>
   
+  <div class="row">
+    <div class="mb-2 " style="font-size: 20px;font-weight: 600;color: #dfe1ed;">Select The Project To Start Document</div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+
+        <div class="card-body">
+          
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <form action="{% url 'pmstart_new_document' %}" method="post">
+              {% csrf_token %}
+              <select class="form-control" name="docid">
+                <option>--select--</option>
+                {% for i in projects %}
+                <option value="{{i.id}}">{{i.project}}</option>
+                {% endfor %}
+              </select>
+              <div class="text-center mt-4">
+                <button class="btn btn-outline-primary mt-3 mb-2" type="submit">Start Document</button>
+              </div>
+              
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <div class="row">
     <div class="mb-2 " style="font-size: 20px;font-weight: 600;color: #dfe1ed;">Projects Document List</div>
@@ -67,12 +96,12 @@
             <table class="table" id="myTable">
               <thead>
                 <tr>
-                  <th>Doc Remove</th>
+                  
                   <th>Project</th>
                   <th>Start Date</th>
                   <th>End Date</th>
                   <th>Start Document</th>
-                  <th>Doc.Start Date</th>
+                  <th>Upload Document</th>
                   <th>User Manuvel</th>
                   <th>Project Details</th>
                   <th>Project Document</th>
@@ -80,7 +109,7 @@
                   <th>Correction</th>
                   <th>Updation</th>
                   <th>Full Doc</th>
-                  <th>Complete</th>
+                  <!--<th>Complete</th>-->
                 </tr>
               </thead>
               {% if proj_doc %}
@@ -88,10 +117,7 @@
               <tbody>
                 {% if i.doc_project_id.status == 'accepted' or i.doc_project_id.status == 'assigned'%}
                   <tr class="">
-                      <td>
-                        <a class="text-danger pr-2" href="" style="cursor:pointer"><i class="mdi mdi-delete ">Delete</i></a>
-                        <!--<a class="text-primary pl-2" href="" style="cursor:pointer"><i class="mdi mdi-pen ">Edit</i></a>-->
-                      </td>
+                     
                       <td><span class="ps-2">{{i.doc_project_name}}</span></td>
                       <td>{{i.doc_project_startdate|date:'d-m-Y'}}</td>
                       <td>{{i.doc_project_enddate|date:'d-m-Y'}}</td>
@@ -106,7 +132,11 @@
                         {% endif%}
                       </td>
                      
-                      <td>{{i.doc_project_currentdate|date:'d-m-Y'}}</td>
+                     <td><button class="btn btn-outline-danger" data-toggle="modal" data-target="#fileupload{{i.id}}"><i class="mdi mdi-file iconpdf" style="font-size:1em ;"></i>File Upload</button>
+                      {% if i.doc_project_ui %}
+                      <a href="{{i.doc_project_ui.url}}" download="{{i.doc_project_ui.url}}"><button class="btn btn-outline-primary">Download</button></a>
+                      {% endif %}
+                    </td>
                       <td><a class="" href="{% url 'project_manager_usermanuvel' i.id %}" style="cursor:pointer"><i class="mdi mdi-book-multiple icon"></i></a></td>
                       {% if i.doc_status == '1' %}
                         <td><a class="" href="{% url 'project_manager_doc_module' i.id %}" style="cursor:pointer"><i class="mdi mdi-book-multiple icon"></i></a>View</td>
@@ -120,7 +150,7 @@
                         <td><a class="text-danger" href="{% url 'pm_doc_corr_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                         <td><a  class="text-danger" href="{% url 'pm_doc_updt_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                         <td><a  class="text-danger" href="{% url 'pm_docfull_pdf' i.id %}" style="cursor:pointer"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
-                        <td><a  class="btn btn-primary" href="{% url 'pm_doc_complete' i.id %}"> Complete</a></td>
+                        <!--<td><a  class="btn btn-primary" href="{% url 'pm_doc_complete' i.id %}"> Complete</a></td>-->
                         
                        
                       {% else %}
@@ -130,7 +160,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                       
                        
                       {% endif %}
                   </tr>
@@ -147,6 +177,41 @@
     </div>
   </div>
   
+
+  {% for i in proj_doc %}
+  <div class="modal" id="fileupload{{i.id}}">
+    <div class="modal-dialog">
+        <div class="col-12 grid-margin stretch-card bg-dark text-light modal-content">
+        <!-- Modal Header -->
+        <a  class="text-danger" href="" style="cursor:pointer"><i class=""></i> </a>
+            <form action="{% url 'pm_doc_upload' %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                {%csrf_token%}
+                    <div class="modal-header">
+                        <h4 class="modal-title">Upload Document  File Of &nbsp;{{i.doc_project_name}}</h4>
+                        <button type="submit" style="color: white" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="row">
+                        <div class="col-12 grid-margin stretch-card">
+                            <div class="card p-3" >
+                                <div class="card-body">
+                                  <div class="mt-3 mb-2">
+                                    <input type="text" value="{{i.id}}" name="docid" hidden>
+                                    <input type="file" class="form-control" name="upload_file">
+                                    </div>
+                                  <div class="mt-4 mb-2">
+                                    <button class="btn btn-outline-success"> Upload</button>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+  </div>
+  
+  {% endfor %}
       
   {% for i in proj_doc %}
   <!-- Modal -->

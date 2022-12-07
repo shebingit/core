@@ -741,6 +741,8 @@ urlpatterns = [
     path('pm_Work_not_assign', views.pm_Work_not_assign, name='pm_Work_not_assign'),
     path('pmdeveloper_task_assign/<int:pmdev_id>', views.pmdeveloper_task_assign, name='pmdeveloper_task_assign'),
     path('pmproject_task_assingdev', views.pmproject_task_assingdev, name='pmproject_task_assingdev'),
+    path('pmstart_new_document>', views.pmstart_new_document, name='pmstart_new_document'),
+    path('pm_doc_upload>', views.pm_doc_upload, name='pm_doc_upload'),
 
 
     #nirmal
