@@ -54,13 +54,13 @@
             <table class="table" id="myTable">
               <thead>
                 <tr>
-                
+                  <th>Doc Download</th>
                   <th>Project</th>
                   <th>Start Date</th>
                   <th>End Date</th>
                   <th>Start Document</th>
                   <th>Doc.Start Date</th>
-                 <!-- <th>Project Details</th>-->
+                  
                 
                   <th>Project Document</th>
                   <th>Desecription</th>
@@ -76,7 +76,11 @@
               <tbody>
                 {% if i.doc_project_id.status == 'accepted' or i.doc_project_id.status == 'assigned'%}
                   <tr class="">
-                     
+                     <td>
+                      {% if i.doc_project_ui %}
+                      <a class="btn btn-outline-primary" href="{{i.doc_project_ui.url}}" download="{{i.doc_project_ui.url}}">Download</a>
+                      {% endif %}
+                    </td>
                       <td><span class="ps-2">{{i.doc_project_name}}</span></td>
                       <td>{{i.doc_project_startdate|date:'d-m-Y'}}</td>
                       <td>{{i.doc_project_enddate|date:'d-m-Y'}}</td>

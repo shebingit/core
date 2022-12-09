@@ -125,14 +125,14 @@
                         </p>
 
                         <h2 class="">Module :&nbsp;<span style="color: #007cae;">{{i.project_cu_module}}</span></h2>
-                        <p><b>Correction Desecription :</b>&nbsp; {{i.project_cu_descrip}}</p>
+                        <p><b>Correction Description :</b>&nbsp; {{i.project_cu_descrip}}</p>
                         <p><b>Previous Content:</b> {{i.project_cu_olddescrip}}</p>
                         {% if i.project_oldui %}
-                            <img src="D:\django\altoscore - Copy{{i.project_oldui.url}}">
+                            <img src="{{path}}{{i.project_oldui.url}}">
                         {% endif %}
                         <p><b>Corrected Content:</b> {{i.project_cu_newdescrip}}</p>
                         {% if i.project_cu_newui %}
-                            <img src="D:\django\altoscore - Copy{{i.project_cu_newui.url}}">
+                            <img src="{{path}}{{i.project_cu_newui.url}}">
                         {% endif %}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                        
@@ -151,22 +151,23 @@
                    {% for i in project_updation %} 
                     <div class="col-lg-12">
                         {% if p1 == '1' %} 
-                        <p> start date: {{i.project_cu_start}} &nbsp;&nbsp; &nbsp;&nbsp; End Date: {{i.project_cu_end}} &nbsp;&nbsp; &nbsp;&nbsp;
+                        <p> Date: {{i.project_date}} &nbsp;&nbsp; &nbsp;&nbsp;
                         {% endif %}
                         {% if p3 == '1' %} 
                             Days to Complete:&nbsp; {{i.project_cu_wdays}}
                         {% endif%}
                         </p>
-                        <h2 class="">Module :&nbsp;<span style="color: #007cae;">{{i.project_cu_module}}</span></h2>
-                        <p><b>Updation Desecription :</b>&nbsp;  {{i.project_cu_descrip}}</p>
-                        <p><b>Previous Content:</b> {{i.project_cu_olddescrip}}</p>
+                        <h2 class="">Task :&nbsp;<span style="color: #007cae;">{{i.project_cu_module}}</span></h2>
+                        <p><b>Updation Description :</b>&nbsp;  {{i.project_cu_descrip}}</p>
+                       <!-- <p><b>Previous Content:</b> {{i.project_cu_olddescrip}}</p>
                         {% if i.project_oldui %}
-                            <img src="D:\django\altoscore - Copy{{i.project_oldui.url}}">
-                        {% endif %}
+                            <img src="{{path}}{{i.project_oldui.url}}">
+                        {% endif %}-->
                         <p><b>Corrected Content:</b> {{i.project_cu_newdescrip}}</p>
                         {% if i.project_cu_newui %}
-                            <img src="D:\django\altoscore - Copy{{i.project_cu_newui.url}}">
+                            <img src="{{path}}{{i.project_cu_newui.url}}">
                         {% endif %}
+                        <p><b>Corrected Content:</b> {{i.project_cu_newdescrip}}</p>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                       
                     </div>

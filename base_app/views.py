@@ -5963,12 +5963,15 @@ def render_pdfof_view(request,id):
     con = conditions.objects.get(id=1)
     mem = user_registration.objects.get(id=id)
     br_admin = branch_registration.objects.get(id=mem.branch_id)
+    if request.method == 'POST':
+        salr= request.POST['sal']
     template_path = 'pdfof.html'
     context = {'mem': mem,
     'con':con,
     'media_url':settings.MEDIA_URL,
     'date':date,
-    'br_admin':br_admin
+    'br_admin':br_admin,
+    'salr':salr,
     }
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
@@ -6943,7 +6946,7 @@ def pm_doc_pdf(request,fulldoc_pdf):
     'devp':devp,
     'doc_user':doc_user,
     'work_days':work_days,
-    'settings.NEWPATH':settings.NEWPATH,
+    'path':settings.NEWPATH,
     }
         
     # Create a Django response object, and specify content_type as pdf
@@ -6984,7 +6987,7 @@ def pm_doc_des_pdf(request,desedoc_pdf):
     'date':date,
     'prodoc':prodoc,
     'proj_table':proj_table,
-    'settings.NEWPATH':settings.NEWPATH,
+    'path':settings.NEWPATH,
 
     }
         
@@ -10446,7 +10449,10 @@ def man_registration_update(request, id):
 
         mem4 = user_registration.objects.get(id=id)
         con = conditions.objects.get(id=1)
-        xem = extracurricular.objects.get(user_id=id)
+        try:
+            xem = extracurricular.objects.get(user_id=id)
+        except extracurricular.DoesNotExist:
+            xem = None
         qem = qualification.objects.get(user_id=id)
         des = designation.objects.filter(~Q(designation='admin'))
         desig = designation.objects.all().exclude(designation = 'team leader').exclude(designation ='manager').exclude(designation ='trainee').exclude(designation ='project manager').exclude(designation ='tester').exclude(designation ='trainingmanager').exclude(designation ='account').exclude(designation ='trainer').exclude(designation ='developer')
@@ -10555,7 +10561,11 @@ def man_resign(request):
 def registrationupdatesave(request, id):
     a = user_registration.objects.get(id=id)
     b = qualification.objects.get(user_id=id)
-    c = extracurricular.objects.get(user_id=id)
+    try:
+        c = extracurricular.objects.get(user_id=id)
+    except extracurricular.DoesNotExist:
+        c = None
+
     d = conditions.objects.get(id=1)
     if request.method == 'POST':
         a.fullname = request.POST['name']
@@ -10597,22 +10607,24 @@ def registrationupdatesave(request, id):
         b.ugaggregrate = request.POST['aggregate1']
         b.pg = request.POST['pg']
         b.save()
-
-        c.user_id = a.id
-        c.internshipdetails = request.POST['details']
-        c.internshipduration = request.POST['duration1']
-        c.internshipcertificate = request.POST['certification']
-        c.onlinetrainingdetails = request.POST['details1']
-        c.onlinetrainingduration = request.POST['duration2']
-        c.onlinetrainingcertificate = request.POST['certification1']
-        c.projecttitle = request.POST['title']
-        c.projectduration = request.POST['duration3']
-        c.projectdescription = request.POST['description']
-        c.projecturl = request.POST['url']
-        c.skill1 = request.POST['skill1']
-        c.skill2 = request.POST['skill2']
-        c.skill3 = request.POST['skill3']
-        c.save()
+        
+        if c :
+            c.user_id = a.id
+            c.internshipdetails = request.POST['details']
+            c.internshipduration = request.POST['duration1']
+            c.internshipcertificate = request.POST['certification']
+            c.onlinetrainingdetails = request.POST['details1']
+            c.onlinetrainingduration = request.POST['duration2']
+            c.onlinetrainingcertificate = request.POST['certification1']
+            c.projecttitle = request.POST['title']
+            c.projectduration = request.POST['duration3']
+            c.projectdescription = request.POST['description']
+            c.projecturl = request.POST['url']
+            c.skill1 = request.POST['skill1']
+            c.skill2 = request.POST['skill2']
+            c.skill3 = request.POST['skill3']
+            c.save()
+            
         d.condition1 = request.POST.get("condition1")
         d.condition2 = request.POST.get("condition2")
         d.condition3 = request.POST.get("condition3")
