@@ -227,8 +227,8 @@
 
 
 <br>
-<div class="mb-5" style="max-height: 250px">
-    <div class="row">
+<div class="mb-5" >
+    <div class="row g-3">
         <div class="col-lg-12 col-sn-12">
             <a href="{% url 'audit_probation' traine_tainer_db.id %}" style="text-decoration: none">
                 <h6 class="mb-4" style="color:white;">Probation</h6>
@@ -246,7 +246,7 @@
             </a>
 
         </div>
-        <div class="card-head" ><h5 class="text-center"> Training Period</h5></div>
+      <!--  <div class="card-head" ><h5 class="text-center"> Training Period</h5></div>
         {% for i in tm %}
         <div class="col-lg-4 col-sn-12">
             <div class="card p-3">
@@ -258,14 +258,15 @@
                 </div>
             </div>
         </div>
-        {% endfor %}
+        {% endfor %}-->
     
         
     </div>  
 </div>
 
 
-<br><br><br>
+<div class="row mt-5">
+    <div class="col-lg-12">
 <div class="form-check mt-5 pl-3">
     <input class="form-check-input" type="checkbox" id="check1" name="check1" value="1" onchange="valueChanged()" checked >
     <label class="form-check-label"><h4>Training</h4></label>
@@ -722,7 +723,8 @@
         </div>
     </div>
 </div>
-
+</div>
+</div>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
