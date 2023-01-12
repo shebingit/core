@@ -1,0 +1,45 @@
+{%extends 'devindex.html'%}
+{%load static%}
+{%block content%}
+
+
+<div class="row pt-3" style="background-color: black;">
+    <div class="" style="font-size: 20px;font-weight: 600;color:#6C7293;">Actions Taken For Project Delay</div>
+  </div>
+<div class="card mt-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col" style="color:#6C7293;">Submitted Date</th>
+                  <th scope="col" style="color:#6C7293;"> Project</th>
+                  
+                  <th scope="col" style="color:#6C7293;">Name</th>
+                  <th scope="col" style="color:#6C7293;">Designation</th>
+                  <th scope="col" style="color:#6C7293;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="myTable">
+    
+                {% for d in action_take %}
+               
+                  <tr>
+                  <td style="color: white;">{{d.wrn_date|date:'d-m-Y'}}</td>
+                  <td>
+                    <div class="">{{d.wrn_task.project.project}}</div>
+                  </td>
+                  
+                    <td style="color: white;">{{d.wrn_user_name.fullname}} </td>
+                    <td style="color: white;">{{d.wrn_user_name.designation.designation}} </td>
+                    <td style="color: white;" >{{d.wrn_reason}} </td>
+
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+    </div>
+</div>
+
+{% endblock %}

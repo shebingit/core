@@ -1741,7 +1741,15 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
  path('Projectmanager_action_taken>', views.Projectmanager_action_taken, name='Projectmanager_action_taken'),
  path('TL_action_taken>', views.TL_action_taken, name='TL_action_taken'),
  path('BRadmin_action_taken>', views.BRadmin_action_taken, name='BRadmin_action_taken'),
-    
+ path('DEVaction>', views.DEVaction, name='DEVaction'),
+
+#20-12-22
+
+ path('pm_leavedesgn>', views.pm_leavedesgn, name='pm_leavedesgn'),  
+ path('pm_emp_ajax>', views.pm_emp_ajax, name='pm_emp_ajax'),  
+ path('tl_leavedesgn>', views.tl_leavedesgn, name='tl_leavedesgn'),  
+ path('tl_emp_ajax>', views.tl_emp_ajax, name='tl_emp_ajax'),  
+ 
 
 
 

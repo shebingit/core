@@ -8030,8 +8030,8 @@ def TLdashboard(request):
             this_event_lst_cnt = len(this_evntlst)
             
 
-
             
+            this_leave_lst= []
 
             def this_remove_days(from_day, end_day):
                 this_leaves = leave.objects.filter(from_date__range=(from_day,end_day),to_date__range=(from_day,end_day), user_id = tlid).values('from_date','to_date')
@@ -8172,7 +8172,7 @@ def TLdashboard(request):
             
             this_month_leave_count = leave.objects.filter(from_date__gte = start_day_of_this_month, to_date__lte = last_day_of_this_month, user_id = tlid).count()
             this_month_leave_count_sub = leave.objects.filter(from_date__range=(start_day_of_this_month,last_day_of_this_month),to_date__range=(start_day_of_this_month,last_day_of_this_month), user_id = tlid).values('from_date','to_date')
-            this_leave_lst = []
+            
 
             if this_month_leave_count >= 1:
 
@@ -9804,8 +9804,8 @@ def DEVtable(request, id):
     proj=project.objects.get(id=id)
     testerstatus = tester_status.objects.filter(project_id=id)
     time = datetime.now()
-    action_take=wrdata.objects.all()
-    return render(request, 'DEVtable.html', {'dev': dev, 'devp': devp, 'time': time, 'teststatus': teststatus, 'action_take':action_take,'testerstatus': testerstatus,'proj':proj})
+   
+    return render(request, 'DEVtable.html', {'dev': dev, 'devp': devp, 'time': time, 'teststatus': teststatus,'testerstatus': testerstatus,'proj':proj})
 
 
 #******************Developer Project Document section **********************
@@ -10453,7 +10453,10 @@ def man_registration_update(request, id):
             xem = extracurricular.objects.get(user_id=id)
         except extracurricular.DoesNotExist:
             xem = None
-        qem = qualification.objects.get(user_id=id)
+        try:
+            qem = qualification.objects.get(user_id=id)
+        except qualification.DoesNotExist:
+            qem= None
         des = designation.objects.filter(~Q(designation='admin'))
         desig = designation.objects.all().exclude(designation = 'team leader').exclude(designation ='manager').exclude(designation ='trainee').exclude(designation ='project manager').exclude(designation ='tester').exclude(designation ='trainingmanager').exclude(designation ='account').exclude(designation ='trainer').exclude(designation ='developer')
 
@@ -10585,6 +10588,7 @@ def registrationupdatesave(request, id):
         a.permanentstate = request.POST['permanentstate']
         a.designation_id = request.POST['designation']
         a.desig_input = request.POST['desg']
+        a.department_input = request.POST['department_current']
         a.mobile = request.POST['mobile']
         a.alternativeno = request.POST['altmobile1']
         a.email = request.POST['email']
@@ -20830,8 +20834,103 @@ def BRadmin_action_taken(request):
     else:
         return redirect('/')
 
+# acations taken to developer 
+def DEVaction(request):
+    if request.session.has_key('devid'):
+        devid = request.session['devid']
+    else:
+       return redirect('/')
+    dev = user_registration.objects.filter(id=devid)
+    devp = user_registration.objects.get(id=devid)
+    action_take=wrdata.objects.filter(wrn_develp=devp)
+    return render(request, 'DEVaction.html', {'dev': dev, 'devp': devp,  'action_take':action_take})
 
 
+
+#project manager action
+
+
+@csrf_exempt
+def pm_leavedesgn(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+            return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+        dept_id = request.GET.get('dept_id')
+        
+        br_id = department.objects.get(id=dept_id)
+        
+        Desig = designation.objects.filter(~Q(designation="admin"),~Q(designation="project manager"),~Q(designation="auditor"),~Q(designation="hr")).filter(branch_id=br_id.branch_id)
+        return render(request,'BRadmin_leavedesgn.html',{'pro': pro,'Desig': Desig})
+    else:
+        return redirect('/')
+    
+
+@csrf_exempt
+def pm_emp_ajax(request):
+    if 'prid' in request.session:
+        if request.session.has_key('prid'):
+            prid = request.session['prid']
+        else:
+            return redirect('/')
+        pro = user_registration.objects.filter(id=prid)
+
+        dept_id = request.GET.get('dept_id')
+        desigId = request.GET.get('desigId')
+        br_id = department.objects.get(id=dept_id)
+        Desig = user_registration.objects.filter(branch_id=br_id.branch_id, designation=desigId, status="active")
+
+        return render(request,'BRadmin_emp_ajax.html',{'pro': pro,'Desig': Desig,})
+    else:
+        return redirect('/')
+
+
+
+
+
+
+
+#Tl action 
+@csrf_exempt
+def tl_leavedesgn(request):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+
+        mem = user_registration.objects.filter(id=tlid)
+
+        dept_id = request.GET.get('dept_id')
+        
+        br_id = department.objects.get(id=dept_id)
+        
+        Desig = designation.objects.filter(~Q(designation="admin"),~Q(designation="team leader"),~Q(designation="project manager"),~Q(designation="auditor"),~Q(designation="hr")).filter(branch_id=br_id.branch_id)
+        return render(request,'BRadmin_leavedesgn.html',{'mem': mem,'Desig': Desig})
+    else:
+        return redirect('/')
+
+
+@csrf_exempt
+def tl_emp_ajax(request):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+
+        mem = user_registration.objects.filter(id=tlid)
+
+        dept_id = request.GET.get('dept_id')
+        desigId = request.GET.get('desigId')
+        br_id = department.objects.get(id=dept_id)
+        Desig = user_registration.objects.filter(branch_id=br_id.branch_id, designation=desigId, status="active")
+
+        return render(request,'BRadmin_emp_ajax.html',{'mem': mem,'Desig': Desig,})
+    else:
+        return redirect('/')
 
 
 

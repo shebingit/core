@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>DiMEnzions</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/static/styles/vendors/feather/feather.css">
+    <link rel="stylesheet" href="/static/styles/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/static/styles/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="/static/styles/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/static/styles/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="/static/styles/js/select.dataTables.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/static/styles/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/static/images/favicon.png" />
+
+    <!--Font-awesome-->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    
+</head>
+
+<body>
+    <div class="container-scroller">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row bg-dark">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center bg-dark">
+
+                <a class="navbar-brand brand-logo mr-5 text-light" href="/userhome"><img src="/static/images/logod.png" alt=""></a>
+                <a class="navbar-brand brand-logo-mini" href="index.html"><img src="/static/images/logo-mini.svg"
+                        alt="logo" /></a>
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end bg-dark">
+                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                    <span class="icon-menu"></span>
+                </button>
+                <!-- <ul class="navbar-nav mr-lg-2">
+                    <li class="nav-item nav-search d-none d-lg-block">
+                        <div class="input-group">
+                            <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                                <span class="input-group-text" id="search">
+                  <i class="icon-search"></i>
+                </span>
+                            </div>
+                            <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+                        </div>
+                    </li>
+                </ul> -->
+                <ul class="navbar-nav navbar-nav-right">
+                    <!-- <li class="nav-item dropdown">
+                        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                            <i class="icon-bell mx-0"></i>
+                            <span class="count"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                            <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                            <a class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-success">
+                                        <i class="ti-info-alt mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        Just now
+                                    </p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-warning">
+                                        <i class="ti-settings mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">Settings</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        Private message
+                                    </p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-info">
+                                        <i class="ti-user mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        2 days ago
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                    </li> -->
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                            <!--  -->
+                            <img src="/static/images/faces/face1.jpg" alt="profile" />
+                            <!--  -->
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                            aria-labelledby="profileDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="ti-settings text-primary"></i> Settings
+                            </a>
+                            <a class="dropdown-item" href="/user_logout">
+                                <i class="ti-power-off text-primary"></i> Logout
+                            </a>
+                        </div>
+                    </li>
+                    <!-- 3 dots -->
+                    <!-- <li class="nav-item nav-settings d-none d-lg-flex">
+                        <a class="nav-link" href="#">
+                            <i class="icon-ellipsis"></i>
+                        </a>
+                    </li> -->
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                    data-toggle="offcanvas">
+                    <span class="icon-menu"></span>
+                </button>
+            </div>
+        </nav>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper bg-dark">
+            <!-- partial:partials/_settings-panel.html -->
+            <div class="theme-setting-wrapper">
+                <div id="settings-trigger"><i class="ti-settings"></i></div>
+                <div id="theme-settings" class="settings-panel">
+                    <i class="settings-close ti-close"></i>
+                    <p class="settings-heading">SIDEBAR SKINS</p>
+                    <div class="sidebar-bg-options " id="sidebar-light-theme">
+                        <div class="img-ss rounded-circle bg-light border mr-3"></div>Light
+                    </div>
+                    <div class="sidebar-bg-options selected" id="sidebar-dark-theme">
+                        <div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark
+                    </div>
+                    <p class="settings-heading mt-2">HEADER SKINS</p>
+                    <div class="color-tiles mx-0 px-4">
+                        <div class="tiles success"></div>
+                        <div class="tiles warning"></div>
+                        <div class="tiles danger"></div>
+                        <div class="tiles info"></div>
+                        <div class="tiles dark default"></div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div id="right-sidebar" class="settings-panel bg-dark">
+                <i class="settings-close ti-close"></i>
+                <ul class="nav nav-tabs border-top bg-dark" id="setting-panel" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab"
+                            aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab"
+                            aria-controls="chats-section">CHATS</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="setting-content">
+                    <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel"
+                        aria-labelledby="todo-section">
+                        <div class="add-items d-flex px-3 mb-0">
+                            <form class="form w-100">
+                                <div class="form-group d-flex">
+                                    <input type="text" class="form-control todo-list-input" placeholder="Add To-do">
+                                    <button type="submit" class="add btn btn-primary todo-list-add-btn"
+                                        id="add-task">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="list-wrapper px-3">
+                            <ul class="d-flex flex-column-reverse todo-list">
+                                <li>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="checkbox" type="checkbox">
+                                            Team review meeting at 3.00 PM
+                                        </label>
+                                    </div>
+                                    <i class="remove ti-close"></i>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="checkbox" type="checkbox">
+                                            Prepare for presentation
+                                        </label>
+                                    </div>
+                                    <i class="remove ti-close"></i>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="checkbox" type="checkbox">
+                                            Resolve all the low priority tickets due today
+                                        </label>
+                                    </div>
+                                    <i class="remove ti-close"></i>
+                                </li>
+                                <li class="completed">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="checkbox" type="checkbox" checked>
+                                            Schedule meeting for next week
+                                        </label>
+                                    </div>
+                                    <i class="remove ti-close"></i>
+                                </li>
+                                <li class="completed">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="checkbox" type="checkbox" checked>
+                                            Project review
+                                        </label>
+                                    </div>
+                                    <i class="remove ti-close"></i>
+                                </li>
+                            </ul>
+                        </div>
+                        <h4 class="px-3 text-muted mt-5 font-weight-light mb-0">Events</h4>
+                        <div class="events pt-4 px-3">
+                            <div class="wrapper d-flex mb-2">
+                                <i class="ti-control-record text-primary mr-2"></i>
+                                <span>Feb 11 2018</span>
+                            </div>
+                            <p class="mb-0 font-weight-thin text-gray">Creating component page build a js</p>
+                            <p class="text-gray mb-0">The total number of sessions</p>
+                        </div>
+                        <div class="events pt-4 px-3">
+                            <div class="wrapper d-flex mb-2">
+                                <i class="ti-control-record text-primary mr-2"></i>
+                                <span>Feb 7 2018</span>
+                            </div>
+                            <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
+                            <p class="text-gray mb-0 ">Call Sarah Graves</p>
+                        </div>
+                    </div>
+                    <!-- To do section tab ends -->
+                    <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
+                        <div class="d-flex align-items-center justify-content-between border-bottom">
+                            <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
+                            <small
+                                class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See
+                                All</small>
+                        </div>
+                        <ul class="chat-list">
+                            <li class="list active">
+                                <div class="profile"><img src="images/faces/face1.jpg" alt="image"><span
+                                        class="online"></span></div>
+                                <div class="info">
+                                    <p>Thomas Douglas</p>
+                                    <p>Available</p>
+                                </div>
+                                <small class="text-muted my-auto">19 min</small>
+                            </li>
+                            <li class="list">
+                                <div class="profile"><img src="images/faces/face2.jpg" alt="image"><span
+                                        class="offline"></span></div>
+                                <div class="info">
+                                    <div class="wrapper d-flex">
+                                        <p>Catherine</p>
+                                    </div>
+                                    <p>Away</p>
+                                </div>
+                                <div class="badge badge-success badge-pill my-auto mx-2">4</div>
+                                <small class="text-muted my-auto">23 min</small>
+                            </li>
+                            <li class="list">
+                                <div class="profile"><img src="images/faces/face3.jpg" alt="image"><span
+                                        class="online"></span></div>
+                                <div class="info">
+                                    <p>Daniel Russell</p>
+                                    <p>Available</p>
+                                </div>
+                                <small class="text-muted my-auto">14 min</small>
+                            </li>
+                            <li class="list">
+                                <div class="profile"><img src="images/faces/face4.jpg" alt="image"><span
+                                        class="offline"></span></div>
+                                <div class="info">
+                                    <p>James Richardson</p>
+                                    <p>Away</p>
+                                </div>
+                                <small class="text-muted my-auto">2 min</small>
+                            </li>
+                            <li class="list">
+                                <div class="profile"><img src="images/faces/face5.jpg" alt="image"><span
+                                        class="online"></span></div>
+                                <div class="info">
+                                    <p>Madeline Kennedy</p>
+                                    <p>Available</p>
+                                </div>
+                                <small class="text-muted my-auto">5 min</small>
+                            </li>
+                            <li class="list">
+                                <div class="profile"><img src="images/faces/face6.jpg" alt="image"><span
+                                        class="online"></span></div>
+                                <div class="info">
+                                    <p>Sarah Graves</p>
+                                    <p>Available</p>
+                                </div>
+                                <small class="text-muted my-auto">47 min</small>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- chat tab ends -->
+                </div>
+            </div>
+            <!-- partial -->
+            <!-- partial:partials/_sidebar.html -->
+            <nav class="sidebar sidebar-offcanvas bg-dark text-light" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin_dashboard">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">Dashboard </span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/registeredusers">
+                            <i class="icon-head menu-icon"></i>
+                            <span class="menu-title">Registered Users</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/freelancers">
+                            <i class="icon-head menu-icon"></i>
+                            <span class="menu-title">Freelancers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/Requested-work">
+                            <i class="icon-columns menu-icon"></i>
+                            <span class="menu-title">Requested Work</span>
+                        </a>
+                    
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/Ongoing-work">
+                            <i class="icon-columns menu-icon"></i>
+                            <span class="menu-title">Ondoing  Work</span>
+                        </a>
+                    
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/Completed-work">
+                            <i class="icon-columns menu-icon"></i>
+                            <span class="menu-title">Completed Work</span>
+                        </a>
+                    
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/addmodel">
+                            <i class="icon-columns menu-icon"></i>
+                            <span class="menu-title">Add Models</span>
+                        </a>
+                    </li>
+                    
+
+
+
+
+
+                </ul>
+            </nav>
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.checked {
+  color: orange;
+}
+</style>
+
+<style>
+  a
+  {
+    text-decoration: none;
+    color: black;
+  }
+  a:hover
+  {
+    text-decoration: none;
+  }
+  .dwn
+  {
+    margin-top: 10px;
+    margin-bottom: 2px;
+    border-radius: 10px;
+    height: 45px;
+    font-size: 14px;
+    background-color: rgb(26, 26, 80);
+    color: #fff; 
+    padding: 10px 8px;
+    
+  }
+  .col-lg-4
+  {
+    padding: 10px 15px;
+  }
+</style>
+
+<section class="profile container mt-5">
+    <div class="profile0 row bg-light shadow  mt-5">
+        <div class="col-lg-2  d-flex flex-column align-items-center pt-3 boxl">
+            <img src="/media/profile/bth1.jpg"
+                alt="" class="shadow img-fluid">
+            <h4 class="m-0 p-2">Shebin Shaji</h4>
+            <!--<p style="color: gray;" class="m-0 p-0">(10 Feedback)</p>
+            <p style="color: gray;" class="m-0 p-0">Member since March 26,20</p>-->
+           
+           
+        </div>
+        <div class="col-lg-6 py-4">
+            <h2 class="px-2">Software Developer</h2>
+            <div class="row pt-3">
+                <div class="col-4 flex grybdr">
+                    <p style="color: gray;" class="m-0 p-0">$ 650.00 / hr</p>
+                </div>
+                <div class="col-4 flex grybdr">
+                    <img src="https://cdn.britannica.com/97/1597-004-05816F4E/Flag-India.jpg" width="20px" alt="">
+                    <p style="color: gray;" class="m-0 px-2"> </p>
+                </div>
+                <div class="col-4 flex ">
+                    
+                    <a href="#" download="/media/images/ALTOS_ML_-_Page_content_1_AarUXDN.docx"><i class="fa fa-file" style="color: rgb(255, 5, 72);"></i></a> 
+                    
+                    
+                    <p style="color: gray;" class="m-0 px-2">Resume</p>
+
+                </div>
+            </div>
+            <p style="color: gray; text-align: justify;" class="m-0 p-2 py-4">overview</p>
+
+            <h4>Star Rating</h4>
+            
+                <span class="fa fa-star checked"></span>
+            
+                
+            
+
+            <!--<div class="rdmr px-4"> <button class="bg-light px-3">Read more</button></div>-->
+            <h5 class="mt-5">Works</h5>
+            <hr>
+            <div class="row g-3 mt-3 flex text-center">
+                <div class="col-lg-4">
+                    <a href="#" download="/media/images/ALTOS_ML_-_Page_content_1.docx " class="dwn mb-2">Download<i class="fa fa-download px-3" ></i></a>
+                    </div>
+                <div class="col-lg-4">
+                    <a href="#" download="/media/images/ALTOS_ML_-_Page_content_1_V1nMxyB.docx"class="dwn mb-2" >Download<i class="fa fa-download  px-3"></i></a>
+                    </div>
+                <div class="col-lg-4">
+                    <a href="#" download="/media/images/ALTOS_ML_-_Page_content_1_zewt1OP.docx"class="dwn mb-2" >Download<i class="fa fa-download  px-3"></i></a>
+                    </div>
+                
+                
+                
+
+            </div>
+
+        </div>
+        <div class="col-lg-4 bdrlft p-4">
+        
+            <div class="row bdrbtm">
+                <div class="col-6 flex flex-column p-4">
+                    <h3 class="red">0</h3>
+                    <p>Ongoing Services</p>
+
+                </div>
+                <div class="col-6 flex flex-column p-4 dark">
+                    <h3 class="red">0</h3>
+                    <p>Completed projects</p>
+                </div>
+            </div>
+            <form action="/rating/11" method="post">
+                <input type="hidden" name="csrfmiddlewaretoken" value="3gEykQS7NhLQPARnF5fMHN9caaCrZKrXFfymf1CHTMCSH4wKE4Beo9Owt8GZUx0L">
+                <div class="p-3 mb-3">
+                    <h5 class="pt-3">Give Rating  <span class="fa fa-star checked"></span></h5>
+                    <input type="number" min="1" max="5" step="1" value="1" name="rt">
+                    
+                   
+                </div>
+    
+                <div class="flex p-4">
+                    <button type="submit" class="text-light redbg btn w-50 py-2">OK</a>
+    
+                </div>
+
+            </form>
+           
+           
+
+
+
+        </div>
+
+    </div>
+
+    <style>
+        input {
+            width: 50px;
+            height: 42px;
+            line-height: 1.65;
+            float: left;
+            display: block;
+            padding: 0;
+            margin: 5px;
+            padding-left: 20px;
+            border: 1px solid #eee;
+          }
+          
+           input:focus {
+            outline: 0;
+          }
+          
+        .profile0 {
+            margin-top: -200px;
+            border: 1px solid rgb(188, 188, 188);
+            border-radius: 10px;
+
+        }.profile0 .boxl img {
+            width: 300px;
+        }
+
+        .grybdr {
+            border-right: 1px solid rgb(200, 200, 200);
+        }
+
+        .rdmr {
+            display: flex;
+            align-items: center;
+            justify-content: end;
+        }
+
+        .rdmr button {
+            border: 1px solid rgba(0, 0, 0, 0);
+
+            color: rgb(255, 5, 72);
+
+        }
+
+        .rdmr button:hover {
+            border: 1px solid rgb(255, 5, 72);
+            color: rgb(255, 5, 72);
+
+        }
+
+        .red {
+            color: rgb(255, 5, 72);
+
+        }
+
+        .redbg {
+            background-color: rgb(255, 5, 72);
+        }
+
+        .dark {
+            background-color: rgb(202, 218, 232);
+        }
+
+        .bdrlft {
+            border-left: 1px solid rgb(200, 200, 200);
+        }
+
+        .bdrbtm {
+            border-bottom: 1px solid rgb(200, 200, 200);
+        }
+
+        @media only screen and (max-width:990px) {
+
+            .profile0 {
+                margin-top: auto;
+            }
+
+            .profile0 .boxl img {
+                margin-top: -120px;
+                border-radius: 200px;
+                width: 200px;
+            }
+
+
+        }
+    </style>
+
+</section>
+
+
+
+
+
+                </div>
+                <!-- content-wrapper ends -->
+
+
+                <!-- partial:partials/_footer.html -->
+
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+
+    <!-- plugins:js -->
+    <script src="/static/styles/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="/static/styles/vendors/chart.js/Chart.min.js"></script>
+    <script src="/static/styles/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="/static/styles/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <script src="/static/styles/js/dataTables.select.min.js"></script>
+
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="/static/styles/js/off-canvas.js"></script>
+    <script src="/static/styles/js/hoverable-collapse.js"></script>
+    <script src="/static/styles/js/template.js"></script>
+    <script src="/static/styles/js/settings.js"></script>
+    <script src="/static/styles/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="/static/styles/js/file-upload.js"></script>
+    <script src="/static/styles/js/dashboard.js"></script>
+    <script src="/static/styles/js/Chart.roundedBarCharts.js"></script>
+    <!-- End custom js for this page-->
+    
+</body>
+
+</html>

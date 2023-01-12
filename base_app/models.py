@@ -153,6 +153,8 @@ class user_registration(models.Model):
     reg_status =  models.CharField(max_length=10, default='0')
     trainee_delay=models.IntegerField(default=0)
     work_status =  models.CharField(max_length=10, default='')
+    desig_input = models.CharField(max_length=30, default='')
+    department_input=models.CharField(max_length=30, default='')
   
    
  
