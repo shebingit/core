@@ -1395,7 +1395,23 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
      re_path(r'^HR_changepassword/$', views.HR_changepassword, name='HR_changepassword'),
      re_path(r'^HR_accountsettings/$', views.HR_accountsettings, name='HR_accountsettings'),
      re_path(r'^HR_imagesettings/$', views.HR_imagesettings, name='HR_imagesettings'),
-     re_path(r'^HR_logout/$', views.HR_logout, name='HR_logout'),  
+
+    # new urls added to Hr Module - 24/02/2023 
+    path('HR_training_leads', views.HR_training_leads, name='HR_training_leads'), 
+    path('HR_upcoming_leads', views.HR_upcoming_leads, name='HR_upcoming_leads'),  
+    path('HR_current_leads', views.HR_current_leads, name='HR_current_leads'),  
+    path('HR_Waiting_leads', views.HR_Waiting_leads, name='HR_Waiting_leads'),   
+    path('HR_Joined', views.HR_Joined, name='HR_Joined'),
+    path('HR_add_leads', views.HR_add_leads, name='HR_add_leads'),
+    path('HR_register_lead', views.HR_register_lead, name='HR_register_lead'),
+    path('HR-lead-Accept/<int:hrlead_acc>', views.HR_lead_accept, name='HR_lead_accept'),
+    path('HR-lead-Reject/<int:hrlead_rej>', views.HR_lead_reject, name='HR_lead_reject'),
+    
+    
+      
+    
+
+    re_path(r'^HR_logout/$', views.HR_logout, name='HR_logout'),  
      
     re_path(r'^completedteam/$', views.completedteam, name='completedteam'),
     re_path(r'^completed_team_trainees/(?P<id>\d+)/$', views.completed_team_trainees, name='completed_team_trainees'),

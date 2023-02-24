@@ -15840,12 +15840,151 @@ def HR_imagesettings(request):
     else:
         return redirect('/')
 
+
+    
+#============== 24/02/2023  New Upadation =============
+
+
+def HR_training_leads(request):
+
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        
+        return render(request,'hr_module/HR_training_leads.html', {'mem': mem})
+    else:
+        return redirect('/')
+    
+    
+def HR_upcoming_leads(request):
+
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        leads=Leads_Register.objects.filter(r_status=0)
+        return render(request,'hr_module/HR_upcoming_leads.html', {'mem': mem,'leads':leads})
+    else:
+        return redirect('/')
+
+
+def HR_current_leads(request):
+
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        leads=Leads_Register.objects.filter(r_status=1)
+        return render(request,'hr_module/HR_current_leads.html', {'mem': mem,'leads':leads})
+    else:
+        return redirect('/')
+    
+def HR_Waiting_leads(request):
+
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        
+        return render(request,'hr_module/HR_wating_leads.html', {'mem': mem})
+    else:
+        return redirect('/')
+    
+    
+def HR_Joined(request):
+
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        
+        return render(request,'hr_module/HR_joined.html', {'mem': mem})
+    else:
+        return redirect('/')
+    
+        
+def HR_add_leads(request):
+
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+       
+        return render(request,'hr_module/HR_add_lead.html', {'mem': mem})
+    else:
+        return redirect('/')
+    
+def HR_register_lead(request):
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+      
+        
+        if request.method == 'POST':
+
+            reg = Leads_Register()
+            reg.r_fullname = request.POST['rname']
+            reg.r_email = request.POST['remail']
+            reg.r_phno = request.POST['rphno']
+            reg.r_place = request.POST['rplace']
+            reg.r_qulific = request.POST['rquli']
+            reg.r_refference = user_registration.objects.get(id=request.POST['rreffer'])
+            reg.r_dese = request.POST['rdesc']
+            msg_success="Lead Registration Successfull"
+            reg.save()
+            leads=Leads_Register.objects.filter(r_status=0)
+
+        return render(request,'hr_module/HR_add_lead.html', {'mem': mem,'msg_success':msg_success,'leads':leads})
+    
+    else:
+        return redirect('/')
+
+
+def HR_lead_accept(request,hrlead_acc):
+
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        reg = Leads_Register.objects.get(id=hrlead_acc)
+        reg.r_status=1
+        reg.save()
+        leads=Leads_Register.objects.filter(r_status=0)
+        return render(request,'hr_module/HR_add_lead.html', {'mem': mem,'leads':leads})
+    else:
+        return redirect('/')
+
+    
+def HR_lead_reject(request,hrlead_rej):
+ 
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        reg = Leads_Register.objects.get(id=hrlead_rej)
+        reg.r_status=2
+        reg.save()
+        leads=Leads_Register.objects.filter(r_status=0)
+        return render(request,'hr_module/HR_add_lead.html', {'mem': mem,'leads':leads})
+    else:
+        return redirect('/')
+
+
+
+
+#============== 24/02/2023  End Upadation =============
+
 def HR_logout(request):
     if 'hr_id' in request.session:
         request.session.flush()
         return redirect('/')
     else:
         return redirect('/')
+
+
+
 
 #*******new******************************
 
