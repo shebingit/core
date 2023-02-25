@@ -44,11 +44,13 @@
                     <table class="table" id="myTable">
                         <thead>
                             <tr class="header" >
-                                <th>Date </th>
+                               
                                 <th>Full Name </th>
                                 <th>Email id</th>
                                 <th> Phone No </th>
                                 <th> Place </th>
+                                <th>Date </th>
+                                <th>Refference By </th>
                                 <th> Qualification </th>
                                 <th> Other Details</th>
                                 <th>Action</th>
@@ -58,11 +60,13 @@
                         <tbody>
                             {% for i in leads %}
                             <tr>
-                                <td> {{ i.r_date }} </td>
+                              
                                 <td><span class="ps-2">{{ i.r_fullname }}</span></h5></td>
                                 <td> {{ i.r_email }} </td>
                                 <td> {{ i.r_phno }} </td>
                                 <td> {{ i.r_place }} </td>
+                                <td> {{ i.r_date }} </td>
+                                <td> {{ i.r_refference.fullname }} </td>
                                 <td> {{ i.r_qulific }} </td>
                                 <td> {{ i.r_dese }} </td>
                                 <td> <a href="{% url 'HR_lead_accept' i.id %}" class="btn btn-outline-success">Accept</a>
@@ -99,12 +103,5 @@
     }
 </script>
 
-<script>
-    $(document).ready(function() {
-        $('table tr').click(function() {
-            window.location = $(this).data('href');
-            return false;
-        });
-    });
-</script>
+
 {% endblock %}

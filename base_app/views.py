@@ -15942,36 +15942,47 @@ def HR_register_lead(request):
         return redirect('/')
 
 
-def HR_lead_accept(request,hrlead_acc):
+def HR_lead_accept(request,pk):
 
     if 'hr_id' in request.session:
         if request.session.has_key('hr_id'):
            hr_id = request.session['hr_id']
         mem = user_registration.objects.filter(id=hr_id)
-        reg = Leads_Register.objects.get(id=hrlead_acc)
+        reg = Leads_Register.objects.get(id=pk)
         reg.r_status=1
         reg.save()
         leads=Leads_Register.objects.filter(r_status=0)
-        return render(request,'hr_module/HR_add_lead.html', {'mem': mem,'leads':leads})
+        return render(request,'hr_module/HR_upcoming_leads.html', {'mem': mem,'leads':leads})
     else:
         return redirect('/')
 
     
-def HR_lead_reject(request,hrlead_rej):
+def HR_lead_reject(request,pk):
  
     if 'hr_id' in request.session:
         if request.session.has_key('hr_id'):
            hr_id = request.session['hr_id']
         mem = user_registration.objects.filter(id=hr_id)
-        reg = Leads_Register.objects.get(id=hrlead_rej)
+        reg = Leads_Register.objects.get(id=pk)
         reg.r_status=2
         reg.save()
         leads=Leads_Register.objects.filter(r_status=0)
-        return render(request,'hr_module/HR_add_lead.html', {'mem': mem,'leads':leads})
+        return render(request,'hr_module/HR_upcoming_leads.html', {'mem': mem,'leads':leads})
     else:
         return redirect('/')
 
 
+def HR_update_lead_status(request,pk):
+     
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        leads = Leads_Register.objects.get(id=pk)
+        
+        return render(request,'hr_module/HR_update_lead_status.html', {'mem': mem,'leads':leads})
+    else:
+        return redirect('/')
 
 
 #============== 24/02/2023  End Upadation =============

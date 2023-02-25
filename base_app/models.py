@@ -1019,3 +1019,5 @@ class Leads_Register(models.Model):
     r_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
     r_dese=models.TextField(default='')
     r_status=models.IntegerField(null=True,blank=True,default=0)
+    r_type_status=models.CharField(max_length=200,null=True, blank=True,default='')
+    r_type=models.CharField(max_length=200,null=True, blank=True,default='')
