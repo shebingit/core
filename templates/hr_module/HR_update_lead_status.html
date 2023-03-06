@@ -8,11 +8,11 @@
 </style>
 
 <div class="row" style="margin-bottom: 50px;">
-    <h3 class="text-muted">Leads Add</h3>
+    <h3 class="text-muted">Leads Update</h3>
 </div>
 
 
-<form class="card col-12" action="{% url 'HR_register_lead' %}"  method="post" enctype='multipart/form-data' >
+<form class="card col-12" action="{% url 'HR_update_lead_data' leads.id %}"  method="post" enctype='multipart/form-data' >
     {% csrf_token %}
     <div class="form-group">
      
@@ -33,6 +33,22 @@
          
          <label>Qualification</label>
          <input type="text" class="form-control card-title col-12 md-4" name="rquli"value="{{leads.r_qulific}}" autocomplete="off">
+
+         <label>Type</label>
+        
+          <select class="form-control" name="rtype"  style='color:white !important'>
+                <option value="Job">Job</option>
+              <option value="Internship">Internship</option>
+            
+          </select> <br>
+          <label>Status</label>
+        
+          <select class="form-control" name="rstatus"  style='color:white !important'>
+              <option value="1">Interested</option>
+              <option value="2">Wating</option>
+              <option value="0">Not Intrested</option>
+             
+          </select> <br>
 
           <label>Reference by</label>
         

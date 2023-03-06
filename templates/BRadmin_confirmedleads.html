@@ -1,15 +1,19 @@
-{% extends 'hr_module/index_hr.html' %} {% block content %}{% load static %}
+{% extends 'BRadmin_index.html' %}
+{% load static %}
+{% block content %}
 
 <style>
-    table tr[data-href] {
-        cursor: pointer;
+  @media(max-width:61.938em){
+    .row h3{
+      font-size: 19px;
     }
+  }
 </style>
 <div class="row ">
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Wating  Leads </h4>
+                <h4 class="card-title">Joind Leads </h4>
                 <div class="form-group">
                     <input type="text" class="form-control" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name" style="color:white;">
                 </div>
@@ -27,7 +31,7 @@
                                 <th> Other Details</th>
                                 <th>Type</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                               
                               
                                
                             </tr>
@@ -45,17 +49,11 @@
                                 <td> {{ i.r_dese }} </td>
                                 <td>{{ i.r_type }}</td>
                                 <td>
-                                   
-                                    {% if i.r_type_status == '2' %}
-                                    Wating
+                                    {% if i.r_status == 1 %}
+                                    Confirmed
                                     {% endif %}
                                 </td>
-                                <td>
-                                    <a href="{% url 'HR_update_lead_status' i.id %}" class="btn btn-outline-warning">Update</a>
-                                    {% if i.r_type_status == '1' %}
-                                    <a href="{% url 'HR_update_lead_status' i.id %}" class="btn btn-outline-success">Confirm</a>
-                                    {% endif %}
-                                </td>
+                               
                                 
                                 
                             </tr>

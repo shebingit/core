@@ -3633,6 +3633,7 @@ def BRadmin_profiledash(request):
         Adm = user_registration.objects.filter(id=Adm_id)
         Num = user_registration.objects.filter(status="active").count()
         Num1 = project.objects.count()
+        lead_count = Leads_Register.objects.count()
         Trainer = designation.objects.get(designation='Trainer')
         trcount = user_registration.objects.filter(designation=Trainer).count()
         Man1 = designation.objects.get(designation='Manager')
@@ -3654,7 +3655,7 @@ def BRadmin_profiledash(request):
             labels = [i.workperformance, i.attitude, i.creativity]
             data = [i.workperformance, i.attitude, i.creativity]
 
-        return render(request, 'BRadmin_profiledash.html', {'labels': labels, 'data': data, 'Num1': Num1, 'Man1': Man2, 'Adm': Adm, 'num': Num, 'trcount': trcount, 'le': le,'count':count})
+        return render(request, 'BRadmin_profiledash.html', {'labels': labels, 'data': data, 'Num1': Num1, 'Man1': Man2, 'Adm': Adm, 'num': Num, 'trcount': trcount, 'le': le,'count':count,'lead_count':lead_count})
     else:
         return redirect('/')
 
@@ -4561,7 +4562,83 @@ def BRadmin_dept(request):
         return render(request,'BRadmin_dept.html',{'proj_det':project_details,'department':depart,'Adm':Adm})
     else:
         return redirect('/')
+
+
+def BRadmin_leads(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        project_details = project.objects.all()
+        depart =department.objects.all()
+        return render(request,'BRadmin_leads.html',{'proj_det':project_details,'department':depart,'Adm':Adm})
+    else:
+        return redirect('/')
+
+
+def BRadmin_currentleads(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        leads=Leads_Register.objects.filter(Q(r_type_status='') | Q(r_type_status=1),r_status=3)
+        return render(request,'BRadmin_currentleads.html',{'leads':leads,'Adm':Adm})
+    else:
+        return redirect('/')
+
+def BRadmin_watingleads(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        leads=Leads_Register.objects.filter(r_type_status=2)
+        return render(request,'BRadmin_watingleads.html',{'leads':leads,'Adm':Adm})
+    else:
+        return redirect('/')
+
+def BRadmin_confirmedleads(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        leads=Leads_Register.objects.filter(r_status=1)
+        return render(request,'BRadmin_confirmedleads.html',{'leads':leads,'Adm':Adm})
+    else:
+        return redirect('/')
     
+
+
+def BRadmin_internshipleads(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        leads=Leads_Register.objects.filter(r_type='Internship')
+        return render(request,'BRadmin_internship_jobleads.html',{'leads':leads,'Adm':Adm})
+    else:
+        return redirect('/')
+    
+def BRadmin_jobleads(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        Adm = user_registration.objects.filter(id=Adm_id)
+        leads=Leads_Register.objects.filter(r_type='job')
+        return render(request,'BRadmin_internship_jobleads.html',{'leads':leads,'Adm':Adm})
+    else:
+        return redirect('/')
 # def BRadmin_profiledash(request):
 #     Num= project.objects.count()
 #     project_details = project.objects.all()
@@ -15875,7 +15952,7 @@ def HR_current_leads(request):
         if request.session.has_key('hr_id'):
            hr_id = request.session['hr_id']
         mem = user_registration.objects.filter(id=hr_id)
-        leads=Leads_Register.objects.filter(r_status=1)
+        leads=Leads_Register.objects.filter(Q(r_type_status='') | Q(r_type_status=1),r_status=3,r_refference=hr_id)
         return render(request,'hr_module/HR_current_leads.html', {'mem': mem,'leads':leads})
     else:
         return redirect('/')
@@ -15886,8 +15963,9 @@ def HR_Waiting_leads(request):
         if request.session.has_key('hr_id'):
            hr_id = request.session['hr_id']
         mem = user_registration.objects.filter(id=hr_id)
+        leads=Leads_Register.objects.filter(r_type_status=2,r_refference=hr_id)
         
-        return render(request,'hr_module/HR_wating_leads.html', {'mem': mem})
+        return render(request,'hr_module/HR_wating_leads.html', {'mem': mem,'leads':leads})
     else:
         return redirect('/')
     
@@ -15898,8 +15976,8 @@ def HR_Joined(request):
         if request.session.has_key('hr_id'):
            hr_id = request.session['hr_id']
         mem = user_registration.objects.filter(id=hr_id)
-        
-        return render(request,'hr_module/HR_joined.html', {'mem': mem})
+        leads=Leads_Register.objects.filter(r_status=1,r_refference=hr_id)
+        return render(request,'hr_module/HR_joined.html', {'mem': mem,'leads':leads})
     else:
         return redirect('/')
     
@@ -15934,7 +16012,7 @@ def HR_register_lead(request):
             reg.r_dese = request.POST['rdesc']
             msg_success="Lead Registration Successfull"
             reg.save()
-            leads=Leads_Register.objects.filter(r_status=0)
+            leads=Leads_Register.objects.filter(r_status=0,r_refference=hr_id)
 
         return render(request,'hr_module/HR_add_lead.html', {'mem': mem,'msg_success':msg_success,'leads':leads})
     
@@ -15949,9 +16027,9 @@ def HR_lead_accept(request,pk):
            hr_id = request.session['hr_id']
         mem = user_registration.objects.filter(id=hr_id)
         reg = Leads_Register.objects.get(id=pk)
-        reg.r_status=1
+        reg.r_status=3
         reg.save()
-        leads=Leads_Register.objects.filter(r_status=0)
+        leads=Leads_Register.objects.filter(r_status=0,r_refference=hr_id)
         return render(request,'hr_module/HR_upcoming_leads.html', {'mem': mem,'leads':leads})
     else:
         return redirect('/')
@@ -15966,7 +16044,7 @@ def HR_lead_reject(request,pk):
         reg = Leads_Register.objects.get(id=pk)
         reg.r_status=2
         reg.save()
-        leads=Leads_Register.objects.filter(r_status=0)
+        leads=Leads_Register.objects.filter(r_status=0,r_refference=hr_id)
         return render(request,'hr_module/HR_upcoming_leads.html', {'mem': mem,'leads':leads})
     else:
         return redirect('/')
@@ -15978,12 +16056,51 @@ def HR_update_lead_status(request,pk):
         if request.session.has_key('hr_id'):
            hr_id = request.session['hr_id']
         mem = user_registration.objects.filter(id=hr_id)
-        leads = Leads_Register.objects.get(id=pk)
+        leads = Leads_Register.objects.get(id=pk,r_refference=hr_id)
         
         return render(request,'hr_module/HR_update_lead_status.html', {'mem': mem,'leads':leads})
     else:
         return redirect('/')
+    
+def HR_update_lead_data(request,pk):
+     
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        leads = Leads_Register.objects.get(id=pk)
+         
+        if request.method == 'POST':
 
+            leads.r_fullname = request.POST['rname']
+            leads.r_email = request.POST['remail']
+            leads.r_phno = request.POST['rphno']
+            leads.r_place = request.POST['rplace']
+            leads.r_qulific = request.POST['rquli']
+            leads.r_refference = user_registration.objects.get(id=request.POST['rreffer'])
+            leads.r_dese = request.POST['rdesc']
+            leads.r_type = request.POST['rtype']
+            leads.r_type_status = request.POST['rstatus']
+            leads.save()
+
+        return redirect('HR_current_leads')
+    else:
+        return redirect('/')
+
+
+def HR_update_lead_confirm(request,pk):
+ 
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        leads = Leads_Register.objects.get(id=pk,r_refference=hr_id)
+        leads.r_status=1
+        leads.save()
+        
+        return redirect('HR_current_leads')
+    else:
+        return redirect('/')
 
 #============== 24/02/2023  End Upadation =============
 

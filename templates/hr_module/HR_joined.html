@@ -9,7 +9,7 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Joined</h4>
+                <h4 class="card-title">Joind Leads </h4>
                 <div class="form-group">
                     <input type="text" class="form-control" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name" style="color:white;">
                 </div>
@@ -17,24 +17,40 @@
                     <table class="table" id="myTable">
                         <thead>
                             <tr class="header" data-href="#">
-
-                                <th> Name </th>
-                                <th> Employee ID </th>
-                                <th> Email </th>
-                                <th> Contact Number </th>
+                                <th>Full Name </th>
+                                <th>Date </th>
+                               
+                                <th>Email id</th>
+                                <th> Phone No </th>
+                                <th> Place </th>
+                                <th> Qualification </th>
+                                <th> Other Details</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                               
+                              
                                
                             </tr>
                         </thead>
                         <tbody>
-                            {% for i in emp_data %}
-                            <tr data-href="{% url 'HR_employeesprofile' i.id %}">
+                            {% for i in leads %}
+                            <tr>
+                            
+                                <td><span class="ps-2">{{ i.r_fullname }}</span></h5></td>
+                                <td> {{ i.r_date }} </td>
+                                <td> {{ i.r_email }} </td>
+                                <td> {{ i.r_phno }} </td>
+                                <td> {{ i.r_place }} </td>
+                                <td> {{ i.r_qulific }} </td>
+                                <td> {{ i.r_dese }} </td>
+                                <td>{{ i.r_type }}</td>
                                 <td>
-                                    <h5><img src="{{ i.photo.url }}" />
-                                        <span class="ps-2">{{ i.fullname }}</span></h5>
+                                    {% if i.r_status == 1 %}
+                                    Confirmed
+                                    {% endif %}
                                 </td>
-                                <td> {{ i.employee_id }} </td>
-                                <td> {{ i.email }} </td>
-                                <td> {{ i.mobile }} </td>
+                               
+                                
                                 
                             </tr>
                             {% endfor %}
@@ -66,12 +82,5 @@
     }
 </script>
 
-<script>
-    $(document).ready(function() {
-        $('table tr').click(function() {
-            window.location = $(this).data('href');
-            return false;
-        });
-    });
-</script>
+
 {% endblock %}

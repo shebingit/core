@@ -527,6 +527,15 @@ urlpatterns = [
 
     # re_path(r'^BRadmin_profiledash$', views.BRadmin_profiledash,name='BRadmin_profiledash'),
     re_path(r'^BRadmin_dept/$', views.BRadmin_dept, name='BRadmin_dept'),
+    path('BRadmin_leads', views.BRadmin_leads, name='BRadmin_leads'),
+    path('BRadmin_currentleads', views.BRadmin_currentleads, name='BRadmin_currentleads'), 
+    path('BRadmin_watingleads', views.BRadmin_watingleads, name='BRadmin_watingleads'),
+    path('BRadmin_confirmedleads', views.BRadmin_confirmedleads, name='BRadmin_confirmedleads'),
+    path('BRadmin_internshipleads', views.BRadmin_internshipleads, name='BRadmin_internshipleads'),
+    path('BRadmin_jobleads', views.BRadmin_jobleads, name='BRadmin_jobleads'),
+    
+    
+    
     re_path(r'^BRadmin_pythons/$', views.BRadmin_pythons, name='BRadmin_pythons'),
     re_path(r'^BRadmin_projects/(?P<id>\d+)/$',
             views.BRadmin_projects, name='BRadmin_projects'),
@@ -1408,6 +1417,10 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('HR_lead_accept/<int:pk>', views.HR_lead_accept, name='HR_lead_accept'),
     path('HR_lead_reject/<int:pk>', views.HR_lead_reject, name='HR_lead_reject'),
     path('HR_update_lead_status/<int:pk>', views.HR_update_lead_status, name='HR_update_lead_status'),
+    path('HR_update_lead_data/<int:pk>', views.HR_update_lead_data, name='HR_update_lead_data'),
+    path('HR_update_lead_confirm/<int:pk>', views.HR_update_lead_confirm, name='HR_update_lead_confirm'),
+    
+    
     
     
       
