@@ -32,11 +32,26 @@
          <input type="text" class="form-control card-title col-12 md-4" name="rplace" value="{{leads.r_place}}" autocomplete="off">
          
          <label>Qualification</label>
-         <input type="text" class="form-control card-title col-12 md-4" name="rquli"value="{{leads.r_qulific}}" autocomplete="off">
+         <input type="text" class="form-control card-title col-12 md-4" name="rquli" value="{{leads.r_qulific}}" autocomplete="off">
+         <label>Year Of Passout</label>
+         <input type="text" class="form-control card-title col-12 md-4" name="ryear"  value="{{leads.r_pass_out_year}}" autocomplete="off">
+
+         <label>Fresher or Experienced </label>
+        
+          <select class="form-control" name="rfr_exp"  style='color:white !important'>
+              <option value="{{leads.r_qulific}}">{{leads.r_fre_exp}}</option>
+              <option value="Fresher">Fresher</option>
+              <option value="Experienced">Experienced</option>
+            
+          </select> <br>
+
+          <label>Lead Source</label>
+         <input type="text" class="form-control card-title col-12 md-4" name="l_source"  value="{{leads.r_lead_source}}" autocomplete="off">
 
          <label>Type</label>
         
           <select class="form-control" name="rtype"  style='color:white !important'>
+                <option value="{{leads.r_type}}">{{leads.r_type}}</option>
                 <option value="Job">Job</option>
               <option value="Internship">Internship</option>
             
@@ -44,11 +59,20 @@
           <label>Status</label>
         
           <select class="form-control" name="rstatus"  style='color:white !important'>
+              {% if leads.r_type_status == '2' %}
+              <option value="2">Wating</option>
+              {% elif leads.r_type_status == '1' %}
+              <option value="1">Interested</option>
+              {% else %}
+              <option value="0">Not Intrested</option>
+              {% endif  %}
               <option value="1">Interested</option>
               <option value="2">Wating</option>
               <option value="0">Not Intrested</option>
              
           </select> <br>
+          <label>Wating Date : {{leads.r_wating_date}}</label>
+          <input type="date" class="form-control card-title col-12 md-4" name="wdate" autocomplete="off">
 
           <label>Reference by</label>
         
@@ -59,7 +83,7 @@
           </select> <br>
            
         <label>Any Other Description</label>
-        <textarea type="text" name="rdesc" class="form-control card-title col-12 md-4" style='color:white !important;height: 100px;'>{{leads.r_dese}}"</textarea>
+        <textarea type="text" name="rdesc" class="form-control card-title col-12 md-4" style='color:white !important;height: 100px;'>{{leads.r_dese}}</textarea>
         
         
         <!-- <br>

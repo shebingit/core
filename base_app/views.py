@@ -15964,8 +15964,9 @@ def HR_Waiting_leads(request):
            hr_id = request.session['hr_id']
         mem = user_registration.objects.filter(id=hr_id)
         leads=Leads_Register.objects.filter(r_type_status=2,r_refference=hr_id)
-        
-        return render(request,'hr_module/HR_wating_leads.html', {'mem': mem,'leads':leads})
+        cur_date=date.today()
+       
+        return render(request,'hr_module/HR_wating_leads.html', {'mem': mem,'leads':leads,'cur_date':cur_date})
     else:
         return redirect('/')
     
@@ -16008,6 +16009,9 @@ def HR_register_lead(request):
             reg.r_phno = request.POST['rphno']
             reg.r_place = request.POST['rplace']
             reg.r_qulific = request.POST['rquli']
+            reg.r_pass_out_year = request.POST['ryear']
+            reg.r_fre_exp = request.POST['rfr_exp']
+            reg.r_lead_source = request.POST['l_source']
             reg.r_refference = user_registration.objects.get(id=request.POST['rreffer'])
             reg.r_dese = request.POST['rdesc']
             msg_success="Lead Registration Successfull"
@@ -16080,10 +16084,20 @@ def HR_update_lead_data(request,pk):
             leads.r_refference = user_registration.objects.get(id=request.POST['rreffer'])
             leads.r_dese = request.POST['rdesc']
             leads.r_type = request.POST['rtype']
+
+            leads.r_pass_out_year = request.POST['ryear']
+            leads.r_fre_exp = request.POST['rfr_exp']
+            leads.r_lead_source = request.POST['l_source']
+
+            if request.POST['wdate']:
+                leads.r_wating_date =  request.POST['wdate']
+            else:
+                leads.r_wating_date =  leads.r_wating_date 
+
             leads.r_type_status = request.POST['rstatus']
             leads.save()
 
-        return redirect('HR_current_leads')
+        return redirect('HR_Waiting_leads')
     else:
         return redirect('/')
 
