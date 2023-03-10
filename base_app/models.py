@@ -8,6 +8,7 @@ from django.db import models
 from django.db.models import JSONField
 # Create your models here.
 
+
 class branch_registration(models.Model):
     branch_name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
@@ -165,8 +166,6 @@ class user_registration(models.Model):
     def avg(self):
         return (self.attitude+self.creativity+self.workperformance)/3
     
-
-
 
 class extracurricular(models.Model):
     user = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
@@ -1006,7 +1005,6 @@ class ProjectBudgect(models.Model):
     pb_title=models.CharField(max_length=255,null=True, blank=True,default='')
     pb_status=models.CharField(max_length=200,null=True, blank=True,default='')
     pb_amount=models.IntegerField(null=True,blank=True,default=0)
-   
     
 #  New model fo leads registraion 24/02/23
 class Leads_Register(models.Model):
@@ -1025,3 +1023,5 @@ class Leads_Register(models.Model):
     r_type_status=models.CharField(max_length=200,null=True, blank=True,default='')
     r_type=models.CharField(max_length=200,null=True, blank=True,default='')
     r_fre_exp=models.CharField(max_length=200,null=True, blank=True,default='')
+
+

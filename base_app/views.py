@@ -6342,6 +6342,7 @@ def projectmanager_assignproject(request):
         
         tes = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= t.id)
         spa = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= d.id)
+       
         
         pvar = project.objects.filter(Q(status="accepted")|Q(status="assigned"))
         modules = project_module_assign.objects.all()
@@ -6468,13 +6469,17 @@ def projectmanager_createproject(request):
             
         mem = user_registration.objects.filter(id=prid)  
         br_id = user_registration.objects.get(id=prid)  
+        dept = department.objects.all()
         if request.method =='POST':
             mem = user_registration.objects.filter(id=prid)
             mem2 = user_registration.objects.get(id=prid)
             var = project()
             doc = PM_ProjectDocument()
             var.projectmanager_id = prid
-            var.department_id = mem2.department_id
+            var.department_id = mem2.department_id 
+            # dept_id=department.objects.get(id=request.POST.get('dpt_name')) 
+            # var.department_id = dept_id.id
+           
             var.project=request.POST.get('pname')
             var.startdate=request.POST.get('sdate')
             var.enddate=request.POST.get('edate')
@@ -6493,7 +6498,7 @@ def projectmanager_createproject(request):
 
             msg_success = "Project created successfully"
             return render(request, 'projectmanager_createproject.html',{'msg_success':msg_success})
-        return render(request, 'projectmanager_createproject.html',{'pro':mem})
+        return render(request, 'projectmanager_createproject.html',{'pro':mem,'dept':dept})
     else:
         return redirect('/')
 
@@ -8411,9 +8416,10 @@ def tlprojecttasks(request,id):
                     lst_file.append('/media/'+''.join(filter(str.isalnum, str(img_emp))))
                     task.json_testerscreenshot = lst_file
             task.save()
+            proj=project.objects.get(id=id)
            
             msg_success = "Task added successfully"
-            return render(request, 'TLprojecttasks.html', {'msg_success':msg_success})
+            return render(request, 'TLprojecttasks.html', {'msg_success':msg_success,'proj':proj})
         else:
             
             request.session['splitid']=id
@@ -15969,6 +15975,25 @@ def HR_Waiting_leads(request):
         return render(request,'hr_module/HR_wating_leads.html', {'mem': mem,'leads':leads,'cur_date':cur_date})
     else:
         return redirect('/')
+
+def HR_leads_expfre(request,pk):
+
+    if 'hr_id' in request.session:
+        if request.session.has_key('hr_id'):
+           hr_id = request.session['hr_id']
+        mem = user_registration.objects.filter(id=hr_id)
+        if pk == 1:
+            leads=Leads_Register.objects.filter(r_type_status=2,r_refference=hr_id, r_fre_exp='Fresher')
+            print(leads)
+        else:
+            leads=Leads_Register.objects.filter(r_type_status=2,r_refference=hr_id, r_fre_exp='Experienced')
+            print(leads)
+
+        cur_date=date.today()
+       
+        return render(request,'hr_module/HR_wating_leads.html', {'mem': mem,'leads':leads,'cur_date':cur_date})
+    else:
+        return redirect('/')
     
     
 def HR_Joined(request):
@@ -16003,26 +16028,51 @@ def HR_register_lead(request):
         
         if request.method == 'POST':
 
-            reg = Leads_Register()
-            reg.r_fullname = request.POST['rname']
-            reg.r_email = request.POST['remail']
-            reg.r_phno = request.POST['rphno']
-            reg.r_place = request.POST['rplace']
-            reg.r_qulific = request.POST['rquli']
-            reg.r_pass_out_year = request.POST['ryear']
-            reg.r_fre_exp = request.POST['rfr_exp']
-            reg.r_lead_source = request.POST['l_source']
-            reg.r_refference = user_registration.objects.get(id=request.POST['rreffer'])
-            reg.r_dese = request.POST['rdesc']
-            msg_success="Lead Registration Successfull"
-            reg.save()
-            leads=Leads_Register.objects.filter(r_status=0,r_refference=hr_id)
+            email_check = Leads_Register.objects.filter(r_email__iexact=request.POST['remail']).exists()
+            phno_check = Leads_Register.objects.filter(r_phno__iexact=request.POST['rphno']).exists()
+            
+            if email_check or phno_check :
+                msg_success="Lead Registration Not Successfull, Email Id Or Phone Number Already Exists"
+                leads=Leads_Register.objects.filter(r_status=0,r_refference=hr_id)
+                return render(request,'hr_module/HR_add_lead.html', {'mem': mem,'msg_success':msg_success,'leads':leads})
+            
+            else:
+                reg = Leads_Register()
+                reg.r_fullname = request.POST['rname']
+                reg.r_email = request.POST['remail']
+                reg.r_phno = request.POST['rphno']
+                reg.r_place = request.POST['rplace']
+                reg.r_qulific = request.POST['rquli']
+                reg.r_pass_out_year = request.POST['ryear']
+                reg.r_fre_exp = request.POST['rfr_exp']
+                reg.r_lead_source = request.POST['l_source']
+                reg.r_refference = user_registration.objects.get(id=request.POST['rreffer'])
+                reg.r_dese = request.POST['rdesc']
+                msg_success="Lead Registration Successfull"
+                reg.save()
+                leads=Leads_Register.objects.filter(r_status=0,r_refference=hr_id)
 
         return render(request,'hr_module/HR_add_lead.html', {'mem': mem,'msg_success':msg_success,'leads':leads})
     
     else:
         return redirect('/')
+    
 
+def check_email(request):
+    email = request.GET.get('email', None)
+    data = {
+        'is_taken': Leads_Register.objects.filter(r_email__iexact=email).exists()
+    }
+   
+    return JsonResponse(data)
+
+def check_phone(request):
+    phno = request.GET.get('phno', None)
+    data = {
+        'is_taken': Leads_Register.objects.filter(r_phno__iexact=phno).exists()
+    }
+   
+    return JsonResponse(data)
 
 def HR_lead_accept(request,pk):
 

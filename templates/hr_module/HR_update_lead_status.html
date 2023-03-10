@@ -23,7 +23,7 @@
          <input type="text" class="form-control card-title col-12 md-4" name="rname" value="{{leads.r_fullname}}" autocomplete="off">
           
          <label>Email id</label>
-         <input type="email" class="form-control card-title col-12 md-4" name="remail" value="{{leads.r_email}}"autocomplete="off">
+         <input type="email" class="form-control card-title col-12 md-4" name="remail" id ="email" value="{{leads.r_email}}"autocomplete="off">
 
          <label>Phone No</label>
          <input type="tel" class="form-control card-title col-12 md-4" name="rphno"value="{{leads.r_phno}}" autocomplete="off">
@@ -39,7 +39,7 @@
          <label>Fresher or Experienced </label>
         
           <select class="form-control" name="rfr_exp"  style='color:white !important'>
-              <option value="{{leads.r_qulific}}">{{leads.r_fre_exp}}</option>
+              <option value="{{leads.r_fre_exp}}">{{leads.r_fre_exp}}</option>
               <option value="Fresher">Fresher</option>
               <option value="Experienced">Experienced</option>
             

@@ -12,6 +12,8 @@
 </div>
 
 
+
+
 <form class="card col-12" action="{% url 'HR_register_lead' %}"  method="post" enctype='multipart/form-data' >
     {% csrf_token %}
     <div class="form-group">
@@ -23,10 +25,14 @@
          <input type="text" class="form-control card-title col-12 md-4" name="rname" autocomplete="off">
           
          <label>Email id</label>
-         <input type="email" class="form-control card-title col-12 md-4" name="remail" autocomplete="off">
+         <input type="email" id="email" class="form-control card-title col-12 md-4" name="remail" autocomplete="off">
 
+       
+          <p id="msg"><span id="email-message" class="msgs"></span> </p>
+      
          <label>Phone No</label>
-         <input type="tel" class="form-control card-title col-12 md-4" name="rphno" autocomplete="off">
+         <input type="tel" id="phno" class="form-control card-title col-12 md-4" name="rphno"  autocomplete="off">
+         <p id="msg"><span id="phno-message" class="msgs"></span></p>
 
          <label>Place</label>
          <input type="text" class="form-control card-title col-12 md-4" name="rplace" autocomplete="off">
@@ -77,6 +83,16 @@
   
   </form>
 
+  <style>
+    #msg .msgs
+    {
+      color: rgb(234, 37, 37);
+      letter-spacing: 0.03rem;
+    }
+  </style>
+
+
+
   {% if msg_success %}
     <script>
         alert('{{ msg_success }}')
@@ -84,6 +100,50 @@
     </script>
 
   {% endif %}
+
+  <script>
+    $('#email').on('change', function() {
+      var email = $(this).val();
+      console.log(email)
+      $.ajax({
+          url: "{% url 'check_email' %}",
+          data: {
+              'email': email
+          },
+          dataType: 'json',
+          success: function (data) {
+              if (data.is_taken) {
+                  $('#email-message').text('Email already exists !');
+                  $('#email-message').addClass('msgs')
+              } else {
+                  $('#email-message').text('');
+              }
+          }
+      });
+  });
+  </script>
+  <script>
+    $('#phno').on('change', function() {
+      var phno = $(this).val();
+      console.log(phno)
+      $.ajax({
+          url: "{% url 'check_phone' %}",
+          data: {
+              'phno': phno
+          },
+          dataType: 'json',
+          success: function (data) {
+              if (data.is_taken) {
+                  $('#phno-message').text('Phone Number already exists !');
+                  $('#phno-message').addClass('msgs')
+              } else {
+                  $('#phno-message').text('');
+              }
+          }
+      });
+  });
+  </script>
+
 
 
 

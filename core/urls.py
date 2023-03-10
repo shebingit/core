@@ -1409,10 +1409,14 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('HR_training_leads', views.HR_training_leads, name='HR_training_leads'), 
     path('HR_upcoming_leads', views.HR_upcoming_leads, name='HR_upcoming_leads'),  
     path('HR_current_leads', views.HR_current_leads, name='HR_current_leads'),  
-    path('HR_Waiting_leads', views.HR_Waiting_leads, name='HR_Waiting_leads'),   
+    path('HR_Waiting_leads', views.HR_Waiting_leads, name='HR_Waiting_leads'), 
+    path('HR_leads_expfre/<int:pk>', views.HR_leads_expfre, name='HR_leads_expfre'),
     path('HR_Joined', views.HR_Joined, name='HR_Joined'),
     path('HR_add_leads', views.HR_add_leads, name='HR_add_leads'),
     path('HR_register_lead', views.HR_register_lead, name='HR_register_lead'),
+    path('check_email', views.check_email, name='check_email'),
+    path('check_phone', views.check_phone, name='check_phone'),
+    
 
     path('HR_lead_accept/<int:pk>', views.HR_lead_accept, name='HR_lead_accept'),
     path('HR_lead_reject/<int:pk>', views.HR_lead_reject, name='HR_lead_reject'),
