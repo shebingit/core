@@ -1014,6 +1014,8 @@ class Leads_Register(models.Model):
     r_place=models.CharField(max_length=200,null=True, blank=True,default='')
     r_qulific=models.CharField(max_length=200,null=True, blank=True,default='')
     r_refference=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='lead_regi',null=True,blank=True)
+    r_assing_id=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='lead_assign',null=True,blank=True)
+    r_assign_status=models.IntegerField(null=True,blank=True,default=0)
     r_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
     r_wating_date=models.DateField(null=True, blank=True)
     r_dese=models.TextField(default='')

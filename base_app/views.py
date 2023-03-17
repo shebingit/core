@@ -186,6 +186,14 @@ def login(request):
                 request.session['hr_id'] = member.id
                 
                 return redirect('HR_Dashboard')
+
+        design8 = designation.objects.get(designation="Data Collector")    
+        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design8.id,status="active").exists():
+                data_collector=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+                request.session['datacollector_id'] = data_collector.id
+                
+                return redirect('DatacollectorDashboard')
+            
         
         design5 = designation.objects.get(designation="Digital manager")    
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design5.id,status="active").exists():
@@ -207,7 +215,8 @@ def login(request):
                 request.session['aud_id'] = auduser.id
                 
                 return redirect('Auditdashboard')
-            
+        
+       
         else:
                 context = {'msg_error': 'Invalid data'}
                 return render(request, 'login.html', context)
@@ -6340,7 +6349,7 @@ def projectmanager_assignproject(request):
         t = designation.objects.get(designation="tester")
         
         
-        tes = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= t.id)
+        tes = user_registration.objects.filter(designation_id= t.id)#department_id = desi_id.department_id, 
         spa = user_registration.objects.filter(department_id = desi_id.department_id, designation_id= d.id)
        
         
@@ -21265,6 +21274,212 @@ def tl_emp_ajax(request):
 
 
 
+#======================= Start Data Colletor Section ==========================================================================
+
+
+# Data Collector  Dashboard created on 17-03-2023
+def DatacollectorDashboard(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        return render(request, 'data_collection/data_dashboard.html', {'data_collect': data_collect,'ldcount':ldcount})
+    else:
+        return redirect('/')
 
 
 
+ 
+# Data Collector password Change
+
+def Datacollector_changepwd(request):
+    
+    if 'datacollector_id' in request.session:
+        
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']     
+        data_collect = user_registration.objects.filter(id=data_colletor_id)     
+        if request.method == 'POST':
+            abc = user_registration.objects.get(id=data_colletor_id)
+            cur = abc.password
+            oldps = request.POST["currentPassword"]
+            newps = request.POST["newPassword"]
+            cmps = request.POST["confirmPassword"]
+            if oldps == cur:
+                if oldps != newps:
+                    if newps == cmps:
+                        abc.password = request.POST.get('confirmPassword')
+                        abc.save()
+                        return render(request, 'data_collection/data_dashboard.html', {'data_collect': data_collect})
+                elif oldps == newps:
+                    messages.add_message(request, messages.INFO, 'Current and New password same')
+                else:
+                    messages.info(request, 'Incorrect password same')
+
+                return render(request, 'data_collection/data_dashboard.html', {'data_collect': data_collect})
+            else:
+                messages.add_message(request, messages.INFO, 'old password wrong')
+                return render(request, 'data_collection/datacolltor_change.html', {'data_collect': data_collect})
+        return render(request, 'data_collection/datacolltor_change.html', {'data_collect': data_collect})         
+    else:
+        return redirect('/')
+
+
+
+#******************** Data Colletor account setting****************************
+def Datacollector_accsetting(request):
+    if 'datacollector_id' in request.session:
+        
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        return render(request,'data_collection/data_accsetting.html', {'data_collect': data_collect})
+    else:
+        return redirect('/')
+
+def Datacollector_accsettingimagechange(request,id):
+    if 'datacollector_id' in request.session:
+        
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        if request.method == 'POST':
+            abc = user_registration.objects.get(id=id)
+            abc.photo = request.FILES['filename']
+            abc.save()
+            return redirect('Datacollector_accsetting')
+        return render(request,'data_collection/data_accsetting.html', {'data_collect': data_collect})
+    else:
+        return redirect('/')
+
+
+
+# Data Collector  logout
+def Datacollectorlogout(request):
+    if 'datacollector_id' in request.session:  
+        request.session.flush()
+        return redirect('/')
+    else:
+        return redirect('/')
+
+
+def datacollector_leads(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        cur_date=date.today()
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        ldassign = Leads_Register.objects.filter(r_assign_status = 1).count()
+        ldpending = Leads_Register.objects.filter(r_assign_status = 0, ).count()
+        tdldcount = Leads_Register.objects.filter(r_date=cur_date).count()
+        tdassingedldcount = Leads_Register.objects.filter(r_assign_status = 1,r_date=cur_date).count()
+        tdassingldcount = Leads_Register.objects.filter(r_assign_status = 0,r_date=cur_date ).count()
+        content= {'tdldcount':tdldcount,'tdassingldcount':tdassingldcount,'tdassingedldcount':tdassingedldcount}
+        return render(request, 'data_collection/datacollector_leads.html', {'data_collect': data_collect,'ldcount':ldcount,'content':content,'ldassign':ldassign,'ldpending':ldpending})
+    else:
+        return redirect('/')
+
+
+
+def datacollector_registerleads(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+    else:
+        return redirect('/')
+
+        
+
+def datacollector_assingnedleads(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        return render(request, 'data_collection/datacollector_assignedleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+    else:
+        return redirect('/')
+
+    
+
+def datacollector_pendingleads(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        return render(request, 'data_collection/datacollector_pendingleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+    else:
+        return redirect('/')
+
+    
+
+
+def datacollector_assignleads(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        return render(request, 'data_collection/datacollector_assignleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+    else:
+        return redirect('/')
+    
+
+# current day details
+
+def datacollector_todyregisterleads(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+    else:
+        return redirect('/')
+
+
+def datacollector_todyassignedleads(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        return render(request, 'data_collection/datacollector_assignedleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+    else:
+        return redirect('/')
+
+def datacollector_todypendingleads(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        return render(request, 'data_collection/datacollector_pendingleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+    else:
+        return redirect('/')

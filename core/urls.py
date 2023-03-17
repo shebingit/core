@@ -1786,6 +1786,26 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
  path('tl_emp_ajax>', views.tl_emp_ajax, name='tl_emp_ajax'),  
  
 
+ # Data Collector Section 17-03-23
+
+path('DatacollectorDashboard>', views.DatacollectorDashboard, name='DatacollectorDashboard'),
+path('Datacollectorlogout>', views.Datacollectorlogout, name='Datacollectorlogout'),
+path('Datacollector_changepwd>', views.Datacollector_changepwd, name='Datacollector_changepwd'), 
+path('Datacollector_accsetting>', views.Datacollector_accsetting, name='Datacollector_accsetting'),
+path('Datacollector_accsettingimagechange>/<int:id>', views.Datacollector_accsettingimagechange, name='Datacollector_accsettingimagechange'),    
+ 
+path('datacollector_leads>', views.datacollector_leads, name='datacollector_leads'),
+path('datacollector_registerleads>', views.datacollector_registerleads, name='datacollector_registerleads'),
+path('datacollector_assingnedleads>', views.datacollector_assingnedleads, name='datacollector_assingnedleads'),
+path('datacollector_pendingleads>', views.datacollector_pendingleads, name='datacollector_pendingleads'),
+path('datacollector_assignleads>', views.datacollector_assignleads, name='datacollector_assignleads'),
+
+path('datacollector_todyregisterleads>', views.datacollector_todyregisterleads, name='datacollector_todyregisterleads'),
+path('datacollector_todyassignedleads>', views.datacollector_todyassignedleads, name='datacollector_todyassignedleads'),
+path('datacollector_todypendingleads>', views.datacollector_todypendingleads, name='datacollector_todypendingleads'),
+
+ 
+
 
 
 ]
