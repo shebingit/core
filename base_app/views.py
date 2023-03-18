@@ -621,9 +621,15 @@ def batchudate(request):
         tid = request.POST.get('batc')
     
         abc = Batch.objects.get(id=tid)
-        abc.batch_name =abc.batch_name
-        abc.bt_start_date = request.POST.get('startdate')
-        abc.bt_end_date = request.POST.get('enddate')
+        abc.batch_name =request.POST.get('batchname')
+        if request.POST.get('startdate'):
+            abc.bt_start_date = request.POST.get('startdate')
+        else:
+            abc.bt_start_date = abc.bt_start_date 
+        if request.POST.get('enddate'):
+            abc.bt_end_date = request.POST.get('enddate')
+        else:
+             abc.bt_end_date =  abc.bt_end_date 
         abc.save()
         return redirect('new_batch')
     else:
