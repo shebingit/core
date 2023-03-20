@@ -21384,7 +21384,7 @@ def datacollector_leads(request):
         data_collect = user_registration.objects.filter(id=data_colletor_id)
         ldcount = Leads_Register.objects.all().count()
         ldassign = Leads_Register.objects.filter(r_assign_status = 1).count()
-        ldpending = Leads_Register.objects.filter(r_assign_status = 0, ).count()
+        ldpending = Leads_Register.objects.filter(r_assign_status = 0).count()
         tdldcount = Leads_Register.objects.filter(r_date=cur_date).count()
         tdassingedldcount = Leads_Register.objects.filter(r_assign_status = 1,r_date=cur_date).count()
         tdassingldcount = Leads_Register.objects.filter(r_assign_status = 0,r_date=cur_date ).count()
@@ -21403,7 +21403,8 @@ def datacollector_registerleads(request):
             return redirect('/')
         data_collect = user_registration.objects.filter(id=data_colletor_id)
         ldcount = Leads_Register.objects.all().count()
-        return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+        ld = Leads_Register.objects.all()
+        return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
     else:
         return redirect('/')
 
@@ -21417,7 +21418,8 @@ def datacollector_assingnedleads(request):
             return redirect('/')
         data_collect = user_registration.objects.filter(id=data_colletor_id)
         ldcount = Leads_Register.objects.all().count()
-        return render(request, 'data_collection/datacollector_assignedleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+        ld = Leads_Register.objects.filter(r_assign_status = 1)
+        return render(request, 'data_collection/datacollector_assignedleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
     else:
         return redirect('/')
 
@@ -21431,7 +21433,8 @@ def datacollector_pendingleads(request):
             return redirect('/')
         data_collect = user_registration.objects.filter(id=data_colletor_id)
         ldcount = Leads_Register.objects.all().count()
-        return render(request, 'data_collection/datacollector_pendingleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+        ld = Leads_Register.objects.filter(r_assign_status = 0)
+        return render(request, 'data_collection/datacollector_pendingleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
     else:
         return redirect('/')
 
@@ -21446,7 +21449,10 @@ def datacollector_assignleads(request):
             return redirect('/')
         data_collect = user_registration.objects.filter(id=data_colletor_id)
         ldcount = Leads_Register.objects.all().count()
-        return render(request, 'data_collection/datacollector_assignleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+        desig= designation.objects.filter(designation='hr')
+        user_details= user_registration.objects.filter(designation__in=desig)
+        ld = Leads_Register.objects.filter(r_assing_id__isnull=True)
+        return render(request, 'data_collection/datacollector_assignleads.html', {'data_collect': data_collect,'ldcount':ldcount,'user_details':user_details,'desig':desig,'ld':ld})
     else:
         return redirect('/')
     
@@ -21459,9 +21465,11 @@ def datacollector_todyregisterleads(request):
             data_colletor_id = request.session['datacollector_id']
         else:
             return redirect('/')
+        today=date.today()
         data_collect = user_registration.objects.filter(id=data_colletor_id)
-        ldcount = Leads_Register.objects.all().count()
-        return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+        ldcount = Leads_Register.objects.filter(r_date=today).count()
+        ld = Leads_Register.objects.filter(r_date=today) 
+        return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
     else:
         return redirect('/')
 
@@ -21472,9 +21480,11 @@ def datacollector_todyassignedleads(request):
             data_colletor_id = request.session['datacollector_id']
         else:
             return redirect('/')
+        today=date.today()
         data_collect = user_registration.objects.filter(id=data_colletor_id)
-        ldcount = Leads_Register.objects.all().count()
-        return render(request, 'data_collection/datacollector_assignedleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+        ldcount = Leads_Register.objects.filter(r_date=today,r_assign_status = 1).count()
+        ld= Leads_Register.objects.filter(r_date=today,r_assign_status = 1)
+        return render(request, 'data_collection/datacollector_assignedleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
     else:
         return redirect('/')
 
@@ -21484,8 +21494,100 @@ def datacollector_todypendingleads(request):
             data_colletor_id = request.session['datacollector_id']
         else:
             return redirect('/')
+        today=date.today()
         data_collect = user_registration.objects.filter(id=data_colletor_id)
-        ldcount = Leads_Register.objects.all().count()
-        return render(request, 'data_collection/datacollector_pendingleads.html', {'data_collect': data_collect,'ldcount':ldcount})
+        ldcount = Leads_Register.objects.filter(r_date=today,r_assign_status = 0).count()
+        ld = Leads_Register.objects.filter(r_date=today,r_assign_status = 0)
+        return render(request, 'data_collection/datacollector_pendingleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
     else:
         return redirect('/')
+
+
+def data_assign_collector(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        
+        if request.method == 'POST':
+            collector_id = user_registration.objects.get(id=int(request.POST['data_colector']))
+           
+            checked_data = request.POST.getlist('select_check_id')
+            if checked_data:
+                for i in checked_data:
+                    ld = Leads_Register.objects.get(id=i)
+                    ld.r_assing_id = user_registration.objects.get(id=collector_id.id)
+                    ld.r_assign_status=1
+                    ld.save()
+                    return redirect('datacollector_assignleads')
+
+            else:
+                    print('No data selected')
+                    messages.warning(request, 'No data selected. Please  check  Atlest  one  data  from  the  table  to  assign')
+                    return redirect('datacollector_assignleads')
+                   
+
+            # data_collect = user_registration.objects.filter(id=data_colletor_id)
+            # ldcount = Leads_Register.objects.all().count()
+           
+    else:
+        return redirect('/')
+
+
+def data_collector_register_save(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+
+        if request.method == 'POST':
+            if  Leads_Register.objects.filter(r_email=request.POST['dc_email']).exists() or Leads_Register.objects.filter(r_phno=request.POST['dc_phno']).exists():
+                
+                print('Duplicate Data Found')
+
+            else:
+
+                ld = Leads_Register()
+                ld.r_fullname = request.POST['dc_name']
+                ld.r_email = request.POST['dc_email']
+                ld.r_phno = request.POST['dc_phno']
+                ld.r_place = request.POST['dc_place']
+                ld.r_dese = request.POST['dc_other']
+                ld.save()
+
+        else:
+            print('Error, No data')
+
+
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        ld = Leads_Register.objects.all()
+        return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
+    else:
+        return redirect('/')
+
+
+
+#data collector Employeee section
+
+def datacollector_employees(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        today=date.today()
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.filter(r_date=today,r_assign_status = 0).count()
+        ld = Leads_Register.objects.filter(r_assign_status = 1).values_list('r_assing_id', flat=True).distinct()
+        print(ld)
+        lddata = Leads_Register.objects.filter(r_assign_status = 1)
+        print(lddata)
+        return render(request, 'data_collection/datacollector_employee.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld,'lddata':lddata})
+    else:
+        return redirect('/')
+
+
+

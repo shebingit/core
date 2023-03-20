@@ -1804,6 +1804,13 @@ path('datacollector_todyregisterleads>', views.datacollector_todyregisterleads, 
 path('datacollector_todyassignedleads>', views.datacollector_todyassignedleads, name='datacollector_todyassignedleads'),
 path('datacollector_todypendingleads>', views.datacollector_todypendingleads, name='datacollector_todypendingleads'),
 
+path('data_assign_collector>', views.data_assign_collector, name='data_assign_collector'),
+path('data_collector_register_save>', views.data_collector_register_save, name='data_collector_register_save'),
+
+#data colector employeee section
+path('datacollector_employees>', views.datacollector_employees, name='datacollector_employees'),
+
+
  
 
 
