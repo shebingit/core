@@ -195,26 +195,29 @@ def login(request):
                 return redirect('DatacollectorDashboard')
             
         
-        design5 = designation.objects.get(designation="Digital manager")    
-        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design5.id,status="active").exists():
-                dmmanager=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
-                request.session['pm_id'] = dmmanager.id
-                
-                return redirect('dm_pmdashboard')
-               
-        design6 = designation.objects.get(designation="Digital Developer")    
-        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design6.id,status="active").exists():
-                dmdev=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
-                request.session['dmdev_id'] = dmdev.id
-                
-                return redirect('dm_devdashboard')
-
         design7 = designation.objects.get(designation="auditor")    
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design7.id,status="active").exists():
                 auduser=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
                 request.session['aud_id'] = auduser.id
                 
                 return redirect('Auditdashboard')
+
+
+        # design5 = designation.objects.get(designation="Digital manager")    
+        # if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design5.id,status="active").exists():
+        #         dmmanager=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+        #         request.session['pm_id'] = dmmanager.id
+                
+        #         return redirect('dm_pmdashboard')
+               
+        # design6 = designation.objects.get(designation="Digital Developer")    
+        # if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=design6.id,status="active").exists():
+        #         dmdev=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+        #         request.session['dmdev_id'] = dmdev.id
+                
+        #         return redirect('dm_devdashboard')
+
+      
         
        
         else:
@@ -15961,7 +15964,7 @@ def HR_upcoming_leads(request):
         if request.session.has_key('hr_id'):
            hr_id = request.session['hr_id']
         mem = user_registration.objects.filter(id=hr_id)
-        leads=Leads_Register.objects.filter(r_status=0)
+        leads=Leads_Register.objects.filter(r_status=0,r_assing_id=hr_id)
         return render(request,'hr_module/HR_upcoming_leads.html', {'mem': mem,'leads':leads})
     else:
         return redirect('/')
@@ -20581,6 +20584,74 @@ def Audit_emp_list(request,audit_depart_id,audit_des_id):
 
 #Employee Report Pdf
 
+
+def Audit_empdaily_reportpdf(request,audit_rep_id):
+    date = datetime.now()  
+    if request.method =="POST":
+        
+        formdate=request.POST.get('emp_form')
+        todate=request.POST.get('emp_to')
+        user= user_registration.objects.get(id=audit_rep_id)
+       
+        
+        task = project_taskassign.objects.filter(developer_id=audit_rep_id,startdate__gte=formdate, enddate__lte=todate)
+       
+        #tsk = trainer_task.objects.filter(user_id=audit_rep_id,startdate__gte=formdate ,startdate__lte=todate)
+       
+       
+        lev = leave.objects.filter(user_id=audit_rep_id,from_date__gte=formdate,from_date__lte=todate)
+        event1 = Event.objects.filter(start_time__range=(formdate,todate))
+     
+       
+
+
+        tlev=0
+        for i in lev:
+            tlev=tlev + int(i.days)
+
+
+
+
+    template_path = 'audit_module/audit_emp_dailyreport_pdf.html'
+    context = {
+    
+    
+    'task':task,
+    
+    'date':date,
+    
+    'lev':lev,
+    
+    'tlev':tlev,
+    'event1':event1,
+    'user':user,
+    'formdate':formdate,
+    'todate':todate,
+   
+    'path':settings.NEWPATH,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+
 def Audit_emp_reportpdf(request,audit_rep_id):
     date = datetime.now()  
     if request.method =="POST":
@@ -21385,11 +21456,12 @@ def datacollector_leads(request):
         ldcount = Leads_Register.objects.all().count()
         ldassign = Leads_Register.objects.filter(r_assign_status = 1).count()
         ldpending = Leads_Register.objects.filter(r_assign_status = 0).count()
+        ldcomplete = Leads_Register.objects.filter(r_status = 1).count()
         tdldcount = Leads_Register.objects.filter(r_date=cur_date).count()
         tdassingedldcount = Leads_Register.objects.filter(r_assign_status = 1,r_date=cur_date).count()
         tdassingldcount = Leads_Register.objects.filter(r_assign_status = 0,r_date=cur_date ).count()
         content= {'tdldcount':tdldcount,'tdassingldcount':tdassingldcount,'tdassingedldcount':tdassingedldcount}
-        return render(request, 'data_collection/datacollector_leads.html', {'data_collect': data_collect,'ldcount':ldcount,'content':content,'ldassign':ldassign,'ldpending':ldpending})
+        return render(request, 'data_collection/datacollector_leads.html', {'data_collect': data_collect,'ldcount':ldcount,'ldcomplete':ldcomplete,'content':content,'ldassign':ldassign,'ldpending':ldpending})
     else:
         return redirect('/')
 
@@ -21408,6 +21480,25 @@ def datacollector_registerleads(request):
     else:
         return redirect('/')
 
+
+def datacollector_Registered_search(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+
+        if request.method == 'POST':
+
+            ld = Leads_Register.objects.filter(r_date__gte=request.POST['register_stdate'], r_date__lte=request.POST['register_enddate'])
+       
+        return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ld':ld})
+    else:
+        return redirect('/')
+
+
+
         
 
 def datacollector_assingnedleads(request):
@@ -21423,6 +21514,24 @@ def datacollector_assingnedleads(request):
     else:
         return redirect('/')
 
+
+def datacollector_assingnedleads_search(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+
+        if request.method == 'POST':
+
+            ld = Leads_Register.objects.filter(r_assign_status = 1,r_assign_date__gte=request.POST['assing_stdate'], r_assign_date__lte=request.POST['assing_enddate'])
+         
+        return render(request, 'data_collection/datacollector_assignedleads.html', {'data_collect': data_collect,'ld':ld})
+    else:
+        return redirect('/')
+
+
     
 
 def datacollector_pendingleads(request):
@@ -21437,6 +21546,20 @@ def datacollector_pendingleads(request):
         return render(request, 'data_collection/datacollector_pendingleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
     else:
         return redirect('/')
+
+def datacollector_completed_leads(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        ld = Leads_Register.objects.filter(r_status = 1)
+        return render(request, 'data_collection/datacollector_completedleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
+    else:
+        return redirect('/')
+
 
     
 
@@ -21482,8 +21605,8 @@ def datacollector_todyassignedleads(request):
             return redirect('/')
         today=date.today()
         data_collect = user_registration.objects.filter(id=data_colletor_id)
-        ldcount = Leads_Register.objects.filter(r_date=today,r_assign_status = 1).count()
-        ld= Leads_Register.objects.filter(r_date=today,r_assign_status = 1)
+        ldcount = Leads_Register.objects.filter(r_assign_date=today,r_assign_status = 1).count()
+        ld= Leads_Register.objects.filter(r_assign_date=today,r_assign_status = 1)
         return render(request, 'data_collection/datacollector_assignedleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
     else:
         return redirect('/')
@@ -21555,6 +21678,8 @@ def data_collector_register_save(request):
                 ld.r_phno = request.POST['dc_phno']
                 ld.r_place = request.POST['dc_place']
                 ld.r_dese = request.POST['dc_other']
+                ld.r_refference = user_registration.objects.get(id=data_colletor_id)
+                ld.r_assign_date = date.today()
                 ld.save()
 
         else:
@@ -21582,12 +21707,85 @@ def datacollector_employees(request):
         data_collect = user_registration.objects.filter(id=data_colletor_id)
         ldcount = Leads_Register.objects.filter(r_date=today,r_assign_status = 0).count()
         ld = Leads_Register.objects.filter(r_assign_status = 1).values_list('r_assing_id', flat=True).distinct()
-        print(ld)
-        lddata = Leads_Register.objects.filter(r_assign_status = 1)
-        print(lddata)
+       
+        lddata =  user_registration.objects.all()
+       
         return render(request, 'data_collection/datacollector_employee.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld,'lddata':lddata})
     else:
         return redirect('/')
 
 
+def data_collector_datas(request,pk):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        today=date.today()
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        data_collector = user_registration.objects.get(id=pk)
+        ldregcount = Leads_Register.objects.filter(r_refference=pk).count()
+        ldassignedcount = Leads_Register.objects.filter(r_assing_id=pk).count()
+        ldpencount = Leads_Register.objects.filter(Q(r_status=3) | Q(r_status=0),r_assing_id=pk).count()
+        ldcompletecount = Leads_Register.objects.filter(r_status=1,r_assing_id=pk).count()
+        ld = Leads_Register.objects.filter(r_refference=pk)
+ 
+        return render(request, 'data_collection/datacollector_employee_datas.html', {'data_collect': data_collect,'data_collector':data_collector,
+        'ldregcount':ldregcount,'ld':ld,'ldassignedcount':ldassignedcount,'ldpencount':ldpencount,'ldcompletecount':ldcompletecount})
+    else:
+        return redirect('/')
+    
+
+def datacollector_datas_check(request,pk,check):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+                data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        today=date.today()
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        data_collector = user_registration.objects.get(id=pk)
+        ldregcount = Leads_Register.objects.filter(r_refference=pk).count()
+        ldassignedcount = Leads_Register.objects.filter(r_assing_id=pk).count()
+        ldpencount = Leads_Register.objects.filter(Q(r_status=3) | Q(r_status=0),r_assing_id=pk).count()
+        ldcompletecount = Leads_Register.objects.filter(r_status=1,r_assing_id=pk).count()
+
+        if check == 1:
+            ld = Leads_Register.objects.filter(r_refference=pk)
+        elif check == 2:
+            ld = Leads_Register.objects.filter(r_assing_id=pk)
+        elif check == 3:
+             ld = Leads_Register.objects.filter(Q(r_status=3) | Q(r_status=0),r_assing_id=pk)
+        else:
+            ld = Leads_Register.objects.filter(r_status=1,r_assing_id=pk)
+
+    
+        return render(request, 'data_collection/datacollector_employee_datas.html', {'data_collect': data_collect,'data_collector':data_collector,
+            'ldregcount':ldregcount,'ld':ld,'ldassignedcount':ldassignedcount,'ldpencount':ldpencount,'ldcompletecount':ldcompletecount})
+    else:
+        return redirect('/')
+
+
+
+
+#Data Collector Analiyis Section
+def datacollector_analiyis(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        cur_date=date.today()
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        ldassign = Leads_Register.objects.filter(r_assign_status = 1).count()
+        ldpending = Leads_Register.objects.filter(r_assign_status = 0).count()
+        tdldcount = Leads_Register.objects.filter(r_date=cur_date).count()
+        tdassingedldcount = Leads_Register.objects.filter(r_assign_status = 1,r_date=cur_date).count()
+        tdassingldcount = Leads_Register.objects.filter(r_assign_status = 0,r_date=cur_date ).count()
+        tdcomplete = Leads_Register.objects.filter(r_status = 1 ).count()
+
+        return render(request, 'data_collection/datacollector_analiyis.html', {'data_collect': data_collect,'ldcount':ldcount,'ldassign':ldassign,'ldpending':ldpending,'tdcomplete':tdcomplete})
+    else:
+        return redirect('/')
 

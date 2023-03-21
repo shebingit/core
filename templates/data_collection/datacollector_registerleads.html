@@ -6,7 +6,7 @@
     #register-section
     {
         display: grid;
-        grid-template-columns: 1.4fr;
+        grid-template-columns:1.5fr 1.4fr;
       
         gap: 1em;
         
@@ -51,6 +51,28 @@
           color: rgb(234, 37, 37);
           letter-spacing: 0.03rem;
         }
+        .input_group
+{
+    margin-top: 2.2em;
+    width:100%;
+}
+.input_group label
+{
+    font-size: 0.85em;
+    width: 30%;
+}
+.input_group input
+{
+    padding: 0.30em;
+    font-size: 0.85em;
+    width: 60%;
+   
+}
+.input_group_save
+{
+    margin-top: 2.4em;
+    text-align: center;
+}
     </style>
 
 
@@ -87,7 +109,40 @@
             </div>
         </form>
     </div>
+    <!-- Serach Section -->
+<div class="container ">
+    
+    <div class="row ">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Registered Leads Search </h4>
+                    <form action="{% url 'datacollector_Registered_search' %}" method="post">
+                        {% csrf_token %}
+                        <div class="input_group">
+                            <label>Registered Start date :</label>
+                            <input type="date" name="register_stdate">
+                        </div>
+                        <div class="input_group">
+                            <label>Registered End date :</label>
+                            <input type="date" name="register_enddate">
+                        </div>
+                        <div class="input_group_save">
+                            <button type="submit" class="btn btn-outline-primary">Search</button>
+                        </div>
+                       
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+    
 </div>
+
+
 
 <style>
     #register-details_filter
@@ -123,7 +178,7 @@
     }
     </style>
 
-<div class="row mt-5">
+<div class="row mt-4">
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">

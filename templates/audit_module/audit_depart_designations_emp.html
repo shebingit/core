@@ -42,7 +42,9 @@
                   <th>Contact No</th>
                   <th>Join Date</th>
                   <th>Department</th>
-                  <th>Report</th>
+                  <th>Daily Report</th>
+                  <th>Full Report</th>
+                  
                 
                 </tr>
               </thead>
@@ -59,6 +61,7 @@
                   <td>{{i.mobile}}</td>
                   <td>{{i.startdate|date:"d-m-Y"}}</td>
                   <td>{{i.department}}</td>
+                  <td><a data-toggle="modal" data-target="#myModaldaily{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                   <td><a data-toggle="modal" data-target="#myModal{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                  
   
@@ -87,6 +90,52 @@
       });
     });
   </script>
+
+
+  {% for i in use %}
+  <!-- Modal -->
+  <div class="modal" id="myModaldaily{{i.id}}">
+      <div class="modal-dialog">
+          <div class="col-12 grid-margin stretch-card bg-dark text-light modal-content">
+          <!-- Modal Header -->
+          <a  class="text-danger" href="" style="cursor:pointer"><i class=""></i> </a>
+              <form action="{% url 'Audit_empdaily_reportpdf' i.id %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                  {%csrf_token%}
+                      <div class="modal-header">
+                          <h4 class="modal-title">Daily Report &nbsp;{{i.doc_project_name}}</h4>
+                          <button type="submit" style="color: white" class=" btn close btn-outline " data-dismiss="modal">&times;</button>
+                      </div>
+                      <!-- Modal body -->
+                      <div class="row">
+                          <div class="col-12 grid-margin stretch-card">
+                              <div class="card p-3" >
+                                  <div class="card-body">
+         
+                                    <div class="card mb-4 p-2">
+                                      <label class="form-label mt-2" style="font-size:13px ;"> From Date</label>
+                                      <input type="date" class="mt-2 mb-2 form-control" name="emp_form" required>
+                                      <label class="form-label mt-2"style="font-size:13px ;">To Date</label>
+                                      <input type="date" class="mt-2 mb-2 form-control" name="emp_to" required>
+                                    </div>
+                                    <div class="row">
+                                      <center>
+                                        <div class="col-sm-5"></div>
+                                        <div class="col-sm-7" class="pull-right">
+                                            <button type="submit" class="btn btn-outline-primary"><i class="mdi mdi-file-pdf iconpdf text-danger"></i>Download</button>
+                                        </div>
+                                      </center>
+                                    </div> 
+                                    
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+      {%endfor%}
+      <!-- modal end -->
   
 
   {% for i in use %}

@@ -1753,6 +1753,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('Audit_department/<int:audit_dep_id>', views.Audit_department, name='Audit_department'),
     path('Audit_emp_list/<int:audit_depart_id>/<int:audit_des_id>', views.Audit_emp_list, name='Audit_emp_list'),
     path('Audit_emp_reportpdf/<int:audit_rep_id>', views.Audit_emp_reportpdf, name='Audit_emp_reportpdf'), 
+    path('Audit_empdaily_reportpdf/<int:audit_rep_id>', views.Audit_empdaily_reportpdf, name='Audit_empdaily_reportpdf'),
     path('Audit_employee_dashbord/<int:audit_emp_id>', views.Audit_employee_dashbord, name='Audit_employee_dashbord'),
     path('Audit_trainee_dashboard/<int:audit_emp_tr>', views.Audit_trainee_dashboard, name='Audit_trainee_dashboard'),
     path('Audit_salary_hold/<int:holdid>', views.Audit_salary_hold, name='Audit_salary_hold'),
@@ -1796,8 +1797,11 @@ path('Datacollector_accsettingimagechange>/<int:id>', views.Datacollector_accset
  
 path('datacollector_leads>', views.datacollector_leads, name='datacollector_leads'),
 path('datacollector_registerleads>', views.datacollector_registerleads, name='datacollector_registerleads'),
+path('datacollector_Registered_search>', views.datacollector_Registered_search, name='datacollector_Registered_search'),
 path('datacollector_assingnedleads>', views.datacollector_assingnedleads, name='datacollector_assingnedleads'),
+path('datacollector_assingnedleads_search>', views.datacollector_assingnedleads_search, name='datacollector_assingnedleads_search'),
 path('datacollector_pendingleads>', views.datacollector_pendingleads, name='datacollector_pendingleads'),
+path('datacollector_completed_leads>', views.datacollector_completed_leads, name='datacollector_completed_leads'),
 path('datacollector_assignleads>', views.datacollector_assignleads, name='datacollector_assignleads'),
 
 path('datacollector_todyregisterleads>', views.datacollector_todyregisterleads, name='datacollector_todyregisterleads'),
@@ -1809,10 +1813,12 @@ path('data_collector_register_save>', views.data_collector_register_save, name='
 
 #data colector employeee section
 path('datacollector_employees>', views.datacollector_employees, name='datacollector_employees'),
+path('data_collector_datas>/<int:pk>', views.data_collector_datas, name='data_collector_datas'), 
+path('datacollector_datas_check>/<int:pk>/<int:check>', views.datacollector_datas_check, name='datacollector_datas_check'), 
 
 
- 
-
+#Data Collector Analiyis Section
+path('datacollector_analiyis>', views.datacollector_analiyis, name='datacollector_analiyis'),
 
 
 ]

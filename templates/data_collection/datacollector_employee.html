@@ -32,6 +32,11 @@
         width:100%;
         height: 35px; 
     }
+    .name_tag
+    {
+        text-decoration: none;
+        color: azure;
+    }
 </style>
 
 <div class="container">
@@ -61,13 +66,14 @@
                         <tbody>
                             {% for i in ld %}
                             {% for j in lddata %}
+                           
                            <!-- <p>{{i}}</p>
                            <p>j:{{j.r_assing_id.id}}</p> -->
-                            {% if i.r_assing_id == j.r_assing_id.id %}
-                            <tr>
+                            {% if i == j.id %}
+                            <tr data-href="#">
 
-                                <td><span class="ps-2">{{ j.r_assing_id.fullname }}</span></td>
-                                <td> {{ j.r_assing_id.designation.designation }} </td>
+                                <td><span class="ps-2"><a href="{% url 'data_collector_datas' j.id %}" class="name_tag">{{j.fullname }}</a></span></td>
+                                <td> {{ j.designation.designation }} </td>
                                 <td>Assigned </td>
                                 
                             </tr>
