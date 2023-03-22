@@ -1810,6 +1810,7 @@ path('datacollector_todypendingleads>', views.datacollector_todypendingleads, na
 
 path('data_assign_collector>', views.data_assign_collector, name='data_assign_collector'),
 path('data_collector_register_save>', views.data_collector_register_save, name='data_collector_register_save'),
+path('lead_fileupload>', views.lead_fileupload, name='lead_fileupload'),
 
 #data colector employeee section
 path('datacollector_employees>', views.datacollector_employees, name='datacollector_employees'),

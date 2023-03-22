@@ -6,6 +6,8 @@ from urllib import response
 import qrcode
 import random
 import csv
+import pandas as pd
+
 import os, json, math
 # import psycopg2
 from django.http import JsonResponse
@@ -21788,4 +21790,36 @@ def datacollector_analiyis(request):
         return render(request, 'data_collection/datacollector_analiyis.html', {'data_collect': data_collect,'ldcount':ldcount,'ldassign':ldassign,'ldpending':ldpending,'tdcomplete':tdcomplete})
     else:
         return redirect('/')
+
+
+def lead_fileupload(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ldcount = Leads_Register.objects.all().count()
+        ld = Leads_Register.objects.all()
+        if request.method == 'POST':
+            file_up=request.FILES.get('leadfile')
+            
+            df = pd.read_excel(file_up)
+            for _, row in df.iterrows():
+                obj = Leads_Register()
+                obj.r_fullname=row['Name']
+                obj.r_email=row['email']
+                obj.r_phno=row['phno']
+                obj.r_place=row['place']
+                obj.r_dese=row['details']
+                obj.r_refference=  user_registration.objects.get(id=data_colletor_id)
+                obj.save()
+
+
+        return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
+    else:
+        return redirect('/')
+
+
 
