@@ -13211,6 +13211,7 @@ def BRadmin_tester_project_list(request,BRadmin_prj_list):
             return redirect('/')
         Adm = user_registration.objects.filter(id=Adm_id)
         proj_list=project_taskassign.objects.filter(tester_id=BRadmin_prj_list).order_by('-submitted_date')
+
         verify_num=project_taskassign.objects.filter(tester_id=BRadmin_prj_list, status='submitted').count()
         pending_verify_num=project_taskassign.objects.filter(tester_id=BRadmin_prj_list, status='Verification').count()
         correction_num=project_taskassign.objects.filter(tester_id=BRadmin_prj_list, status='correction').count()
@@ -20291,8 +20292,18 @@ def projectManager_project_delay(request):
            return redirect('/')
         pro = user_registration.objects.filter(id=prid)
         pr_manager = user_registration.objects.get(id=prid)
-        print(pr_manager.department)
-        display=project_taskassign.objects.filter(delay__gte='4').order_by('-id')
+
+        cur_date=date.today()
+       
+        year = cur_date.year
+    
+        first_date = datetime(year, 1, 1).strftime('%Y-%m-%d')
+        display=project_taskassign.objects.filter(~Q(status='submitted'),enddate__lt=cur_date,enddate__gte=first_date).order_by('-id')
+        for i in display:
+           days=(cur_date - i.enddate).days
+           
+           i.tsakdelaydays= int(days)
+           i.save()
         war=wrdata.objects.all()
         return render(request, 'projectmanager_projects_delay.html',{'pro':pro,'display':display,'war':war})
     else:
@@ -20317,10 +20328,8 @@ def projectManager_warning(request,pmtaskwr_id):
         warningdata.wrn_task=prjtask
         warningdata.wrn_reason=remark
         warningdata.save()
-    
-        display=project_taskassign.objects.filter(delay__gte='4').order_by('-id')
-        war=wrdata.objects.all()
-        return render(request, 'projectmanager_projects_delay.html',{'pro':pro,'display':display,'war':war})
+        
+        return redirect('projectManager_project_delay')
     else:
         return redirect('/')
 
@@ -20577,11 +20586,51 @@ def Audit_emp_list(request,audit_depart_id,audit_des_id):
         Aud = user_registration.objects.filter(id=Aud_id)
         mem = department.objects.get(id=audit_depart_id)
         mem1 = designation.objects.get(pk=audit_des_id)
+
+        if mem1.designation == 'tester':
+
+            use=user_registration.objects.filter(department_id=mem.id,designation=mem1, status="active")
+            context = {'mem':mem,'use':use,'Aud' : Aud}
+
+            return render(request, 'audit_module/audit_tester.html',context)
+
         use=user_registration.objects.filter(department_id=mem.id,designation=mem1, status="active")
         context = {'mem':mem,'use':use,'Aud' : Aud,}
         return render(request, 'audit_module/audit_depart_designations_emp.html',context)
     else:
         return redirect('/')
+    
+
+def Audit_tester_works(request,pk):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        proj_list=project_taskassign.objects.filter(tester_id=pk).order_by('-submitted_date')
+        verify_num=project_taskassign.objects.filter(tester_id=pk, status='submitted').count()
+        pending_verify_num=project_taskassign.objects.filter(tester_id=pk, status='Verification').count()
+        correction_num=project_taskassign.objects.filter(tester_id=pk, status='correction').count()
+        tester_dely=TSproject_Task_verify.objects.filter(ts_tester_id=pk).order_by('-id')
+        delay_num=0
+        for i in tester_dely:
+            delay_num=delay_num+int(i.ts_delay)
+       
+        return render(request, 'audit_module/audit_tester_works.html', {'Aud': Aud,'proj_list':proj_list,'verify_num':verify_num,'pending_verify_num':pending_verify_num,'correction_num':correction_num,'tester_dely':tester_dely,'delay_num':delay_num})
+
+
+def Audit_tester_works_view(request,pk):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        tas=project_taskassign.objects.get(id=pk)
+        data1 = tester_status.objects.filter(task=tas).order_by('-id')
+        print(data1)
+        return render(request, 'audit_module/audit_tester_works_view.html', {'Aud': Aud,'tas':tas,'data1':data1})
 
 
 #Employee Report Pdf
@@ -21158,6 +21207,43 @@ def Audit_action_taken(request):
     else:
         return redirect('/')
 
+
+@csrf_exempt
+def Audit_designation_list(request):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+
+        dept_id = request.GET.get('dept_id')
+        
+        br_id = department.objects.get(id=dept_id)
+        
+        Desig = designation.objects.filter(~Q(designation="admin")).filter(branch_id=br_id.branch_id)
+        return render(request,'audit_module/audit_desig_list.html',{'Aud': Aud,'Desig': Desig})
+    else:
+        return redirect('/')
+
+
+@csrf_exempt
+def Audit_designationemp_list(request):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+
+        dept_id = request.GET.get('dept_id')
+        desigId = request.GET.get('desigId')
+        br_id = department.objects.get(id=dept_id)
+        emps = user_registration.objects.filter(branch_id=br_id.branch_id,department=br_id, designation=desigId, status="active")
+
+        return render(request,'audit_module/audit_desig_list.html',{'Aud': Aud,'emps': emps})
+    else:
+        return redirect('/')
 
 
 # Tl Action Taken 
@@ -21807,14 +21893,19 @@ def lead_fileupload(request):
             
             df = pd.read_excel(file_up)
             for _, row in df.iterrows():
-                obj = Leads_Register()
-                obj.r_fullname=row['Name']
-                obj.r_email=row['email']
-                obj.r_phno=row['phno']
-                obj.r_place=row['place']
-                obj.r_dese=row['details']
-                obj.r_refference=  user_registration.objects.get(id=data_colletor_id)
-                obj.save()
+                if Leads_Register.objects.filter(Q(r_email=row['email'])| Q(r_phno=row['phno'])).exists():
+
+                    print('Duplicate Data Found')
+                else:
+
+                    obj = Leads_Register()
+                    obj.r_fullname=row['Name']
+                    obj.r_email=row['email']
+                    obj.r_phno=row['phno']
+                    obj.r_place=row['place']
+                    obj.r_dese=row['details']
+                    obj.r_refference=  user_registration.objects.get(id=data_colletor_id)
+                    obj.save()
 
 
         return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})

@@ -36,6 +36,7 @@
                 <th scope="col" style="color:#6C7293;">Task name</th>
                 <th scope="col" style="color:#6C7293;">Team Leader</th>
                 <th scope="col" style="color:#6C7293;">AssignedTo</th>
+                <th scope="col" style="color:#6C7293;">Current Work Status</th>
                 <th scope="col" style="color:#6C7293;">Remark</th>
                 <th scope="col" style="color:#6C7293;">Delay</th>
                 <th scope="col" style="color:#6C7293;">Action</th>
@@ -52,13 +53,14 @@
                
                 <td style="color: white;">{{i.tl}}</td>
                 <td style="color: white;">{{i.developer}}</td>
+                <td style="color: white;">{{i.status}}</td>
                 <td style="color: white;">
                 <button type="button" data-toggle="modal" data-target="#remarks{{i.id}}" class="btn btn-social-icon-text btn-outline-primary">Remarks</button>
                     
                 </td>
                 
                
-                <td><div class="badge badge-outline-danger">{{i.delay}}</div></td>
+                <td><div class="badge badge-outline-danger">{{i.tsakdelaydays}}</div></td>
                 <td style="color: white;">   <button type="button" data-toggle="modal" data-target="#myModal{{i.id}}" class="btn btn-social-icon-text btn-outline-warning"><i class="mdi mdi-tooltip-edit"></i>Action</button></td>
                
               </tr>

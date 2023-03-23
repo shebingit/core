@@ -1,0 +1,156 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+<div class="row">
+    <div class=" ml-5 " style="font-size: 20px;font-weight: 600;opacity: 0.9;color: #6c7293;">Project Test List</div>
+  </div>
+  <br>
+  
+  <div class="col-12 mt-4  grid-margin">
+      <div class="card">
+        <div class="card-body">
+         <div class="row g-2 text-center">
+          <div class="col-lg-3  col-sm-12 text-success"><i class="mdi mdi-account-check"></i> &nbsp;verified - &nbsp;{{verify_num}}</div>
+          <div class="col-lg-3 col-sm-12 text-warning"><i class="mdi mdi-account-alert"></i>&nbsp;verify - &nbsp;{{pending_verify_num}} </div>
+          <div class="col-lg-3 col-sm-12 text-danger"><i class="mdi mdi-account-remove"></i>&nbsp;Correction - &nbsp;{{correction_num}}</div>
+          <div class="col-lg-3 col-sm-12 text-info"><i class="mdi mdi-account"></i>&nbsp;Tester Delay - &nbsp;{{delay_num}} &nbsp;
+            <a href="" class="btn btn-outline-info mt-3"  data-toggle="modal" data-target="#reportstatus"><i class="mdi mdi-clock"></i></a> </div>
+         </div>
+         <br>
+          <div class="col-md-4 col-6 w-100">
+            <input type="search" class="form-control rounded" id="search" onkeyup="myFunction()" placeholder="Search"
+              aria-label="Search" aria-describedby="search-addon" />
+          </div>
+          <div class="table-responsive">
+            <table class="table" >
+              <thead>
+                <tr>
+                  <th>View</th>
+                  <th>Status</th>
+                  <th>Project</th>
+                  <th>Task</th>
+                  <th>Developer</th>
+                  <th>Submission Date</th>
+               
+  
+                </tr>
+              </thead>
+              <tbody id="myTable">
+                {% for i in proj_list %}
+                <tr>
+                  <td><a href="{% url 'Audit_tester_works_view' i.id %}" class="btn"><i class="mdi mdi-eye"></i></a></td>
+                  <td>
+                    {% if i.status == 'Verification' %}
+                     <button type="button" class="btn btn-outline-warning">{{i.status}} </button>
+                     {% elif i.status == 'correction' %}
+                     <button type="button" class="btn btn-outline-danger">{{i.status}} </button>
+                     {% elif i.status == 'submitted' %}
+                     <button type="button" class="btn btn-outline-success">{{i.status}} </button>
+                     {% endif %}
+                  </td>
+                  <td>{{i.project}}</td>
+                  <td>{{i.task}}</td>
+                  <td> {{i.developer}} </td>
+                  <td>{{i.submitted_date|date:"d-m-Y"}}</td>
+                 
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade " id="reportstatus">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div class="modal-content modal-xl" style="background-color: #191c24;">
+        <form action="" method="post" enctype="multipart/form-data">
+          <div class="modal-header">
+  
+            <h5 class="modal-title text-info">Report Status</h5>
+            <button type="button" class="close text-light" data-dismiss="modal" aria-label=""
+              style="background-color: #191c24;border:none;font-size: 20px">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="table-responsive mt-3 mb-3 container">
+            <table class="table  table-bordered ">
+              <thead style="background-color: black;">
+                <tr>
+                  <th scope="col" class="text-light">Date</th>
+                  <th scope="col" class="text-light">Project</th>
+                  <th scope="col" class="text-light">Task</th>
+                  
+                  <th scope="col" class="text-light">Work Status</th>
+                  <th scope="col" class="text-light">Delay</th>
+                  <th scope="col" class="text-light">Reason For Delay</th>
+  
+  
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in tester_dely %}
+                <tr>
+                  <td class="text-light">{{i.ts_task_verify_date|date:"d-m-Y"}} </td>
+                  <td class="text-light">{{i.ts_project_task.project}}</td>
+                  <td class="text-light">{{i.ts_project_task.task}}</td>
+                  <td class="text-light">{{i.ts_task_status}}</td>
+                  <td class="text-light">{{i.ts_delay}}</td>
+                  <td class="text-light">{{i.ts_reson_dely}}</td>
+                </tr>
+       
+                {% endfor %}
+  
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  <script>
+    function myFunction() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("search");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    
+    $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#dev_table tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+    $("#search").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  </script>
+    {%endblock%}

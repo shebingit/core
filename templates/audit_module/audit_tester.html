@@ -1,0 +1,97 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+<style>
+  td a
+  {
+    text-decoration: none;
+    color:#6C7293;
+  }
+  .iconpdf
+    {
+      font-size: 1.5rem;
+    }
+</style>
+
+<div class="row mt-3">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+              <h5>Tester List</h5>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+              <form>
+                <div class="input-group input-group-sm mb-3">
+                  <input type="text" class="form-control text-light" id="search" placeholder="Search for names.."
+              title="Type in a name" style="color:white;">
+  
+                  
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table " id="myTable">
+              <thead>
+                <tr data-href="#">
+                  <th>SlNo</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Contact No</th>
+                  <th>Join Date</th>
+                  <th>Department</th>
+                  <th>Tester works</th>
+                 
+                  
+                
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in use %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  
+                  <td>
+                   <a href="{% url 'Audit_employee_dashbord' i.id %}"> <img src="{{media_url}}{{i.photo.url}}" class="img-fluid rounded-circle " alt="image"  >                    
+                      {{i.fullname}}</a>
+                  </td>
+                  <td>{{i.email}}</td>
+                  <td>{{i.mobile}}</td>
+                  <td>{{i.startdate|date:"d-m-Y"}}</td>
+                  <td>{{i.department}}</td>
+                  <td><a href="{% url 'Audit_tester_works' i.id %}" class="btn btn-outline-primary">View</a></td>
+                 
+  
+                  
+                </tr>
+                {% endfor %}
+                
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    $(document).ready(function () {
+      $("#search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
+
+
+ 
+
+
+{% endblock %}

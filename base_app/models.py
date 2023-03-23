@@ -287,6 +287,7 @@ class project_taskassign(models.Model):
     workaccept = models.FileField(upload_to='images/', null=True, blank=True,default="0")
     worktype = models.CharField(max_length=15, null=True,default="0")
     tsakworkdays= models.IntegerField(default='0', null=True) 
+    tsakdelaydays= models.IntegerField(default='0', null=True) 
     
 
     def __str__(self):

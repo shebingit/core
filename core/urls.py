@@ -1774,6 +1774,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
 # Action Taken
  path('Audit_action_taken>', views.Audit_action_taken, name='Audit_action_taken'),
+
  path('Projectmanager_action_taken>', views.Projectmanager_action_taken, name='Projectmanager_action_taken'),
  path('TL_action_taken>', views.TL_action_taken, name='TL_action_taken'),
  path('BRadmin_action_taken>', views.BRadmin_action_taken, name='BRadmin_action_taken'),
@@ -1820,6 +1821,15 @@ path('datacollector_datas_check>/<int:pk>/<int:check>', views.datacollector_data
 
 #Data Collector Analiyis Section
 path('datacollector_analiyis>', views.datacollector_analiyis, name='datacollector_analiyis'),
+
+
+
+#audit section 23-03-2023
+path('Audit_designation_list>', views.Audit_designation_list, name='Audit_designation_list'),
+path('Audit_designationemp_list>', views.Audit_designationemp_list, name='Audit_designationemp_list'),
+path('Audit_tester_works>/<int:pk>', views.Audit_tester_works, name='Audit_tester_works'),
+path('Audit_tester_works_view>/<int:pk>', views.Audit_tester_works_view, name='Audit_tester_works_view'),
+
 
 
 ]

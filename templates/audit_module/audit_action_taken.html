@@ -86,6 +86,7 @@
                   <th>SlNo</th>
                   <th>Date</th>
                   <th>Taken By</th>
+                  <th>Designation</th>
                   <th>Name</th>
                   <th>Remark/Action</th>
                   <th>Designation</th>
@@ -98,6 +99,7 @@
                   <td>{{ forloop.counter }}</td>
                   <td>{{i.at_date|date:"d-m-Y"}}</td>
                   <td>{{i.atby.fullname}}</td>
+                  <td>{{i.atby.designation.designation}}</td>
                   <td>{{i.atemp.fullname}}</td>
                   <td>{{i.at_remark}}</td>
                   <td>{{i.atdesig.designation}}</td>
@@ -126,9 +128,10 @@
 <script type="text/javascript">
     $("#regdetailsDesig").change(function () {
         const deptId = $(this).val();
+        console.log(deptId)
         
         $.ajax({
-            url: '{% url "BRadmin_leavedesgn" %}',
+            url: '{% url "Audit_designation_list" %}',
             data: {
                 'dept_id': deptId
             },
@@ -149,7 +152,7 @@
         const desigId = $("#designation").val();
         console.log(deptId,desigId);
         $.ajax({
-            url: '{% url "BRadmin_emp_ajax" %}',
+            url: '{% url "Audit_designationemp_list" %}',
             data: {
                 'dept_id': deptId,
                 'desigId':desigId,
