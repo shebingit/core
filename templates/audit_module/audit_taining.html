@@ -80,7 +80,10 @@
                         <div class="col-12 grid-margin table1">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">all Department &nbsp; - &nbsp; Trainees</h4>
+                                    <h4 class="card-title">all Department &nbsp; - &nbsp; New &nbsp; and  &nbsp;Ongoing  &nbsp;Trainees</h4>
+                                    <div class="p-2 text-end mb-4">
+                                        <button type="button" onclick="alltrainee()"  class="btn btn-outline-primary">Viem All Trainees</button>
+                                    </div>
                                     <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
                                         placeholder="Search...">
                                     <br>
@@ -196,20 +199,105 @@
     </div>
 </div>
 
+<!------------- Trainer , Trainee Display -->
+
+<div class="row traine" id="alltaine">
+    <div class="col-sm-12 grid-margin">
+        <div class="card">
+            <a href="#" style="text-decoration: none; color: white;">
+                <div class="card-body">
+                    
+                    <div class="row">
+                        <div class="col-12 grid-margin table1">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">all Department &nbsp; - &nbsp;Trainees</h4>
+                                    <div class="p-2 text-end mb-4">
+                                        <button type="button" onclick="alltrainee()"  class="btn btn-outline-primary">Viem All Trainees</button>
+                                    </div>
+                                    <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                                        placeholder="Search...">
+                                    <br>
+                                    <div class="table-responsive">
+                                        <table class="table" >
+                                            
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th> Full Name </th>
+                                                    <th> Joing date</th>
+                                                    <th> Department </th>
+                                                    <th> Hr Manager </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="myTable">
+                                                
+                                                {% for i in alltraines %}
+                                                    
+                                                <tr>
+                                      
+                                                    <td>{{forloop.counter}}</td>
+                                                   
+                                                    <td>{% if i.photo %}
+                                                        <img src="{{i.photo.url}}" alt="image" />
+                                                        {% endif %}
+                                                        <a href="{% url 'Audit_trainee_trainer_dashboard' i.id %}">
+                                                            <span class="ps-2">{{i.fullname}}</span>
+                                                        </a>
+                                                    </td>
+                                                    <td> {{i.joiningdate|date:"d-m-Y"}}</td>
+                                                    <td> {{i.department.department }} </td>
+                                                    <td> {{i.hrmanager }} </td>
+                                                   
+                                                    {% endfor %}
+                                                </tr>
+                                                
+                                                
+                                            </tbody>
+                           
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
 
 <script>
     function trainee() {
       var x = document.getElementById("taine");
+      var Y = document.getElementById("tainer");
       if (x.style.display === "none") {
         x.style.display = "block";
+        Y.style.display = "none";
       } else {
         x.style.display = "none";
       }
     }
     function trainer() {
         var x = document.getElementById("tainer");
+        var Y = document.getElementById("taine");
         if (x.style.display === "none") {
           x.style.display = "block";
+          Y.style.display = "none";
+        } else {
+          x.style.display = "none";
+        }
+      }
+      function alltrainee() {
+        var x = document.getElementById("alltaine");
+        var Y = document.getElementById("tainer");
+        var z = document.getElementById("taine");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+          Y.style.display = "none";
+          z.style.display = "none";
         } else {
           x.style.display = "none";
         }

@@ -36,6 +36,7 @@ urlpatterns = [
 
     re_path(r'^new_team1/$', views.new_team1, name='new_team1'),
      path('new_batch',views.new_batch, name='new_batch'),
+    path('batch_complete/<int:pk>/',views.batch_complete, name='batch_complete'),
      path('team_trainee/<int:tm_tnr>/',views.team_trainee, name='team_trainee'),
      path('trainee_delete/<int:tm_trainee>/',views.trainee_delete, name='trainee_delete'),
     re_path(r'^newteamcreate/$', views.newteamcreate, name='newteamcreate'),
@@ -119,6 +120,7 @@ urlpatterns = [
     re_path(r'^Ptdetails/(?P<id>\d+)$', views.Ptdetails, name='Ptdetails'),
     re_path(r'^traineedetails/(?P<id>\d+)$',
             views.traineedetails, name="traineedetails"),
+ path('taineestatuschange/<int:pk>',views.taineestatuschange, name='taineestatuschange'),
 
 
 

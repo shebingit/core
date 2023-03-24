@@ -1,4 +1,11 @@
 {%extends 'index_trainingmanager.html'%} {% load static %} {% block content %}
+<style>
+    .trainee_name
+    {
+        text-decoration: none;
+        color: rgb(53, 52, 52);
+    }
+</style>
 <div class="row mt-3 mb-5">
     <div class="col-12 grid-margin">
         <div class="card">
@@ -25,16 +32,28 @@
                                 <th> Join Date </th>
                                 <th> Email </th>
                                 <th> Mobile </th>
+                                <th> Training Status</th>
+                                <th> Action </th>
                             </tr>
                         </thead>
                         <tbody  id="myTable">{% if tre %} {% for t in tre %}
                             <tr data-href="{% url 'traineedetails' t.id %}">
                                  <td> {{forloop.counter}} </td>
-                                <td><img src=" {{t.photo.url}} " alt="image " /> &nbsp;{{t.fullname}}</td>
+                                <td ><img src=" {{t.photo.url}} " alt="image " /> &nbsp;{{t.fullname}}</td>
                                 <td> {{t.department.department}} </td>
                                 <td>{{t.joiningdate|date:"d-m-Y"}}</td>
                                 <td>{{t.email}}</td>
                                 <td>{{t.mobile}}</td>
+                                <td>
+                                    {% if t.trainee_status == 1 %}
+                                    <button class="btn btn-outline-success">Copleted</button>
+                                {% elif t.trainee_status == 0  %}
+                                <button class="btn btn-outline-primary">Not Changed</button>
+                                {% elif t.trainee_status == 2  %}
+                                <button class="btn btn-outline-warning">Ongoing</button>
+                                {% endif %}
+                                </td>
+                                <td> <button type="button" class="btn btn-social-icon-text btn-outline-success"> Update</button></td>
                             </tr>
                             {% endfor %}{% else %}
                             <h5>Nothing to display...</h5>
@@ -47,6 +66,15 @@
     </div>
 </div>
 <!-- trainee table ends here -->
+
+
+
+
+
+
+
+
+
 <script>
     $(document).ready(function(){
   $("#myInput").on("keyup", function() {

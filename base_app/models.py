@@ -156,6 +156,7 @@ class user_registration(models.Model):
     work_status =  models.CharField(max_length=10, default='')
     desig_input = models.CharField(max_length=30, default='')
     department_input=models.CharField(max_length=30, default='')
+    trainee_status = models.IntegerField(default='0')
   
    
  

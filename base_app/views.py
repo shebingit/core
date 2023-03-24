@@ -488,6 +488,23 @@ def newbatchcreate(request):
     return redirect('new_batch')
 
     
+def batch_complete(request,pk):
+    if 'usernametm2' in request.session:
+        if request.session.has_key('usernametm'):
+            usernametm = request.session['usernametm']
+        if request.session.has_key('usernametm1'):
+            usernametm1 = request.session['usernametm1']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(designation_id=usernametm) .filter(fullname=usernametm1)
+        batc = Batch.objects.get(id=pk)
+        batc.bt_status=1
+        batc.save()
+        batc = Batch.objects.all()
+        return render(request, 'new_batch.html', {'mem': mem, 'batc': batc})
+    else:
+        return redirect('/')
+        
     
 
 def trainer_trainees_details(request, id):
@@ -750,6 +767,7 @@ def Trainers_Attendancetable(request):
         return render(request, 'Trainers_Attendancetable.html',{'mem':mem,'vars':attend})
     else:
         return redirect('/')
+    
 def Trainee(request):
     if 'usernametm2' in request.session:
         if request.session.has_key('usernametm'):
@@ -1643,8 +1661,13 @@ def traineedetails(request,id):
             designation_id=usernametm) .filter(fullname=usernametm1)
 
         vars = user_registration.objects.get(id=id)
-        tre = create_team.objects.get(id=vars.team.id)
-        k=user_registration.objects.get(id=tre.trainer_id)
+        if vars.team :
+            tre = create_team.objects.get(id=vars.team.id)
+            k=user_registration.objects.get(id=tre.trainer_id)
+        else:
+           tre=NULL 
+           k=NULL
+       
         labels = []
         data = []
         queryset = user_registration.objects.filter(id=vars.id)
@@ -1655,7 +1678,25 @@ def traineedetails(request,id):
         return render(request, 'traineedetails.html', {'mem': mem, 'vars': vars, 'tre': tre, 'labels': labels, 'data': data,'k':k})
     else:
         return redirect('/')
+
+
+def taineestatuschange(request,pk):
+    if request.session.has_key('usernametm'):
+        usernametm = request.session['usernametm']
+        if request.session.has_key('usernametm1'):
+            usernametm1 = request.session['usernametm1']
+        else:
+            return redirect('/')
         
+        if request.method == 'POST':
+    
+            k=user_registration.objects.get(id=pk)
+            k.trainee_status=request.POST['status_change']
+            k.save()
+            return redirect('Trainee')
+    
+    else:
+        return redirect('/')
         
         
         
@@ -20447,9 +20488,10 @@ def Audit_training(request):
         else:
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
-        traines=user_registration.objects.filter(designation_id=9,status='active')
+        traines=user_registration.objects.filter(Q(trainee_status=0) | Q(trainee_status=2),designation_id=9,status='active')
+        alltraines =user_registration.objects.filter(designation_id=9,status='active')
         trainers=user_registration.objects.filter(designation_id=8,status='active')
-        return render(request, 'audit_module/audit_taining.html', {'Aud': Aud,'traines':traines,'trainers':trainers})
+        return render(request, 'audit_module/audit_taining.html', {'Aud': Aud,'traines':traines,'trainers':trainers,'alltraines':alltraines})
     else:
         return redirect('/')
 

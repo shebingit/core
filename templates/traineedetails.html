@@ -79,6 +79,51 @@
     </div>
     <!--details ends here -->
 
+    <!-- status form starts here -->
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h4 class="card-title text-center">Trainee Status Change</h4>
+                        </div>
+                    </div>
+                    <form class="forms-sample" action="{% url 'taineestatuschange' vars.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label for="exampleInputEmail2" class="col-3 col-sm-3 col-md-3 col-lg-3 col-form-label">Select Status</label>
+                            <div class="col-9 col-sm-9 col-md-9 col-lg-9">
+                                <select name="status_change" id="" class="form-control text-light">
+                                    <option value="vars.trainee_status">
+                                        {% if vars.trainee_status == 1 %}
+                                            Copleted
+                                        {% elif vars.trainee_status == 0  %}
+                                            Not Changed
+                                        {% elif vars.trainee_status == 2  %}
+                                            Ongoing
+                                        {% endif %}
+                                    </option>
+                                    <option value="1">Copleted</option>
+                                    <option value="2">Ongoing</option>
+                                    <!-- <option value="3">Incomplete</option> -->
+                                </select>
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-3 col-sm-6 col-md-6"></div>
+                            <div class="col-9 col-sm-6 col-md-6">
+                                <button type="submit" class="btn btn-outline-primary btn-icon-text">Change </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- pie chart and bar chart starts here -->
     <div class="page-header">
         <h3 class="page-title"> Chart </h3>
