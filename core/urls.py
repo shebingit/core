@@ -1797,7 +1797,15 @@ path('Datacollectorlogout>', views.Datacollectorlogout, name='Datacollectorlogou
 path('Datacollector_changepwd>', views.Datacollector_changepwd, name='Datacollector_changepwd'), 
 path('Datacollector_accsetting>', views.Datacollector_accsetting, name='Datacollector_accsetting'),
 path('Datacollector_accsettingimagechange>/<int:id>', views.Datacollector_accsettingimagechange, name='Datacollector_accsettingimagechange'),    
- 
+path('data_leave>', views.data_leave, name='data_leave'),
+path('data_leave_form>', views.data_leave_form, name='data_leave_form'),
+path('data_leave_apply>', views.data_leave_apply, name='data_leave_apply'),
+path('data_collectorleaverequiest>', views.data_collectorleaverequiest, name='data_collectorleaverequiest'),
+
+
+
+
+
 path('datacollector_leads>', views.datacollector_leads, name='datacollector_leads'),
 path('datacollector_registerleads>', views.datacollector_registerleads, name='datacollector_registerleads'),
 path('datacollector_Registered_search>', views.datacollector_Registered_search, name='datacollector_Registered_search'),
@@ -1818,11 +1826,13 @@ path('lead_fileupload>', views.lead_fileupload, name='lead_fileupload'),
 #data colector employeee section
 path('datacollector_employees>', views.datacollector_employees, name='datacollector_employees'),
 path('data_collector_datas>/<int:pk>', views.data_collector_datas, name='data_collector_datas'), 
+path('data_collector_datas_serach>/<int:pk>', views.data_collector_datas_serach, name='data_collector_datas_serach'), 
 path('datacollector_datas_check>/<int:pk>/<int:check>', views.datacollector_datas_check, name='datacollector_datas_check'), 
 
 
 #Data Collector Analiyis Section
 path('datacollector_analiyis>', views.datacollector_analiyis, name='datacollector_analiyis'),
+path('datacollector_lead_analiyisearch>', views.datacollector_lead_analiyisearch, name='datacollector_lead_analiyisearch'),
 
 
 

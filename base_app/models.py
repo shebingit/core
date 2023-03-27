@@ -1025,6 +1025,7 @@ class Leads_Register(models.Model):
     r_lead_source=models.CharField(max_length=200,null=True, blank=True,default='')
     r_pass_out_year=models.CharField(max_length=1000,null=True, blank=True,default='')
     r_status=models.IntegerField(null=True,blank=True,default=0)
+    r_completed_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     r_type_status=models.CharField(max_length=200,null=True, blank=True,default='')
     r_type=models.CharField(max_length=200,null=True, blank=True,default='')
     r_fre_exp=models.CharField(max_length=200,null=True, blank=True,default='')

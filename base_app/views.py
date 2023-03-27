@@ -16222,6 +16222,7 @@ def HR_update_lead_confirm(request,pk):
         mem = user_registration.objects.filter(id=hr_id)
         leads = Leads_Register.objects.get(id=pk,r_refference=hr_id)
         leads.r_status=1
+        leads.r_completed_date=date.today()
         leads.save()
         
         return redirect('HR_current_leads')
@@ -21864,7 +21865,54 @@ def data_collector_datas(request,pk):
         'ldregcount':ldregcount,'ld':ld,'ldassignedcount':ldassignedcount,'ldpencount':ldpencount,'ldcompletecount':ldcompletecount})
     else:
         return redirect('/')
-    
+
+
+
+
+def data_collector_datas_serach(request,pk):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        today=date.today()
+        data_collector = user_registration.objects.get(id=pk)
+        if request.method == 'POST':
+            data_collect = user_registration.objects.filter(id=data_colletor_id)
+
+            if request.POST['check_id']:
+                check=int(request.POST['check_id'])
+            else:
+                 check=1
+            print(check)
+
+            ldregcount = Leads_Register.objects.filter(r_refference=pk,r_date__gte=request.POST['register_stdate'], r_date__lte=request.POST['register_enddate']).count()
+            ldassignedcount = Leads_Register.objects.filter(r_assing_id=pk,r_assign_date__gte=request.POST['register_stdate'], r_assign_date__lte=request.POST['register_enddate'],r_assign_status = 1).count()
+            ldpencount = Leads_Register.objects.filter(Q(r_status=3) | Q(r_status=0),r_assing_id=pk,r_date__gte=request.POST['register_stdate'], r_date__lte=request.POST['register_enddate']).count()
+            ldcompletecount = Leads_Register.objects.filter(r_status=1,r_assing_id=pk,r_completed_date__gte=request.POST['register_stdate'], r_completed_date__lte=request.POST['register_enddate']).count()
+            ld = Leads_Register.objects.filter(r_refference=pk,r_date__gte=request.POST['register_stdate'], r_date__lte=request.POST['register_enddate'])
+
+
+            if check == 1:
+                ld = Leads_Register.objects.filter(r_refference=pk,r_date__gte=request.POST['register_stdate'], r_date__lte=request.POST['register_enddate'])
+            elif check == 2:
+                ld = Leads_Register.objects.filter(r_assing_id=pk,r_assign_date__gte=request.POST['register_stdate'], r_assign_date__lte=request.POST['register_enddate'],r_assign_status = 1)
+            elif check == 3:
+                ld = Leads_Register.objects.filter(Q(r_status=3) | Q(r_status=0),r_assing_id=pk,r_date__gte=request.POST['register_stdate'], r_date__lte=request.POST['register_enddate'])
+            else:
+                check=4
+                ld = Leads_Register.objects.filter(r_status=1,r_assing_id=pk,r_completed_date__gte=request.POST['register_stdate'], r_completed_date__lte=request.POST['register_enddate'])
+
+
+
+            return render(request, 'data_collection/datacollector_employee_datas.html', {'data_collect': data_collect,'data_collector':data_collector,
+            'ldregcount':ldregcount,'ld':ld,'ldassignedcount':ldassignedcount,'ldpencount':ldpencount,'ldcompletecount':ldcompletecount,'check':check})
+        else:
+            return redirect('data_collector_datas',data_collector.id)
+    else:
+        return redirect('/')
+
+
 
 def datacollector_datas_check(request,pk,check):
     if 'datacollector_id' in request.session:
@@ -21887,11 +21935,12 @@ def datacollector_datas_check(request,pk,check):
         elif check == 3:
              ld = Leads_Register.objects.filter(Q(r_status=3) | Q(r_status=0),r_assing_id=pk)
         else:
+            check=4
             ld = Leads_Register.objects.filter(r_status=1,r_assing_id=pk)
 
     
         return render(request, 'data_collection/datacollector_employee_datas.html', {'data_collect': data_collect,'data_collector':data_collector,
-            'ldregcount':ldregcount,'ld':ld,'ldassignedcount':ldassignedcount,'ldpencount':ldpencount,'ldcompletecount':ldcompletecount})
+            'ldregcount':ldregcount,'ld':ld,'ldassignedcount':ldassignedcount,'ldpencount':ldpencount,'ldcompletecount':ldcompletecount,'check':check})
     else:
         return redirect('/')
 
@@ -21918,6 +21967,34 @@ def datacollector_analiyis(request):
         return render(request, 'data_collection/datacollector_analiyis.html', {'data_collect': data_collect,'ldcount':ldcount,'ldassign':ldassign,'ldpending':ldpending,'tdcomplete':tdcomplete})
     else:
         return redirect('/')
+
+
+
+def datacollector_lead_analiyisearch(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        cur_date=date.today()
+
+        if request.method == 'POST':
+
+           
+            ldcount = Leads_Register.objects.filter(r_date__gte=request.POST['register_stdate'], r_date__lte=request.POST['register_enddate']).count()
+            ldassign = Leads_Register.objects.filter(r_assign_date__gte=request.POST['register_stdate'], r_assign_date__lte=request.POST['register_enddate'],r_assign_status = 1).count()
+            ldpending = Leads_Register.objects.filter(r_date__gte=request.POST['register_stdate'], r_date__lte=request.POST['register_enddate'],r_assign_status = 0).count()
+           
+            tdcomplete = Leads_Register.objects.filter(r_completed_date__gte=request.POST['register_stdate'], r_completed_date__lte=request.POST['register_enddate'],r_status = 1 ).count()
+
+        return render(request, 'data_collection/datacollector_analiyis.html', {'data_collect': data_collect,'ldcount':ldcount,'ldassign':ldassign,'ldpending':ldpending,'tdcomplete':tdcomplete})
+       
+       
+    else:
+        return redirect('/')
+
+
 
 
 def lead_fileupload(request):
@@ -21953,6 +22030,94 @@ def lead_fileupload(request):
         return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
     else:
         return redirect('/')
+
+
+#leave Section
+def data_leave(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+
+        return render(request, 'data_collection/data_leave.html', {'data_collect': data_collect})
+    else:
+        return redirect('/')
+
+
+
+def data_leave_form(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+       
+
+        return render(request, 'data_collection/data_leave_form.html', {'data_collect': data_collect})
+    else:
+        return redirect('/')
+
+
+def data_leave_apply(request):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        data_id = user_registration.objects.get(id=int(request.POST['dev_id']))
+    
+        if request.method == "POST":
+            leaves = leave()
+            leaves.from_date = request.POST['from']
+            leaves.to_date = request.POST['to']
+            leaves.leave_status = request.POST['haful']
+            leaves.reason = request.POST['reason']
+            leaves.leaveapprovedstatus=0
+            leaves.user_id = request.POST['dev_id']
+            leaves.designation_id = data_id.id
+            
+            start = datetime.strptime(leaves.from_date, '%Y-%m-%d').date() 
+            end = datetime.strptime(leaves.to_date, '%Y-%m-%d').date()
+
+            diff = (end  - start).days
+            
+            cnt =  Event.objects.filter(start_time__range=(start,end)).count()
+            
+            if diff == 0:
+                leaves.days = 1
+            else:
+                leaves.days = diff - cnt
+                
+            leaves.save()
+            return render(request, 'data_collection/data_leave.html', {'data_collect': data_collect})
+        else:
+            return render(request, 'data_collection/data_leave_form.html', {'data_collect': data_collect})
+    else:
+        return redirect('/')
+
+
+
+
+def data_collectorleaverequiest(request):
+    if 'datacollector_id' in request.session:
+            if request.session.has_key('datacollector_id'):
+                data_colletor_id = request.session['datacollector_id']
+            else:
+                return redirect('/')
+            data_collect = user_registration.objects.filter(id=data_colletor_id)
+            data_col = leave.objects.filter(user_id=data_colletor_id)
+       
+            return render(request, 'data_collection/data_leave_requests.html', {'data_collect': data_collect, 'data_col': data_col})
+    else:
+        return redirect('/')
+
+
 
 
 
