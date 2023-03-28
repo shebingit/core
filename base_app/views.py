@@ -20636,6 +20636,7 @@ def Audit_emp_list(request,audit_depart_id,audit_des_id):
             context = {'mem':mem,'use':use,'Aud' : Aud}
 
             return render(request, 'audit_module/audit_tester.html',context)
+        
 
         use=user_registration.objects.filter(department_id=mem.id,designation=mem1, status="active")
         context = {'mem':mem,'use':use,'Aud' : Aud,}
@@ -20695,13 +20696,20 @@ def Audit_empdaily_reportpdf(request,audit_rep_id):
        
         lev = leave.objects.filter(user_id=audit_rep_id,from_date__gte=formdate,from_date__lte=todate)
         event1 = Event.objects.filter(start_time__range=(formdate,todate))
+       
+        if user.designation.designation == 'project manager':
+            proj = project.objects.filter(projectmanager_id=audit_rep_id,startdate__gte=formdate,startdate__lte=todate)
+            ptask = project_taskassign.objects.filter(project__in=proj,startdate__gte=formdate, enddate__lte=todate).order_by('startdate')
+          
+        else:
+            proj=None
      
        
-
-
         tlev=0
         for i in lev:
             tlev=tlev + int(i.days)
+
+
 
 
 
@@ -20711,6 +20719,7 @@ def Audit_empdaily_reportpdf(request,audit_rep_id):
     
     
     'task':task,
+    'ptask':ptask,
     
     'date':date,
     
