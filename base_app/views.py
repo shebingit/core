@@ -20689,7 +20689,7 @@ def Audit_empdaily_reportpdf(request,audit_rep_id):
         user= user_registration.objects.get(id=audit_rep_id)
        
         
-        task = project_taskassign.objects.filter(developer_id=audit_rep_id,startdate__gte=formdate, enddate__lte=todate)
+        task = project_taskassign.objects.filter(developer_id=audit_rep_id,startdate__gte=formdate, enddate__lte=todate).order_by('startdate') 
        
         #tsk = trainer_task.objects.filter(user_id=audit_rep_id,startdate__gte=formdate ,startdate__lte=todate)
        
@@ -20702,6 +20702,7 @@ def Audit_empdaily_reportpdf(request,audit_rep_id):
             ptask = project_taskassign.objects.filter(project__in=proj,startdate__gte=formdate, enddate__lte=todate).order_by('startdate')
           
         else:
+            ptask=None
             proj=None
      
        
@@ -20720,6 +20721,7 @@ def Audit_empdaily_reportpdf(request,audit_rep_id):
     
     'task':task,
     'ptask':ptask,
+    'proj':proj,
     
     'date':date,
     
@@ -20737,7 +20739,7 @@ def Audit_empdaily_reportpdf(request,audit_rep_id):
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
     #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
+    response['Content-Disposition'] = 'filename="Project-DailyTask-Report.pdf"'
      # find the template and render it.
 
     template = get_template(template_path)
@@ -21820,7 +21822,13 @@ def data_collector_register_save(request):
                 ld.r_dese = request.POST['dc_other']
                 ld.r_refference = user_registration.objects.get(id=data_colletor_id)
                 ld.r_assign_date = date.today()
-                ld.save()
+                #ld.save()
+                new_input_lable = request.POST.getlist('new_input_lable')
+                new_input_values = request.POST.getlist('new_input')
+                for lab in new_input_lable:
+                    print(lab)
+                for value in new_input_values: 
+                    print(value)
 
         else:
             print('Error, No data')

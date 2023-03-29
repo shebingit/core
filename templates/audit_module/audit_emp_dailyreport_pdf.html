@@ -119,11 +119,14 @@
                 <h1>Daily Work Details</h1>
                 
                 {% if user.designation.designation == 'project manager' %}
+                {% for i in proj %}
+                <h3 style="font-weight: 500;">Project Name : <span style="font-size: 15px;">{{i.project}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Progress :{{i.progress}}&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;Status :{{i.status}}</h3>
 
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col">Project</th>
+                      
                         <th scope="col">TL</th>
                         <th scope="col">Task Name</th>
                       
@@ -142,7 +145,7 @@
                           
                         
                       <tr>
-                        <td>{{j.project.project}}</td>
+                       
                         <td>{{j.tl.fullname}}</td>
                         <td>{{j.task}}</td>
                         
@@ -159,7 +162,9 @@
                       
                     </tbody>
                   </table>
-                  {% else %}
+                  <hr>
+                {% endfor %}
+                {% else %}
 
                     <table class="table">
                         <thead>
