@@ -21822,13 +21822,17 @@ def data_collector_register_save(request):
                 ld.r_dese = request.POST['dc_other']
                 ld.r_refference = user_registration.objects.get(id=data_colletor_id)
                 ld.r_assign_date = date.today()
-                #ld.save()
+                ld.save()
                 new_input_lable = request.POST.getlist('new_input_lable')
                 new_input_values = request.POST.getlist('new_input')
-                for lab in new_input_lable:
-                    print(lab)
-                for value in new_input_values: 
-                    print(value)
+                for lab,value in zip(new_input_lable,new_input_values):
+                    print(lab,":",value)
+                    lead_ex=LeadExtradata()
+                    lead_ex.leadid=ld
+                    lead_ex.lead_ex_head=lab
+                    lead_ex.lead_ex_data=value
+                    lead_ex.save()
+                
 
         else:
             print('Error, No data')
@@ -21838,6 +21842,21 @@ def data_collector_register_save(request):
         ldcount = Leads_Register.objects.all().count()
         ld = Leads_Register.objects.all()
         return render(request, 'data_collection/datacollector_registerleads.html', {'data_collect': data_collect,'ldcount':ldcount,'ld':ld})
+    else:
+        return redirect('/')
+
+
+def datacollector_Register_exdata(request,pk):
+    if 'datacollector_id' in request.session:
+        if request.session.has_key('datacollector_id'):
+            data_colletor_id = request.session['datacollector_id']
+        else:
+            return redirect('/')
+        today=date.today()
+        data_collect = user_registration.objects.filter(id=data_colletor_id)
+        ld=Leads_Register.objects.get(id=pk)
+        leadex=LeadExtradata.objects.filter(leadid_id=pk)
+        return render(request, 'data_collection/datacollector_regextra.html', {'data_collect': data_collect,'leadex':leadex,'ld':ld})
     else:
         return redirect('/')
 

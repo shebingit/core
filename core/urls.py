@@ -1818,6 +1818,7 @@ path('datacollector_assignleads>', views.datacollector_assignleads, name='dataco
 path('datacollector_todyregisterleads>', views.datacollector_todyregisterleads, name='datacollector_todyregisterleads'),
 path('datacollector_todyassignedleads>', views.datacollector_todyassignedleads, name='datacollector_todyassignedleads'),
 path('datacollector_todypendingleads>', views.datacollector_todypendingleads, name='datacollector_todypendingleads'),
+path('datacollector_Register_exdata>/<int:pk>', views.datacollector_Register_exdata, name='datacollector_Register_exdata'), 
 
 path('data_assign_collector>', views.data_assign_collector, name='data_assign_collector'),
 path('data_collector_register_save>', views.data_collector_register_save, name='data_collector_register_save'),

@@ -104,17 +104,17 @@
             {% csrf_token %}
             <div class="input-group">
                 <label>Name :</label>
-                <input type="text" name="dc_name">
+                <input type="text" name="dc_name" required>
             </div>
             
             <div class="input-group">
                 <label>Email :</label>
-                <input type="email" name="dc_email" id="email">
+                <input type="email" name="dc_email" id="email" required>
                 <p id="msg"><span id="email-message" class="msgs"></span> </p>
             </div>
             <div class="input-group">
                 <label>Contact :</label>
-                <input type="tel" name="dc_phno" id="phno">
+                <input type="tel" name="dc_phno" id="phno" required>
                 <p id="msg"><span id="phno-message" class="msgs"></span></p>
             </div>
             <div class="input-group">
@@ -144,11 +144,11 @@
                         {% csrf_token %}
                         <div class="input_group">
                             <label>From date :</label>
-                            <input type="date" name="register_stdate">
+                            <input type="date" name="register_stdate" required>
                         </div>
                         <div class="input_group">
                             <label>To date :</label>
-                            <input type="date" name="register_enddate">
+                            <input type="date" name="register_enddate"required>
                         </div>
                         <div class="input_group_save">
                             <button type="submit" class="btn btn-outline-primary">Search</button>
@@ -245,7 +245,7 @@
                                 <td> {{ i.r_phno }} </td>
                                 <td> {{ i.r_place }} </td>
                               
-                                <td> {{ i.r_dese }} </td>
+                                <td> <a href="{% url 'datacollector_Register_exdata' i.id %}" class="btn btn-outline-warning">View</a> </td>
                               
                                 <td>
                                     {% if i.r_type_status == '' %}
@@ -315,8 +315,8 @@
         var counter = 0;
       $("#add-input").click(function() {
         counter++;
-        var inputlable = '<input type="text" class="input_fl" id="field_' + counter + '" name="new_input_lable" placeholder="Field name">';
-        var inputField = '<input type="text"  class="input_inp" id="field2_' + counter + '" name="new_input" placeholder="value'+' -' + counter + '">';
+        var inputlable = '<input type="text" class="input_fl" id="field_' + counter + '" name="new_input_lable" placeholder="Field name" required>';
+        var inputField = '<input type="text"  class="input_inp" id="field2_' + counter + '" name="new_input" placeholder="value'+' -' + counter + '" required>';
         
         var button = '<button type="button"  class="btn btn-outline-warning btn_remove" name="remove" data-field="' + counter + '">-</button';
         

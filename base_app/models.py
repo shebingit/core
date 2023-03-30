@@ -1030,4 +1030,8 @@ class Leads_Register(models.Model):
     r_type=models.CharField(max_length=200,null=True, blank=True,default='')
     r_fre_exp=models.CharField(max_length=200,null=True, blank=True,default='')
 
+class LeadExtradata(models.Model):
+    leadid=models.ForeignKey(Leads_Register,on_delete=models.CASCADE,related_name='lead_id',null=True,blank=True)
+    lead_ex_head=models.CharField(max_length=200,null=True, blank=True,default='')
+    lead_ex_data=models.TextField(default='')
 
