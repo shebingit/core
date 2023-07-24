@@ -1844,6 +1844,8 @@ path('Audit_tester_works>/<int:pk>', views.Audit_tester_works, name='Audit_teste
 path('Audit_tester_works_view>/<int:pk>', views.Audit_tester_works_view, name='Audit_tester_works_view'),
 
 
+# Office Admin
+path('OFadmin_profiledash', views.OFadmin_profiledash, name='OFadmin_profiledash'),
 
 ]
 

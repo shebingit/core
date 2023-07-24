@@ -63,19 +63,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'infoxtec_dbcore',
-#         'USER':'infoxtec_dbcore',
-#         'PASSWORD':'infoxtec_dbcore',
-#         'HOST':'localhost',
-#         'PORT':'3306',
-#     }
-# }
 DATABASES = {
     'default': {
          'ENGINE': 'django.db.backends.mysql',
@@ -87,16 +75,7 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'coreappbasebackend1',
-#         'USER':'coreappbasebackend1',
-#         'PASSWORD':'coreappbasebackend1',
-#         'HOST':'localhost',
-#         'PORT':'3306',
-#     }
-# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

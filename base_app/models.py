@@ -289,6 +289,7 @@ class project_taskassign(models.Model):
     worktype = models.CharField(max_length=15, null=True,default="0")
     tsakworkdays= models.IntegerField(default='0', null=True) 
     tsakdelaydays= models.IntegerField(default='0', null=True) 
+    tester_delay = models.IntegerField(default='0', null=True) 
     
 
     def __str__(self):
@@ -867,7 +868,7 @@ class TSproject_Task_verify(models.Model):
     ts_task_verify_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
     ts_task_sub_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     ts_task_status=models.CharField(max_length=200, null=True,default="")
-    ts_delay=models.CharField(max_length=200, null=True,default="0")
+    ts_delay= models.IntegerField(default='0', null=True) 
     ts_reson_dely=models.TextField(default=" ")
 
 

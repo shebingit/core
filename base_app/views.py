@@ -140,6 +140,21 @@ def login(request):
                 Trainer = designation.objects.get(designation='trainer')
                 trcount=user_registration.objects.filter(designation=Trainer).count()
                 return redirect('BRadmin_profiledash')
+
+        office_admin = designation.objects.get(designation="Office admin")   
+        if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation=office_admin.id,status="active").exists():
+                
+                member=user_registration.objects.get(email=request.POST['email'], password=request.POST['password'])
+                request.session['ofadmin_id'] = member.designation_id
+                request.session['usernamets1'] = member.fullname
+                request.session['usernamehr2'] = member.branch_id
+                request.session['ofadmin_id'] = member.id 
+                Adm=user_registration.objects.filter(id= member.id)
+                Num = user_registration.objects.count()
+                Num1 = project.objects.count()
+                Trainer = designation.objects.get(designation='trainer')
+                trcount=user_registration.objects.filter(designation=Trainer).count()
+                return redirect('OFadmin_profiledash')
             
         design2 = designation.objects.get(designation="tester")   
         if user_registration.objects.filter(email=request.POST['email'], password=request.POST['password'],designation_id=design2.id,status="active").exists():
@@ -3685,6 +3700,7 @@ def BRadmin_index(request):
     else:
         return redirect('/')
     
+    
 def BRadmin_profiledash(request):
     if 'Adm_id' in request.session:
         if request.session.has_key('Adm_id'):
@@ -6502,6 +6518,7 @@ def projectmanager_projectstatus(request,id):
         des = designation.objects.get(designation="team leader")
         dev = designation.objects.get(designation="developer")
         var = project_taskassign.objects.filter(project_id=id).order_by('-id')
+
         data = test_status.objects.filter(project_id=id).order_by('-id')
         data1 = tester_status.objects.filter(project_id=id).order_by('-id')
         newdata = project_taskassign.objects.filter(project_id=id,subtask__isnull = False).order_by('-id')
@@ -9223,10 +9240,18 @@ def TSproject_status_confirm(request,ts_prj_task_verify):
             verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,
                                                 ts_delay=delys,ts_tester=prj_task.tester,ts_task_status=task_verify,ts_task_sub_date=prj_task.submitted_date)
             verify_task.save()
+
+            var= project_taskassign.objects.get(id=verify_task.ts_project_task.id)
+            var.tester_delay = int(var.tester_delay) + int(verify_task.ts_delay)
+            var.save()
         else:
             verify_task=TSproject_Task_verify(ts_project_task=prj_task,ts_reson_dely=delay_reson,
                                                 ts_delay=0,ts_tester=prj_task.tester,ts_task_status=task_verify,ts_task_sub_date=prj_task.submitted_date)
             verify_task.save()
+            var= project_taskassign.objects.get(id=verify_task.ts_project_task.id)
+            var.tester_delay = int(var.tester_delay) + int(verify_task.ts_delay)
+            var.save()
+
         pts=project_taskassign.objects.get(id=ts_prj_task_verify)
         prj_id=prj_task.project.id
         return redirect('TSprojectdetails', prj_id)
@@ -22154,6 +22179,26 @@ def data_collectorleaverequiest(request):
         return redirect('/')
 
 
+
+
+
+
+# ===================== OFFICE ADMIN SECTION ===========================================
+
+
+def OFadmin_profiledash(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            Adm_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')
+        
+        return render(request, 'office_admin/dashboard.html', {})
+    else:
+        return redirect('/')
+
+
+# ===================== END OFFICE ADMIN SECTION ======================================
 
 
 
