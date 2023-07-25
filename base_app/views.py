@@ -149,11 +149,8 @@ def login(request):
                 request.session['usernamets1'] = member.fullname
                 request.session['usernamehr2'] = member.branch_id
                 request.session['ofadmin_id'] = member.id 
-                Adm=user_registration.objects.filter(id= member.id)
+                of_Adm=user_registration.objects.filter(id= member.id)
                 Num = user_registration.objects.count()
-                Num1 = project.objects.count()
-                Trainer = designation.objects.get(designation='trainer')
-                trcount=user_registration.objects.filter(designation=Trainer).count()
                 return redirect('OFadmin_profiledash')
             
         design2 = designation.objects.get(designation="tester")   
@@ -22185,17 +22182,216 @@ def data_collectorleaverequiest(request):
 
 # ===================== OFFICE ADMIN SECTION ===========================================
 
+# =========== OFFICE ADMIN  PROFILE DASHBOARD =================
 
 def OFadmin_profiledash(request):
     if 'ofadmin_id' in request.session:
         if request.session.has_key('ofadmin_id'):
-            Adm_id = request.session['ofadmin_id']
+            ofadmin_id = request.session['ofadmin_id']
         else:
             return redirect('/')
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        reg_count = user_registration.objects.all().count()
+        leads_count=Leads_Register.objects.filter(r_type='Internship').count()
         
-        return render(request, 'office_admin/dashboard.html', {})
+        return render(request, 'office_admin/dashboard.html', {'of_Adm':of_Adm,'reg_count':reg_count,'leads_count':leads_count})
     else:
         return redirect('/')
+
+
+
+# ============= OFFICE ADMIN  - Registration view section ==================
+
+def of_admin_registrationview(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')   
+    of_Adm = user_registration.objects.filter(id=ofadmin_id)
+    return render(request,'office_admin/OFadmin_registrationview.html',{'of_Adm':of_Adm})
+
+
+
+# ============== OFFICE ADMIN  - Current Registration view section ====================
+
+    
+def ofadmin_registration(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')    
+        
+    if 'stop_status' in request.POST:
+        uid = request.POST.get("His_id")
+        user = user_registration.objects.get(id=uid)
+        if user.status=="active":
+            user.status="stop"
+            user.save()
+            return redirect("ofadmin_registration")
+        else:
+            user.status="active"
+            user.save()
+            return redirect("ofadmin_registration")
+    else:    
+        if  request.method=="POST":
+            u_id = request.POST.get("id")
+            dept_id = request.POST.get("dept")
+            desi_id = request.POST.get("des")
+            emp_ty = request.POST.get("emp_type")
+            res = request.POST.get("stat")
+
+            user = user_registration.objects.get(id=u_id)
+            user.department_id = dept_id 
+            user.status = res
+            user.employee_type=emp_ty
+            user.designation_id = desi_id
+            if desi_id == '6' or desi_id == '4':
+                user.work_status='0'
+            user.save()
+            return redirect("ofadmin_registration")
+        
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        mem1 = user_registration.objects.filter(~Q(status="resigned")).order_by("-id")
+        mem2 = designation.objects.filter(~Q(designation="admin"))
+        mem3 = department.objects.all()
+        return render(request,'office_admin/OFadmin_registration.html',{'mem3':mem3,'mem2':mem2,'of_Adm':of_Adm,'mem1':mem1})
+
+
+
+# ============== OFFICE ADMIN  -  Registration Delete section ====================
+
+        
+def ofadmin_registrationdelete(request,id):
+    man = user_registration.objects.get(id=id)
+  
+    man1 = extracurricular.objects.get(user_id=man.id)
+    man2 = qualification.objects.get(user_id=man.id)
+    man2.delete()
+    man1.delete()
+    man.delete()
+
+    os.remove(man.idproof.path)
+    os.remove(man.photo.path
+              )
+    return redirect('ofadmin_registration')
+    
+
+# ============== OFFICE ADMIN  - New Registration view section ====================
+
+def OFadmin_new_registration(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')    
+        
+    if request.method == "POST":
+        u_id = request.POST.get("id")
+        dept_id = request.POST.get("dept")
+        desi_id = request.POST.get("des")
+        res = request.POST.get("stat")
+
+        user = user_registration.objects.get(id=u_id)
+        user.department_id = dept_id
+        user.status = res
+        user.designation_id = desi_id
+        user.save()
+        return redirect("OFadmin_new_registration")
+    of_Adm = user_registration.objects.filter(id=ofadmin_id)
+    mem1 = user_registration.objects.filter(~Q(status="resigned"),reg_status=0).order_by("-id")
+    mem2 = designation.objects.filter(~Q(designation="admin"))
+    mem3 = department.objects.all()
+    return render(request, 'office_admin/OFadmin_new_registration.html', {'mem3': mem3, 'mem2': mem2, 'of_Adm': of_Adm, 'mem1': mem1})
+
+
+
+# ==================== OFFICE ADMIN  - Resign view section ====================
+        
+def ofadmin_resign(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')       
+    if request.method=="POST":
+        u_id = request.POST.get("id")
+        dept_id = request.POST.get("dept")
+        desi_id = request.POST.get("des")
+        user = user_registration.objects.get(id=u_id)
+        user.department_id = dept_id 
+        
+        user.designation_id = desi_id
+        user.save()
+        return redirect("BRadmin_registration")
+   
+    of_Adm = user_registration.objects.filter(id=ofadmin_id)
+    mem1 = user_registration.objects.filter(status="resigned").order_by("-id")
+    mem2 = designation.objects.all()
+    mem3 = department.objects.all()
+    return render(request,'office_admin/OFadmin_resign.html',{'mem3':mem3,'mem2':mem2,'of_Adm':of_Adm,'mem1':mem1})
+
+
+# ==================== OFFICE ADMIN - Registaration Approvel ====================
+
+def of_admin_registrationstatus(request, id):
+    man = user_registration.objects.get(id=id)
+    man.reg_status = "1"    
+    man.save()
+    return redirect('OFadmin_new_registration')
+
+
+
+# ============= OFFICE ADMIN  - Registration view section ==================
+
+def of_admin_request(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')   
+    of_Adm = user_registration.objects.filter(id=ofadmin_id)
+    mem3 = user_registration.objects.all()
+    return render(request,'office_admin/OFadmin_request.html',{'of_Adm':of_Adm,'mem3':mem3})
+
+
+def ofadmin_request_formSubmit(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')  
+
+        
+        if request.method == 'POST':
+
+            canidate = user_registration.objects.get(id=int(request.POST['nameInputId']))
+            select_opt = request.POST.getlist('certficate_select')
+
+            for opt in select_opt:
+
+                certificate = Certificate_approve()
+                certificate.cf_develp = canidate
+                certificate.cf_certificate = opt
+                certificate.save()
+        
+    of_Adm = user_registration.objects.filter(id=ofadmin_id)
+    mem3 = user_registration.objects.all()
+    return render(request,'office_admin/OFadmin_request.html',{'of_Adm':of_Adm,'mem3':mem3})
+
+    
+    
+def ofadmin_requestView(request):
+
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')   
+    of_Adm = user_registration.objects.filter(id=ofadmin_id)
+    request_list = Certificate_approve.objects.all()
+    return render(request,'office_admin/OFadmin_requestList.html',{'of_Adm':of_Adm,'request_list':request_list})
 
 
 # ===================== END OFFICE ADMIN SECTION ======================================

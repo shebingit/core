@@ -1036,3 +1036,13 @@ class LeadExtradata(models.Model):
     lead_ex_head=models.CharField(max_length=200,null=True, blank=True,default='')
     lead_ex_data=models.TextField(default='')
 
+
+# Certficate Approvel table , Use in -  Office Admin Module
+
+class Certificate_approve(models.Model):
+    cf_develp=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='Certificate_user',null=True,blank=True)
+    cf_certificate=models.CharField(max_length=200,null=True, blank=True,default='')
+    cf_request_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    cf_approve_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
+    cf_status=models.IntegerField(null=True,blank=True,default=0)
+

@@ -1846,6 +1846,21 @@ path('Audit_tester_works_view>/<int:pk>', views.Audit_tester_works_view, name='A
 
 # Office Admin
 path('OFadmin_profiledash', views.OFadmin_profiledash, name='OFadmin_profiledash'),
+path('OFadmin_registration_view', views.of_admin_registrationview, name='of_admin_registrationview'),
+path('OFadmin_registration', views.ofadmin_registration, name='ofadmin_registration'),
+path('OFadmin_registration_delete/<int:id>', views.ofadmin_registrationdelete, name='ofadmin_registrationdelete'),
+path('OFadmin_new_registration', views.OFadmin_new_registration, name='OFadmin_new_registration'),
+path('OFadmin_registrationstatus/<int:id>', views.of_admin_registrationstatus, name='of_admin_registrationstatus'),
+path('OFadmin_resign', views.ofadmin_resign, name='ofadmin_resign'),
+
+# Request section 
+
+path('OFadmin-Request', views.of_admin_request, name='of_admin_request'),
+path('OFadmin-Request-Form-Submit', views.ofadmin_request_formSubmit, name='ofadmin_request_formSubmit'),
+path('OFadmin-Request-View', views.ofadmin_requestView, name='ofadmin_requestView'),
+
+
+
 
 ]
 
