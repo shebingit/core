@@ -35,6 +35,35 @@
             margin-right: 15px;
         }
     }
+
+    .circle, .circle::before {
+        content: " ";
+        margin: 10px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin: 0 auto;
+        transition: all 0.3s;
+        background-color: #13db31;
+      
+      }
+      
+      .circle::before {
+        animation: mymove 2s infinite;
+        position: absolute;
+        background-color: #11ed11
+      }
+      
+      @-webkit-keyframes mymove {
+        50%   {
+          transform: scale(2);
+          opacity: 0
+        }
+        100%   {
+          transform: scale(2);
+          opacity: 0
+        }
+      }
 </style>
 
 <body>
@@ -161,6 +190,20 @@
                         <span class="menu-title">Registration</span>
                     </a>
                 </li>
+
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="{% url 'BRadmin_request' %}">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-reply"></i>
+                        </span>
+                        <span class="menu-title">Request  </span> 
+                        {% if requests %}
+                        <span class="circle"></span>
+                        {% endif %}
+                    </a>
+                </li>
+
+                
 
                 <li class="nav-item menu-items">
                     <a class="nav-link" href="{% url 'newdept' %}">

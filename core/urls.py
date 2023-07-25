@@ -1860,6 +1860,13 @@ path('OFadmin-Request-Form-Submit', views.ofadmin_request_formSubmit, name='ofad
 path('OFadmin-Request-View', views.ofadmin_requestView, name='ofadmin_requestView'),
 
 
+#Admin Module - Request section
+
+path('BRadmin-Request', views.BRadmin_request, name='BRadmin_request'),
+path('BRadmin_request_approve/<int:app_id>', views.BRadmin_request_approve, name='BRadmin_request_approve'),
+path('BRadmin_request_decline/<int:dec_id>', views.BRadmin_request_decline, name='BRadmin_request_decline'),
+
+
 
 
 ]

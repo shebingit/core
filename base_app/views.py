@@ -3724,12 +3724,12 @@ def BRadmin_profiledash(request):
         l=leave.objects.filter(to_date__gte=date.today())
        
         count=user_registration.objects.filter(~Q(id__in=l.values_list('user_id', flat=True)),Q(designation_id=tlde.id) | Q(designation_id=d.id),status="active",work_status='0').count()
-       
+        requests = Certificate_approve.objects.filter(cf_status=0)
         for i in queryset:
             labels = [i.workperformance, i.attitude, i.creativity]
             data = [i.workperformance, i.attitude, i.creativity]
 
-        return render(request, 'BRadmin_profiledash.html', {'labels': labels, 'data': data, 'Num1': Num1, 'Man1': Man2, 'Adm': Adm, 'num': Num, 'trcount': trcount, 'le': le,'count':count,'lead_count':lead_count})
+        return render(request, 'BRadmin_profiledash.html', {'requests':requests,'labels': labels, 'data': data, 'Num1': Num1, 'Man1': Man2, 'Adm': Adm, 'num': Num, 'trcount': trcount, 'le': le,'count':count,'lead_count':lead_count})
     else:
         return redirect('/')
 
@@ -22398,3 +22398,32 @@ def ofadmin_requestView(request):
 
 
 
+# ======== ADMIN Request Approve Section ======================================
+
+def BRadmin_request(request):
+    if 'Adm_id' in request.session:
+        if request.session.has_key('Adm_id'):
+            Adm_id = request.session['Adm_id']
+        else:
+            return redirect('/')
+        
+        Adm = user_registration.objects.filter(id=Adm_id)
+        requests = Certificate_approve.objects.filter(cf_status=0)
+        return render(request,'BRadmin_request.html',{'Adm':Adm,'requests':requests})
+    else:
+        return redirect('/')
+    
+
+def BRadmin_request_approve(request,app_id): 
+    request_list=Certificate_approve.objects.get(id=app_id)   
+    request_list.cf_status = 1
+    request_list.cf_approve_date = date.today()
+    request_list.save()
+    return redirect('BRadmin_request')
+
+def BRadmin_request_decline(request,dec_id): 
+    request_list=Certificate_approve.objects.get(id=dec_id)   
+    request_list.cf_status = 2
+    request_list.cf_approve_date = date.today()
+    request_list.save()
+    return redirect('BRadmin_request')
