@@ -106,26 +106,88 @@
                                     <td> 
                                         {% if i.cf_certificate == 'Offer Letter' and i.cf_status == 1 %}
                                         <a href="{% url 'pdfof' i.cf_develp.id %}"> 
-                                            <div class="badge badge-outline-success">Download</div>
+                                            <div class="badge badge-outline-primary">Download</div>
+                                        </a>
+                                        <a href="{% url 'ofadmin_request_status_change' i.id %}" data-bs-toggle="tooltip" data-bs-placement="left" title="After download click here."> 
+                                            <div class="badge badge-outline-info" >Taken</div>
+                                        </a>
+
+                                        {% elif i.cf_certificate == 'Offer Letter' and   i.cf_status == 0 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-warning" >Wating</div>
+                                        </a>
+
+                                        {% elif i.cf_certificate == 'Offer Letter' and   i.cf_status == 3 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-success" >File Downloaded</div>
+                                        </a>
+                                        {% elif i.cf_certificate == 'Offer Letter' and  i.cf_status == 2 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-danger" >Declined</div>
                                         </a>
                                         {% endif %}
                                     
                                         
                                         {% if i.cf_certificate == 'Experience Certificate' and i.cf_status == 1 %}
                                         <a href="{% url 'pdfex' i.cf_develp.id %}">  
-                                            <div class="badge badge-outline-success">Download</div>
+                                            <div class="badge badge-outline-primary">Download</div>
+                                        </a>
+                                        <a href="{% url 'ofadmin_request_status_change' i.id %}" data-bs-toggle="tooltip" data-bs-placement="left" title="After download click here."> 
+                                            <div class="badge badge-outline-warning" >Taken</div>
+                                        </a>
+                                        {% elif i.cf_certificate == 'Experience Certificate' and i.cf_status == 0 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-warning" >Wating</div>
+                                        </a>
+                                        {% elif i.cf_certificate == 'Experience Certificate' and i.cf_status == 3 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-success" >File Downloaded</div>
+                                        </a>
+                                        {% elif i.cf_certificate == 'Experience Certificate' and i.cf_status == 2 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-danger" >Declined</div>
                                         </a>
                                         {% endif %}
                                     
                                         {% if i.cf_certificate == 'Relieve Letter' and i.cf_status == 1 %}
                                         <a href="{% url 'pdfre' i.cf_develp.id %}">  
-                                            <div class="badge badge-outline-success">Download</div>
+                                            <div class="badge badge-outline-primary">Download</div>
+                                        </a>
+                                        <a href="{% url 'ofadmin_request_status_change' i.id %}" data-bs-toggle="tooltip" data-bs-placement="left" title="After download click here."> 
+                                            <div class="badge badge-outline-info" >Taken</div>
+                                        </a>
+                                        {% elif i.cf_certificate == 'Relieve Letter' and i.cf_status == 0 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-warning" >Wating</div>
+                                        </a>
+                                        {% elif i.cf_certificate == 'Relieve Letter' and i.cf_status == 3 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-success" >File Downloaded</div>
+                                        </a>
+                                        {% elif i.cf_certificate == 'Relieve Letter' and i.cf_status == 2 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-danger" >Declined</div>
                                         </a>
                                         {% endif %}
                                     
                                         {% if i.cf_certificate == 'Authorization Letter' and i.cf_status == 1 %}
                                         <a href="{% url 'pdfau' i.cf_develp.id %}">  
-                                            <div class="badge badge-outline-success">Download</div>
+                                            <div class="badge badge-outline-primary">Download</div>
+                                        </a>
+                                        <a href="{% url 'ofadmin_request_status_change' i.id %}" data-bs-toggle="tooltip" data-bs-placement="left" title="After download click here."> 
+                                            <div class="badge badge-outline-info" >Taken</div>
+                                        </a>
+                                        {% elif i.cf_certificate == 'Authorization Letter' and i.cf_status == 0 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-warning" >Wating</div>
+                                        </a>
+                                        {% elif i.cf_certificate == 'Authorization Letter' and i.cf_status == 3 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-success" >File Downloaded</div>
+                                        </a>
+                                        {% elif i.cf_certificate == 'Authorization Letter' and i.cf_status == 2 %}
+                                        <a href=""]> 
+                                            <div class="badge badge-outline-danger" >Declined</div>
                                         </a>
                                         {% endif %}
                                     </td>

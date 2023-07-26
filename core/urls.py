@@ -1852,12 +1852,45 @@ path('OFadmin_registration_delete/<int:id>', views.ofadmin_registrationdelete, n
 path('OFadmin_new_registration', views.OFadmin_new_registration, name='OFadmin_new_registration'),
 path('OFadmin_registrationstatus/<int:id>', views.of_admin_registrationstatus, name='of_admin_registrationstatus'),
 path('OFadmin_resign', views.ofadmin_resign, name='ofadmin_resign'),
+path('OFadmin_man_registration-Update/<int:id>', views.OFadmin_man_registration_update, name='OFadmin_man_registration_update'),
+path('OFadmin_registration-Update-Save/<int:id>', views.OFadmin_registrationupdatesave, name='OFadmin_registrationupdatesave'),
+path('OFadmin_leavestatus', views.OFadmin_leavestatus, name='OFadmin_leavestatus'),
+path('OFadmin_applyleav', views.OFadmin_applyleav, name='OFadmin_applyleav'),
+path('OFadmin_leave_form', views.OFadmin_leave_form, name='OFadmin_leave_form'),
+path('OFadmin_leaverequiest', views.OFadmin_leaverequiest, name='OFadmin_leaverequiest'),
+path('OFadmin-Logout', views.OFadminlogout, name='OFadminlogout'),
+
+# Account Section
+
+path('OFadmin_accsetting', views.OFadmin_accsetting, name='OFadmin_accsetting'),
+path('OFadmin_accsettingimagechange/<int:id>', views.OFadmin_accsettingimagechange, name='OFadmin_accsettingimagechange'),
+path('OFadmin_changepwd', views.OFadmin_changepwd, name='OFadmin_changepwd'),
 
 # Request section 
 
 path('OFadmin-Request', views.of_admin_request, name='of_admin_request'),
 path('OFadmin-Request-Form-Submit', views.ofadmin_request_formSubmit, name='ofadmin_request_formSubmit'),
 path('OFadmin-Request-View', views.ofadmin_requestView, name='ofadmin_requestView'),
+path('OFadmin-Request-Status-Change/<int:req_id>', views.ofadmin_request_status_change, name='ofadmin_request_status_change'),
+
+
+# INTERNSHIP OFFICE ADMIN SECTION 
+
+path('OFadmin-Internship-View', views.OFadmin_internship_view, name='OFadmin_internship_view'),
+path('OFadmin-Internship-Lead-View', views.OFadmin_internship, name='OFadmin_internship'),
+path('OFadmin-Internship-request', views.OFadmin_internship_request, name='OFadmin_internship_request'),
+path('OFadmin-Internship-request-Form-submit', views.ofadmin_internship_request_formSubmit, name='ofadmin_internship_request_formSubmit'),
+path('OFadmin-Internship-request-List', views.ofadmin_internship_requestView, name='ofadmin_internship_requestView'),
+path('OFadmin-Internship-Date', views.OFadmin_internship_date, name='OFadmin_internship_date'),
+path('OFadmin_internship_dateview', views.OFadmin_internship_dateview, name='OFadmin_internship_dateview'),
+path('OFadmin-Internship-Pending', views.OFadmin_internship_pending, name='OFadmin_internship_pending'),
+path('OFadmin-Internship-Account-Approve', views.OFadmin_internship_acc_approved, name='OFadmin_internship_acc_approved'),
+path('OFadmin-Internship-Update/<int:id>', views.OFadmin_internship_update, name='OFadmin_internship_update'),
+path('OFadmin-Internship-te-Save/<int:id>', views.OFadmin_internshipupdatesave, name='OFadmin_internshipupdatesave'),
+path('OFadmin-Internship-Delete/<int:id>', views.OFadmin_interndelete, name='OFadmin_interndelete'),
+
+
+
 
 
 #Admin Module - Request section
@@ -1865,6 +1898,7 @@ path('OFadmin-Request-View', views.ofadmin_requestView, name='ofadmin_requestVie
 path('BRadmin-Request', views.BRadmin_request, name='BRadmin_request'),
 path('BRadmin_request_approve/<int:app_id>', views.BRadmin_request_approve, name='BRadmin_request_approve'),
 path('BRadmin_request_decline/<int:dec_id>', views.BRadmin_request_decline, name='BRadmin_request_decline'),
+
 
 
 

@@ -1041,8 +1041,11 @@ class LeadExtradata(models.Model):
 
 class Certificate_approve(models.Model):
     cf_develp=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='Certificate_user',null=True,blank=True)
+    cf_intern=models.ForeignKey(internship,on_delete=models.CASCADE,related_name='Intern_Certificate_user',null=True,blank=True)
+    cf_category=models.IntegerField(null=True,blank=True,default=0)
     cf_certificate=models.CharField(max_length=200,null=True, blank=True,default='')
     cf_request_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
     cf_approve_date=models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     cf_status=models.IntegerField(null=True,blank=True,default=0)
+
 

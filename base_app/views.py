@@ -22389,9 +22389,324 @@ def ofadmin_requestView(request):
             ofadmin_id = request.session['ofadmin_id']
         else:
             return redirect('/')   
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        request_list = Certificate_approve.objects.filter(cf_category=0).order_by('-id')
+        return render(request,'office_admin/OFadmin_requestList.html',{'of_Adm':of_Adm,'request_list':request_list})
+    
+    else:
+        return redirect('/')   
+
+
+# Status change after the dwnload button click
+def ofadmin_request_status_change(request,req_id):
+
+    request_list = Certificate_approve.objects.get(id=req_id)
+    request_list.cf_status = 3
+    request_list.save()
+    if request_list.cf_category == 0:
+        return redirect('ofadmin_requestView')
+    else:
+        return redirect('ofadmin_internship_requestView')
+
+
+def OFadmin_man_registration_update(request, id):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/') 
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+
+        mem4 = user_registration.objects.get(id=id)
+        con = conditions.objects.get(id=1)
+        try:
+            xem = extracurricular.objects.get(user_id=id)
+        except extracurricular.DoesNotExist:
+            xem = None
+        try:
+            qem = qualification.objects.get(user_id=id)
+        except qualification.DoesNotExist:
+            qem= None
+        des = designation.objects.filter(~Q(designation='admin'))
+      
+        desig = designation.objects.all().exclude(designation = 'team leader').exclude(designation ='manager').exclude(designation ='trainee').exclude(designation ='project manager').exclude(designation ='tester').exclude(designation ='trainingmanager').exclude(designation ='account').exclude(designation ='trainer').exclude(designation ='developer')
+
+        admins = user_registration.objects.get(id=ofadmin_id)
+        try:
+            br_name = branch_registration.objects.get(id=admins.id)
+        except branch_registration.DoesNotExist:
+            br_name= None
+
+        return render(request, 'office_admin/OFadmin_man_registration_update.html', {'con': con, 'mem4': mem4, 'qem': qem, 'xem': xem, 'of_Adm': of_Adm, 'des': des, 'br_name': br_name, 'desig':desig})
+    else:
+        return redirect('/')
+    
+    
+def OFadmin_registrationupdatesave(request, id):
+    a = user_registration.objects.get(id=id)
+    try:
+        b = qualification.objects.get(user_id=id)
+    except qualification.DoesNotExist:
+        b = None
+    try:
+        c = extracurricular.objects.get(user_id=id)
+    except extracurricular.DoesNotExist:
+        c = None
+
+    d = conditions.objects.get(id=1)
+    if request.method == 'POST':
+        a.fullname = request.POST['name']
+        a.fathername = request.POST['fathersname']
+        a.mothername = request.POST['mothersname']
+        a.presentaddress1 = request.POST['presentaddress1']
+        a.presentaddress2 = request.POST['presentaddress2']
+        a.presentaddress3 = request.POST['presentaddress3']
+        a.pincode = request.POST['pincode']
+        a.district = request.POST['district']
+        a.state = request.POST['state']
+        a.permanentaddress1 = request.POST['permanentaddress1']
+        a.permanentaddress2 = request.POST['permanentaddress2']
+        a.permanentaddress3 = request.POST['permanentaddress3']
+        a.permanentpincode = request.POST['permanentpincode']
+        a.permanentdistrict = request.POST['permanentdistrict']
+        a.permanentstate = request.POST['permanentstate']
+        a.designation_id = request.POST['designation']
+        a.desig_input = request.POST['desg']
+        a.department_input = request.POST['department_current']
+        a.mobile = request.POST['mobile']
+        a.alternativeno = request.POST['altmobile1']
+        a.email = request.POST['email']
+        a.hrmanager = request.POST['hrname']
+        a.joiningdate = request.POST['dateofjoin']
+        a.startdate = request.POST['startdate']
+        a.enddate = request.POST['enddate']
+        a.workperformance = request.POST['performance']
+        a.hr_designation = request.POST['hrdesignation']
+        if request.FILES.get('signature') is not None:
+            a.signature = request.FILES['signature']
+        a.save()
+
+        if b:
+            b.user_id = a.id
+            b.school = request.POST['school']
+            b.schoolaggregate = request.POST['aggregate']
+            b.ugdegree = request.POST['degree']
+            b.ugstream = request.POST['stream']
+            b.ugpassoutyr = request.POST['passoutyear']
+            b.ugaggregrate = request.POST['aggregate1']
+            b.pg = request.POST['pg']
+            b.save()
+        
+        if c :
+            c.user_id = a.id
+            c.internshipdetails = request.POST['details']
+            c.internshipduration = request.POST['duration1']
+            c.internshipcertificate = request.POST['certification']
+            c.onlinetrainingdetails = request.POST['details1']
+            c.onlinetrainingduration = request.POST['duration2']
+            c.onlinetrainingcertificate = request.POST['certification1']
+            c.projecttitle = request.POST['title']
+            c.projectduration = request.POST['duration3']
+            c.projectdescription = request.POST['description']
+            c.projecturl = request.POST['url']
+            c.skill1 = request.POST['skill1']
+            c.skill2 = request.POST['skill2']
+            c.skill3 = request.POST['skill3']
+            c.save()
+            
+        d.condition1 = request.POST.get("condition1")
+        d.condition2 = request.POST.get("condition2")
+        d.condition3 = request.POST.get("condition3")
+        d.condition4 = request.POST.get("condition4")
+        d.condition5 = request.POST.get("condition5")
+        d.condition6 = request.POST.get("condition6")
+        d.save()
+        return redirect('ofadmin_registration')
+        
+
+
+
+# ===================== OFFICE ADMIN  INTERNSHIP SECTION ===============
+
+def OFadmin_internship_view(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')       
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        return render(request,'office_admin/OFadmin_internship_view.html',{'of_Adm':of_Adm})
+    
+    else:
+        return redirect('/')   
+
+
+def OFadmin_internship(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/') 
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        var1=internship.objects.all().order_by("-id")
+        return render(request,'office_admin/OFadmin_internship.html',{'var1':var1,'of_Adm':of_Adm})
+    else:
+        return redirect('/')
+
+
+def OFadmin_internship_request(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/') 
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        var1=internship.objects.all().order_by("-id")
+        return render(request,'office_admin/OFadmin_internship_request.html',{'var1':var1,'of_Adm':of_Adm})
+    else:
+        return redirect('/')
+
+
+def ofadmin_internship_request_formSubmit(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')  
+
+        
+        if request.method == 'POST':
+
+            canidate = internship.objects.get(id=int(request.POST['nameInputId']))
+            select_opt = request.POST.getlist('certficate_select')
+
+            for opt in select_opt:
+
+                certificate = Certificate_approve()
+                certificate.cf_intern = canidate
+                certificate.cf_category =1
+                certificate.cf_certificate = opt
+                certificate.save()
+        
     of_Adm = user_registration.objects.filter(id=ofadmin_id)
-    request_list = Certificate_approve.objects.all()
-    return render(request,'office_admin/OFadmin_requestList.html',{'of_Adm':of_Adm,'request_list':request_list})
+    var1 = internship.objects.all()
+    return render(request,'office_admin/OFadmin_internship_request.html',{'of_Adm':of_Adm,'var1':var1})
+
+
+def ofadmin_internship_requestView(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')   
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        request_list = Certificate_approve.objects.filter(cf_category=1).order_by('-id')
+        return render(request,'office_admin/OFadmin_iternship_requestList.html',{'of_Adm':of_Adm,'request_list':request_list})
+    
+    else:
+        return redirect('/')   
+
+
+
+def OFadmin_internship_date(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')  
+          
+    of_Adm = user_registration.objects.filter(id=ofadmin_id)
+    newdata = internship.objects.all().values('reg_date').distinct()
+    return render(request,'office_admin/OFadmin_internship_date.html',{'of_Adm':of_Adm,'newdata':newdata})  
+
+
+
+def OFadmin_internship_dateview(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')    
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        reg_date=request.GET.get('date')
+        empid=internship.objects.filter(reg_date=reg_date)
+        return render(request,'office_admin/OFadmin_internship_dateview.html',{'of_Adm':of_Adm,'data':empid})
+   
+
+def OFadmin_internship_pending(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')   
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+
+        data=internship.objects.filter(complete_status='0')
+        use=internship_type.objects.all()
+    
+        return render(request, 'office_admin/OFadmin_internship_pending.html', {'data': data,'use': use,'of_Adm':of_Adm})
+    
+
+def OFadmin_internship_acc_approved(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')  
+    of_Adm = user_registration.objects.filter(id=ofadmin_id)
+    data=internship.objects.filter(verify_status='1')
+    use=internship_type.objects.all()
+
+    return render(request, 'office_admin/OFadmin_internship_acc_approved.html', {'data': data ,'use':use, 'of_Adm':of_Adm})
+
+
+def OFadmin_internship_update(request,id):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')  
+    of_Adm = user_registration.objects.filter(id=ofadmin_id)
+    var = internship.objects.get(id=id)
+    return render(request,'office_admin/OFadmin_internship_update.html',{'var':var,'of_Adm':of_Adm})
+
+
+def OFadmin_internshipupdatesave(request,id):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')    
+    of_Adm = user_registration.objects.filter(id=ofadmin_id)
+    var = internship.objects.get(id=id)
+    var.fullname = request.POST['fullname']
+    var.collegename = request.POST['college']
+    var.reg_no = request.POST['regno']
+    var.course = request.POST['course']
+    var.stream = request.POST['stream']        
+    var.platform = request.POST['platform']        
+    #var.branch_id  =  request.POST['branch']        
+    var.start_date =  request.POST['startdate']        
+    var.end_date  =  request.POST['enddate']        
+    var.mobile  =  request.POST['mobile']        
+    var.alternative_no  =  request.POST['altmob']        
+    var.email = request.POST['email']
+    var.hrmanager = request.POST['hrmanager']
+    var.guide = request.POST['guide']
+    var.rating = request.POST['rating']
+    
+    if request.FILES.get('profile_pic') is not None:
+         var.profile_pic  =  request.FILES['profile_pic']
+    var.save()
+    return redirect('OFadmin_internship')
+
+
+
+def OFadmin_interndelete(request,id):
+    man = internship.objects.get(id=id)
+    man.delete()
+    return redirect('OFadmin_internship')
+
 
 
 # ===================== END OFFICE ADMIN SECTION ======================================
@@ -22408,8 +22723,9 @@ def BRadmin_request(request):
             return redirect('/')
         
         Adm = user_registration.objects.filter(id=Adm_id)
-        requests = Certificate_approve.objects.filter(cf_status=0)
-        return render(request,'BRadmin_request.html',{'Adm':Adm,'requests':requests})
+        emp_requests = Certificate_approve.objects.filter(cf_status=0,cf_category=0)
+        intern_requests = Certificate_approve.objects.filter(cf_status=0,cf_category=1)
+        return render(request,'BRadmin_request.html',{'Adm':Adm,'emp_requests':emp_requests,'intern_requests':intern_requests})
     else:
         return redirect('/')
     
@@ -22427,3 +22743,141 @@ def BRadmin_request_decline(request,dec_id):
     request_list.cf_approve_date = date.today()
     request_list.save()
     return redirect('BRadmin_request')
+
+
+# ================== OFFICE ADMIN ACCOUNT-SECTION ================
+
+def OFadmin_accsetting(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        return render(request,'office_admin/OFadmin_accsetting.html', {'of_Adm': of_Adm})
+    else:
+        return redirect('/')
+
+def OFadmin_accsettingimagechange(request,id):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')
+        
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        if request.method == 'POST':
+            abc = user_registration.objects.get(id=id)
+            abc.photo = request.FILES['filename']
+            abc.save()
+            return redirect('OFadmin_accsetting')
+        return render(request, 'office_admin/OFadmin_accsetting.html',{'of_Adm':of_Adm})
+    else:
+        return redirect('/')
+
+
+def OFadmin_changepwd(request):
+    
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')    
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)     
+        if request.method == 'POST':
+            abc = user_registration.objects.get(id=ofadmin_id)
+            cur = abc.password
+            oldps = request.POST["currentPassword"]
+            newps = request.POST["newPassword"]
+            cmps = request.POST["confirmPassword"]
+            if oldps == cur:
+                if oldps != newps:
+                    if newps == cmps:
+                        abc.password = request.POST.get('confirmPassword')
+                        abc.save()
+                        return render(request, 'office_admin/dashboard.html', {'of_Adm': of_Adm})
+                elif oldps == newps:
+                    messages.add_message(request, messages.INFO, 'Current and New password same')
+                else:
+                    messages.info(request, 'Incorrect password same')
+
+                return render(request, 'office_admin/dashboard.html', {'of_Adm': of_Adm})
+            else:
+                messages.add_message(request, messages.INFO, 'old password wrong')
+                return render(request, 'office_admin/OFadmin_changepwd.html', {'of_Adm': of_Adm})
+        return render(request, 'office_admin/OFadmin_changepwd.html', {'of_Adm': of_Adm})         
+    else:
+        return redirect('/')
+
+
+def OFadmin_leavestatus(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')    
+        of_Adm = user_registration.objects.filter(id=ofadmin_id) 
+        return render(request, 'office_admin/OFadmin_leave.html', {'of_Adm': of_Adm})   
+     
+    else:
+        return redirect('/')    
+    
+
+def OFadmin_leave_form(request):
+    des1 = designation.objects.get(designation='Office admin')
+    if request.method == "POST":
+        leaves = leave()
+        leaves.from_date = request.POST['from']
+        leaves.to_date = request.POST['to']
+        leaves.leave_status = request.POST['haful']
+        leaves.reason = request.POST['reason']
+        leaves.leaveapprovedstatus=0
+        leaves.user_id = request.POST['dev_id']
+        leaves.designation_id = des1.id
+        
+        start = datetime.strptime(leaves.from_date, '%Y-%m-%d').date() 
+        end = datetime.strptime(leaves.to_date, '%Y-%m-%d').date()
+
+        diff = (end  - start).days
+        
+        cnt =  Event.objects.filter(start_time__range=(start,end)).count()
+        
+        if diff == 0:
+            leaves.days = 1
+        else:
+            leaves.days = diff - cnt
+            
+        leaves.save()
+        return redirect('OFadmin_applyleav')
+    else:
+        return redirect('OFadmin_applyleav')
+
+
+def OFadmin_applyleav(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')    
+        of_Adm = user_registration.objects.filter(id=ofadmin_id) 
+        return render(request, 'office_admin/OFadmin_applyleav.html', {'of_Adm': of_Adm})
+
+
+
+def OFadmin_leaverequiest(request):
+    if 'ofadmin_id' in request.session:
+        if request.session.has_key('ofadmin_id'):
+            ofadmin_id = request.session['ofadmin_id']
+        else:
+            return redirect('/')  
+        devl = leave.objects.filter(user_id=ofadmin_id)
+        of_Adm = user_registration.objects.filter(id=ofadmin_id)
+        return render(request, 'office_admin/OFadmin_leaverequiest.html', {'of_Adm': of_Adm, 'devl': devl})
+
+
+def OFadminlogout(request):
+    if 'ofadmin_id' in request.session:  
+        request.session.flush()
+        return redirect('/')
+    else:
+        return redirect('/') 
