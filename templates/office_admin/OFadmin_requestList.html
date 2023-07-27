@@ -105,7 +105,7 @@
                             
                                     <td> 
                                         {% if i.cf_certificate == 'Offer Letter' and i.cf_status == 1 %}
-                                        <a href="{% url 'pdfof' i.cf_develp.id %}"> 
+                                        <a data-bs-toggle="modal" data-bs-target="#salary{{i.cf_develp.id}}"> 
                                             <div class="badge badge-outline-primary">Download</div>
                                         </a>
                                         <a href="{% url 'ofadmin_request_status_change' i.id %}" data-bs-toggle="tooltip" data-bs-placement="left" title="After download click here."> 
@@ -202,6 +202,31 @@
         </div>
     </div>
 </div>
+
+{% for i in request_list  %}
+  
+  <!-- Modal -->
+  <div class="modal fade" id="salary{{i.cf_develp.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" style="border: none;"> 
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'pdfof' i.cf_develp.id %}" method="post" class="text-center">
+            {% csrf_token %}
+            <h5 class="modal-title" id="exampleModalLabel">Input the starting salary per month</h5>
+            <input type="text" class="form-control mt-3 mb-3" name="sal">
+            <button type="submit" class="btn btn-outline-success">Download</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          </form>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
