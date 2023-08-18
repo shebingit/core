@@ -494,9 +494,6 @@ class trainer_task_test(models.Model):
         auto_now_add=True, auto_now=False,  null=True, blank=True)
 
 
-
-
-
 class topic(models.Model):
     trainee = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
                                 related_name='topictrainee', null=True, blank=True, default='')

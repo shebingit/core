@@ -1746,6 +1746,7 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('Audit_trainee_trainer_dashboard/<int:audit_traine_id>', views.Audit_trainee_trainer_dashboard, name='Audit_trainee_trainer_dashboard'),
     path('Audit_trainee_trainer_details/<int:audit_ttrainer_id>/<int:audit_tm_id>/<int:audit_trn_id>', views.Audit_trainee_trainer_details, name='Audit_trainee_trainer_details'),
     path('audit_probation/<int:audit_tr_prob>', views.audit_probation, name='audit_probation'),
+    path('Audit-Trainee-Report/<int:PDF_traineer_id>', views.audit_trainee_reportPDF, name='audit_trainee_reportPDF'),
 
 #Trainer
     path('audit_trainer_teamview/<int:audit_trainer_tmid>', views.audit_trainer_teamview, name='audit_trainer_teamview'),

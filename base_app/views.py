@@ -20575,6 +20575,82 @@ def Audit_trainee_trainer_details(request,audit_ttrainer_id,audit_tm_id,audit_tr
     else:
         return redirect('/')
 
+
+#===================== Trainee Report  Genarate section ==================
+
+def audit_trainee_reportPDF(request,PDF_traineer_id):
+    
+  
+    date = datetime.now()    # Getting the current date
+
+    if request.method =="POST": # reading all the data 
+        p1=request.POST.get('trainee_project')
+        p2=request.POST.get('tainee_task')
+        p3=request.POST.get('trainee_topics')
+        p4=request.POST.get('trainee_leave')
+        p5=request.POST.get('trainee_feedbak')
+        formdate=request.POST.get('sdate')
+        todate=request.POST.get('edate')
+
+
+    trainee = user_registration.objects.get(id=PDF_traineer_id)
+
+    if p1 == '1':
+
+        project_task = trainer_task.objects.filter(user_id=trainee.id,task_type=1)
+    else:
+        project_task=None
+    
+    if p2 == '1':
+        ttasks = trainer_task.objects.filter(user_id=trainee.id,task_type=0)
+
+    else:
+        ttasks=None   
+    
+    if p3 == '1':
+        ttask = trainer_task.objects.filter(user_id=trainee.id,task_type=0)
+        team_names = ttask.values_list('team_name', flat=True)
+        ttopic = topic.objects.filter(team__in=team_names)
+    else:
+        ttopic=None   
+   
+    if p4 == '1':
+        leave_data = leave.objects.filter(user=trainee)
+
+    else:
+        leave_data=None   
+   
+    if p5 == '1':
+        
+        feedback_data = Feedbacks.objects.filter(fb_from=trainee,fb_date__gte=formdate,fb_date__lte=todate)
+    else:
+        feedback_data=None   
+   
+    tester_data = trainer_task_test.objects.all()
+    
+    content={'trainee':trainee,'date':date,'ttopic':ttopic,'ttasks':ttasks,'project_task':project_task,
+             'tester_data':tester_data,'leave_data':leave_data,'feedback_data':feedback_data}
+    
+    template_path = 'audit_module/audit_trainee_report_pdf.html'
+
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(content)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
 # Trainee porobation Deatails
 def audit_probation(request,audit_tr_prob):
     if 'aud_id' in request.session:
