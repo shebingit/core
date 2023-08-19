@@ -20589,9 +20589,10 @@ def audit_trainee_reportPDF(request,PDF_traineer_id):
         p3=request.POST.get('trainee_topics')
         p4=request.POST.get('trainee_leave')
         p5=request.POST.get('trainee_feedbak')
+        p6=request.POST.get('trainee_probation')
         formdate=request.POST.get('sdate')
         todate=request.POST.get('edate')
-
+ 
 
     trainee = user_registration.objects.get(id=PDF_traineer_id)
 
@@ -20602,7 +20603,7 @@ def audit_trainee_reportPDF(request,PDF_traineer_id):
         project_task=None
     
     if p2 == '1':
-        ttasks = trainer_task.objects.filter(user_id=trainee.id,task_type=0)
+        ttasks = trainer_task.objects.filter(user_id=trainee.id,task_type=0,startdate__gte=formdate,startdate__lte=todate)
 
     else:
         ttasks=None   
@@ -20610,12 +20611,12 @@ def audit_trainee_reportPDF(request,PDF_traineer_id):
     if p3 == '1':
         ttask = trainer_task.objects.filter(user_id=trainee.id,task_type=0)
         team_names = ttask.values_list('team_name', flat=True)
-        ttopic = topic.objects.filter(team__in=team_names)
+        ttopic = topic.objects.filter(team__in=team_names,startdate__gte=formdate,startdate__lte=todate)
     else:
         ttopic=None   
    
     if p4 == '1':
-        leave_data = leave.objects.filter(user=trainee)
+        leave_data = leave.objects.filter(user=trainee,from_date__gte=formdate,from_date__lte=todate)
 
     else:
         leave_data=None   
@@ -20624,19 +20625,25 @@ def audit_trainee_reportPDF(request,PDF_traineer_id):
         
         feedback_data = Feedbacks.objects.filter(fb_from=trainee,fb_date__gte=formdate,fb_date__lte=todate)
     else:
-        feedback_data=None   
+        feedback_data=None  
+
+    if p6 == '1':
+         t_prob=probation.objects.filter(user_id=trainee) 
+    else:
+        t_prob=None  
    
     tester_data = trainer_task_test.objects.all()
     
     content={'trainee':trainee,'date':date,'ttopic':ttopic,'ttasks':ttasks,'project_task':project_task,
-             'tester_data':tester_data,'leave_data':leave_data,'feedback_data':feedback_data}
+             'tester_data':tester_data,'leave_data':leave_data,'feedback_data':feedback_data,
+             'formdate':formdate,'todate':todate,'t_prob':t_prob}
     
     template_path = 'audit_module/audit_trainee_report_pdf.html'
 
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
     #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] = 'filename="Project-Document.pdf"'
+    response['Content-Disposition'] = 'filename="Trainee-Report.pdf"'
      # find the template and render it.
 
     template = get_template(template_path)
@@ -20788,8 +20795,11 @@ def Audit_empdaily_reportpdf(request,audit_rep_id):
        
         
         task = project_taskassign.objects.filter(developer_id=audit_rep_id,startdate__gte=formdate, enddate__lte=todate).order_by('startdate') 
-       
-        #tsk = trainer_task.objects.filter(user_id=audit_rep_id,startdate__gte=formdate ,startdate__lte=todate)
+        for i in task:
+            print(i.id)
+
+        tester_data= TSproject_Task_verify.objects.filter(ts_project_task__in=task)
+
        
        
         lev = leave.objects.filter(user_id=audit_rep_id,from_date__gte=formdate,from_date__lte=todate)
@@ -20811,13 +20821,14 @@ def Audit_empdaily_reportpdf(request,audit_rep_id):
 
 
 
-
+    print('tester:',tester_data)
 
     template_path = 'audit_module/audit_emp_dailyreport_pdf.html'
     context = {
     
     
     'task':task,
+    'tester_data':tester_data,
     'ptask':ptask,
     'proj':proj,
     
@@ -20883,6 +20894,7 @@ def Audit_emp_reportpdf(request,audit_rep_id):
         sal = acntspayslip.objects.filter(user_id_id=audit_rep_id,fromdate__gte=formdate,fromdate__lte=todate)
         proj = project.objects.filter(projectmanager_id=audit_rep_id,startdate__gte=formdate,startdate__lte=todate)
         
+        tester_data = TSproject_Task_verify.objects.filter(ts_project_task__in=task)
 
 
         tlev=0
@@ -20899,6 +20911,7 @@ def Audit_emp_reportpdf(request,audit_rep_id):
     'pros':pros,
     'devp':devp,
     'task':task,
+    'tester_data':tester_data,
     'p3':p3,
     'p4':p4,
     'p5':p5,
