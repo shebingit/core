@@ -1,0 +1,344 @@
+{% extends 'audit_module/audit_index.html' %} 
+{% load static %} 
+{% block content %}
+
+<style>
+   .text-sm
+   {
+    font-size: 0.875rem;
+   }
+   .h-80
+
+   {
+    max-height: 70vh;
+    overflow-y: scroll;
+   }
+   
+   #rightBox::-webkit-scrollbar {
+    width: 4px; /* Set the width of the scrollbar */
+    }
+
+    /* Track */
+    #rightBox::-webkit-scrollbar-track {
+        background: #f1f1f1; /* Color of the scrollbar track */
+    }
+
+    /* Handle */
+    #rightBox::-webkit-scrollbar-thumb {
+        background: #888; /* Color of the scrollbar handle */
+    }
+
+    /* Handle on hover */
+    #rightBox::-webkit-scrollbar-thumb:hover {
+        background: #555; /* Color of the scrollbar handle on hover */
+    }
+</style>
+
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+
+            
+            <div class="row">
+                <div class="col-4 col-sm-12 col-md-4 col-lg-4 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-secondary">
+                                <span class="mdi mdi-account text-primary mdi-18px ml-2"></span> Employee Details 
+                            </h5>
+                            <hr>
+                            <p class="text-muted"> Full Name : {{emp.fullname}}</p>
+                            <p class="text-muted"> Email id : {{emp.email}}</p>
+                            <p class="text-muted"> Phone Number: {{emp.mobile}}</p>
+                            <p class="text-muted"> Department: {{emp.department.department}}</p>
+                            <p class="text-muted"> Designation : {{emp.designation.designation}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8 col-sm-12 col-md-8 col-lg-8 grid-margin">
+                    <div class="card">
+                        <div class="card-body h-80" id="rightBox">
+                           <h5 class="card-title text-secondary"> <span class="mdi mdi-check-circle-outline text-success ml-2"></span> Confirmation Check List </h5>
+                           <div class="mt-2">
+                                <form class="" action="{% url 'Audit_emp_confirmations_save' emp.id %}" method="post">
+                                    {% csrf_token %}
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-6 col-md-6">
+                                            <label class="label text-sm text-offwhite">Offer Letter Signed </label>
+                                        </div>
+                                        <div class="col-lg-6  col-sm-6 col-md-6">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label text-sm " for="radio1">
+                                                  <input type="radio" class="form-check-input" id="radio1" name="optradio" value='Yes' > <span class="text-sm"> Yes</span> 
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label" for="radio1">
+                                                  <input type="radio" class="form-check-input" id="radio1" name="optradio" value='No' checked><span class="text-sm"> No</span> 
+                                                </label>
+                                            </div>
+                                            <div class="mt-2" id="offerDate">
+                                                <label class="form-label text-sm text-muted" >Date </label>
+                                                <input type="date" name="offerdata" class="form-control">
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-lg-6 col-sm-6 col-md-6">
+                                            <label class="label text-sm text-offwhite">Permission Letter Signed </label>
+                                        </div>
+                                        <div class="col-lg-6  col-sm-6 col-md-6">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label text-sm " for="radio1">
+                                                  <input type="radio" class="form-check-input" id="radio1" name="poptradio" value='Yes' > <span class="text-sm"> Yes</span> 
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label" for="radio1">
+                                                  <input type="radio" class="form-check-input" id="radio1" name="poptradio" value='No' checked><span class="text-sm"> No</span> 
+                                                </label>
+                                            </div>
+                                            <div class="mt-2" id="permissionDate">
+                                                <label class="form-label text-sm text-muted" >Date </label>
+                                                <input type="date" name="permission_date" class="form-control">
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <div class="col-lg-6 col-sm-6 col-md-6">
+                                            <label class="label text-sm text-offwhite">FeedBack Received </label>
+                                        </div>
+                                        <div class="col-lg-6  col-sm-6 col-md-6">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label text-sm " for="radio1">
+                                                  <input type="radio" class="form-check-input" id="" name="fr_opt" value='Yes' > <span class="text-sm"> Yes</span> 
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label" for="radio1">
+                                                  <input type="radio" class="form-check-input" id="" name="fr_opt" value='No' checked><span class="text-sm"> No</span> 
+                                                </label>
+                                            </div>
+                                            <div class="mt-2" id="frDate">
+                                                <label class="form-label text-sm text-muted" >Date </label>
+                                                <input type="date" name="fr_date" class="form-control">
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-lg-6 col-sm-6 col-md-6">
+                                            <label class="label text-sm text-offwhite">FeedBack Video Received </label>
+                                        </div>
+                                        <div class="col-lg-6  col-sm-6 col-md-6">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label text-sm " for="radio1">
+                                                  <input type="radio" class="form-check-input" id="radio1" name="fvr_opt" value='Yes' > <span class="text-sm"> Yes</span> 
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label" for="radio1">
+                                                  <input type="radio" class="form-check-input" id="radio1" name="fvr_opt" value='No' checked><span class="text-sm"> No</span> 
+                                                </label>
+                                            </div>
+                                            <div class="mt-2" id="fvDate">
+                                                <label class="form-label text-sm text-muted" >Date </label>
+                                                <input type="date" name="fvdate" class="form-control">
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-lg-6 col-sm-6 col-md-6">
+                                            <label class="label text-sm text-offwhite">Circular Signed </label>
+                                        </div>
+                                        <div class="col-lg-6  col-sm-6 col-md-6">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label text-sm " for="radio1">
+                                                  <input type="radio" class="form-check-input" id="radio1" name="cr_opt" value='Yes' > <span class="text-sm"> Yes</span> 
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label" for="radio1">
+                                                  <input type="radio" class="form-check-input" id="radio1" name="cr_opt" value='No' checked><span class="text-sm"> No</span> 
+                                                </label>
+                                            </div>
+                                            <div class="mt-2" id="csDate">
+                                                <label class="form-label text-sm text-muted" >Date </label>
+                                                <input type="date" name="cs_date" class="form-control">
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-lg-6 col-sm-6 col-md-6">
+                                            <label class="label text-sm text-offwhite">Sample Project Warning  </label>
+                                        </div>
+                                        <div class="col-lg-6  col-sm-6 col-md-6">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label text-sm " for="radio1">
+                                                  <input type="radio" class="form-check-input" id="radio1" name="spw_opt" value='Yes' > <span class="text-sm"> Yes</span> 
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label" for="radio1">
+                                                  <input type="radio" class="form-check-input" id="radio1" name="spw_opt" value='No' checked><span class="text-sm"> No</span> 
+                                                </label>
+                                            </div>
+                                            <div class="mt-2" id="spwDate">
+                                                <label class="form-label text-sm text-muted" >Date </label>
+                                                <input type="date" name="spw_date" class="form-control">
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <h6 class="text-secondary"> Live Project Task and Warning Mail</h6>
+                                    <div class="row">
+                                        
+                                        {% for wr in Warning_data %}
+                                        <div class="col-lg-6 col-sm-12 col-md-6">
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="warning_check" value="{{wr.id}}"> {{wr.wrn_reason}}
+                                                </label>
+                                                <p class="text-muted">Task : {{ wr.wrn_task.task}}</p>
+                                                <p class="text-muted">Sub Task : {{ wr.wrn_task.task}}</p>
+                                                <p class="text-muted">Date : {{ wr.wrn_date}}</p>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <hr>
+                                    <h6 class="text-secondary"> Any Other Details</h6>
+                                    <div class="container" id="container">
+                                       
+                                    </div>
+                                    <div class="text-end mt-2">
+                                        <button type="button" class="btn btn-outline-primary addRow"><span class="mdi mdi-plus mdi-18px"></span></button>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-success p-2"><span class="text-sm">Save</span></button>
+                                    </div>
+                                </form>
+                           </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#offerDate').hide();
+        $('#permissionDate').hide();
+        $('#frDate').hide();
+        $('#fvDate').hide();
+        $('#spwDate').hide();
+        $('#csDate').hide();
+
+        $('input[name="optradio"]').change(function () {
+            if ($(this).val() == "Yes") {
+                $('#offerDate').show();
+            } else {
+                $('#offerDate').hide();
+            }
+        });
+        $('input[name="poptradio"]').change(function () {
+            if ($(this).val() == "Yes") {
+                $('#permissionDate').show();
+            } else {
+                $('#permissionDate').hide();
+            }
+        });
+        $('input[name="fr_opt"]').change(function () {
+            if ($(this).val() == "Yes") {
+                $('#frDate').show();
+            } else {
+                $('#frDate').hide();
+            }
+        });
+        $('input[name="fvr_opt"]').change(function () {
+            if ($(this).val() == "Yes") {
+                $('#fvDate').show();
+            } else {
+                $('#fvDate').hide();
+            }
+        });
+        $('input[name="cr_opt"]').change(function () {
+            if ($(this).val() == "Yes") {
+                $('#csDate').show();
+            } else {
+                $('#csDate').hide();
+            }
+        });
+        $('input[name="spw_opt"]').change(function () {
+            if ($(this).val() == "Yes") {
+                $('#spwDate').show();
+            } else {
+                $('#spwDate').hide();
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        var rowCounter = 1;
+
+        // Function to add a new row
+        function addNewRow() {
+            rowCounter++;
+            var newRow = `<div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <label class="label text-sm text-offwhite"> Title </label>
+                                <input type="text" name="oth_name_${rowCounter}" class="form-control">
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-md-6">
+                                <label class="label text-sm text-offwhite mt-2"> Check Any Option </label><br>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label text-sm" for="radio1">
+                                        <input type="radio" class="form-check-input otherOption" id="oth_opt_yes_${rowCounter}" name="oth_opt_${rowCounter}" value="Yes" checked> <span class="text-sm"> Yes</span>
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label" for="radio1">
+                                        <input type="radio" class="form-check-input otherOption" id="oth_opt_no_${rowCounter}" name="oth_opt_${rowCounter}" value="No" > <span class="text-sm"> No</span>
+                                    </label>
+                                </div>
+                                <div class="otherDate" id="otherDate_${rowCounter}">
+                                    <label class="label text-sm text-offwhite">Date </label>
+                                    <input type="date" name="oth_date_${rowCounter}" class="form-control">
+                                </div>
+                            </div>
+                        </div>`;
+            $('#container').append(newRow);
+        }
+
+        // Add a new row on button click
+        $('.btn-outline-primary').click(function () {
+            addNewRow();
+        });
+        // Radio button change event
+        $(document).on('change', '.otherOption', function () {
+            var otherDateDiv = $(this).closest('.row').find('.otherDate');
+           
+            if ($(this).val() === "Yes") {
+                otherDateDiv.show();
+            } else {
+                otherDateDiv.hide();
+            }
+        });
+    });
+</script>
+{% endblock %}

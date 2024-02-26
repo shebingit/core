@@ -1,0 +1,125 @@
+{% extends 'AdmOfc_index.html' %} {% load static %} {% block content %}
+<style>
+    table tr[data-href] {
+        cursor: pointer;
+    }
+    table td{
+        vertical-align: top !important;
+    }
+    .leave_reason {
+      width: 325px; /* Adjust the width as needed */
+      max-width: 325px; /* Ensure the maximum width is the same as the specified width */
+    }
+
+    textarea{
+        background-color: #191c24;
+        color: #6c7293;
+        border: none;
+        width: 300px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 5px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #191c24;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
+
+
+<div class="row ">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <div class="row" style="margin-top: -16px">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <br>
+                        <h4>Leave List </h4>
+                        <br>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <form>
+                            <div class="input-group input-group-sm mb-3">
+                                <input type="text" class="form-control" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name" style="color:white;">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- table start -->
+
+                <div class="table-responsive">
+                    <table class="table" id="myTable">
+                        <thead>
+
+                            <tr>
+                                <th> SlNo </th>
+                                <th> Name </th>
+                                <th> Email</th>
+                                <th> Contact</th>
+                                <th> Date from</th>
+                                <th> Date To </th>
+                                <th class="leave_reason"> Reason </th>
+                                <th> Leave </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if le %} {%for t in le %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{t.name}}</td>
+                                <td>{{t.email}}</td>
+                                <td>{{t.mobile}}</td>
+                                <td> {{t.from_date|date:"d-m-Y"}}</td>
+                                <td> {{t.to_date|date:"d-m-Y"}} </td>
+                                <td class="leave_reason" style="padding: 0.5rem 0.9375rem;"> <textarea disabled rows="3">{{t.reason}}</textarea></td>
+                                <td> {{t.leave_status}} </td>
+                            </tr>
+
+                            {% endfor %}{% else %}
+                            <h5>Nothing to display...</h5>
+                            {% endif %}                          
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js -->
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

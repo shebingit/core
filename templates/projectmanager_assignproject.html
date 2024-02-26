@@ -1,4 +1,10 @@
 {% extends 'promanagerindex.html' %} {% load static %} {% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 <html>
 
 <title>Create Project</title>
@@ -17,11 +23,18 @@
              <h5>Updation</h5>
             </label>
           </div>
-     
-        
+     <label>Select Department</label>
+      
+        <select class="form-control" name="prodepart" id="Department"  style='color:white !important'>
+            <option>--select--</option>
+            {% for n in drt %}
+            <option value="{{n.id}}">{{n.department}}</option>
+            {% endfor %}
+        </select> <br>
         <label>Select Team Leader</label>
       
-        <select class="form-control" name="pname"  style='color:white !important'>
+        <select class="form-control" name="pname" id="Desig"  style='color:white !important'>
+        
             <option>--select--</option>
             {% for i in spa %}
             <option value="{{i.id}}">{{i.fullname}}</option>
@@ -87,6 +100,27 @@
 
 
 </form>
+
+
+
+ <script type="text/javascript">
+        $("#Department").change(function () {
+          const url = $("#personForm").attr("data-cities-url");
+            const deptId = $(this).val();
+            $.ajax({
+                url: '{% url 'mandesig_promanager' %}',
+                data: {
+                    'dept_id': deptId
+                },
+                success: function (data) {
+                    $("#Desig").html(data);
+                    console.log(data);
+                }
+            });
+    
+        });
+ </script>
+
 
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

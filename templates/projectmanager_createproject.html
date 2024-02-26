@@ -14,15 +14,7 @@
 
         {% csrf_token %}
         <div class="card-body col-12">
-           
             <h2>Create Project</h2><br>
-            <label>Department Name</label>
-            <select class="form-control" name="dpt_name"  style='color:white !important'>
-              <option>--select--</option>
-              {% for i in dept %}
-              <option value="{{i.id}}">{{i.department}}</option>
-              {% endfor %}
-            </select> <br>
             <label>Project Name</label>
             <input type="text" name="pname" class="form-control card-title col-12 md-4 text-light" autocomplete="off" >
             <label>Start Date</label>

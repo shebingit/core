@@ -11,7 +11,9 @@
             <div class="card-body">
                 
                     {% csrf_token %}
-                    
+                    <div class="other_leave d-flex justify-content-end">
+                        <a href="{% url 'BRadmin_otherleavehistory' %}"><button type="button" class="btn btn-primary">Other Leaves</button></a>
+                    </div>
                     <div class="form-group">
                         <label>Select Department</label>
                         <select class="form-control" id="regdetailsDesig" style="color:white;" name="Department">

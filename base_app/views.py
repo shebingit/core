@@ -2391,6 +2391,8 @@ def trainer_givetask(request, id):
         d = create_team.objects.get(id=id)
         des = designation.objects.get(designation='trainee')
         var = user_registration.objects.filter(team_id=d).filter(designation_id=des.id)
+        for i in var:
+            print(i.fullname)
         
     
         
@@ -20748,6 +20750,167 @@ def Audit_emp_list(request,audit_depart_id,audit_des_id):
         return render(request, 'audit_module/audit_depart_designations_emp.html',context)
     else:
         return redirect('/')
+
+
+
+# Confirmation Section -----New section ---------------26/02/2024 ------------------------------
+
+
+def Audit_emp_confirmations(request,empID_ConfirmId):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        emp = user_registration.objects.get(id=empID_ConfirmId)
+        Warning_data = wrdata.objects.filter(wrn_develp=emp)
+        context = {'Aud': Aud,'emp':emp,'Warning_data':Warning_data}
+
+        return render(request, 'audit_module/audit_confirmation.html',context)
+    else:
+        return redirect('/')
+
+
+def Audit_emp_confirmations_save(request,empID_ConfirmSave):
+    if 'aud_id' in request.session:
+        if request.session.has_key('aud_id'):
+            Aud_id = request.session['aud_id']
+        else:
+            return redirect('/')
+        Aud = user_registration.objects.filter(id=Aud_id)
+        emp = user_registration.objects.get(id=empID_ConfirmSave)
+        Warning_data = wrdata.objects.filter(wrn_develp=emp)
+
+        ofl = request.POST['optradio']
+        pl = request.POST['poptradio']
+        fb = request.POST['fr_opt']
+        fbv = request.POST['fvr_opt']
+        cr = request.POST['cr_opt']
+        swp = request.POST['spw_opt']
+
+        confirmation_data = []
+        confirmation_data1 = []
+
+
+        for key, value in request.POST.items():
+            if key.startswith('oth_'):
+                confirmation_data.append({key: value})
+     
+
+        for item in confirmation_data:
+            for key, value in item.items():
+                index = key.split('_')[-1]  
+               
+                existing_dict = next((d for d in confirmation_data1 if f"oth_name_{index}" in d), None)
+                if existing_dict:
+                    existing_dict[key] = value  
+                else:
+                    confirmation_data1.append({key: value}) 
+
+        for index, data_dict in enumerate(confirmation_data1, start=2):
+   
+            
+            confirm_obj = ConfirmationList()
+
+            confirm_obj.confirm_Employee = emp
+            confirm_obj.confirm_title = data_dict.get(f'oth_name_{index}', '')  
+            confirm_obj.confirm_option = 'Yes' if data_dict.get(f'oth_opt_{index}') == 'Yes' else 'No' 
+            if data_dict.get(f'oth_date_{index}', '')  :
+                confirm_obj.send_date = data_dict.get(f'oth_date_{index}', '')  
+            
+          
+            confirm_obj.save()
+
+        #Offer Letter
+        confirm_obj = ConfirmationList()
+        confirm_obj.confirm_Employee = emp
+        confirm_obj.confirm_title= 'Offer Letter Signed'
+        if ofl == 'Yes':
+            confirm_obj.confirm_option = 'Yes'
+            confirm_obj.send_date = request.POST['offerdata']
+        else:
+            confirm_obj.confirm_option = 'No'
+        confirm_obj.save()
+
+        #Permission Letter
+        confirm_obj = ConfirmationList()
+        confirm_obj.confirm_Employee = emp
+        confirm_obj.confirm_title= 'Permission Letter Signed'
+        if pl == 'Yes':
+            confirm_obj.confirm_option = 'Yes'
+            confirm_obj.send_date = request.POST['permission_date']
+        else:
+            confirm_obj.confirm_option = 'No'
+        confirm_obj.save()
+
+        #FeedBack Received
+        confirm_obj = ConfirmationList()
+        confirm_obj.confirm_Employee = emp
+        confirm_obj.confirm_title= 'FeedBack Received'
+        if fb == 'Yes':
+            confirm_obj.confirm_option = 'Yes'
+            confirm_obj.send_date = request.POST['fr_date']
+        else:
+            confirm_obj.confirm_option = 'No'
+        confirm_obj.save()
+
+        #FeedBack Video Received
+        confirm_obj = ConfirmationList()
+        confirm_obj.confirm_Employee = emp
+        confirm_obj.confirm_title= 'FeedBack Video Received'
+        if fbv == 'Yes':
+            confirm_obj.confirm_option = 'Yes'
+            confirm_obj.send_date = request.POST['fvdate']
+        else:
+            confirm_obj.confirm_option = 'No'
+        confirm_obj.save()
+
+        #Circular Signed
+        confirm_obj = ConfirmationList()
+        confirm_obj.confirm_Employee = emp
+        confirm_obj.confirm_title= 'Circular Signed'
+        if cr == 'Yes':
+            confirm_obj.confirm_option = 'Yes'
+            confirm_obj.send_date = request.POST['cs_date']
+        else:
+            confirm_obj.confirm_option = 'No'
+        confirm_obj.save()
+
+
+        #Sample Project Warning
+        confirm_obj = ConfirmationList()
+        confirm_obj.confirm_Employee = emp
+        confirm_obj.confirm_title= 'Sample Project Warning'
+        if swp == 'Yes':
+            confirm_obj.confirm_option = 'Yes'
+            confirm_obj.send_date = request.POST['spw_date']
+        else:
+            confirm_obj.confirm_option = 'No'
+        confirm_obj.save()
+
+        wr_check = request.POST.getlist('warning_check')
+        if wr_check:
+            for ch_id in wr_check:
+                Wd = wrdata.objects.get(id=ch_id)
+                confirm_obj = ConfirmationList()
+                confirm_obj.confirm_Employee = emp
+                confirm_obj.confirm_title=str(Wd.wrn_reason + " - " +  Wd.wrn_task.subtask )             
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = Wd.wrn_date
+               
+                confirm_obj.save()
+
+
+        context = {'Aud': Aud,'emp':emp,'Warning_data':Warning_data}
+
+        return render(request, 'audit_module/audit_confirmation.html',context)
+    else:
+        return redirect('/')
+
+
+
+# Confimarion Section End ---------------------------------------------------------------------
     
 
 def Audit_tester_works(request,pk):

@@ -1764,6 +1764,10 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
     path('Audit_tlproject_split/<int:audit_pid>/<int:audit_ptlid>', views.Audit_tlproject_split, name='Audit_tlproject_split'),
     path('Audit_DEVtable/<int:audit_emp_prtask>/<int:audit_empid>', views.Audit_DEVtable, name='Audit_DEVtable'),
 
+#Employee Confirmation Section - 26/02/24------------------------------
+   path('Audit_emp_confirmations/<int:empID_ConfirmId>', views.Audit_emp_confirmations, name='Audit_emp_confirmations'),
+path('Audit_emp_confirmations_save/<int:empID_ConfirmSave>', views.Audit_emp_confirmations_save, name='Audit_emp_confirmations_save'),
+
 #project
     path('Audit_project>', views.Audit_project, name='Audit_project'),
     path('Audit_project_details/<int:audit_pro_id>', views.Audit_project_details, name='Audit_project_details'),

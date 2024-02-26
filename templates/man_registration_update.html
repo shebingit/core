@@ -110,11 +110,10 @@
                         <option value="{{i.id}}">{{i.designation}}</option>
                         {% endfor %}
                 </select><br>
-                <label id="form-label">To Input Department:</label>
-                <input type="text" class="form-control" name="department_current" autocomplete="off"><br>
                 <label id="form-label">To Input Desiganation:</label>
                 <input type="text" class="form-control" name="desg" autocomplete="off"><br>
-
+                <label id="form-label">To Input Department:</label>
+                <input type="text" class="form-control" name="department_current" autocomplete="off"><br>
                 <label id="form-label">Trainer:</label>
                 <input type="text" class="form-control" name="trainer" autocomplete="off" value="{{mem4.trainer}}"><br>
                 <label>File Upload</label>
@@ -125,6 +124,7 @@
                         <option value="Admin">Admin</option>
                         <option value="HR">HR</option>
                         <option value="HR Manager">HR Manager</option>
+                        <option value="HR Manager">HR Executive</option>
                 </select><br>
 
                 <label id="form-label">Hr Manager:</label>
@@ -139,7 +139,8 @@
                 <!--<label id="form-label">Manager Department:</label>
                 <input type="text" class="form-control" name="managerdepartment" autocomplete="off" value="{{mem4.department}}"><br>-->
 
-
+                 <label id="form-label">Performance:</label>
+                <input type="text" class="form-control" name="perfo" autocomplete="off" value="{{mem4.performance}}"><br>
                
 
                 <!--<label id="form-label">Name:</label>

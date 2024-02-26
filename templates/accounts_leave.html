@@ -7,7 +7,7 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
               <form>
                 <div class="input-group input-group-sm mb-3">
-                  <input type="text" class="form-control text-light" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
+                  <input type="text" class="form-control text-light" id="search"  placeholder="Search for names.."
               title="Type in a name" style="color:white;">
   
                   
@@ -21,8 +21,9 @@
                 <tr>
                   <th>From Date</th>
                   <th>To Date</th>
+                  <th>Leave Status</th>
                   <th>Reason</th>
-                  <th>Status</th>
+                  
                   
                 </tr>
               </thead>
@@ -32,15 +33,20 @@
                 <tr>
                   <td>{{i.from_date|date:'d-m-Y'}}</td>
                   <td>{{i.to_date|date:'d-m-Y'}}</td>
-                  <td>{{i.reason}}</td>
                   <td>
-                    {%if i.leaveapprovedstatus == '1' %}
+                    <!-- {%if i.leaveapprovedstatus == '1' %}
                     <div class="badge badge-outline-success">Approved</div>
                     {%else%}
                     <div class="badge badge-outline-warning">Pending</div>
 
 
-                  {% endif %}</td>
+                  {% endif %} -->
+                  {{i.leave_status}}
+                </td>
+                <td >
+                  <textarea  name="" id="" cols="10" rows="3" style="background-color: transparent;color: #6c7293;border: none;width: 100%;" readonly>{{i.reason}}</textarea>
+                </td>
+                  
                   
                   
                 </tr>
@@ -57,12 +63,25 @@
     </div>
   </div>
   <script>
-    $(document).ready(function(){
-      $("#myInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#myTable tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-      });
-    });
+    // $(document).ready(function(){
+    //   $("#myInput").on("keyup", function() {
+    //     var value = $(this).val().toLowerCase();
+    //     $("#myTable tr").filter(function() {
+    //       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    //     });
+    //   });
+    // });
+    $(document).ready(function() {
+                var $rows = $('.table tbody tr');
+                $('#search').keyup(function() {
+                    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+                    $rows.show().filter(function() {
+                        console.log($rows.show())
+        
+                        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                        console.log(text)
+                        return !~text.indexOf(val);
+                    }).hide();
+                });
+            });
     </script>

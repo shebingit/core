@@ -1,0 +1,212 @@
+{% extends 'BRadmin_index.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .table1 {
+        margin-left: auto;
+        margin-right: auto;
+       
+    }
+
+    th,
+    td {
+        text-align: center;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 5px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #191c24;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    .card-title{
+        font-size: 20px;
+        font-weight: 900px;
+    }
+</style>
+
+<div class="row">
+    <div class=" col-12 grid-margin table1">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Experience Certificate Requests</h4>
+                <input type="text" class="form-control text-light" onkeyup="myFunction()" id="search" name="search" autocomplete="off"
+                    placeholder="Search...">
+                <br>
+                <div class="table-responsive">
+                    <table class="table" >
+                        <thead>
+                            <tr>
+                                <th>Sl.No</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>Date of Appointment</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                            {% if exp_requests %}
+                            {% for i in exp_requests  %}
+                                <tr>
+                                    <td>
+                                    {{forloop.counter}}
+                                    </td>
+                                    <td style="text-align:left;">
+                                        <img src="{{i.photo.url}}" alt="image" />
+                                        <span class="ps-2">{{i.fullname}}</span>
+                                    </td>
+                                    <td style="text-align:left;"> {{i.email}} </td>
+                                    <td>{{i.department}}</td>
+                                    <td>{{i.designation}}</td>
+                                    <td> {{i.joiningdate|date:"d-m-Y"}}</td>
+                                    <td>
+                                        <a href="{% url 'BRadmin_approveExpRequest' i.id %}" class="me-1 text-decoration-none">
+                                            <div class="badge badge-outline-success">Approve</div>
+                                        </a>
+                                        <a href="{% url 'BRadmin_rejectExpRequest' i.id %}">
+                                            <div class="badge badge-outline-danger" onclick="return confirm('Are sure you want reject this Request?')">Reject</div>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td>
+                                        <h4>No Requests..</h4>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+   
+    function popup() {
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger',
+
+
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                swalWithBootstrapButtons.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your imaginary file is safe :)',
+                    'error'
+                )
+            }
+        })
+    }
+
+
+    function myFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("search");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+    $(document).ready(function () {
+        $("#search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+
+
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{%if messages%} {%for message in messages%} {%if message.tags == "success"%}
+<script>
+  swal({
+    position: "top-end",
+    icon: "success",
+    title: "{{message}}",
+  });
+</script>
+{%elif message.tags == "warning"%}
+<script>
+  swal({
+    position: "top-end",
+    icon: "warning",
+    title: "{{message}}",
+  });
+</script>
+{%elif message.tags == "error"%}
+<script>
+  swal({
+    position: "top-end",
+    icon: "error",
+    title: "{{message}}",
+  });
+</script>
+{%else%}
+<script>
+  swal({
+    position: "top-end",
+    icon: "info",
+    title: "{{message}}",
+  });
+</script>
+{%endif%} {%endfor%} {%endif%}
+{% endblock %}

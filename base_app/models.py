@@ -1046,3 +1046,11 @@ class Certificate_approve(models.Model):
     cf_status=models.IntegerField(null=True,blank=True,default=0)
 
 
+# Confirmations 
+    
+class ConfirmationList(models.Model):
+    confirm_Employee = models.ForeignKey(user_registration,on_delete=models.CASCADE,null=True,blank=True)
+    confirm_date = models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    confirm_title = models.TextField()
+    confirm_option = models.CharField(max_length=100,null=True, blank=True,default='')
+    send_date = models.DateField(auto_now_add=False,auto_now=False,  null=True, blank=True)

@@ -85,15 +85,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for i in mem1 %}
+                        
+                        {% for mem1 in mem1 %}
                         <tr>
-                            <td>{{i.date|date:"d-m-Y"}}</td>
+                            <td>{{mem1.date|date:"d-m-Y"}}</td>
                             <!--<td> {{i.login_time}} </td>-->
                             <!--<td> {{i.logout_time}} </td>-->
-                            {% if i.status == 'absent' %}
-                            <td><div class="badge badge-outline-danger">{{i.status}}</div></td>
+                            {% if mem1.attendance_status == "1" %}
+                            <td><div class="badge badge-outline-success">Present</div></td>
                             {% else %}
-                            <td><div class="badge badge-outline-success">{{i.status}}</div></td>
+                            <td><div class="badge badge-outline-danger">Absent</div></td>
                             {% endif %}
                         </tr>
                        {% endfor %}

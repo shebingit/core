@@ -26,7 +26,7 @@
                         <label>Select Designation</label>
                         <select class="form-control" style="color:white;" name="designation" id="designation">
                           {% for j in des %}
-                          <option value="{{j.id}}">{{i.designation}}</option>
+                          <option value="{{j.id}}">{{j.designation}}</option>
                           {% endfor %}
                         </select>
 
@@ -35,7 +35,7 @@
                         <label>Select Employee</label>
                         <select class="form-control" id="empname" style="color:white;" name="emp">
                           {% for k in emp %}
-                          <option value="{{k.id}}">{{i.fullname}}</option>
+                          <option value="{{k.id}}">{{k.fullname}}</option>
                           {% endfor %}
                         </select>
 

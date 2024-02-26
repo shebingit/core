@@ -37,11 +37,10 @@
               <thead>
                 <tr data-href="#">
                   <th>SlNo</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Contact No</th>
-                  <th>Join Date</th>
-                  <th>Department</th>
+                  <th>Name | Email | Contact No</th>
+                
+                  <th>Department | Join Date</th>
+                  <th>Confimations</th>
                   <th>Daily Report</th>
                   <th>Full Report</th>
                   <th>Training Time Report</th>
@@ -54,17 +53,19 @@
                   <td>{{ forloop.counter }}</td>
                   
                   <td>
-                   <a href="{% url 'Audit_employee_dashbord' i.id %}"> <img src="{{media_url}}{{i.photo.url}}" class="img-fluid rounded-circle " alt="image"  >                    
-                      {{i.fullname}}</a>
+                   <a href="{% url 'Audit_employee_dashbord' i.id %}">
+                     <img src="{{media_url}}{{i.photo.url}}" class="img-fluid rounded-circle " alt="image"  >                    
+                      {{i.fullname}}
+                    </a>
+                    <p class="mt-3">{{i.email}} </p><p>{{i.mobile}}</p>
                   </td>
-                  <td>{{i.email}}</td>
-                  <td>{{i.mobile}}</td>
-                  <td>{{i.startdate|date:"d-m-Y"}}</td>
-                  <td>{{i.department}}</td>
-                  <td><a data-toggle="modal" data-target="#myModaldaily{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
-                  <td><a data-toggle="modal" data-target="#myModal{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
+
+                  <td><p>{{i.department}}</p><p>Join Date : {{i.startdate|date:"d-m-Y"}}</p></td>
+                  <td class="text-center"><a href="{% url 'Audit_emp_confirmations' i.id %}" class="text-info"><i class="mdi mdi-file-check iconpdf"></i> </a></td>
+                  <td class="text-center"><a data-toggle="modal" data-target="#myModaldaily{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
+                  <td class="text-center"><a data-toggle="modal" data-target="#myModal{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                  
-                  <td><a data-toggle="modal" data-target="#alltrainee_report{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
+                  <td class="text-center"><a data-toggle="modal" data-target="#alltrainee_report{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                   
                 </tr>
                 {% endfor %}
