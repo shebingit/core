@@ -295,6 +295,7 @@ class project_taskassign(models.Model):
     def __str__(self):
         return self.project.project
 
+
 class test_status(models.Model):
     user = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
                              related_name='test_statususer', null=True, blank=True)
@@ -955,6 +956,7 @@ class wrdata(models.Model):
     wrn_task=models.ForeignKey(project_taskassign,on_delete=models.CASCADE,related_name='wr_task',null=True,blank=True)
     wrn_reason=models.CharField(max_length=200,null=True, blank=True)
     wrn_date=models.DateField(auto_now_add=True, auto_now=False,  null=True, blank=True)
+    
 
 class WorkRequest(models.Model):
     wrk_develp=models.ForeignKey(user_registration,on_delete=models.CASCADE,related_name='wrk_devp',null=True,blank=True)

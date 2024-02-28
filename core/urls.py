@@ -1766,7 +1766,8 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
 #Employee Confirmation Section - 26/02/24------------------------------
    path('Audit_emp_confirmations/<int:empID_ConfirmId>', views.Audit_emp_confirmations, name='Audit_emp_confirmations'),
-path('Audit_emp_confirmations_save/<int:empID_ConfirmSave>', views.Audit_emp_confirmations_save, name='Audit_emp_confirmations_save'),
+   path('Audit_empdocumentpdf/<int:audit_docuid>', views.Audit_empdocumentpdf, name='Audit_empdocumentpdf'),
+   path('Audit_emp_confirmations_save/<int:empID_ConfirmSave>', views.Audit_emp_confirmations_save, name='Audit_emp_confirmations_save'),
 
 #project
     path('Audit_project>', views.Audit_project, name='Audit_project'),
@@ -1905,6 +1906,11 @@ path('BRadmin_request_approve/<int:app_id>', views.BRadmin_request_approve, name
 path('BRadmin_request_decline/<int:dec_id>', views.BRadmin_request_decline, name='BRadmin_request_decline'),
 
 
+# Team Lead Module -----------------28/02/24
+
+path('TL-Report', views.Tl_Report, name='Tl_Report'),
+path('TL-ViewReport', views.Tl_developer_report, name='Tl_developer_report'),
+path('Task-PDF/', views.Tlemp_Taskpdf, name='Tlemp_Taskpdf'),
 
 
 

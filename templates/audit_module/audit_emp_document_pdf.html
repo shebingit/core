@@ -1,0 +1,222 @@
+{%load static%}
+<!DOCTYPE >
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ALTOS CORE</title>
+        <style>
+            .table1 {
+                background-color: #f2f2f2;
+            }
+            .table2 {
+                background-color: #e3eaee;
+            }
+            .table3 {
+                background-color: #f0e0a3;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+            }
+            .table2  th, 
+            .table2 td {
+                padding: 4px;
+                text-align: left;
+                
+            }
+            .table3 tr{
+                border: 1px solid #774141;
+            }
+            .table3 td{
+                font-size: 12px;
+            }
+          
+                
+        </style>
+    </head>
+  
+    <body>
+      
+      <table class="table1">
+
+        <thead>
+          <tr>
+            <th colspan="2">
+              <div style="text-align: left;">
+                <img src="media/images/companylogo.png" height="50" width="150"> 
+              </div>
+            </th>
+            <th colspan="4">
+              <h2 style="text-align: start;
+                         padding-top:10px;
+                         font-size:15px;
+                         font-weight:500px;
+                         letter-spacing:1px">
+                    EMPLOYEE DOCUMENT CHECKLIST
+              </h2>
+            </th>
+            <th>
+              <div style="text-align: right;">{{date|date:'d-m-Y'}}</div>
+            </th>
+          </tr>
+        </thead>
+      </table>
+        
+<br>
+      
+       
+        <table class="table2">
+            <thead class="">
+              
+                <tr >
+                    <th style="text-align: left;padding-top: 12px; ">
+                        <h5 style="font-size: 12px; font-weight:500; ">
+                
+                            Name of Employee
+                           
+                        </h5>
+                    </th>
+                    <th style="text-align: left; padding-top: 12px;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{user.fullname}}
+                           
+                        </h5>
+                    </th>
+                </tr>
+                
+                <tr>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            Address of Employee
+                           
+                        </h5>
+                    </th>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{user.presentaddress1}}(h),  &nbsp; {{user.presentaddress2}}
+                           {{user.presentaddress3}}, <br>  &nbsp; &nbsp; &nbsp; {{user.pincode}}&nbsp; {{user.district}}, &nbsp;{{user.state}}, &nbsp;{{user.country}}
+                           
+                        </h5>
+                    </th>
+                </tr>
+             
+                <tr>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            Contact Number 
+                        
+                        </h5>
+                    </th>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{user.mobile}}
+                        
+                        </h5>
+                    </th>
+                </tr>
+              
+                <tr>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            Email
+                           
+                        </h5>
+                    </th>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{user.email}} 
+                           
+                        </h5>
+                    </th>
+                </tr>
+               
+                <tr>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            Designation
+                           
+                        </h5>
+                    </th>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{user.designation.designation}}
+                           
+                        </h5>
+                    </th>
+                </tr>
+              
+                <tr>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            Department
+                           
+                        </h5>
+                    </th>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{user.department.department}}
+                           
+                        </h5>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+       
+<br>
+        <table class="table3 " >
+            <thead >
+                <tr>
+                    <th style="background-color: #774141; color:#eff6f9; font-size:14px;"colspan="4" style="text-align: left;">
+                        Requirements
+                    </th>
+                    <th  style="background-color: #563333; color:#eff6f9; font-size:12px;"colspan="2" style="text-align: center;">Recived Or Not </th>
+                    <th  style="background-color: #774141; color:#eff6f9; font-size:12px;" colspan="2" style="text-align: center;">Date </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for confirmation in confirmation_obj %}
+                <tr>
+                    <td colspan="4" >
+                        {{confirmation.confirm_title}}
+                    </td>
+                    <td colspan="2" style="text-align: center;">
+                        {{confirmation.confirm_option}}
+                       
+                    </td>
+                    <td colspan="2">
+                        {{confirmation.send_date|default:"Not Avilable"}}
+                    </td>
+                </tr>
+                {% endfor %}
+               
+            </tbody>
+        </table>
+                   
+        
+     
+             
+    <script>
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+         document.getElementById("currentDate").value = date;
+    </script>
+        
+    </body>
+</html>

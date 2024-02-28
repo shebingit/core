@@ -55,6 +55,24 @@
                             <p class="text-muted"> Designation : {{emp.designation.designation}}</p>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-secondary">
+                                <span class="mdi mdi-check text-primary mdi-18px ml-2"></span> Dodument Checked
+                            </h5>
+                            <hr>
+                            <div class="row">
+                                {% for c in confirm_objs %}
+                                <div class="col-lg-5"><p class="text-muted">  {{c.confirm_title}} </p></div>
+                                <div class="col-lg-3"><p class="text-muted">  {{c.confirm_option}}</p></div>
+                                <div class="col-lg-4"><p class="text-muted">  {{c.send_date|default:"No data"}}</p></div>
+                                {% endfor %}
+                            </div>
+                           
+                           
+                           
+                        </div>
+                    </div>
                 </div>
                 <div class="col-8 col-sm-12 col-md-8 col-lg-8 grid-margin">
                     <div class="card">

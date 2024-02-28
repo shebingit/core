@@ -1,0 +1,235 @@
+{%load static%}
+<!DOCTYPE >
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ALTOS CORE</title>
+        <style>
+            .table1 {
+                background-color: #f2f2f2;
+            }
+            .table2 {
+                background-color: #e3eaee;
+            }
+            .table3 {
+                background-color: #f0e0a3;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+            }
+            .table2  th, 
+            .table2 td {
+                padding: 4px;
+                text-align: left;
+                
+            }
+            .table3 tr{
+                border: 1px solid #774141;
+            }
+            .table3 td{
+                font-size: 12px;
+            }
+          
+                
+        </style>
+    </head>
+  
+    <body>
+      
+      <table class="table1">
+
+        <thead>
+          <tr>
+            <th colspan="2">
+              <div style="text-align: left;">
+                <img src="media/images/companylogo.png" height="50" width="150"> 
+              </div>
+            </th>
+            <th colspan="4">
+              <h2 style="text-align: start;
+                         padding-top:10px;
+                         font-size:15px;
+                         font-weight:500px;
+                         letter-spacing:1px">
+                    EMPLOYEE TASK DETAILS
+              </h2>
+            </th>
+            <th>
+              <div style="text-align: right;">{{date|date:'d-m-Y'}}</div>
+            </th>
+          </tr>
+        </thead>
+      </table>
+        
+    <br>
+      
+        <table class="table2">
+            <thead class="">
+              
+                <tr >
+                    <th style="text-align: left;padding-top: 12px; ">
+                        <h5 style="font-size: 12px; font-weight:500; ">
+                
+                            Name of Employee
+                           
+                        </h5>
+                    </th>
+                    <th style="text-align: left; padding-top: 12px;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{developer_obj.fullname}}
+                           
+                        </h5>
+                    </th>
+                </tr>
+                
+                <tr>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            Address of Employee
+                           
+                        </h5>
+                    </th>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{developer_obj.presentaddress1}}(h),  &nbsp; {{developer_obj.presentaddress2}}
+                           {{developer_obj.presentaddress3}}, <br>  &nbsp; &nbsp; &nbsp; {{developer_obj.pincode}}&nbsp; {{developer_obj.district}}, &nbsp;{{developer_obj.state}}, &nbsp;{{user.country}}
+                           
+                        </h5>
+                    </th>
+                </tr>
+             
+                <tr>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            Contact Number 
+                        
+                        </h5>
+                    </th>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{developer_obj.mobile}}
+                        
+                        </h5>
+                    </th>
+                </tr>
+              
+                <tr>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            Email
+                           
+                        </h5>
+                    </th>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{developer_obj.email}} 
+                           
+                        </h5>
+                    </th>
+                </tr>
+               
+                <tr>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            Designation
+                           
+                        </h5>
+                    </th>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{developer_obj.designation.designation}}
+                           
+                        </h5>
+                    </th>
+                </tr>
+              
+                <tr>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            Department
+                           
+                        </h5>
+                    </th>
+                    <th style="text-align: left;">
+                        <h5 style="font-size: 12px; font-weight:500;">
+                
+                            : {{developer_obj.department.department}}
+                           
+                        </h5>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+       
+        <br>
+        {% if searchd1 or searchd2 %}
+             <h5>Report generated from {{ searchd1 }} to {{ searchd2 }}</h5>
+        {% endif %}
+        <table class="table3 " >
+            <thead >
+                <tr>
+                    <th style="background-color: #774141; color:#eff6f9; font-size:14px;"colspan="4" style="text-align: left;">
+                        Project | Task
+                    </th>
+                    <th  style="background-color: #563333; color:#eff6f9; font-size:12px;"colspan="2" style="text-align: center;">From Date </th>
+                    <th  style="background-color: #563333; color:#eff6f9; font-size:12px;"colspan="2" style="text-align: center;">To Date </th>
+                    <th  style="background-color: #563333; color:#eff6f9; font-size:12px;" colspan="2" style="text-align: center;">Status | Submitted </th>
+                    <th  style="background-color: #563333; color:#eff6f9; font-size:12px;" colspan="2" style="text-align: center;">Delay </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in task_objs %}
+                <tr>
+                    <td colspan="4" >
+                        {{ task.project.project }}
+                        <p>Task : {{ task.task }}</p>
+                    </td>
+                    <td colspan="2" style="text-align: center;">
+                        {{ task.startdate }}
+                       
+                    </td>
+                    <td colspan="2">
+                        {{ task.enddate }}
+                    </td>
+                    <td colspan="2">
+                        {{ task.status|default:"Not Available" }} 
+                        <p >{{ task.submitted_date }}
+                    </td>
+                    <td colspan="2">
+                        {{ task.delay |default:"0" }}
+                        
+                    </td>
+                </tr>
+                {% endfor %}
+               
+            </tbody>
+        </table>
+                   
+        
+     
+             
+    <script>
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+         document.getElementById("currentDate").value = date;
+    </script>
+        
+    </body>
+</html>

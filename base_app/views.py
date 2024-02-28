@@ -20765,7 +20765,8 @@ def Audit_emp_confirmations(request,empID_ConfirmId):
         Aud = user_registration.objects.filter(id=Aud_id)
         emp = user_registration.objects.get(id=empID_ConfirmId)
         Warning_data = wrdata.objects.filter(wrn_develp=emp)
-        context = {'Aud': Aud,'emp':emp,'Warning_data':Warning_data}
+        confirm_objs = ConfirmationList.objects.filter(confirm_Employee=emp)
+        context = {'Aud': Aud,'emp':emp,'Warning_data':Warning_data,'confirm_objs':confirm_objs}
 
         return render(request, 'audit_module/audit_confirmation.html',context)
     else:
@@ -20788,6 +20789,141 @@ def Audit_emp_confirmations_save(request,empID_ConfirmSave):
         fbv = request.POST['fvr_opt']
         cr = request.POST['cr_opt']
         swp = request.POST['spw_opt']
+
+        
+        #Offer Letter
+        try:
+            confirm_obj = ConfirmationList.objects.get(confirm_Employee=emp,confirm_title='Offer Letter Signed')
+            if ofl == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['offerdata']
+                confirm_obj.save()
+
+          
+
+        except ConfirmationList.DoesNotExist:
+            confirm_obj = ConfirmationList()
+            confirm_obj.confirm_Employee = emp
+            confirm_obj.confirm_title= 'Offer Letter Signed'
+            if ofl == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['offerdata']
+              
+
+            else:
+                confirm_obj.confirm_option = 'No'
+            confirm_obj.save()
+
+        #Permission Letter
+        try:
+            confirm_obj = ConfirmationList.objects.get(confirm_Employee=emp,confirm_title='Permission Letter Signed')
+            if pl == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['permission_date']
+                confirm_obj.save()
+
+        except ConfirmationList.DoesNotExist:
+            confirm_obj = ConfirmationList()
+            confirm_obj.confirm_Employee = emp
+            confirm_obj.confirm_title= 'Permission Letter Signed'
+            if pl == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['permission_date']
+            else:
+                confirm_obj.confirm_option = 'No'
+            confirm_obj.save()
+
+        #FeedBack Received
+        try:
+            confirm_obj = ConfirmationList.objects.get(confirm_Employee=emp,confirm_title='FeedBack Received')
+            if fb == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['fr_date']
+                confirm_obj.save()
+
+        except ConfirmationList.DoesNotExist:
+            confirm_obj = ConfirmationList()
+            confirm_obj.confirm_Employee = emp
+            confirm_obj.confirm_title= 'FeedBack Received'
+            if fb == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['fr_date']
+            else:
+                confirm_obj.confirm_option = 'No'
+            confirm_obj.save()
+
+        #FeedBack Video Received
+        try:
+            confirm_obj = ConfirmationList.objects.get(confirm_Employee=emp,confirm_title='FeedBack Video Received')
+            if fbv == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['fvdate']
+                confirm_obj.save()
+           
+        except ConfirmationList.DoesNotExist:
+            confirm_obj = ConfirmationList()
+            confirm_obj.confirm_Employee = emp
+            confirm_obj.confirm_title= 'FeedBack Video Received'
+            if fbv == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['fvdate']
+            else:
+                confirm_obj.confirm_option = 'No'
+            confirm_obj.save()
+
+        #Circular Signed
+        try:
+            confirm_obj = ConfirmationList.objects.get(confirm_Employee=emp,confirm_title='Circular Signed')
+            if cr == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['cs_date']
+                confirm_obj.save()
+          
+        except ConfirmationList.DoesNotExist:
+            confirm_obj = ConfirmationList()
+            confirm_obj.confirm_Employee = emp
+            confirm_obj.confirm_title= 'Circular Signed'
+            if cr == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['cs_date']
+            else:
+                confirm_obj.confirm_option = 'No'
+            confirm_obj.save()
+
+
+        #Sample Project Warning
+        try:
+            confirm_obj = ConfirmationList.objects.get(confirm_Employee=emp,confirm_title='Sample Project Warning')
+            if swp == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['spw_date']
+                confirm_obj.save()
+
+        except ConfirmationList.DoesNotExist:
+            confirm_obj = ConfirmationList()
+            confirm_obj.confirm_Employee = emp
+            confirm_obj.confirm_title= 'Sample Project Warning'
+            if swp == 'Yes':
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = request.POST['spw_date']
+            else:
+                confirm_obj.confirm_option = 'No'
+            confirm_obj.save()
+
+
+        wr_check = request.POST.getlist('warning_check')
+
+        if wr_check:
+            for ch_id in wr_check:
+                Wd = wrdata.objects.get(id=ch_id)
+                confirm_obj = ConfirmationList()
+                confirm_obj.confirm_Employee = emp
+                confirm_obj.confirm_title=str(Wd.wrn_reason + " - " +  Wd.wrn_task.subtask )             
+                confirm_obj.confirm_option = 'Yes'
+                confirm_obj.send_date = Wd.wrn_date
+               
+                confirm_obj.save()
+
 
         confirmation_data = []
         confirmation_data1 = []
@@ -20822,84 +20958,6 @@ def Audit_emp_confirmations_save(request,empID_ConfirmSave):
           
             confirm_obj.save()
 
-        #Offer Letter
-        confirm_obj = ConfirmationList()
-        confirm_obj.confirm_Employee = emp
-        confirm_obj.confirm_title= 'Offer Letter Signed'
-        if ofl == 'Yes':
-            confirm_obj.confirm_option = 'Yes'
-            confirm_obj.send_date = request.POST['offerdata']
-        else:
-            confirm_obj.confirm_option = 'No'
-        confirm_obj.save()
-
-        #Permission Letter
-        confirm_obj = ConfirmationList()
-        confirm_obj.confirm_Employee = emp
-        confirm_obj.confirm_title= 'Permission Letter Signed'
-        if pl == 'Yes':
-            confirm_obj.confirm_option = 'Yes'
-            confirm_obj.send_date = request.POST['permission_date']
-        else:
-            confirm_obj.confirm_option = 'No'
-        confirm_obj.save()
-
-        #FeedBack Received
-        confirm_obj = ConfirmationList()
-        confirm_obj.confirm_Employee = emp
-        confirm_obj.confirm_title= 'FeedBack Received'
-        if fb == 'Yes':
-            confirm_obj.confirm_option = 'Yes'
-            confirm_obj.send_date = request.POST['fr_date']
-        else:
-            confirm_obj.confirm_option = 'No'
-        confirm_obj.save()
-
-        #FeedBack Video Received
-        confirm_obj = ConfirmationList()
-        confirm_obj.confirm_Employee = emp
-        confirm_obj.confirm_title= 'FeedBack Video Received'
-        if fbv == 'Yes':
-            confirm_obj.confirm_option = 'Yes'
-            confirm_obj.send_date = request.POST['fvdate']
-        else:
-            confirm_obj.confirm_option = 'No'
-        confirm_obj.save()
-
-        #Circular Signed
-        confirm_obj = ConfirmationList()
-        confirm_obj.confirm_Employee = emp
-        confirm_obj.confirm_title= 'Circular Signed'
-        if cr == 'Yes':
-            confirm_obj.confirm_option = 'Yes'
-            confirm_obj.send_date = request.POST['cs_date']
-        else:
-            confirm_obj.confirm_option = 'No'
-        confirm_obj.save()
-
-
-        #Sample Project Warning
-        confirm_obj = ConfirmationList()
-        confirm_obj.confirm_Employee = emp
-        confirm_obj.confirm_title= 'Sample Project Warning'
-        if swp == 'Yes':
-            confirm_obj.confirm_option = 'Yes'
-            confirm_obj.send_date = request.POST['spw_date']
-        else:
-            confirm_obj.confirm_option = 'No'
-        confirm_obj.save()
-
-        wr_check = request.POST.getlist('warning_check')
-        if wr_check:
-            for ch_id in wr_check:
-                Wd = wrdata.objects.get(id=ch_id)
-                confirm_obj = ConfirmationList()
-                confirm_obj.confirm_Employee = emp
-                confirm_obj.confirm_title=str(Wd.wrn_reason + " - " +  Wd.wrn_task.subtask )             
-                confirm_obj.confirm_option = 'Yes'
-                confirm_obj.send_date = Wd.wrn_date
-               
-                confirm_obj.save()
 
 
         context = {'Aud': Aud,'emp':emp,'Warning_data':Warning_data}
@@ -20907,6 +20965,41 @@ def Audit_emp_confirmations_save(request,empID_ConfirmSave):
         return render(request, 'audit_module/audit_confirmation.html',context)
     else:
         return redirect('/')
+
+
+def Audit_empdocumentpdf(request,audit_docuid):
+    date = datetime.now()  
+   
+       
+    user= user_registration.objects.get(id=audit_docuid)
+    confirmation_obj = ConfirmationList.objects.filter(confirm_Employee=user)   
+        
+        
+    template_path = 'audit_module/audit_emp_document_pdf.html'
+
+    context = {
+    'user':user,
+    'confirmation_obj':confirmation_obj,
+    'path':settings.NEWPATH,
+    }
+        
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'filename="Project-DailyTask-Report.pdf"'
+     # find the template and render it.
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+    html, dest=response)
+
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
 
 
 
@@ -23133,3 +23226,119 @@ def OFadminlogout(request):
         return redirect('/')
     else:
         return redirect('/') 
+
+
+
+#-----------28/02/24 Task Report Section ----------------------------------
+
+def Tl_Report(request):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=tlid)
+        man = user_registration.objects.filter(tl_id=tlid, status="active")
+        return render(request, 'tl_module/employee_workReport.html', { 'mem': mem, 'man': man})
+    else:
+        return redirect('/')
+
+def Tl_developer_report(request):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=tlid)
+        man = user_registration.objects.filter(tl_id=tlid, status="active")
+
+        if request.POST:
+            dev_Id = request.POST['developer_ID']
+            d1 = request.POST['from_date']
+            d2 = request.POST['to_date']
+
+            developer_obj = user_registration.objects.get(tl_id=tlid, status="active",id=dev_Id)
+
+            total_task_count = project_taskassign.objects.filter(developer=developer_obj).count() 
+            sunmitted_task_count = project_taskassign.objects.filter(developer=developer_obj,status='submitted').count()
+            verification_task_count = project_taskassign.objects.filter(developer=developer_obj,status='Verification').count()
+            correction_task_count = project_taskassign.objects.filter(developer=developer_obj,status='correction').count()
+            ongoing_task_count = total_task_count - (sunmitted_task_count + verification_task_count + correction_task_count)
+
+            task_objs =  project_taskassign.objects.filter(developer=developer_obj).order_by('-id')
+
+            if d1:
+                task_objs = task_objs.filter(startdate__gte=d1) 
+
+            if d2:
+                 task_objs = task_objs.filter(enddate__lte=d2) 
+
+            context = { 'mem': mem, 'man': man,
+                       'developer':developer_obj,
+                       'total_task_count':total_task_count,
+                       'sunmitted_task_count':sunmitted_task_count,
+                       'ongoing_task_count':ongoing_task_count,
+                       'correction_task_count':correction_task_count,
+                       'verification_task_count':verification_task_count,
+                       'task_objs':task_objs,'d1':d1,'d2':d2
+                       }
+
+        return render(request, 'tl_module/employee_workReport.html',context )
+    else:
+        return redirect('/')
+
+def Tlemp_Taskpdf(request):
+
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+
+    if request.method == 'GET':
+        # Get the values sent via AJAX
+        empID = request.GET.get('empID')
+        searchd1 = request.GET.get('searchd1')
+        searchd2 = request.GET.get('searchd2')
+
+       
+        try:
+            developer_obj = user_registration.objects.get(tl_id=tlid, status="active", id=empID)
+            task_objs =  project_taskassign.objects.filter(developer=developer_obj).order_by('-id')
+
+            if searchd1:
+                task_objs = task_objs.filter(startdate__gte=searchd1) 
+
+            if searchd2:
+                task_objs = task_objs.filter(enddate__lte=searchd2)    
+
+            template_path = 'tl_module/task_detailsPdf.html'
+
+            context = {
+                'developer_obj': developer_obj,
+                'task_objs': task_objs,
+                'searchd1':searchd1,
+                'searchd2':searchd2,
+                'path': settings.NEWPATH,
+            }
+
+            # Render the PDF template
+            template = get_template(template_path)
+            html = template.render(context)
+
+            # Generate PDF
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="Task-Report.pdf"'  # 'inline' to open in browser
+            pisa.CreatePDF(html, dest=response)
+
+            return response
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    # Handle other HTTP methods if needed
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+# End Task Report Section ------------------------------------------------ 
+
+
+
