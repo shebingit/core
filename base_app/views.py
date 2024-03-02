@@ -20316,7 +20316,7 @@ def TLproject_task_delay(request):
             return redirect('/')
         mem = user_registration.objects.filter(id=tlid)
         display1 = project.objects.all()
-        display=project_taskassign.objects.filter(tl_id=tlid,delay__gte='4')
+        display=project_taskassign.objects.filter(tl_id=tlid)
         war=wrdata.objects.all()
         return render(request, 'TLprojects_task_delay.html',{'display':display,'mem':mem,'display1':display1,'war':war,'tlid':tlid})
     else:
@@ -23340,5 +23340,48 @@ def Tlemp_Taskpdf(request):
 
 # End Task Report Section ------------------------------------------------ 
 
+#Team Developer Task Delay --------------------------------------------
 
+def Tl_TaskDelay(request):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=tlid)
+        man = user_registration.objects.filter(tl_id=tlid, status="active")
+
+        tod_date = date.today()
+
+        tasks_objs = project_taskassign.objects.filter(tl__id=tlid,enddate__lt=tod_date).exclude(status='submitted')
+
+        for tsk in tasks_objs:
+            
+            diff_count = (tod_date - tsk.enddate ).days
+            sunday_count = count_sundays(tsk.enddate,tod_date)
+            print(sunday_count)
+            print(tsk.enddate,tod_date)
+            print('id:',tsk.id)
+            print('-----------------------')
+           
+
+        context = {'tasks_objs':tasks_objs,
+        'mem': mem, 'man': man
+                   }
+        return render(request, 'tl_module/employee_taskDelayreport.html',context)
+    else:
+        return redirect('/')
+
+def count_sundays(start_date, end_date):
+    # Initialize count
+    sunday_count = 0
+    # Iterate over each day in the range
+    current_date = start_date
+    while current_date <= end_date:
+        # Check if the current day is a Sunday (weekday() returns 6 for Sunday)
+        if current_date.weekday() == 6:
+            sunday_count += 1
+        # Move to the next day
+        current_date += timedelta(days=1)
+    return sunday_count
 

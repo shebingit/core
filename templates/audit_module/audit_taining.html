@@ -102,6 +102,8 @@
                                                     <th> Joing date</th>
                                                     <th> Department </th>
                                                     <th> Hr Manager </th>
+                                                    <th>Confimations</th>
+                                                    <th>Documents</th>
                                                     <th>Report</th>
                                                 </tr>
                                             </thead>
@@ -123,6 +125,8 @@
                                                     <td> {{i.joiningdate|date:"d-m-Y"}}</td>
                                                     <td> {{i.department.department }} </td>
                                                     <td> {{i.hrmanager }} </td>
+                                                    <td class="text-center"><a href="{% url 'Audit_emp_confirmations' i.id %}" class="text-info"><i class="mdi mdi-file-check iconpdf"></i> </a></td>
+                                                    <td class="text-center"><a href="{% url 'Audit_empdocumentpdf' i.id %}"  class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                                                     <td><a data-toggle="modal" data-target="#trainee_report{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                                                    
                                                     {% endfor %}
@@ -235,6 +239,8 @@
                                                     <th> Joing date</th>
                                                     <th> Department </th>
                                                     <th> Hr Manager </th>
+                                                    <th>Confimations</th>
+                                                    <th>Documents</th>
                                                     <th>Report</th>
                                                 </tr>
                                             </thead>
@@ -256,6 +262,8 @@
                                                     <td> {{i.joiningdate|date:"d-m-Y"}}</td>
                                                     <td> {{i.department.department }} </td>
                                                     <td> {{i.hrmanager }} </td>
+                                                    <td class="text-center"><a href="{% url 'Audit_emp_confirmations' i.id %}" class="text-info"><i class="mdi mdi-file-check iconpdf"></i> </a></td>
+                                                    <td class="text-center"><a href="{% url 'Audit_empdocumentpdf' i.id %}"  class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                                                     <td><a data-toggle="modal" data-target="#alltrainee_report{{i.id}}" class="text-danger"><i class="mdi mdi-file-pdf iconpdf"></i> </a></td>
                                                    
                                                     {% endfor %}

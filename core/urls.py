@@ -1912,6 +1912,9 @@ path('TL-Report', views.Tl_Report, name='Tl_Report'),
 path('TL-ViewReport', views.Tl_developer_report, name='Tl_developer_report'),
 path('Task-PDF/', views.Tlemp_Taskpdf, name='Tlemp_Taskpdf'),
 
+# Task Delay ---------------------2/02/24
+
+path('TL-Developer-Task-Delay', views.Tl_TaskDelay, name='Tl_TaskDelay'),
 
 
 ]

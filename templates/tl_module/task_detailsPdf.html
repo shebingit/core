@@ -198,8 +198,8 @@
                 {% for task in task_objs %}
                 <tr>
                     <td colspan="4" >
-                        {{ task.project.project }}
-                        <p>Task : {{ task.task }}</p>
+                        {{ task.project.project }}<br>
+                        Task : {{ task.task }}
                     </td>
                     <td colspan="2" style="text-align: center;">
                         {{ task.startdate }}
@@ -209,8 +209,7 @@
                         {{ task.enddate }}
                     </td>
                     <td colspan="2">
-                        {{ task.status|default:"Not Available" }} 
-                        <p >{{ task.submitted_date }}
+                       {{ task.submitted_date }}
                     </td>
                     <td colspan="2">
                         {{ task.delay |default:"0" }}
