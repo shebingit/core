@@ -41,7 +41,7 @@ from django.db.models import Sum
 
 from cal.models import *
 
-
+from django.core import serializers
 # Create your views here.
 def login(request):
     
@@ -20308,22 +20308,22 @@ def get_instances(request):
 
 # team leader project task delay warning message 
 
-def TLproject_task_delay(request):
-    if 'tlid' in request.session:
-        if request.session.has_key('tlid'):
-            tlid = request.session['tlid']
-        else:
-            return redirect('/')
-        mem = user_registration.objects.filter(id=tlid)
-        display1 = project.objects.all()
-        display=project_taskassign.objects.filter(tl_id=tlid)
-        war=wrdata.objects.all()
-        return render(request, 'TLprojects_task_delay.html',{'display':display,'mem':mem,'display1':display1,'war':war,'tlid':tlid})
-    else:
-        return redirect('/')
+# def TLproject_task_delay(request):
+#     if 'tlid' in request.session:
+#         if request.session.has_key('tlid'):
+#             tlid = request.session['tlid']
+#         else:
+#             return redirect('/')
+#         mem = user_registration.objects.filter(id=tlid)
+#         display1 = project.objects.all()
+#         display=project_taskassign.objects.filter(tl_id=tlid)
+#         war=wrdata.objects.all()
+#         return render(request, 'TLprojects_task_delay.html',{'display':display,'mem':mem,'display1':display1,'war':war,'tlid':tlid})
+#     else:
+#         return redirect('/')
     
     
-def TL_warning(request,Tltask_id):
+def TL_warning(request):
     if 'tlid' in request.session:
         if request.session.has_key('tlid'):
             tlid = request.session['tlid']
@@ -20332,20 +20332,21 @@ def TL_warning(request,Tltask_id):
         mem = user_registration.objects.filter(id=tlid)
         tl = user_registration.objects.get(id=tlid)
 
-        if request.method == 'POST':
+        if request.POST:
             remark = request.POST['remarks']
-        prjtask=project_taskassign.objects.get(id=Tltask_id)
-        warningdata=wrdata()
-        warningdata.wrn_develp=prjtask.developer
-        warningdata.wrn_user_name=tl
-        warningdata.wrn_task=prjtask
-        warningdata.wrn_reason=remark
-        warningdata.save()
-        war=wrdata.objects.all()
+            task_ID = request.POST.get('task_Id')
 
-        display1 = project.objects.all()
-        display=project_taskassign.objects.filter(tl_id=tlid,delay__gte='4')
-        return render(request, 'TLprojects_task_delay.html',{'display':display,'mem':mem,'display1':display1,'war':war})
+            prjtask=project_taskassign.objects.get(id=task_ID)
+            warningdata=wrdata()
+            warningdata.wrn_develp=prjtask.developer
+            warningdata.wrn_user_name=tl
+            warningdata.wrn_task=prjtask
+            warningdata.wrn_reason=remark
+            warningdata.save()
+            messages.success(request, "Action Taken updated.")
+
+            return redirect('Tl_TaskDelay')
+
     else:
         return redirect('/')
 
@@ -20698,7 +20699,8 @@ def audit_trainer_teamview(request,audit_trainer_tmid):
 
 
 #Employee  Section ---------------auditor Employee page load
-
+# Updation Work 04/03/2024 
+    
 def Audit_employees(request):
     if 'aud_id' in request.session:
         if request.session.has_key('aud_id'):
@@ -20706,9 +20708,9 @@ def Audit_employees(request):
         else:
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
-        emp= user_registration.objects.filter(~Q(designation_id=9))
-        des = department.objects.all()
-        return render(request, 'audit_module/audit_employee.html', {'Aud': Aud,'emp':emp,'des':des})
+       
+        department_objs = department.objects.all()
+        return render(request, 'audit_module/audit_employee.html', {'Aud': Aud,'department_objs':department_objs})
     else:
         return redirect('/')
 
@@ -20719,10 +20721,15 @@ def Audit_department(request,audit_dep_id):
         else:
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
-        mem = department.objects.get(id=audit_dep_id)
-        des=designation.objects.filter(~Q(designation='admin'),~Q(designation='manager'),~Q(designation='account'),~Q(designation='auditor'),~Q(designation='Digital manager'),~Q(designation='Digital Developer'),~Q(designation='trainee'))
-        context = {'mem':mem,'des':des,'Aud' : Aud,}
-        return render(request, 'audit_module/audit_depart_designations.html',context)
+        department_obj = department.objects.get(id=audit_dep_id)
+        designations_objs = designation.objects.filter(department=department_obj)
+        department_objs = department.objects.all()
+       
+        
+        context = {'Aud' : Aud,'department_obj':department_obj,
+                   'designations_objs':designations_objs,
+                   'department_objs':department_objs}
+        return render(request, 'audit_module/audit_employee.html',context)
     else:
         return redirect('/')
 
@@ -20734,22 +20741,37 @@ def Audit_emp_list(request,audit_depart_id,audit_des_id):
         else:
             return redirect('/')
         Aud = user_registration.objects.filter(id=Aud_id)
-        mem = department.objects.get(id=audit_depart_id)
-        mem1 = designation.objects.get(pk=audit_des_id)
 
-        if mem1.designation == 'tester':
+        designation_obj = designation.objects.get(pk=audit_des_id)
+        department_obj = department.objects.get(id=audit_depart_id)
 
-            use=user_registration.objects.filter(department_id=mem.id,designation=mem1, status="active")
-            context = {'mem':mem,'use':use,'Aud' : Aud}
+        designations_objs = designation.objects.filter(department=department_obj)
+        department_objs = department.objects.all()
+       
+        emp_list = user_registration.objects.filter(department_id=department_obj,designation=designation_obj, status="active")
 
-            return render(request, 'audit_module/audit_tester.html',context)
-        
-
-        use=user_registration.objects.filter(department_id=mem.id,designation=mem1, status="active")
-        context = {'mem':mem,'use':use,'Aud' : Aud,}
-        return render(request, 'audit_module/audit_depart_designations_emp.html',context)
+        context = {'Aud' : Aud,'department_obj':department_obj,
+                   'designations_objs':designations_objs,
+                   'department_objs':department_objs,
+                    'designation_obj':designation_obj,
+                    'emp_list':emp_list}
+        return render(request, 'audit_module/audit_employee.html',context)
     else:
         return redirect('/')
+
+    #     if mem1.designation == 'tester':
+
+    #         use=user_registration.objects.filter(department_id=mem.id,designation=mem1, status="active")
+    #         context = {'mem':mem,'use':use,'Aud' : Aud}
+
+    #         return render(request, 'audit_module/audit_tester.html',context)
+        
+
+    #     use=user_registration.objects.filter(department_id=mem.id,designation=mem1, status="active")
+    #     context = {'mem':mem,'use':use,'Aud' : Aud,}
+    #     return render(request, 'audit_module/audit_depart_designations_emp.html',context)
+    # else:
+    #     return redirect('/')
 
 
 
@@ -23183,7 +23205,7 @@ def OFadmin_leave_form(request):
         start = datetime.strptime(leaves.from_date, '%Y-%m-%d').date() 
         end = datetime.strptime(leaves.to_date, '%Y-%m-%d').date()
 
-        diff = (end  - start).days
+        diff = (end - start).days
         
         cnt =  Event.objects.filter(start_time__range=(start,end)).count()
         
@@ -23349,28 +23371,142 @@ def Tl_TaskDelay(request):
         else:
             return redirect('/')
         mem = user_registration.objects.filter(id=tlid)
+        tl = user_registration.objects.get(id=tlid)
         man = user_registration.objects.filter(tl_id=tlid, status="active")
 
         tod_date = date.today()
 
-        tasks_objs = project_taskassign.objects.filter(tl__id=tlid,enddate__lt=tod_date).exclude(status='submitted')
+        tasks_objs = project_taskassign.objects.filter(tl__id=tlid,enddate__lt=tod_date).exclude(Q(status='submitted') | Q(developer=tl)).order_by('-id')
+       
+        tasks_objs_on_task = project_taskassign.objects.filter(tl__id=tlid).exclude(Q(status='submitted') | Q(developer=tl)).count()
 
-        for tsk in tasks_objs:
+
+
+        if request.POST:
+            dev_ID = request.POST['developer_ID']
+            Delaydays = request.POST['delay_days']
+            d1 = request.POST['from_date']
+            d2 = request.POST['to_date']
             
-            diff_count = (tod_date - tsk.enddate ).days
-            sunday_count = count_sundays(tsk.enddate,tod_date)
-            print(sunday_count)
-            print(tsk.enddate,tod_date)
-            print('id:',tsk.id)
-            print('-----------------------')
-           
+            if dev_ID:
+                tasks_objs = tasks_objs.filter(developer__id=dev_ID)
+                
+            if d1:
+                tasks_objs = tasks_objs.filter(startdate__gte=d1)
 
-        context = {'tasks_objs':tasks_objs,
-        'mem': mem, 'man': man
+            if d2:
+                tasks_objs = tasks_objs.filter(enddate__lte=d2)
+
+            if Delaydays:
+
+                task_list = []
+
+                tasks_objs_on_task = tasks_objs.exclude(Q(status='submitted') | Q(developer=tl)).count()
+
+                tasks_objs_delay_count = tasks_objs.count()
+
+                
+                if tasks_objs_delay_count == tasks_objs_on_task:
+                    delay_progress = 100
+                
+                else:
+                    delay_progress = ((tasks_objs_delay_count / tasks_objs_on_task  ) * 100)
+
+
+
+                for task in tasks_objs:
+            
+                    diff_count = (tod_date - task.enddate ).days
+                    sunday_count = count_sundays(task.enddate,tod_date)
+                    delay_count = diff_count - sunday_count
+                   
+                    if  int(delay_count) >= int(Delaydays):
+                    
+                        task_dict = {'id': task.id,
+                                    'image':task.developer.photo.url,
+                                    'name': task.developer.fullname,
+                                        'project': task.project.project,
+                                        'task':task.task,
+                                        'subtask':task.subtask,
+                                        'startdate':task.startdate,
+                                        'enddate':task.enddate,
+                                        'progress':task.progress,
+                                        'delay':delay_count,
+                                        'status':task.status}
+                        
+                        task_list.append(task_dict)
+
+                context = { 'mem': mem, 'man': man,
+                        'task_list':task_list,
+                        'tasks_objs_delay_count':tasks_objs_delay_count,
+                            'tasks_objs_on_task':tasks_objs_on_task,
+                            'delay_progress':delay_progress
+                        }
+                
+                return render(request, 'tl_module/employee_taskDelayreport.html',context)
+
+            tasks_objs_on_task = tasks_objs.exclude(Q(status='submitted') | Q(developer=tl)).count()
+
+        tasks_objs_delay_count = tasks_objs.count()
+
+
+        if tasks_objs_delay_count == tasks_objs_on_task:
+            delay_progress = 100
+        
+        else:
+            delay_progress = ((tasks_objs_delay_count / tasks_objs_on_task  ) * 100)
+
+
+
+        task_list = []
+
+
+        for task in tasks_objs:
+            
+            diff_count = (tod_date - task.enddate ).days
+            sunday_count = count_sundays(task.enddate,tod_date)
+            delay_count = diff_count - sunday_count
+
+            task_dict = {'id': task.id,
+                         'image':task.developer.photo.url,
+                          'name': task.developer.fullname,
+                            'project': task.project.project,
+                            'task':task.task,
+                            'subtask':task.subtask,
+                            'startdate':task.startdate,
+                            'enddate':task.enddate,
+                            'progress':task.progress,
+                            'delay':delay_count,
+                            'status':task.status}
+              
+            task_list.append(task_dict)
+
+        context = { 'mem': mem, 'man': man,
+                   'task_list':task_list,
+                   'tasks_objs_delay_count':tasks_objs_delay_count,
+                    'tasks_objs_on_task':tasks_objs_on_task,
+                    'delay_progress':delay_progress
                    }
+        
         return render(request, 'tl_module/employee_taskDelayreport.html',context)
     else:
         return redirect('/')
+
+def actionTaken_view(request):
+    if request.method == 'GET':
+        task_id = request.GET.get('task_id')
+        task_warnings = wrdata.objects.filter(wrn_task__id=task_id)
+        if task_warnings:
+           
+            data = serializers.serialize('json', task_warnings, fields=('wrn_reason', 'wrn_date', 'wrn_task'))
+            return JsonResponse(data, safe=False)
+        else:
+          
+            return JsonResponse([], safe=False)
+    else:
+        # Handle other HTTP methods if needed
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
 
 def count_sundays(start_date, end_date):
     # Initialize count

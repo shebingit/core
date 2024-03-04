@@ -161,7 +161,7 @@
                             </td>
                             <td>
                                 <span >{{task.startdate}}  </span>  | <span class="ml-2">{{task.enddate}}</span>
-                                <p class="mt-2">Status : {{task.status|default:"On Going"}}  </p>
+                                <p class="mt-2">Status : {{task.status}}  </p>
                                 <button type="button" class="btn btn-outline-danger"><span class="small"> Delay -</span> {{task.delay}}</button>
                                 <button type="button" data-toggle="modal" data-id="{{task.id}}" data-target="#action" class="btn btn-social-icon-text btn-outline-warning action-modal-button">
                                     <i class="mdi mdi-tooltip-edit"></i>

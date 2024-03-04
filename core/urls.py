@@ -1716,8 +1716,8 @@ re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_inte
 
 
    #***************** tl project task delay *******************
-   path('TLproject_task_delay', views.TLproject_task_delay, name='TLproject_task_delay'),
-   path('TL_warning/<int:Tltask_id>', views.TL_warning, name='TL_warning'),
+   #path('TLproject_task_delay', views.TLproject_task_delay, name='TLproject_task_delay'),
+   path('TL_warning/', views.TL_warning, name='TL_warning'),
 
    #project manager project Tl/developer delay
    path('projectManager_project_delay', views.projectManager_project_delay, name='projectManager_project_delay'),
@@ -1914,7 +1914,9 @@ path('Task-PDF/', views.Tlemp_Taskpdf, name='Tlemp_Taskpdf'),
 
 # Task Delay ---------------------2/02/24
 
-path('TL-Developer-Task-Delay', views.Tl_TaskDelay, name='Tl_TaskDelay'),
+path('TL-Developer-Task-Delay/', views.Tl_TaskDelay, name='Tl_TaskDelay'),
+path('Action-Taken-View/', views.actionTaken_view, name='actionTaken_view'),
+
 
 
 ]

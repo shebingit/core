@@ -2,158 +2,411 @@
 {% load static %} 
 {% block content %}
 <style>
+    .docBox
+    {
+        position: relative;
+        z-index: 99;
+    }
     a{
         text-decoration: none;
         color: #f5f5f5;
     }
+    .table-responsive
+    {
+        max-height: 80vh;
+        overflow-y: scroll;
+    }
+    /* Width of the scrollbar */
+#table-responsive::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track (background) of the scrollbar */
+  #table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle (thumb) of the scrollbar */
+  #table-responsive::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  #table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+    .text-offwhite
+    {
+        color: #b5b5b5;
+    }
+    .content-div 
+    {
+        justify-content: start ;
+        list-style: none;
+    }
+    .text-head
+    {
+        font-size: 0.8875rem;
+    }
+    .content-div p
+    {
+        padding: 0.25rem;
+    }
+    .content-div p span
+    {
+        font-weight: 400;
+    }
+    .content-div:hover {
+        background: #171616;
+        border-radius: 10px;
+       
+    }
+    .content-div:hover .bg-hover {
+       color: #b5b5b5;
+       
+    }
+    .content-divList
+    {
+        margin-left: 1rem;
+    }
+    .content-divList:hover {
+        background: #171616;
+        border-radius: 10px;
+       
+    }
+    .content-divList p
+    {
+        padding: 0.25rem;
+    }
 </style>
 
-
-<div>Department</div>
-<div class="row" style="padding-top:20px;">
-    {%for i in des%}
-    <div class="col-lg-4 col-md-4 col-sm-4 col-12 grid-margin">
-      <a href="{% url 'Audit_department' i.id %}" style="text-decoration: none">
-        <div class="card" style="height: 180px">
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-3 col-12 grid-margin">
+        <div class="card">
            
-                <div class="card-body">
-                    
-                    <div class="row" style="padding-top:20px;">
-                        <div class="col-8 col-sm-12 col-md-6 col-lg-8  my-auto">
-                            <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                
-                                    <h4 class="mb-0" style="color:white;">{{i.department}}</h4>
-                               
-                                
+            <div class="card-body">
+                <h6 class="text-offwhite"> Departments</h6>
+                <hr>
+                <div class="divBox">
+                    {%for i in department_objs %}
+                    <div class="content-div m-0 p-0">
+                        <a href="{% url 'Audit_department' i.id %}">
+                            <p class="text-secondary">
+                                <span class="mdi mdi-chevron-right bg-hover "></span> 
+                            <span class="text-head bg-hover ">{{i.department}}</span> 
+                           </p>  
+                        </a> 
+                    </div>
+
+                    <div class="divBox">
+                        {% for desig in designations_objs %}
+                            {% if i.id == desig.department.id %}
+                            <div class="content-divList">
+                                <a href="{% url 'Audit_emp_list' i.id desig.id  %}">
+                                    <p class="text-secondary">
+                                        <span class="mdi mdi-briefcase "></span> 
+                                        <span class="">{{desig.designation}}</span> 
+                                    </p>  
+                                </a>
                             </div>
-                          
-                        </div>
-                        <div class="col-4 col-sm-12 col-md-6 col-lg-4 text-center text-xl-right">
-                            <i class="icon-lg mdi mdi-code-tags-check text-primary ms-auto"></i>
-                            
-
-                        </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
-                </div>
-          
-        </div>
-        </a>
-    </div>
-    {% endfor %}
-</div>
 
-<!--<div class="card">
-    <div class="row g-2 mt-1 answer3">
-        <div class="col-md-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">employees  &nbsp; of  &nbsp;all &nbsp; department</h4>
-                    <input type="text" class="form-control " onkeyup="myFunction()" id="search" name="search" autocomplete="off"
-                        placeholder="Search...">
-                    <br>
-                    <div class="table-responsive">
-                        <table class="table" >
-                            
-                            <thead>
-                                <tr>
-                                    <th> Sl.No </th>
-                                    <th> Name </th>
-                                    <th> Email </th>  
-                                    <th> Phone Number </th>                                                
-                                    <th> Department</th>
-                                    <th> Designation </th>
-                                    <th> Employee Type</th>
-                                    <th> Status</th>
-                                    <th> Date of Appointment </th>
-                                    <th> Employee Id </th>
-                                    
-                                </tr>
-                            </thead>
-                            <tbody id="myTable">
-                            {% if emp %}
-                                {% for i in emp %}
-                                    
-                                <tr>
-                      
-                                    <td>{{forloop.counter}}</td>
-                                    <td style="text-align:left;">
-                                        <img src="{{i.photo.url}}" alt="image" />
-                                        <a href="{% url 'Audit_employee_dashbord' i.id %}"><span class="ps-2">{{i.fullname}}</span></a>
-                                    </td>
-                                    <td> {{i.email}}</td>
-                                    <td> {{i.mobile}}</td>
-                                    <td> {{i.department.department}}</td>
-                                    <td> {{i.designation.designation}}</td>
-                                    <td> 
-                                        {% if i.employee_type == '1' %}
-                                            Direct Employee
-                                        {% else %}
-                                            Trainee
-                                        {% endif %}
-
-                                    </td>
-                                    <td> {{i.status}}</td>
-                                    <td>{{i.joiningdate|date:"d-m-Y"}}</td>
-                                    <td> {{i.employee_id}}</td>
-                                   
-                                    {% endfor %}
-                                </tr>
-                            {% else %}
-                            <tr><h4 class="text-center">Nothing To Display....</h4></tr>
-                            {% endif %} 
-                                
-                            </tbody>
-           
-                        </table>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
-    
         </div>
-       
     </div>
-    
-    
-    
-</div>-->
+    <div class="col-lg-9 col-md-9 col-sm-9 col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-offwhite"> {% if department_obj %}{{department_obj}} - {% endif %}{{designation_obj.designation}}</h6>
+                <hr>
 
-<script>
-             
-    $(document).ready(function () {
-        $("#search").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#myTable tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                {% if emp_list %}
+                <div class="table-responsive" id="table-responsive">
+                    <table class="table " id="myTable">
+                      <thead>
+                        <tr data-href="#">
+                          <th>SlNo</th>
+                          <th>Name | Email | Contact No</th>
+                        
+                          <th>Department | Join Date</th>
+                          <th>Documents and Reports </th>
+                        
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for i in emp_list %}
+                        <tr>
+                          <td>{{ forloop.counter }}</td>
+                          
+                          <td>
+                           <a href="{% url 'Audit_employee_dashbord' i.id %}">
+                             <img src="{{media_url}}{{i.photo.url}}" class="img-fluid rounded-circle " alt="image"  >                    
+                              {{i.fullname}}
+                            </a>
+                            <p class="mt-3">{{i.email}} </p><p>{{i.mobile}}</p>
+                          </td>
+        
+                          <td><p>{{i.department}}</p><p>Join Date : {{i.startdate|date:"d-m-Y"}}</p></td>
+                          <td class="text-center docBox">
+                            <span class="mdi mdi-dots-vertical option-icon" title="Options "></span> 
+                            <div class="optionBox card" style="display: none;  position: absolute; top: 1px; right: 140px;">
+                                <div class="card-body text-start" >
+                                    <p>
+                                        <a href="{% url 'Audit_emp_confirmations' i.id %}" class="">
+                                            <i class="mdi mdi-file-check text-secondary iconpdf"></i> 
+                                            <span class="small"> Confimations </span>
+                                        </a> 
+                                    </p>
+                                    <p><a href="{% url 'Audit_empdocumentpdf' i.id %}"  class=""><i class="mdi mdi-file-pdf text-danger iconpdf"></i><span class="small"> Documents </span> </a></p>
+                                    <p><a data-toggle="modal" data-target="#myModaldaily{{i.id}}" class=""><i class="mdi mdi-file-pdf text-danger iconpdf"></i> <span class="small"> Daily Report </span></a></p>
+                                    <p><a data-toggle="modal" data-target="#myModal{{i.id}}" class=""><i class="mdi mdi-file-pdf text-danger iconpdf"></i> <span class="small"> Full Report </span></a></p>
+                                    <p><a data-toggle="modal" data-target="#alltrainee_report{{i.id}}" class=""><i class="mdi mdi-file-pdf text-danger iconpdf"></i> <span class="small"> Training Report </span></a></p>
+                                </div>
+                                
+                            </div>
+                          </td>
+                          
+                        </tr>
+                        {% endfor %}
+                        
+                        
+                      </tbody>
+                    </table>
+                </div>            
+                {% endif %}
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+ <!--==================Training time Trainee report =====================-->
+
+ {% for i in emp_list %}
+ <div class="modal" id="alltrainee_report{{i.id}}">
+     <div class="modal-dialog">
+         <div class="col-12 grid-margin stretch-card bg-dark text-light modal-content">
+         <!-- Modal Header -->
+         <a  class="text-danger" href="" style="cursor:pointer"><i class=""></i> </a>
+             <form action="{% url 'audit_trainee_reportPDF' i.id %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                 {%csrf_token%}
+                     <div class="modal-header">
+                         <h4 class="modal-title">Report &nbsp;{{i.fullname}}</h4>
+                         <button type="submit" style="color: white" class=" btn close btn-outline " data-dismiss="modal">&times;</button>
+                     </div>
+                     <!-- Modal body -->
+                     <div class="row">
+                         <div class="col-12 grid-margin stretch-card">
+                             <div class="card p-3" >
+                                 <div class="card-body">
+                                   
+                                     <label class="form-label mt-2" style="font-size:13px ;"> From Date</label>
+                                     <input type="date" class="mt-2 mb-2 form-control" name="sdate" required >
+                                     <label class="form-label mt-2"style="font-size:13px ;">To Date</label>
+                                     <input type="date" class="mt-2 mb-2 form-control" name="edate" required>
+                             
+                                   
+                                  
+                                     <div class="row g-2 mt-3">
+                                         <div class="col-md-6 col-sm-12">
+                                             <div class="form-check form-switch">
+                                                 <input class="form-check-input" type="checkbox" id="" value="1"  name="trainee_project">
+                                                 <label class="form-check-label" for="">Project Details </label>
+                                             </div>
+                                         </div>
+                                         <div class="col-md-6 col-sm-12">
+                                             <div class="form-check form-switch">
+                                                 <input class="form-check-input" type="checkbox" id="" value="1"  name="tainee_task">
+                                                 <label class="form-check-label" for="">Task Details </label>
+                                             </div>
+                                         </div>
+                                         <div class="col-md-6 col-sm-12">
+                                             <div class="form-check form-switch">
+                                                 <input class="form-check-input" type="checkbox" id="" value="1"  name="trainee_topics">
+                                                 <label class="form-check-label" for="">Topics Details </label>
+                                             </div>
+                                         </div>
+                                         <div class="col-md-6 col-sm-12">
+                                           <div class="form-check form-switch">
+                                               <input class="form-check-input" type="checkbox" id="" value="1"    name="trainee_probation">
+                                               <label class="form-check-label" for="">Probation Details</label>
+                                           </div>
+                                       </div>
+                                         <div class="col-md-6 col-sm-12">
+                                             <div class="form-check form-switch">
+                                                 <input class="form-check-input" type="checkbox" id="" value="1"    name="trainee_leave">
+                                                 <label class="form-check-label" for="">Leave Details</label>
+                                             </div>
+                                         </div>
+                                         <div class="col-md-6 col-sm-12">
+                                             <div class="form-check form-switch">
+                                                 <input class="form-check-input" type="checkbox" id="" value="1"    name="trainee_feedbak">
+                                                 <label class="form-check-label" for="">FeedBack Details</label>
+                                             </div>
+                                             
+                                         </div>
+                                     </div>
+ 
+                                     <div class="col-md-12 col-sm-12 text-center">
+                                         <button type="submit" class="btn btn-outline-primary mt-4"><i class="mdi mdi-file-pdf iconpdf text-danger"></i>Download</button>
+                                     </div>
+                                       
+                                 
+                         
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </form>
+             </div>
+         </div>
+     </div>
+ {%endfor%}
+ 
+ 
+   <!---=============== End ==========================-->
+ 
+ 
+   {% for i in emp_list %}
+   <!-- Modal -->
+   <div class="modal" id="myModaldaily{{i.id}}">
+       <div class="modal-dialog">
+           <div class="col-12 grid-margin stretch-card bg-dark text-light modal-content">
+           <!-- Modal Header -->
+           <a  class="text-danger" href="" style="cursor:pointer"><i class=""></i> </a>
+               <form action="{% url 'Audit_empdaily_reportpdf' i.id %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                   {%csrf_token%}
+                       <div class="modal-header">
+                           <h4 class="modal-title">Daily Report &nbsp;{{i.doc_project_name}}</h4>
+                           <button type="submit" style="color: white" class=" btn close btn-outline " data-dismiss="modal">&times;</button>
+                       </div>
+                       <!-- Modal body -->
+                       <div class="row">
+                           <div class="col-12 grid-margin stretch-card">
+                               <div class="card p-3" >
+                                   <div class="card-body">
+          
+                                     <div class="card mb-4 p-2">
+                                       <label class="form-label mt-2" style="font-size:13px ;"> From Date</label>
+                                       <input type="date" class="mt-2 mb-2 form-control" name="emp_form" required>
+                                       <label class="form-label mt-2"style="font-size:13px ;">To Date</label>
+                                       <input type="date" class="mt-2 mb-2 form-control" name="emp_to" required>
+                                     </div>
+                                     <div class="row">
+                                       <center>
+                                         <div class="col-sm-5"></div>
+                                         <div class="col-sm-7" class="pull-right">
+                                             <button type="submit" class="btn btn-outline-primary"><i class="mdi mdi-file-pdf iconpdf text-danger"></i>Download</button>
+                                         </div>
+                                       </center>
+                                     </div> 
+                                     
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </form>
+               </div>
+           </div>
+       </div>
+       {%endfor%}
+       <!-- modal end -->
+   
+ 
+   {% for i in emp_list %}
+   <!-- Modal -->
+   <div class="modal" id="myModal{{i.id}}">
+       <div class="modal-dialog">
+           <div class="col-12 grid-margin stretch-card bg-dark text-light modal-content">
+           <!-- Modal Header -->
+           <a  class="text-danger" href="" style="cursor:pointer"><i class=""></i> </a>
+               <form action="{% url 'Audit_emp_reportpdf' i.id %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                   {%csrf_token%}
+                       <div class="modal-header">
+                           <h4 class="modal-title">Report &nbsp;{{i.doc_project_name}}</h4>
+                           <button type="submit" style="color: white" class=" btn close btn-outline " data-dismiss="modal">&times;</button>
+                       </div>
+                       <!-- Modal body -->
+                       <div class="row">
+                           <div class="col-12 grid-margin stretch-card">
+                               <div class="card p-3" >
+                                   <div class="card-body">
+                                    
+ 
+                                     
+                                     <div class="card mb-4 p-2">
+                                       <label class="form-label mt-2" style="font-size:13px ;"> From Date</label>
+                                       <input type="date" class="mt-2 mb-2 form-control" name="emp_form" required>
+                                       <label class="form-label mt-2"style="font-size:13px ;">To Date</label>
+                                       <input type="date" class="mt-2 mb-2 form-control" name="emp_to" required>
+                                     </div>
+                                     
+                                     
+                                    
+                                       <div class="form-check form-switch">
+                                         <input class="form-check-input" type="checkbox" id="" value="1"  name="emp_proj">
+                                         <label class="form-check-label" for="">Include Project Details </label>
+                                       </div>
+                                       <div class="form-check form-switch">
+                                         <input class="form-check-input" type="checkbox" id="" value="1"  name="emp_proj_corr">
+                                         <label class="form-check-label" for="">Include Project correction Details </label>
+                                       </div>
+                                       <div class="form-check form-switch">
+                                         <input class="form-check-input" type="checkbox" id="" value="1"  name="emp_training">
+                                         <label class="form-check-label" for="">Include Trainig Details </label>
+                                       </div>
+                                       <div class="form-check form-switch">
+                                         <input class="form-check-input" type="checkbox" id="" value="1"    name="emp_salary">
+                                         <label class="form-check-label" for="">Include Salary Details</label>
+                                       </div>
+                                       
+                                       <div class="form-check form-switch">
+                                         <input class="form-check-input" type="checkbox" id="" value="1"    name="emp_leatd">
+                                         <label class="form-check-label" for="">Include Leave and Attendence Details</label>
+                                       </div>
+                                       <div class="form-check form-switch">
+                                         <input class="form-check-input" type="checkbox" id="" value="1"    name="emp_issue">
+                                         <label class="form-check-label" for="">Include Action Taken</label>
+                                       </div>
+                                     
+                                     
+                                        
+                                         
+                                         
+                                           <div class="row">
+                                               <center>
+                                               <div class="col-sm-5"></div>
+                                               <div class="col-sm-7" class="pull-right">
+                                                   <button type="submit" class="btn btn-outline-primary"><i class="mdi mdi-file-pdf iconpdf text-danger"></i>Download</button>
+                                               </div>
+                                             </center>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </form>
+               </div>
+           </div>
+       </div>
+       {%endfor%}
+       <!-- modal end -->
+
+
+       <script>
+        $(document).ready(function() {
+            // Add click event listener to option-icon
+            $('.option-icon').click(function() {
+                // Toggle the display of optionBox when option-icon is clicked
+                $(this).siblings('.optionBox').toggle();
             });
         });
-    });
-
-
-    function myFunction() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("search");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0];
-          if (td)
-           {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) 
-            {
-              tr[i].style.display = "";
-            } 
-            else
-            {
-              tr[i].style.display = "none";
-            }
-          }
-        }
-      }
-</script>
-
-
-
+        </script>
 
 {% endblock %}

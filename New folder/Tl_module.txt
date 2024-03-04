@@ -1,0 +1,175 @@
+TLindex.html add after the Task li
+
+<li class="nav-item menu-items">
+            <a class="nav-link" href="{% url 'Tl_TaskDelay' %}">
+              <span class="menu-icon">
+                <i class="mdi mdi-clock-alert"></i>
+              </span>
+              <span class="menu-title">Task Delay</span>
+            </a>
+ </li>
+new url =================================
+
+# Task Delay ---------------------2/02/24
+
+path('TL-Developer-Task-Delay/', views.Tl_TaskDelay, name='Tl_TaskDelay'),
+path('Action-Taken-View/', views.actionTaken_view, name='actionTaken_view'),
+
+
+new views ==================================
+
+#Team Developer Task Delay --------------------------------------------
+
+def Tl_TaskDelay(request):
+    if 'tlid' in request.session:
+        if request.session.has_key('tlid'):
+            tlid = request.session['tlid']
+        else:
+            return redirect('/')
+        mem = user_registration.objects.filter(id=tlid)
+        man = user_registration.objects.filter(tl_id=tlid, status="active")
+
+        tod_date = date.today()
+
+        tasks_objs = project_taskassign.objects.filter(tl__id=tlid,enddate__lt=tod_date).exclude(status='submitted').order_by('-id')
+       
+        tasks_objs_on_task = project_taskassign.objects.filter(tl__id=tlid).exclude(status='submitted').count()
+
+        if request.POST:
+            dev_ID = request.POST['developer_ID']
+            Delaydays = request.POST['delay_days']
+            d1 = request.POST['from_date']
+            d2 = request.POST['to_date']
+            
+            if dev_ID:
+                tasks_objs = tasks_objs.filter(developer__id=dev_ID)
+                
+            if d1:
+                tasks_objs = tasks_objs.filter(startdate__gte=d1)
+
+            if d2:
+                tasks_objs = tasks_objs.filter(enddate__lte=d2)
+
+            if Delaydays:
+
+                task_list = []
+
+                tasks_objs_on_task = tasks_objs.exclude(status='submitted').count()
+
+                tasks_objs_delay_count = tasks_objs.count()
+
+                
+                if tasks_objs_delay_count == tasks_objs_on_task:
+                    delay_progress = 100
+                
+                else:
+                    delay_progress = ((tasks_objs_delay_count / tasks_objs_on_task  ) * 100)
+
+
+
+                for task in tasks_objs:
+            
+                    diff_count = (tod_date - task.enddate ).days
+                    sunday_count = count_sundays(task.enddate,tod_date)
+                    delay_count = diff_count - sunday_count
+                    print(delay_count, "-",Delaydays)
+                    if  int(delay_count) >= int(Delaydays):
+                    
+                        task_dict = {'id': task.id,
+                                    'image':task.developer.photo.url,
+                                    'name': task.developer.fullname,
+                                        'project': task.project.project,
+                                        'task':task.task,
+                                        'subtask':task.subtask,
+                                        'startdate':task.startdate,
+                                        'enddate':task.enddate,
+                                        'progress':task.progress,
+                                        'delay':delay_count,
+                                        'status':task.status}
+                        
+                        task_list.append(task_dict)
+
+                context = { 'mem': mem, 'man': man,
+                        'task_list':task_list,
+                        'tasks_objs_delay_count':tasks_objs_delay_count,
+                            'tasks_objs_on_task':tasks_objs_on_task,
+                            'delay_progress':delay_progress
+                        }
+                
+                return render(request, 'tl_module/employee_taskDelayreport.html',context)
+
+            tasks_objs_on_task = tasks_objs.exclude(status='submitted').count()
+
+        tasks_objs_delay_count = tasks_objs.count()
+
+
+        if tasks_objs_delay_count == tasks_objs_on_task:
+            delay_progress = 100
+        
+        else:
+            delay_progress = ((tasks_objs_delay_count / tasks_objs_on_task  ) * 100)
+
+
+
+        task_list = []
+
+
+        for task in tasks_objs:
+            
+            diff_count = (tod_date - task.enddate ).days
+            sunday_count = count_sundays(task.enddate,tod_date)
+            delay_count = diff_count - sunday_count
+
+            task_dict = {'id': task.id,
+                         'image':task.developer.photo.url,
+                          'name': task.developer.fullname,
+                            'project': task.project.project,
+                            'task':task.task,
+                            'subtask':task.subtask,
+                            'startdate':task.startdate,
+                            'enddate':task.enddate,
+                            'progress':task.progress,
+                            'delay':delay_count,
+                            'status':task.status}
+              
+            task_list.append(task_dict)
+
+        context = { 'mem': mem, 'man': man,
+                   'task_list':task_list,
+                   'tasks_objs_delay_count':tasks_objs_delay_count,
+                    'tasks_objs_on_task':tasks_objs_on_task,
+                    'delay_progress':delay_progress
+                   }
+        
+        return render(request, 'tl_module/employee_taskDelayreport.html',context)
+    else:
+        return redirect('/')
+
+def actionTaken_view(request):
+    if request.method == 'GET':
+        task_id = request.GET.get('task_id')
+        task_warnings = wrdata.objects.filter(wrn_task__id=task_id)
+        if task_warnings:
+           
+            data = serializers.serialize('json', task_warnings, fields=('wrn_reason', 'wrn_date', 'wrn_task'))
+            return JsonResponse(data, safe=False)
+        else:
+          
+            return JsonResponse([], safe=False)
+    else:
+        # Handle other HTTP methods if needed
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+def count_sundays(start_date, end_date):
+    # Initialize count
+    sunday_count = 0
+    # Iterate over each day in the range
+    current_date = start_date
+    while current_date <= end_date:
+        # Check if the current day is a Sunday (weekday() returns 6 for Sunday)
+        if current_date.weekday() == 6:
+            sunday_count += 1
+        # Move to the next day
+        current_date += timedelta(days=1)
+    return sunday_count

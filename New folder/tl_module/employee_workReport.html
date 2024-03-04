@@ -1,0 +1,241 @@
+{%extends 'TLindex.html'%}
+{%load static%}
+{%block content%}
+
+<style>
+    .ml-1
+    {
+        margin-left: 0.625rem;
+    }
+    .text-sm
+    {
+        font-size: 0.885rem;
+    }
+    .text-xm
+    {
+        font-size: 0.725rem;
+    }
+    
+   
+    .task-count
+    {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    .table-responsive
+    {
+        max-height: 70vh;
+    }
+    .table thead th
+    {
+        font-size: 12px;
+    }
+    .table tbody td{
+        font-size: 12px;
+    }
+    #task-table::-webkit-scrollbar {
+        width: 4px; /* Adjust as needed */
+    }
+    
+    /* Track styles */
+    #task-table::-webkit-scrollbar-track {
+        background: #e1e1e1; /* Color of the track */
+    }
+    
+    /* Handle styles */
+    #task-table::-webkit-scrollbar-thumb {
+        background: #888; 
+    }
+    
+    /* Handle hover */
+    #task-table::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+    table.sticky-header thead th {
+        position: sticky;
+        top: 0;
+        background-color: #0f0f0f; 
+        z-index: 1; 
+    }
+
+    /* Optional: Style the table for demonstration */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-8 col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title  text-secondary pb-2">Developers Task Report</h5>
+                <form action="{% url 'Tl_developer_report' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-12 col-md-5 col-lg-5">
+                            <div class="form-group">
+                                <label class="form-lable text-sm text-muted">Developers</label>
+                                <select class="form-control text-muted" name="developer_ID">
+                                    {% for developer in man %}
+                                    <option class="text-sm "  value="{{developer.id}}">{{developer.fullname}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="form-lable text-sm text-muted">Task From </label>
+                                <input type="date" name="from_date" class="form-control text-muted text-xm">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="form-lable text-sm text-muted">Task To </label>
+                                <input type="date" name="to_date" class="form-control text-xm text-muted">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1 d-flex align-items-center justify-content-center">
+                            <div class="button-group ">
+                                <button type="submit" class="btn btn-outline-primary"><span class="mdi mdi-magnify"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </form>
+                
+                <hr>
+                <div class="d-flex justify-content-between  align-items-center mb-2">
+                    <h6 class="text-secondary m-0 mb-2">Task Details</h6>
+                    {% if developer %}
+                    <div id="Pdf-btn"> <span class="mdi mdi-file-pdf mdi-24px text-danger">  </span> </div>
+                    <input type="hidden" id="empID" value="{{developer.id}}">
+                    <input type="hidden" id="searchd1" value="{{d1}}">
+                    <input type="hidden" id="searchd2" value="{{d2}}">
+                    {% endif %}
+                   
+                </div>
+                
+                <div class="table-responsive" id="task-table">
+                    <table class="table sticky-header " id="">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Project | Task</th>         
+                          <th>From Date</th>
+                          <th>To Date</th>
+                          <th>Status | Submitted</th>
+                       
+                          <th>Delay</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for task in task_objs %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                {{ task.project.project }}
+                                <p class="mt-2">Task : {{ task.task }}</p>
+                            </td>
+                           
+                            <td>{{ task.startdate }}</td>
+                            <td>{{ task.enddate }}</td>
+                            <td>{{ task.status|default:"Not Available" }} 
+                                <p class="mt-2 text-xm" >{{ task.submitted_date }}</p>
+                            </td>
+                            <td> <button type="button" class="btn btn-outline-danger">{{ task.delay |default:"0" }}</button></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="basic-details d-flex ">
+                    <div class="imgBox">
+                        {% if developer.photo %}
+                        <img class="img-xs rounded-circle" src="{{developer.photo.url}}"  alt="profile">
+                        {% else %}
+                        <span class="mdi mdi-account mdi-18px"></span>
+                        {% endif %}
+                    </div>
+                    <div class="top-details ml-1">
+                        <h5 class="text-sm text-ofwhite"> {{developer.fullname}}</h5>
+                        <p class="text-xm text-secondary"> {{developer.designation.designation}}</p>
+                        
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between m-0">
+                    <h6 class="text-secondary m-0">Developer Info</h6>
+                    <p class="text-secondary m-0">Task - {{ sunmitted_task_count }} / {{ total_task_count }}</p>
+                </div>
+                
+                <hr>
+                <div class="dev-info ">
+                   
+                    <p class="text-muted "><span class="mdi mdi-email mdi-18px"></span> <span class="ml-1"> {{developer.email}}</span> </p>
+                    <p class="text-muted "><span class="mdi mdi-phone mdi-18px"></span> <span class="ml-1"> {{developer.mobile}}</span></p>
+                   
+                </div>
+                <h6 class="text-secondary m-0">Task Info</h6>
+                <hr>
+                <div class="task-count">
+                    <p class="text-secondary m-0"><span class="mdi mdi-check text-primary   mr-1"></span> Allocated Task - {{ total_task_count }}</p>
+                    <p class="text-secondary m-0"> <span class="mdi mdi-file-document text-info mr-1"></span> Ongoing Task - {{ ongoing_task_count }} </p>
+                    <p class="text-secondary m-0"> <span class="mdi mdi-file-check text-warning mr-1"></span> Verification Task -  {{ verification_task_count }}</p>
+                    <p class="text-secondary m-0"> <span class="mdi mdi-rotate-left text-danger mr-1"> </span>Correction Task -  {{ correction_task_count }}</p>
+                   
+                    <p class="text-secondary m-0"> <span class="mdi mdi-check-all text-success   mr-1"> </span>Submitted Task - {{ sunmitted_task_count }} </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#Pdf-btn").click(function(){
+            // Get values of empID, searchd1, and searchd2
+            var empID = $("#empID").val();
+            var searchd1 = $("#searchd1").val();
+            var searchd2 = $("#searchd2").val();
+    
+            // AJAX request
+            $.ajax({
+                url: '/Task-PDF/',
+                method: 'GET', // or 'GET' depending on your view
+                data: {
+                    empID: empID,
+                    searchd1: searchd1,
+                    searchd2: searchd2
+                },
+                success: function(response){
+                    var blob = new Blob([response], { type: 'application/pdf' });
+                    var url = window.URL.createObjectURL(blob);
+                    
+                    // Create an anchor element to trigger the download
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'Task-Report.pdf'; // Specify the filename here
+                    a.click();
+                },
+                error: function(xhr, status, error){
+                    // Handle error if needed
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+    </script>
+    
+
+{% endblock %}
